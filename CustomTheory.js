@@ -8,13 +8,13 @@ import { theory } from "./api/Theory";
 
 import { Utils } from "./api/Utils";
 
-var id = "exponential_theory_hyperknf";
+var id = "my_custom_theory_id";
 
 var name = "My Custom Theory";
 
-var description = "A basic theory";
+var description = "A basic theory.";
 
-var authors = "HyperKNF";
+var authors = "Gilles-Philippe Paillé";
 
 var version = 1;
 
@@ -40,9 +40,9 @@ var init = () => {
 
     {
 
-        let getDesc = (level) => "c_1=2^{" + getC1(level).toString(0) + "}";
+        let getDesc = (level) => "c_1=" + getC1(level).toString(0);
 
-        c1 = theory.createUpgrade(0, currency, new FirstFreeCost(new ExponentialCost(1, Math.log2(1.1))));
+        c1 = theory.createUpgrade(0, currency, new FirstFreeCost(new ExponentialCost(15, Math.log2(2))));
 
         c1.getDescription = (_) => Utils.getMath(getDesc(c1.level));
 
@@ -54,11 +54,11 @@ var init = () => {
 
     {
 
-        let getDesc = (level) => "c_2=10^{" + level + "}";
+        let getDesc = (level) => "c_2=2^{" + level + "}";
 
         let getInfo = (level) => "c_2=" + getC2(level).toString(0);
 
-        c2 = theory.createUpgrade(1, currency, new ExponentialCost(5, Math.log2(1.5)));
+        c2 = theory.createUpgrade(1, currency, new ExponentialCost(5, Math.log2(10)));
 
         c2.getDescription = (_) => Utils.getMath(getDesc(c2.level));
 
@@ -72,9 +72,9 @@ var init = () => {
 
     theory.createPublicationUpgrade(0, currency, 1e10);
 
-    theory.createBuyAllUpgrade(1, currency, 1e17);
+    theory.createBuyAllUpgrade(1, currency, 1e13);
 
-    theory.createAutoBuyerUpgrade(2, currency, 1e25);
+    theory.createAutoBuyerUpgrade(2, currency, 1e30);
 
     ///////////////////////
 
@@ -124,9 +124,15 @@ var init = () => {
 
     chapter2 = theory.createStoryChapter(1, "My Second Chapter", "This is line 1 again,\nand this is line 2... again.\n\nNice again.", () => c2.level > 0);
 
+    updateAvailability();
+
 }
 
-var updateAvailability = () => {}
+var updateAvailability = () => {
+
+    c2Exp.isAvailable = c1Exp.level > 0;
+
+}
 
 var tick = (elapsedTime, multiplier) => {
 
@@ -134,9 +140,9 @@ var tick = (elapsedTime, multiplier) => {
 
     let bonus = theory.publicationMultiplier;
 
-    currency.value += dt * bonus * getC1(c1.level) *
+    currency.value += dt * bonus * getC1(c1.level).pow(getC1Exponent(c1Exp.level)) *
 
-                                   getC2(c2.level);
+                                   getC2(c2.level).pow(getC2Exponent(c2Exp.level));
 
 }
 
@@ -144,19 +150,19 @@ var getPrimaryEquation = () => {
 
     let result = "\\dot{\\rho} = c_1";
 
-  //  if (c1Exp.level == 1) result += "^{1.05}";
+    if (c1Exp.level == 1) result += "^{1.05}";
 
-   // if (c1Exp.level == 2) result += "^{1.1}";
+    if (c1Exp.level == 2) result += "^{1.1}";
 
-   // if (c1Exp.level == 3) result += "^{1.15}";
+    if (c1Exp.level == 3) result += "^{1.15}";
 
     result += "c_2";
 
-   // if (c2Exp.level == 1) result += "^{1.05}";
+    if (c2Exp.level == 1) result += "^{1.05}";
 
-  //  if (c2Exp.level == 2) result += "^{1.1}";
+    if (c2Exp.level == 2) result += "^{1.1}";
 
-   // if (c2Exp.level == 3) result += "^{1.15}";
+    if (c2Exp.level == 3) result += "^{1.15}";
 
     return result;
 
@@ -164,16 +170,20 @@ var getPrimaryEquation = () => {
 
 var getSecondaryEquation = () => theory.latexSymbol + "=\\max\\rho";
 
-var getPublicationMultiplier = (tau) => tau / BigNumber.THREE;
+var getPublicationMultiplier = (tau) => tau.pow(0.164) / BigNumber.THREE;
 
-var getPublicationMultiplierFormula = (symbol) => "\\frac{{" + symbol + "}}{3}";
+var getPublicationMultiplierFormula = (symbol) => "\\frac{{" + symbol + "}^{0.164}}{3}";
 
 var getTau = () => currency.value;
 
 var get2DGraphValue = () => currency.value.sign * (BigNumber.ONE + currency.value.abs()).log10().toNumber();
 
-var getC1 = (level) => BigNumber.TWO.pow(level);
+var getC1 = (level) => Utils.getStepwisePowerSum(level, 2, 10, 0);
 
-var getC2 = (level) => BigNumber.from(10).pow(level)
+var getC2 = (level) => BigNumber.TWO.pow(level);
+
+var getC1Exponent = (level) => BigNumber.from(1 + 0.05 * level);
+
+var getC2Exponent = (level) => BigNumber.from(1 + 0.05 * level);
 
 init();
