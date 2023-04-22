@@ -80,29 +80,29 @@ var init = () => {
 
     //// Milestone Upgrades
 
-    //theory.setMilestoneCost(new LinearCost(25, 25));
+    theory.setMilestoneCost(new LinearCost(25, 25));
 
     {
 
-        //c1Exp = theory.createMilestoneUpgrade(0, 3);
+        c1Exp = theory.createMilestoneUpgrade(0, 3);
 
-        //c1Exp.description = Localization.getUpgradeIncCustomExpDesc("c_1", "0.05");
+        c1Exp.description = Localization.getUpgradeIncCustomExpDesc("c_1", "0.05");
 
-     //   c1Exp.info = Localization.getUpgradeIncCustomExpInfo("c_1", "0.05");
+        c1Exp.info = Localization.getUpgradeIncCustomExpInfo("c_1", "0.05");
 
-      //  c1Exp.boughtOrRefunded = (_) => theory.invalidatePrimaryEquation();
+        c1Exp.boughtOrRefunded = (_) => theory.invalidatePrimaryEquation();
 
     }
 
     {
 
-       // c2Exp = theory.createMilestoneUpgrade(1, 3);
+        c2Exp = theory.createMilestoneUpgrade(1, 3);
 
-       // c2Exp.description = Localization.getUpgradeIncCustomExpDesc("c_2", "0.05");
+        c2Exp.description = Localization.getUpgradeIncCustomExpDesc("c_2", "0.05");
 
-        //c2Exp.info = Localization.getUpgradeIncCustomExpInfo("c_2", "0.05");
+        c2Exp.info = Localization.getUpgradeIncCustomExpInfo("c_2", "0.05");
 
-        //c2Exp.boughtOrRefunded = (_) => theory.invalidatePrimaryEquation();
+        c2Exp.boughtOrRefunded = (_) => theory.invalidatePrimaryEquation();
 
     }
 
