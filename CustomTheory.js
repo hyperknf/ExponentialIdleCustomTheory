@@ -70,11 +70,11 @@ var init = () => {
 
     // Permanent Upgrades
 
-    theory.createPublicationUpgrade(0, currency, 1e1000);
+    theory.createPublicationUpgrade(0, currency, 1e10);
 
-    theory.createBuyAllUpgrade(1, currency, 1e3000);
+    theory.createBuyAllUpgrade(1, currency, 1e17);
 
-    theory.createAutoBuyerUpgrade(2, currency, 1e25000);
+    theory.createAutoBuyerUpgrade(2, currency, 1e25);
 
     ///////////////////////
 
@@ -123,8 +123,6 @@ var init = () => {
     chapter1 = theory.createStoryChapter(0, "My First Chapter", "This is line 1,\nand this is line 2.\n\nNice.", () => c1.level > 0);
 
     chapter2 = theory.createStoryChapter(1, "My Second Chapter", "This is line 1 again,\nand this is line 2... again.\n\nNice again.", () => c2.level > 0);
-
-    updateAvailability();
 
 }
 
