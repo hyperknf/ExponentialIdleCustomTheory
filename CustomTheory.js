@@ -8,13 +8,13 @@ import { theory } from "./api/Theory";
 
 import { Utils } from "./api/Utils";
 
-var id = "my_custom_theory_id";
+var id = "exponential_theory_hyperknf";
 
 var name = "My Custom Theory";
 
-var description = "A basic theory.";
+var description = "A basic theory";
 
-var authors = "Gilles-Philippe Paillé";
+var authors = "HyperKNF";
 
 var version = 1;
 
