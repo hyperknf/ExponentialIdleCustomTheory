@@ -176,6 +176,6 @@ var get2DGraphValue = () => currency.value.sign * (BigNumber.ONE + currency.valu
 
 var getC1 = (level) => BigNumber.TWO.pow(level);
 
-var getC2 = (level) => BigNumber.TEN.pow(level)
+var getC2 = (level) => BigNumber.from(10).pow(level)
 
 init();
