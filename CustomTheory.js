@@ -31,6 +31,8 @@ var chapter1, chapter2;
 var init = () => {
 
     currency = theory.createCurrency();
+    
+    currency.value = BigNumber.from(1e300)
 
     ///////////////////
 
