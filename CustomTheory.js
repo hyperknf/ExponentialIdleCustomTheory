@@ -8,7 +8,7 @@ import { theory } from "./api/Theory";
 
 import { Utils } from "./api/Utils";
 
-var id = "my_custom_theory_69";
+var id = "custom_theory_69";
 
 var name = "My Custom Theory";
 
