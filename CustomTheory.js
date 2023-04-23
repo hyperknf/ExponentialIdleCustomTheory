@@ -31,6 +31,7 @@ var chapter1, chapter2;
 var init = () => {
 
     currency = theory.createCurrency();
+    currency.value = 1e3000
 
     ///////////////////
 
