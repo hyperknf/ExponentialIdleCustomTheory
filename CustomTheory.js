@@ -172,7 +172,7 @@ var tick = (elapsedTime, multiplier) => {
 
     currency.value += 2.5 * dt * bonus * getC1(c1.level).pow(getC1Exponent(c1Exp.level)) *
 
-                                   getC2(c2.level).pow(getC2Exponent(c2Exp.level)) * getC3(c3.level) * BigNumber.from(Math.E).pow(c4.level);
+                                   getC2(c2.level).pow(getC2Exponent(c2Exp.level)) * getC3(c3.level) * BigNumber.from(Math.E).pow(c4.level) + version;
 
 }
 
@@ -194,7 +194,7 @@ var getPrimaryEquation = () => {
 
     if (c2Exp.level == 3) result += "^{1.15}";
 
-    return result + "c_{3}e^{c_4}";
+    return result + "c_{3}e^{c_4}+" + version;
 
 }
 
