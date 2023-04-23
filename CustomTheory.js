@@ -318,7 +318,7 @@ var getPublicationMultiplier = (tau) => tau.pow(0.3) / BigNumber.from(2);
 
 var getPublicationMultiplierFormula = (symbol) => "\\frac{{" + symbol + "}^{0.3}}{2}";
 
-var getTau = () => (currency.value.max(BigNumber.ONE) == BigNumber.ONE ? BigNumber.ONE : currency.value.pow(BigNumber.from(0.5 * (1 - 1 / (n.level + 2))))) * (Math.log(x) ** 0.2) * currency2.value.pow(BigNumber.from(0.25));
+var getTau = () => (currency.value.max(BigNumber.ONE) == BigNumber.ONE ? BigNumber.ONE : currency.value.pow(BigNumber.from(0.5 * (1 - 1 / (n.level + 2)))) * (Math.log(x) ** 0.2)) * currency2.value.pow(BigNumber.from(0.25));
 
 var get2DGraphValue = () => currency.value.sign * (BigNumber.ONE + currency.value.abs()).log10().toNumber();
 
