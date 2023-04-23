@@ -154,7 +154,7 @@ var init = () => {
 
         let getInfo = (level) => `n=${level}`;
 
-        n = theory.createUpgrade(4, currency, new ExponentialCost(1e3, Math.log2(100)));
+        n = theory.createUpgrade(7, currency, new ExponentialCost(1e3, Math.log2(100)));
 
         n.getDescription = (_) => Utils.getMath(getDesc(n.level));
 
