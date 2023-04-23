@@ -270,7 +270,7 @@ var getPublicationMultiplier = (tau) => tau.pow(0.01) / BigNumber.THREE;
 
 var getPublicationMultiplierFormula = (symbol) => "\\frac{{" + symbol + "}^{0.01}}{3}";
 
-var getTau = () => currency.value.max(BigNumber.ONE) == BigNumber.ONE ? BigNumber.ONE : Bigpow(BigNumber.from(0.2 * (1 - 1 / (n.level + 2))));
+var getTau = () => currency.value.max(BigNumber.ONE) == BigNumber.ONE ? BigNumber.ONE : currency.value.pow(BigNumber.from(0.2 * (1 - 1 / (n.level + 2))));
 
 var get2DGraphValue = () => currency.value.sign * (BigNumber.ONE + currency.value.abs()).log10().toNumber();
 
