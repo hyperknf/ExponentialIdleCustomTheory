@@ -24,7 +24,7 @@ var c1, c2, c3;
 
 var c1Exp, c2Exp;
 
-var achievement1, achievement2;
+var achievement1;
 
 var chapter1, chapter2;
 
@@ -128,9 +128,7 @@ var init = () => {
 
     //// Achievements
 
-    achievement1 = theory.createAchievement(0, "Achievement 1", "Description 1", () => c1.level > 1);
-
-    achievement2 = theory.createSecretAchievement(1, "Achievement 2", "Description 2", "Maybe you should buy two levels of c2?", () => c2.level > 1);
+    achievement1 = theory.createAchievement(0, "The start of chaos", "This is the start of something bad...", () => c1.level > 1);
 
     ///////////////////
 
