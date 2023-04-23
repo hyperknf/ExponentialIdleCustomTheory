@@ -194,7 +194,7 @@ var getPrimaryEquation = () => {
 
     if (c2Exp.level == 3) result += "^{1.15}";
 
-    return result + "c_{3}e^{c_4}+";
+    return result + "c_{3}e^{c_4}";
 
 }
 
