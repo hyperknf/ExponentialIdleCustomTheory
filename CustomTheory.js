@@ -268,7 +268,7 @@ var getPrimaryEquation = () => {
 
 }
 
-var getSecondaryEquation = () => "\\dot{rho_2}=n" + theory.latexSymbol + "=\\max\\rho_1^{0.5(1-\\frac{1}{n+2})}\\rho_2^0.05";
+var getSecondaryEquation = () => "\\dot{rho_2}=n, " + theory.latexSymbol + "=\\max\\rho_1^{0.5(1-\\frac{1}{n+2})}\\rho_2^0.05";
 
 var getPublicationMultiplier = (tau) => tau.pow(0.1) / BigNumber.THREE;
 
