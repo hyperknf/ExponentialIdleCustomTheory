@@ -18,7 +18,7 @@ var authors = "HyperKNF";
 
 var version = 6;
 
-var currency;
+var currency, currency2;
 
 var c1, c2, c3, c4, k1, k2, k3, n;
 
@@ -31,6 +31,8 @@ var chapter1, chapter2;
 var init = () => {
 
     currency = theory.createCurrency();
+    
+    currency2 = theory.createCurrency()
 
     ///////////////////
 
@@ -239,12 +241,14 @@ var tick = (elapsedTime, multiplier) => {
     currency.value += Math.pow(-1.0001, n.level) / (2 ** (1 + k2.level) - Math.PI ** (k3.level)) * (1 + 1 / (k1.level + 1)) ** (k1.level + 1) * dt * bonus * getC1(c1.level).pow(getC1Exponent(c1Exp.level)) *
 
                                    getC2(c2.level).pow(getC2Exponent(c2Exp.level)) * getC3(c3.level) * BigNumber.from(Math.E).pow(c4.level);
+    
+    currency2.value += n.level
 
 }
 
 var getPrimaryEquation = () => {
 
-    let result = `\\dot{\\rho} = (\\frac{(-1.001)^{n}}{2^{k_2}-\\pi^{k_3}})(1+\\frac{1}{k_1+1})^{k_1+1}c_{1}`;
+    let result = `\\dot{\\rho_1} = (\\frac{(-1.001)^{n}}{2^{k_2}-\\pi^{k_3}})(1+\\frac{1}{k_1+1})^{k_1+1}c_{1}`;
 
     if (c1Exp.level == 1) result += "^{1.05}";
 
@@ -260,17 +264,17 @@ var getPrimaryEquation = () => {
 
     if (c2Exp.level == 3) result += "^{1.15}";
 
-    return result + "c_{3}e^{c_4}";
+    return result + "c_{3}e^{c_4}\n\\dot{\\rho_2} = n";
 
 }
 
-var getSecondaryEquation = () => theory.latexSymbol + "=\\max\\rho^{0.5(1-\\frac{1}{n+2})}";
+var getSecondaryEquation = () => theory.latexSymbol + "=\\max\\rho_1^{0.5(1-\\frac{1}{n+2})}\\rho_2^0.05";
 
 var getPublicationMultiplier = (tau) => tau.pow(0.1) / BigNumber.THREE;
 
 var getPublicationMultiplierFormula = (symbol) => "\\frac{{" + symbol + "}^{0.1}}{3}";
 
-var getTau = () => currency.value.max(BigNumber.ONE) == BigNumber.ONE ? BigNumber.ONE : currency.value.pow(BigNumber.from(0.5 * (1 - 1 / (n.level + 2))));
+var getTau = () => (currency.value.max(BigNumber.ONE) == BigNumber.ONE ? BigNumber.ONE : currency.value.pow(BigNumber.from(0.5 * (1 - 1 / (n.level + 2))))) * currency2.value.pow()BigNumber.from(0.05);
 
 var get2DGraphValue = () => currency.value.sign * (BigNumber.ONE + currency.value.abs()).log10().toNumber();
 
