@@ -264,7 +264,7 @@ var getPrimaryEquation = () => {
 
 }
 
-var getSecondaryEquation = () => theory.latexSymbol + "=\\max\\rho^{1-//frac{1}{n+1}}";
+var getSecondaryEquation = () => theory.latexSymbol + "=\\max\\rho^{1-\\frac{1}{n+1}}";
 
 var getPublicationMultiplier = (tau) => tau.pow(0.01) / BigNumber.THREE;
 
