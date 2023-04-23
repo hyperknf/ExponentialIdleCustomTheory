@@ -156,7 +156,7 @@ var tick = (elapsedTime, multiplier) => {
 
     let bonus = theory.publicationMultiplier;
 
-    currency.value += dt * bonus * getC1(c1.level).pow(getC1Exponent(c1Exp.level)) *
+    currency.value += 2.5 * dt * bonus * getC1(c1.level).pow(getC1Exponent(c1Exp.level)) *
 
                                    getC2(c2.level).pow(getC2Exponent(c2Exp.level));
 
@@ -164,7 +164,7 @@ var tick = (elapsedTime, multiplier) => {
 
 var getPrimaryEquation = () => {
 
-    let result = "\\dot{\\rho} = 1.5c_1";
+    let result = "\\dot{\\rho} = 2.5c_1";
 
     if (c1Exp.level == 1) result += "^{1.05}";
 
