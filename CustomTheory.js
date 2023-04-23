@@ -20,7 +20,7 @@ var version = 6;
 
 var currency, currency2;
 
-var c1, c2, c3, c4, k1, k2, k3, n;
+var c1, c2, c3, c4, k1, k2, k3, n, m;
 
 var c1Exp, c2Exp;
 
@@ -163,6 +163,22 @@ var init = () => {
         n.getInfo = (amount) => Utils.getMathTo(getInfo(n.level), getInfo(n.level + amount));
 
     }
+    
+    // m
+
+    {
+
+        let getDesc = (level) => "m=" + level;
+
+        let getInfo = (level) => `m=${level}`;
+
+        m = theory.createUpgrade(8, currency2, new FirstFreeCost(new ExponentialCost(100, Math.log2(2))));
+
+        m.getDescription = (_) => Utils.getMath(getDesc(m.level));
+
+        m.getInfo = (amount) => Utils.getMathTo(getInfo(m.level), getInfo(m.level + amount));
+
+    }
 
     /////////////////////
 
@@ -242,7 +258,7 @@ var tick = (elapsedTime, multiplier) => {
 
                                    getC2(c2.level).pow(getC2Exponent(c2Exp.level)) * getC3(c3.level) * BigNumber.from(Math.E).pow(c4.level);
     
-    currency2.value += n.level * Math.sqrt(k1.level + k2.level + 1 + k3.level)
+    currency2.value += m.level * n.level * Math.sqrt(k1.level + k2.level + 1 + k3.level)
 
 }
 
@@ -268,7 +284,7 @@ var getPrimaryEquation = () => {
 
 }
 
-var getSecondaryEquation = () => "\\dot{\\rho_2}=n\\sqrt{k_1+k_2+k_3}, \\quad" + theory.latexSymbol + "=\\max\\rho_1^{0.5(1-\\frac{1}{n+2})}\\rho_2^{0.05}";
+var getSecondaryEquation = () => "\\dot{\\rho_2}=nm\\sqrt{k_1+k_2+k_3}, \\quad" + theory.latexSymbol + "=\\max\\rho_1^{0.5(1-\\frac{1}{n+2})}\\rho_2^{0.05}";
 
 var getPublicationMultiplier = (tau) => tau.pow(0.3) / BigNumber.from(2.5);
 
