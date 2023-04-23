@@ -194,7 +194,7 @@ var init = () => {
 
     achievement1 = theory.createAchievement(0, "The start of chaos", "The start of something bad...", () => c1.level > 1);
     
-    achievement2 = theory.createAchievement(1, "Exponential constant", "You found out about the exponential constant", () => k.level > 1)
+    achievement2 = theory.createAchievement(1, "Exponential constant", "You found out about the exponential constant", () => k1.level > 1)
 
     ///////////////////
 
