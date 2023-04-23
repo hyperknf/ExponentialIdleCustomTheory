@@ -22,7 +22,7 @@ var currency, currency2;
 
 var c1, c2, c3, c4, c5, k1, k2, k3, n, m;
 
-var c1Exp, c2Exp, usum;
+var c1Exp, c2Exp;
 
 var achievement1;
 
@@ -251,18 +251,6 @@ var init = () => {
         c2Exp.boughtOrRefunded = (_) => theory.invalidatePrimaryEquation();
 
     }
-    
-    {
-
-        usum = theory.createMilestoneUpgrade(2, 1);
-
-        usum.description = "Unlock summation";
-
-        usum.info = usum.description;
-
-        usum.boughtOrRefunded = (_) => theory.invalidatePrimaryEquation();
-
-    }
 
     /////////////////
 
@@ -296,7 +284,7 @@ var tick = (elapsedTime, multiplier) => {
 
     let bonus = theory.publicationMultiplier;
 
-    currency.value += Math.pow(-1.0001, n.level) / (2 ** (1 + k2.level) - Math.PI ** (k3.level)) * (1 + 1 / (k1.level + 1)) ** (k1.level + 1) * dt * bonus * getC1(c1.level).pow(getC1Exponent(c1Exp.level)) *
+    currency.value += Math.pow(-1.0001, n.level) / (2 ** (1 + k2.level) - Math.PI ** (k3.level)) * (1 + 1 / (k1.level + 1)) ** (k1.level + 1) * dt * bonus * Math.sqrt(getC1(c1.level).pow(getC1Exponent(c1Exp.level)) *
 
                                    getC2(c2.level).pow(getC2Exponent(c2Exp.level)) * getC3(c3.level) * BigNumber.from(Math.E).pow(c4.level) * BigNumber.from(Math.PI).pow(c5.level);
     
@@ -308,37 +296,21 @@ var tick = (elapsedTime, multiplier) => {
     
     }
     
-    currency2.value += m.level * n.level * (usum.level == 1 ? sum : Math.sqrt(k1.level + k2.level + 1 + k3.level))
+    currency2.value += m.level * n.level * sum
 
 }
 
 var getPrimaryEquation = () => {
 
-    let result = `\\dot{\\rho_1} = (\\frac{(-1.001)^{n}}{2^{k_2}-\\pi^{k_3}})(1+\\frac{1}{k_1+1})^{k_1+1}c_{1}`;
-
-    if (c1Exp.level == 1) result += "^{1.05}";
-
-    if (c1Exp.level == 2) result += "^{1.1}";
-
-    if (c1Exp.level == 3) result += "^{1.15}";
-
-    result += "c_2";
-
-    if (c2Exp.level == 1) result += "^{1.05}";
-
-    if (c2Exp.level == 2) result += "^{1.1}";
-
-    if (c2Exp.level == 3) result += "^{1.15}";
-
-    return result + "c_{3}e^{c_4}\\pi^{c_5}";
-
+    return `\\dot{\\rho_1} = (\\frac{(-1.001)^{n}}{2^{k_2}-\\pi^{k_3}})(1+\\frac{1}{k_1+1})^{k_1+1}\\sqrt{x}`;
+    
 }
 
 theory.primaryEquationHeight = 50
 
-theory.secondaryEquationHeight = 125
+theory.secondaryEquationHeight = 150
 
-var getSecondaryEquation = () => `\\dot{\\rho_2}=nm${usum.level == 1 ? "\\sum_{i=0}^{\\lfloor \\sqrt{k_1} \\rfloor +1}i" : ""}\\sqrt{k_1+k_2+k_3}\\\\` + theory.latexSymbol + "=\\max\\rho_1^{0.5(1-\\frac{1}{n+2})}\\rho_2^{0.25}";
+var getSecondaryEquation = () => `x=c_{1}${c1Exp.level != 0 ? "^{" + (1 + 0.05 * c1Exp.level) + "}" : ""}c_2${c2Exp.level != 0 ? "^{" + (1 + 0.05 * c2Exp.level) + "}" : ""}c_{3}e^{c_4}\\pi^{c_5}\\\\\\dot{\\rho_2}=nm\\sum_{i=0}^{\\lfloor \\sqrt{k_1} \\rfloor +1}i\\sqrt{k_1+k_2+k_3}\\\\` + theory.latexSymbol + "=\\max\\rho_1^{0.5(1-\\frac{1}{n+2})}\\rho_2^{0.25}";
 
 var getPublicationMultiplier = (tau) => tau.pow(0.3) / BigNumber.from(2);
 
