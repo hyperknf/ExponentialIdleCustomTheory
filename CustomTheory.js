@@ -202,17 +202,13 @@ var init = () => {
 
     // Permanent Upgrades
 
-    theory.createPublicationUpgrade(0, currency, 1e9);
-
-    theory.createBuyAllUpgrade(1, currency, 1e15);
-
-    theory.createAutoBuyerUpgrade(2, currency, 1e23);
+    theory.createPublicationUpgrade(0, currency, 1e10);
 
     ///////////////////////
 
     //// Milestone Upgrades
 
-    theory.setMilestoneCost(new LinearCost(20, 20));
+    theory.setMilestoneCost(new LinearCost(15, 15));
 
     {
 
@@ -242,7 +238,7 @@ var init = () => {
 
         usum = theory.createMilestoneUpgrade(2, 1);
 
-        usum.description = "Unlock summation in \\dot{\\rho_2}";
+        usum.description = "Unlock summation in \\rho_2";
 
         usum.info = usum.description;
 
