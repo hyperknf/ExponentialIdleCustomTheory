@@ -236,7 +236,7 @@ var tick = (elapsedTime, multiplier) => {
 
     let bonus = theory.publicationMultiplier;
 
-    currency.value += Math.abs(Math.sin(n.level + 1)) * Math.pow(-1.01, n.level) / (2 ** (1 + k2.level) - Math.PI ** (k3.level)) * (1 + 1 / (k1.level + 1)) ** (k1.level + 1) * dt * bonus * getC1(c1.level).pow(getC1Exponent(c1Exp.level)) *
+    currency.value += Math.pow(-1.01, n.level) / (2 ** (1 + k2.level) - Math.PI ** (k3.level)) * (1 + 1 / (k1.level + 1)) ** (k1.level + 1) * dt * bonus * getC1(c1.level).pow(getC1Exponent(c1Exp.level)) *
 
                                    getC2(c2.level).pow(getC2Exponent(c2Exp.level)) * getC3(c3.level) * BigNumber.from(Math.E).pow(c4.level);
 
@@ -244,7 +244,7 @@ var tick = (elapsedTime, multiplier) => {
 
 var getPrimaryEquation = () => {
 
-    let result = `\\dot{\\rho} = (\\frac{(-1.01)^{n}}{2^{k_2}-\\pi^{k_3}})(1+\\frac{1}{k+1})^{k+1}c_{1}`;
+    let result = `\\dot{\\rho} = (\\frac{(-1.01)^{n}}{2^{k_2}-\\pi^{k_3}})(1+\\frac{1}{k_1+1})^{k_1+1}c_{1}`;
 
     if (c1Exp.level == 1) result += "^{1.05}";
 
@@ -260,17 +260,17 @@ var getPrimaryEquation = () => {
 
     if (c2Exp.level == 3) result += "^{1.15}";
 
-    return result + "c_{3}e^{c_4}|sin(n+1)|";
+    return result + "c_{3}e^{c_4}";
 
 }
 
-var getSecondaryEquation = () => theory.latexSymbol + "=\\max\\rho";
+var getSecondaryEquation = () => theory.latexSymbol + "=\\max\\rho^{1-//frac{1}{n+1}}";
 
 var getPublicationMultiplier = (tau) => tau.pow(0.01) / BigNumber.THREE;
 
 var getPublicationMultiplierFormula = (symbol) => "\\frac{{" + symbol + "}^{0.01}}{3}";
 
-var getTau = () => currency.value;
+var getTau = () => currency.value ** (1 - 1 / (n.level + 1));
 
 var get2DGraphValue = () => currency.value.sign * (BigNumber.ONE + currency.value.abs()).log10().toNumber();
 
