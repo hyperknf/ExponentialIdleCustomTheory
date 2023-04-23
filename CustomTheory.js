@@ -120,7 +120,7 @@ var init = () => {
 
         let getDesc = (level) => "k_2=" + (1 + level);
 
-        let getInfo = (level) => `k_2=${level}`;
+        let getInfo = (level) => `k_2=${1 + level}`;
 
         k2 = theory.createUpgrade(5, currency, new ExponentialCost(10, Math.log2(1.5)));
 
