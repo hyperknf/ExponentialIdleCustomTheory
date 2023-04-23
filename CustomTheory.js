@@ -22,7 +22,7 @@ var currency, currency2;
 
 var c1, c2, c3, c4, c5, k1, k2, k3, n, m;
 
-var x
+var x = BigNumber.from(0);
 
 var c1Exp, c2Exp;
 
