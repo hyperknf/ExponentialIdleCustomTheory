@@ -20,7 +20,7 @@ var version = 6;
 
 var currency;
 
-var c1, c2, c3, c4;
+var c1, c2, c3, c4, k;
 
 var c1Exp, c2Exp;
 
@@ -42,7 +42,7 @@ var init = () => {
 
         let getDesc = (level) => "c_1=" + getC1(level).toString(0);
 
-        c1 = theory.createUpgrade(0, currency, new FirstFreeCost(new ExponentialCost(10, Math.log2(1.25))));
+        c1 = theory.createUpgrade(0, currency, new FirstFreeCost(new ExponentialCost(10, Math.log2(1.5))));
 
         c1.getDescription = (_) => Utils.getMath(getDesc(c1.level));
 
@@ -58,7 +58,7 @@ var init = () => {
 
         let getInfo = (level) => "c_2=" + getC2(level).toString(0);
 
-        c2 = theory.createUpgrade(1, currency, new ExponentialCost(25, Math.log2(15)));
+        c2 = theory.createUpgrade(1, currency, new ExponentialCost(25, Math.log2(20)));
 
         c2.getDescription = (_) => Utils.getMath(getDesc(c2.level));
 
@@ -74,7 +74,7 @@ var init = () => {
 
         let getInfo = (level) => "c_3=" + getC3(level).toString(0);
 
-        c3 = theory.createUpgrade(2, currency, new ExponentialCost(100, Math.log2(30)));
+        c3 = theory.createUpgrade(2, currency, new ExponentialCost(100, Math.log2(35)));
 
         c3.getDescription = (_) => Utils.getMath(getDesc(c3.level));
 
@@ -90,11 +90,27 @@ var init = () => {
 
         let getInfo = (level) => `c_4=${level}`;
 
-        c4 = theory.createUpgrade(3, currency, new ExponentialCost(50, Math.log2(22.5)));
+        c4 = theory.createUpgrade(3, currency, new ExponentialCost(50, Math.log2(50)));
 
         c4.getDescription = (_) => Utils.getMath(getDesc(c4.level));
 
         c4.getInfo = (amount) => Utils.getMathTo(getInfo(c4.level), getInfo(c4.level + amount));
+
+    }
+    
+    // k
+
+    {
+
+        let getDesc = (level) => "k=" + level;
+
+        let getInfo = (level) => `k=${level}`;
+
+        k = theory.createUpgrade(4, currency, new ExponentialCost(25, Math.log2(2)));
+
+        k.getDescription = (_) => Utils.getMath(getDesc(k.level));
+
+        k.getInfo = (amount) => Utils.getMathTo(getInfo(k.level), getInfo(k.level + amount));
 
     }
 
@@ -102,11 +118,11 @@ var init = () => {
 
     // Permanent Upgrades
 
-    theory.createPublicationUpgrade(0, currency, 1e10);
+    theory.createPublicationUpgrade(0, currency, 1e25);
 
-    theory.createBuyAllUpgrade(1, currency, 1e13);
+    theory.createBuyAllUpgrade(1, currency, 1e50);
 
-    theory.createAutoBuyerUpgrade(2, currency, 1e30);
+    theory.createAutoBuyerUpgrade(2, currency, 1e100);
 
     ///////////////////////
 
@@ -145,14 +161,14 @@ var init = () => {
     //// Achievements
 
     achievement1 = theory.createAchievement(0, "The start of chaos", "The start of something bad...", () => c1.level > 1);
+    
+    achievement2 = theory.createAchievement(1, "Exponential constant", "You found out about the exponential constant", () => k.level > 1)
 
     ///////////////////
 
     //// Story chapters
 
-    chapter1 = theory.createStoryChapter(0, "My First Chapter", "This is line 1,\nand this is line 2.\n\nNice.", () => c1.level > 0);
-
-    chapter2 = theory.createStoryChapter(1, "My Second Chapter", "This is line 1 again,\nand this is line 2... again.\n\nNice again.", () => c2.level > 0);
+    chapter1 = theory.createStoryChapter(0, "e", "You started to find out\nthat as k approaches infinity\n(1 + 1/k)^k approaches e\nMaybe this will be useful in your research?", () => c1.level > 0);
 
     updateAvailability();
 
@@ -165,12 +181,14 @@ var updateAvailability = () => {
 }
 
 var tick = (elapsedTime, multiplier) => {
+    
+    updateAvailability()
 
     let dt = BigNumber.from(elapsedTime * multiplier);
 
     let bonus = theory.publicationMultiplier;
 
-    currency.value += 2.5 * dt * bonus * getC1(c1.level).pow(getC1Exponent(c1Exp.level)) *
+    currency.value += 2.5 * (1 + 1 / (k.level + 1)) ** (k.level + 1) * dt * bonus * getC1(c1.level).pow(getC1Exponent(c1Exp.level)) *
 
                                    getC2(c2.level).pow(getC2Exponent(c2Exp.level)) * getC3(c3.level) * BigNumber.from(Math.E).pow(c4.level);
 
@@ -178,7 +196,7 @@ var tick = (elapsedTime, multiplier) => {
 
 var getPrimaryEquation = () => {
 
-    let result = "\\dot{\\rho} = 2.5c_1";
+    let result = `\\dot{\\rho} = 2.5(1+\\frac{1}{k+1})^{k+1}c_1`;
 
     if (c1Exp.level == 1) result += "^{1.05}";
 
@@ -202,7 +220,7 @@ var getSecondaryEquation = () => theory.latexSymbol + "=\\max\\rho";
 
 var getPublicationMultiplier = (tau) => tau.pow(0.5) / BigNumber.THREE;
 
-var getPublicationMultiplierFormula = (symbol) => "\\frac{{" + symbol + "}^{0.164}}{3}";
+var getPublicationMultiplierFormula = (symbol) => "\\frac{{" + symbol + "}^{0.5}}{3}";
 
 var getTau = () => currency.value;
 
