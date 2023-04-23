@@ -8,19 +8,19 @@ import { theory } from "./api/Theory";
 
 import { Utils } from "./api/Utils";
 
-var id = "my_custom_theory_id";
+var id = "HyperKNF_Exponential";
 
-var name = "My Custom Theory";
+var name = "Exponential";
 
-var description = "A basic theory.";
+var description = "Exponential";
 
-var authors = "Gilles-Philippe Paillé";
+var authors = "HyperKNF";
 
 var version = 1;
 
 var currency;
 
-var c1, c2;
+var c1, c2, c3;
 
 var c1Exp, c2Exp;
 
@@ -42,7 +42,7 @@ var init = () => {
 
         let getDesc = (level) => "c_1=" + getC1(level).toString(0);
 
-        c1 = theory.createUpgrade(0, currency, new FirstFreeCost(new ExponentialCost(5, Math.log2(1.1))));
+        c1 = theory.createUpgrade(0, currency, new FirstFreeCost(new ExponentialCost(10, Math.log2(2))));
 
         c1.getDescription = (_) => Utils.getMath(getDesc(c1.level));
 
@@ -58,11 +58,27 @@ var init = () => {
 
         let getInfo = (level) => "c_2=" + getC2(level).toString(0);
 
-        c2 = theory.createUpgrade(1, currency, new ExponentialCost(25, Math.log2(2)));
+        c2 = theory.createUpgrade(1, currency, new ExponentialCost(25, Math.log2(5)));
 
         c2.getDescription = (_) => Utils.getMath(getDesc(c2.level));
 
         c2.getInfo = (amount) => Utils.getMathTo(getInfo(c2.level), getInfo(c2.level + amount));
+
+    }
+    
+    // c3
+
+    {
+
+        let getDesc = (level) => "c_3=3^{" + level + "}";
+
+        let getInfo = (level) => "c_3=" + getC3(level).toString(0);
+
+        c3 = theory.createUpgrade(1, currency, new ExponentialCost(100, Math.log2(10)));
+
+        c3.getDescription = (_) => Utils.getMath(getDesc(c3.level));
+
+        c3.getInfo = (amount) => Utils.getMathTo(getInfo(c3.level), getInfo(c3.level + amount));
 
     }
 
@@ -148,7 +164,7 @@ var tick = (elapsedTime, multiplier) => {
 
 var getPrimaryEquation = () => {
 
-    let result = "\\dot{\\rho} = c_1";
+    let result = "\\dot{\\rho} = 1.5c_1";
 
     if (c1Exp.level == 1) result += "^{1.05}";
 
@@ -164,7 +180,7 @@ var getPrimaryEquation = () => {
 
     if (c2Exp.level == 3) result += "^{1.15}";
 
-    return result;
+    return result + "c_3";
 
 }
 
@@ -181,6 +197,8 @@ var get2DGraphValue = () => currency.value.sign * (BigNumber.ONE + currency.valu
 var getC1 = (level) => Utils.getStepwisePowerSum(level, 2, 10, 0);
 
 var getC2 = (level) => BigNumber.TWO.pow(level);
+
+var getC3 = (level) => BigNumber.THREE.pow(level)
 
 var getC1Exponent = (level) => BigNumber.from(1 + 0.05 * level);
 
