@@ -44,7 +44,7 @@ var init = () => {
 
         let getDesc = (level) => "c_1=" + getC1(level).toString(0);
 
-        c1 = theory.createUpgrade(0, currency, new FirstFreeCost(new ExponentialCost(10, Math.log2(1.5))));
+        c1 = theory.createUpgrade(0, currency, new FirstFreeCost(new ExponentialCost(10, Math.log2(2.5)));
 
         c1.getDescription = (_) => Utils.getMath(getDesc(c1.level));
 
@@ -270,9 +270,9 @@ var getPrimaryEquation = () => {
 
 var getSecondaryEquation = () => "\\dot{\\rho_2}=n\\sqrt{k_1+k_2+k_3}, \\quad" + theory.latexSymbol + "=\\max\\rho_1^{0.5(1-\\frac{1}{n+2})}\\rho_2^{0.05}";
 
-var getPublicationMultiplier = (tau) => tau.pow(0.1) / BigNumber.THREE;
+var getPublicationMultiplier = (tau) => tau.pow(0.3) / BigNumber.from(2.5);
 
-var getPublicationMultiplierFormula = (symbol) => "\\frac{{" + symbol + "}^{0.1}}{3}";
+var getPublicationMultiplierFormula = (symbol) => "\\frac{{" + symbol + "}^{0.3}}{2.5}";
 
 var getTau = () => (currency.value.max(BigNumber.ONE) == BigNumber.ONE ? BigNumber.ONE : currency.value.pow(BigNumber.from(0.5 * (1 - 1 / (n.level + 2))))) * currency2.value.pow(BigNumber.from(0.05));
 
