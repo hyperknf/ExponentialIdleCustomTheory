@@ -20,7 +20,7 @@ var version = 6;
 
 var currency, currency2;
 
-var c1, c2, c3, c4, k1, k2, k3, n, m;
+var c1, c2, c3, c4, c5, k1, k2, k3, n, m;
 
 var c1Exp, c2Exp, usum;
 
@@ -108,6 +108,24 @@ var init = () => {
         
     }
     
+    // c5
+
+    {
+
+        let getDesc = (level) => "c_5=2^{" + level + "}";
+
+        let getInfo = (level) => `c_5=${level}`;
+
+        c5 = theory.createUpgrade(4, currency, new ExponentialCost(150, Math.log2(75)));
+
+        c5.getDescription = (_) => Utils.getMath(getDesc(c5.level));
+
+        c5.getInfo = (amount) => Utils.getMathTo(getInfo(c5.level), getInfo(c5.level + amount));
+        
+        c5.canBeRefunded = (_) => true
+
+    }
+    
     // k1
 
     {
@@ -116,7 +134,7 @@ var init = () => {
 
         let getInfo = (level) => `k_1=${level}`;
 
-        k1 = theory.createUpgrade(4, currency, new ExponentialCost(25, Math.log2(2)));
+        k1 = theory.createUpgrade(5, currency, new ExponentialCost(25, Math.log2(2)));
 
         k1.getDescription = (_) => Utils.getMath(getDesc(k1.level));
 
@@ -134,7 +152,7 @@ var init = () => {
 
         let getInfo = (level) => `k_2=${1 + level}`;
 
-        k2 = theory.createUpgrade(5, currency, new ExponentialCost(10, Math.log2(1.5)));
+        k2 = theory.createUpgrade(6, currency, new ExponentialCost(10, Math.log2(1.5)));
 
         k2.getDescription = (_) => Utils.getMath(getDesc(k2.level));
 
@@ -152,7 +170,7 @@ var init = () => {
 
         let getInfo = (level) => `k_3=${level}`;
 
-        k3 = theory.createUpgrade(6, currency, new ExponentialCost(10, Math.log2(1.5)));
+        k3 = theory.createUpgrade(7, currency, new ExponentialCost(10, Math.log2(1.5)));
 
         k3.getDescription = (_) => Utils.getMath(getDesc(k3.level));
 
@@ -170,7 +188,7 @@ var init = () => {
 
         let getInfo = (level) => `n=${level}`;
 
-        n = theory.createUpgrade(7, currency, new ExponentialCost(1e3, Math.log2(1.5)));
+        n = theory.createUpgrade(8, currency, new ExponentialCost(1e3, Math.log2(1.5)));
 
         n.getDescription = (_) => Utils.getMath(getDesc(n.level));
 
@@ -188,7 +206,7 @@ var init = () => {
 
         let getInfo = (level) => `m=${level}`;
 
-        m = theory.createUpgrade(8, currency2, new FirstFreeCost(new ExponentialCost(100, Math.log2(2))));
+        m = theory.createUpgrade(9, currency2, new FirstFreeCost(new ExponentialCost(100, Math.log2(2))));
 
         m.getDescription = (_) => Utils.getMath(getDesc(m.level));
 
@@ -280,7 +298,7 @@ var tick = (elapsedTime, multiplier) => {
 
     currency.value += Math.pow(-1.0001, n.level) / (2 ** (1 + k2.level) - Math.PI ** (k3.level)) * (1 + 1 / (k1.level + 1)) ** (k1.level + 1) * dt * bonus * getC1(c1.level).pow(getC1Exponent(c1Exp.level)) *
 
-                                   getC2(c2.level).pow(getC2Exponent(c2Exp.level)) * getC3(c3.level) * BigNumber.from(Math.E).pow(c4.level);
+                                   getC2(c2.level).pow(getC2Exponent(c2Exp.level)) * getC3(c3.level) * BigNumber.from(Math.E).pow(c4.level) * BigNumber.from(Math.PI).pow(c5.level);
     
     let sum = 0
     
@@ -312,7 +330,7 @@ var getPrimaryEquation = () => {
 
     if (c2Exp.level == 3) result += "^{1.15}";
 
-    return result + "c_{3}e^{c_4}";
+    return result + "c_{3}e^{c_4}\\pi^{c_5}";
 
 }
 
