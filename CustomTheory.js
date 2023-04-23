@@ -20,7 +20,7 @@ var version = 6;
 
 var currency;
 
-var c1, c2, c3, c4, k1, k2, k3;
+var c1, c2, c3, c4, k1, k2, k3, n;
 
 var c1Exp, c2Exp;
 
@@ -145,6 +145,22 @@ var init = () => {
         k3.getInfo = (amount) => Utils.getMathTo(getInfo(k3.level), getInfo(k3.level + amount));
 
     }
+    
+    // n
+
+    {
+
+        let getDesc = (level) => "n=" + level;
+
+        let getInfo = (level) => `n=${level}`;
+
+        n = theory.createUpgrade(4, currency, new ExponentialCost(1e3, Math.log2(100)));
+
+        n.getDescription = (_) => Utils.getMath(getDesc(n.level));
+
+        n.getInfo = (amount) => Utils.getMathTo(getInfo(n.level), getInfo(n.level + amount));
+
+    }
 
     /////////////////////
 
@@ -220,7 +236,7 @@ var tick = (elapsedTime, multiplier) => {
 
     let bonus = theory.publicationMultiplier;
 
-    currency.value += 2 / (2 ** (1 + k2.level) - Math.PI ** (k3.level)) * (1 + 1 / (k1.level + 1)) ** (k1.level + 1) * dt * bonus * getC1(c1.level).pow(getC1Exponent(c1Exp.level)) *
+    currency.value += Math.abs(Math.sin(n.level)) * (-1.01 ** n.level) / (2 ** (1 + k2.level) - Math.PI ** (k3.level)) * (1 + 1 / (k1.level + 1)) ** (k1.level + 1) * dt * bonus * getC1(c1.level).pow(getC1Exponent(c1Exp.level)) *
 
                                    getC2(c2.level).pow(getC2Exponent(c2Exp.level)) * getC3(c3.level) * BigNumber.from(Math.E).pow(c4.level);
 
@@ -228,7 +244,7 @@ var tick = (elapsedTime, multiplier) => {
 
 var getPrimaryEquation = () => {
 
-    let result = `\\dot{\\rho} = (\\frac{2}{2^{k_2}-\\pi^{k_3}})(1+\\frac{1}{k+1})^{k+1}c_1`;
+    let result = `\\dot{\\rho} = (\\frac{(-1.01)^{n}}{2^{k_2}-\\pi^{k_3}})(1+\\frac{1}{k+1})^{k+1}c_{1}|sin n|`;
 
     if (c1Exp.level == 1) result += "^{1.05}";
 
