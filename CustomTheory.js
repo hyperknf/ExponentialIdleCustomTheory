@@ -74,7 +74,7 @@ var init = () => {
 
         let getInfo = (level) => "c_3=" + getC3(level).toString(0);
 
-        c3 = theory.createUpgrade(2, currency, new ExponentialCost(100, Math.log2(75)));
+        c3 = theory.createUpgrade(2, currency, new ExponentialCost(100, Math.log2(100)));
 
         c3.getDescription = (_) => Utils.getMath(getDesc(c3.level));
 
@@ -90,7 +90,7 @@ var init = () => {
 
         let getInfo = (level) => `c_4=${level}`;
 
-        c4 = theory.createUpgrade(3, currency, new ExponentialCost(50, Math.log2(100)));
+        c4 = theory.createUpgrade(3, currency, new ExponentialCost(50, Math.log2(80)));
 
         c4.getDescription = (_) => Utils.getMath(getDesc(c4.level));
 
@@ -200,7 +200,7 @@ var init = () => {
 
     //// Story chapters
 
-    chapter1 = theory.createStoryChapter(0, "e", "You started to find out\nthat as k approaches infinity\n(1 + 1/k)^k approaches e\nMaybe this will be useful in your research?", () => k1.level >= 1);
+    chapter1 = theory.createStoryChapter(0, "e", "You started to find out\nthat as k approaches infinity\n(1 + 1/k)^k approaches e\nMaybe this will be useful in your research?", () => true);
 
     updateAvailability();
 
