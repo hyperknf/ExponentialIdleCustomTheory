@@ -200,7 +200,7 @@ var init = () => {
 
     //// Story chapters
 
-    chapter1 = theory.createStoryChapter(0, "e", "You started to find out\nthat as k approaches infinity\n(1 + 1/k)^k approaches e\nMaybe this will be useful in your research?", () => k.level > 0);
+    chapter1 = theory.createStoryChapter(0, "e", "You started to find out\nthat as k approaches infinity\n(1 + 1/k)^k approaches e\nMaybe this will be useful in your research?", () => k1.level > 0);
 
     updateAvailability();
 
