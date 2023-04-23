@@ -258,7 +258,15 @@ var tick = (elapsedTime, multiplier) => {
 
                                    getC2(c2.level).pow(getC2Exponent(c2Exp.level)) * getC3(c3.level) * BigNumber.from(Math.E).pow(c4.level);
     
-    currency2.value += m.level * n.level * Math.sqrt(k1.level + k2.level + 1 + k3.level)
+    let sum = 0
+    
+    for (let i = 1; i <= Math.floor(Math.sqrt(k1.level)) + 1; i++) {
+    
+        sum += i * Math.sqrt(k1.level + k2.level + 1 + k3.level)
+    
+    }
+    
+    currency2.value += m.level * n.level * sum
 
 }
 
@@ -284,13 +292,13 @@ var getPrimaryEquation = () => {
 
 }
 
-var getSecondaryEquation = () => "\\dot{\\rho_2}=nm\\sqrt{k_1+k_2+k_3}, \\quad" + theory.latexSymbol + "=\\max\\rho_1^{0.5(1-\\frac{1}{n+2})}\\rho_2^{0.05}";
+var getSecondaryEquation = () => "\\dot{\\rho_2}=nm\\sum_{i=0}^{\\floor{\\sqrt{k_1}+1}}i\\sqrt{k_1+k_2+k_3}\n" + theory.latexSymbol + "=\\max\\rho_1^{0.5(1-\\frac{1}{n+2})}\\rho_2^{0.25}";
 
 var getPublicationMultiplier = (tau) => tau.pow(0.3) / BigNumber.from(2.5);
 
 var getPublicationMultiplierFormula = (symbol) => "\\frac{{" + symbol + "}^{0.3}}{2.5}";
 
-var getTau = () => (currency.value.max(BigNumber.ONE) == BigNumber.ONE ? BigNumber.ONE : currency.value.pow(BigNumber.from(0.5 * (1 - 1 / (n.level + 2))))) * currency2.value.pow(BigNumber.from(0.05));
+var getTau = () => (currency.value.max(BigNumber.ONE) == BigNumber.ONE ? BigNumber.ONE : currency.value.pow(BigNumber.from(0.5 * (1 - 1 / (n.level + 2))))) * currency2.value.pow(BigNumber.from(0.25));
 
 var get2DGraphValue = () => currency.value.sign * (BigNumber.ONE + currency.value.abs()).log10().toNumber();
 
