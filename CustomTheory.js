@@ -88,7 +88,7 @@ var init = () => {
 
         let getDesc = (level) => "c_4={" + level + "}";
 
-        let getInfo = (level) => "c_2=" + getC4(level).toString(0);
+        let getInfo = (level) => "c_2=" + level.toString(0);
 
         c4 = theory.createUpgrade(3, currency, new ExponentialCost(50, Math.log2(5)));
 
