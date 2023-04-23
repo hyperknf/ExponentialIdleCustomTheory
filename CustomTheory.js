@@ -264,13 +264,13 @@ var getPrimaryEquation = () => {
 
 }
 
-var getSecondaryEquation = () => theory.latexSymbol + "=\\max\\rho^{0.2}";
+var getSecondaryEquation = () => theory.latexSymbol + "=\\max\\rho^{0.2(1-\\frac{1}{n+2})}";
 
 var getPublicationMultiplier = (tau) => tau.pow(0.01) / BigNumber.THREE;
 
 var getPublicationMultiplierFormula = (symbol) => "\\frac{{" + symbol + "}^{0.01}}{3}";
 
-var getTau = () => currency.value ** 0.2;
+var getTau = () => currency.value.pow(0.2 * (1 - 1 / (n.level + 2)));
 
 var get2DGraphValue = () => currency.value.sign * (BigNumber.ONE + currency.value.abs()).log10().toNumber();
 
