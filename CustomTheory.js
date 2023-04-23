@@ -20,7 +20,7 @@ var version = 1;
 
 var currency;
 
-var c1, c2, c3;
+var c1, c2, c3, c4;
 
 var c1Exp, c2Exp;
 
@@ -81,6 +81,22 @@ var init = () => {
         c3.getInfo = (amount) => Utils.getMathTo(getInfo(c3.level), getInfo(c3.level + amount));
 
     }
+    
+    // c4
+
+    {
+
+        let getDesc = (level) => "c_4={" + level + "}";
+
+        let getInfo = (level) => "c_2=" + getC4(level).toString(0);
+
+        c4 = theory.createUpgrade(3, currency, new ExponentialCost(50, Math.log2(5)));
+
+        c4.getDescription = (_) => Utils.getMath(getDesc(c4.level));
+
+        c4.getInfo = (amount) => Utils.getMathTo(getInfo(c4.level), getInfo(c4.level + amount));
+
+    }
 
     /////////////////////
 
@@ -128,7 +144,7 @@ var init = () => {
 
     //// Achievements
 
-    achievement1 = theory.createAchievement(0, "The start of chaos", "This is the start of something bad...", () => c1.level > 1);
+    achievement1 = theory.createAchievement(0, "The start of chaos", "The start of something bad...", () => c1.level > 1);
 
     ///////////////////
 
@@ -156,7 +172,7 @@ var tick = (elapsedTime, multiplier) => {
 
     currency.value += 2.5 * dt * bonus * getC1(c1.level).pow(getC1Exponent(c1Exp.level)) *
 
-                                   getC2(c2.level).pow(getC2Exponent(c2Exp.level));
+                                   getC2(c2.level).pow(getC2Exponent(c2Exp.level)) * getC3(c3.level) * BigNumber.from(Math.E).pow(getC4(c4.level));
 
 }
 
@@ -178,7 +194,7 @@ var getPrimaryEquation = () => {
 
     if (c2Exp.level == 3) result += "^{1.15}";
 
-    return result + "c_3";
+    return result + "c_{3}e^{c_4}";
 
 }
 
@@ -197,6 +213,8 @@ var getC1 = (level) => Utils.getStepwisePowerSum(level, 2, 10, 0);
 var getC2 = (level) => BigNumber.TWO.pow(level);
 
 var getC3 = (level) => BigNumber.THREE.pow(level)
+
+var getC4 = (level) => level
 
 var getC1Exponent = (level) => BigNumber.from(1 + 0.05 * level);
 
