@@ -16,7 +16,7 @@ var description = "Exponential";
 
 var authors = "HyperKNF";
 
-var version = 1;
+var version = 6;
 
 var currency;
 
