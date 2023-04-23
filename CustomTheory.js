@@ -294,7 +294,7 @@ var tick = (elapsedTime, multiplier) => {
     
     }
     
-    currency2.value += m.level * n.level * (usum.level == 1 + sum : Math.sqrt(k1.level + k2.level + 1 + k3.level))
+    currency2.value += m.level * n.level * (usum.level == 1 ? sum : Math.sqrt(k1.level + k2.level + 1 + k3.level))
 
 }
 
