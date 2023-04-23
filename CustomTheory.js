@@ -310,7 +310,7 @@ theory.primaryEquationHeight = 50
 
 theory.secondaryEquationHeight = 150
 
-var getSecondaryEquation = () => `x=c_{1}${c1Exp.level != 0 ? "^{" + (1 + 0.05 * c1Exp.level) + "}" : ""}c_2${c2Exp.level != 0 ? "^{" + (1 + 0.05 * c2Exp.level) + "}" : ""}c_{3}e^{c_4}\\pi^{c_5}\\\\\\dot{\\rho_2}=nm\\sum_{i=0}^{\\lfloor \\sqrt{k_1} \\rfloor +1}i\\sqrt{k_1+k_2+k_3}\\\\` + theory.latexSymbol + "=\\max\\rho_1^{0.5(1-\\frac{1}{n+2})}\\rho_2^{0.25}";
+var getSecondaryEquation = () => `x=c_{1}${c1Exp.level != 0 ? "^{" + (1 + 0.05 * c1Exp.level) + "}" : ""}c_2${c2Exp.level != 0 ? "^{" + (1 + 0.05 * c2Exp.level) + "}" : ""}c_{3}e^{c_4}\\pi^{c_5}\\\\\\dot{\\rho_2}=nm\\sum_{i=0}^{\\lfloor \\sqrt{k_1} \\rfloor +1}{i\\sqrt{k_1+k_2+k_3}}\\\\` + theory.latexSymbol + "=\\max\\rho_1^{0.5(1-\\frac{1}{n+2})}\\rho_2^{0.25}";
 
 var getPublicationMultiplier = (tau) => tau.pow(0.3) / BigNumber.from(2);
 
