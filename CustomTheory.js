@@ -238,7 +238,7 @@ var init = () => {
 
         usum = theory.createMilestoneUpgrade(2, 1);
 
-        usum.description = "Unlock summation in \\rho_2";
+        usum.description = "Unlock summation";
 
         usum.info = usum.description;
 
