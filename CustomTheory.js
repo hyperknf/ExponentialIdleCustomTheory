@@ -264,17 +264,17 @@ var getPrimaryEquation = () => {
 
     if (c2Exp.level == 3) result += "^{1.15}";
 
-    return result + "c_{3}e^{c_4}\n\\dot{\\rho_2} = n";
+    return result + "c_{3}e^{c_4}";
 
 }
 
-var getSecondaryEquation = () => theory.latexSymbol + "=\\max\\rho_1^{0.5(1-\\frac{1}{n+2})}\\rho_2^0.05";
+var getSecondaryEquation = () => "\\dot{rho_2}=n" + theory.latexSymbol + "=\\max\\rho_1^{0.5(1-\\frac{1}{n+2})}\\rho_2^0.05";
 
 var getPublicationMultiplier = (tau) => tau.pow(0.1) / BigNumber.THREE;
 
 var getPublicationMultiplierFormula = (symbol) => "\\frac{{" + symbol + "}^{0.1}}{3}";
 
-var getTau = () => (currency.value.max(BigNumber.ONE) == BigNumber.ONE ? BigNumber.ONE : currency.value.pow(BigNumber.from(0.5 * (1 - 1 / (n.level + 2))))) * currency2.value.pow()BigNumber.from(0.05);
+var getTau = () => (currency.value.max(BigNumber.ONE) == BigNumber.ONE ? BigNumber.ONE : currency.value.pow(BigNumber.from(0.5 * (1 - 1 / (n.level + 2))))) * currency2.value.pow(BigNumber.from(0.05));
 
 var get2DGraphValue = () => currency.value.sign * (BigNumber.ONE + currency.value.abs()).log10().toNumber();
 
