@@ -166,11 +166,11 @@ var init = () => {
 
     // Permanent Upgrades
 
-    theory.createPublicationUpgrade(0, currency, 1e25);
+    theory.createPublicationUpgrade(0, currency, 1e10);
 
-    theory.createBuyAllUpgrade(1, currency, 1e50);
+    theory.createBuyAllUpgrade(1, currency, 1e16);
 
-    theory.createAutoBuyerUpgrade(2, currency, 1e100);
+    theory.createAutoBuyerUpgrade(2, currency, 1e25);
 
     ///////////////////////
 
@@ -264,13 +264,13 @@ var getPrimaryEquation = () => {
 
 }
 
-var getSecondaryEquation = () => theory.latexSymbol + "=\\max\\rho^{0.2(1-\\frac{1}{n+2})}";
+var getSecondaryEquation = () => theory.latexSymbol + "=\\max\\rho^{0.5(1-\\frac{1}{n+2})}";
 
-var getPublicationMultiplier = (tau) => tau.pow(0.01) / BigNumber.THREE;
+var getPublicationMultiplier = (tau) => tau.pow(0.1) / BigNumber.THREE;
 
-var getPublicationMultiplierFormula = (symbol) => "\\frac{{" + symbol + "}^{0.01}}{3}";
+var getPublicationMultiplierFormula = (symbol) => "\\frac{{" + symbol + "}^{0.1}}{3}";
 
-var getTau = () => currency.value.max(BigNumber.ONE) == BigNumber.ONE ? BigNumber.ONE : currency.value.pow(BigNumber.from(0.2 * (1 - 1 / (n.level + 2))));
+var getTau = () => currency.value.max(BigNumber.ONE) == BigNumber.ONE ? BigNumber.ONE : currency.value.pow(BigNumber.from(0.5 * (1 - 1 / (n.level + 2))));
 
 var get2DGraphValue = () => currency.value.sign * (BigNumber.ONE + currency.value.abs()).log10().toNumber();
 
