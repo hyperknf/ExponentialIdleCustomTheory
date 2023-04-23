@@ -22,6 +22,8 @@ var currency, currency2;
 
 var c1, c2, c3, c4, c5, k1, k2, k3, n, m;
 
+var x
+
 var c1Exp, c2Exp;
 
 var achievement1;
@@ -284,9 +286,9 @@ var tick = (elapsedTime, multiplier) => {
 
     let bonus = theory.publicationMultiplier;
 
-    currency.value += Math.pow(-1.0001, n.level) / (2 ** (1 + k2.level) - Math.PI ** (k3.level)) * (1 + 1 / (k1.level + 1)) ** (k1.level + 1) * dt * bonus * (getC1(c1.level).pow(getC1Exponent(c1Exp.level)) *
+    currency.value += Math.pow(-1.0001, n.level) / (2 ** (1 + k2.level) - Math.PI ** (k3.level)) * (1 + 1 / (k1.level + 1)) ** (k1.level + 1) * dt * bonus * (x = (getC1(c1.level).pow(getC1Exponent(c1Exp.level)) *
 
-                                   getC2(c2.level).pow(getC2Exponent(c2Exp.level)) * getC3(c3.level) * BigNumber.from(Math.E).pow(c4.level) * BigNumber.from(Math.PI).pow(c5.level)) ** 0.75;
+                                   getC2(c2.level).pow(getC2Exponent(c2Exp.level)) * getC3(c3.level) * BigNumber.from(Math.E).pow(c4.level) * BigNumber.from(Math.PI).pow(c5.level))) ** 0.75;
     
     let sum = 0
     
@@ -310,13 +312,13 @@ theory.primaryEquationHeight = 50
 
 theory.secondaryEquationHeight = 150
 
-var getSecondaryEquation = () => `x=c_{1}${c1Exp.level != 0 ? "^{" + (1 + 0.05 * c1Exp.level) + "}" : ""}c_2${c2Exp.level != 0 ? "^{" + (1 + 0.05 * c2Exp.level) + "}" : ""}c_{3}e^{c_4}\\pi^{c_5}\\\\\\dot{\\rho_2}=m\\sum_{i=0}^{\\lfloor \\sqrt{n} \\rfloor +1}{i\\sqrt{k_1+k_2+k_3}}\\\\` + theory.latexSymbol + "=\\max\\rho_1^{0.5(1-\\frac{1}{n+2})}\\rho_2^{0.25}\\sqrt{\\ln x}";
+var getSecondaryEquation = () => `x=c_{1}${c1Exp.level != 0 ? "^{" + (1 + 0.05 * c1Exp.level) + "}" : ""}c_2${c2Exp.level != 0 ? "^{" + (1 + 0.05 * c2Exp.level) + "}" : ""}c_{3}e^{c_4}\\pi^{c_5}\\\\\\dot{\\rho_2}=m\\sum_{i=0}^{\\lfloor \\sqrt{n} \\rfloor +1}{i\\sqrt{k_1+k_2+k_3}}\\\\` + theory.latexSymbol + "=\\max\\rho_1^{0.5(1-\\frac{1}{n+2})}\\rho_2^{0.25}\\sqrt[5]{\\ln x}";
 
 var getPublicationMultiplier = (tau) => tau.pow(0.3) / BigNumber.from(2);
 
 var getPublicationMultiplierFormula = (symbol) => "\\frac{{" + symbol + "}^{0.3}}{2}";
 
-var getTau = () => (currency.value.max(BigNumber.ONE) == BigNumber.ONE ? BigNumber.ONE : currency.value.pow(BigNumber.from(0.5 * (1 - 1 / (n.level + 2))))) * currency2.value.pow(BigNumber.from(0.25));
+var getTau = () => (currency.value.max(BigNumber.ONE) == BigNumber.ONE ? BigNumber.ONE : currency.value.pow(BigNumber.from(0.5 * (1 - 1 / (n.level + 2))))) * (Math.log(x) ** 0.2) * currency2.value.pow(BigNumber.from(0.25));
 
 var get2DGraphValue = () => currency.value.sign * (BigNumber.ONE + currency.value.abs()).log10().toNumber();
 
