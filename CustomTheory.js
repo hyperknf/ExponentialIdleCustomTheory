@@ -292,7 +292,11 @@ var getPrimaryEquation = () => {
 
 }
 
-var getSecondaryEquation = () => "\\dot{\\rho_2}=nm\\sum_{i=0}^{\\lfloor \\sqrt{k_1} \\rfloor +1}i\\sqrt{k_1+k_2+k_3}\n" + theory.latexSymbol + "=\\max\\rho_1^{0.5(1-\\frac{1}{n+2})}\\rho_2^{0.25}";
+theory.primaryEquationHeight = 90
+
+theory.secondaryEquationHeight = 90
+
+var getSecondaryEquation = () => "\\dot{\\rho_2}=nm\\sum_{i=0}^{\\lfloor \\sqrt{k_1} \\rfloor +1}i\\sqrt{k_1+k_2+k_3}<br>" + theory.latexSymbol + "=\\max\\rho_1^{0.5(1-\\frac{1}{n+2})}\\rho_2^{0.25}";
 
 var getPublicationMultiplier = (tau) => tau.pow(0.3) / BigNumber.from(2.5);
 
