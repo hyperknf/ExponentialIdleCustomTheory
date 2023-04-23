@@ -62,7 +62,7 @@ var init = () => {
 
         let getInfo = (level) => "c_2=" + getC2(level).toString(0);
 
-        c2 = theory.createUpgrade(1, currency, new ExponentialCost(25, Math.log2(35)));
+        c2 = theory.createUpgrade(1, currency, new ExponentialCost(25, Math.log2(30)));
 
         c2.getDescription = (_) => Utils.getMath(getDesc(c2.level));
 
@@ -80,7 +80,7 @@ var init = () => {
 
         let getInfo = (level) => "c_3=" + getC3(level).toString(0);
 
-        c3 = theory.createUpgrade(2, currency, new ExponentialCost(100, Math.log2(75)));
+        c3 = theory.createUpgrade(2, currency, new ExponentialCost(100, Math.log2(70)));
 
         c3.getDescription = (_) => Utils.getMath(getDesc(c3.level));
 
