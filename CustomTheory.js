@@ -260,7 +260,7 @@ var getPrimaryEquation = () => {
 
     if (c2Exp.level == 3) result += "^{1.15}";
 
-    return result + "c_{3}e^{c_4}//mid //sin(n+1) //mid";
+    return result + "c_{3}e^{c_4}|sin(n+1)|";
 
 }
 
