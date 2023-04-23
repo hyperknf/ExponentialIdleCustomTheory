@@ -22,7 +22,7 @@ var currency, currency2;
 
 var c1, c2, c3, c4, k1, k2, k3, n, m;
 
-var c1Exp, c2Exp;
+var c1Exp, c2Exp, usum;
 
 var achievement1;
 
@@ -50,6 +50,8 @@ var init = () => {
 
         c1.getInfo = (amount) => Utils.getMathTo(getDesc(c1.level), getDesc(c1.level + amount));
 
+        c1.canBeRefunded = (_) => true
+        
     }
 
     // c2
@@ -65,6 +67,8 @@ var init = () => {
         c2.getDescription = (_) => Utils.getMath(getDesc(c2.level));
 
         c2.getInfo = (amount) => Utils.getMathTo(getInfo(c2.level), getInfo(c2.level + amount));
+        
+        c2.canBeRefunded = (_) => true
 
     }
     
@@ -82,6 +86,8 @@ var init = () => {
 
         c3.getInfo = (amount) => Utils.getMathTo(getInfo(c3.level), getInfo(c3.level + amount));
 
+        c3.canBeRefunded = (_) => true
+        
     }
     
     // c4
@@ -98,6 +104,8 @@ var init = () => {
 
         c4.getInfo = (amount) => Utils.getMathTo(getInfo(c4.level), getInfo(c4.level + amount));
 
+        c4.canBeRefunded = (_) => true
+        
     }
     
     // k1
@@ -113,6 +121,8 @@ var init = () => {
         k1.getDescription = (_) => Utils.getMath(getDesc(k1.level));
 
         k1.getInfo = (amount) => Utils.getMathTo(getInfo(k1.level), getInfo(k1.level + amount));
+        
+        k1.canBeRefunded = (_) => true
 
     }
     
@@ -129,6 +139,8 @@ var init = () => {
         k2.getDescription = (_) => Utils.getMath(getDesc(k2.level));
 
         k2.getInfo = (amount) => Utils.getMathTo(getInfo(k2.level), getInfo(k2.level + amount));
+        
+        k2.canBeRefunded = (_) => true
 
     }
     
@@ -145,6 +157,8 @@ var init = () => {
         k3.getDescription = (_) => Utils.getMath(getDesc(k3.level));
 
         k3.getInfo = (amount) => Utils.getMathTo(getInfo(k3.level), getInfo(k3.level + amount));
+        
+        k3.canBeRefunded = (_) => true
 
     }
     
@@ -161,6 +175,8 @@ var init = () => {
         n.getDescription = (_) => Utils.getMath(getDesc(n.level));
 
         n.getInfo = (amount) => Utils.getMathTo(getInfo(n.level), getInfo(n.level + amount));
+        
+        n.canBeRefunded = (_) => true
 
     }
     
@@ -178,6 +194,8 @@ var init = () => {
 
         m.getInfo = (amount) => Utils.getMathTo(getInfo(m.level), getInfo(m.level + amount));
 
+        m.canBeRefunded = (_) => true
+        
     }
 
     /////////////////////
@@ -194,7 +212,7 @@ var init = () => {
 
     //// Milestone Upgrades
 
-    theory.setMilestoneCost(new LinearCost(25, 25));
+    theory.setMilestoneCost(new LinearCost(20, 20));
 
     {
 
@@ -219,8 +237,18 @@ var init = () => {
         c2Exp.boughtOrRefunded = (_) => theory.invalidatePrimaryEquation();
 
     }
-
     
+    {
+
+        usum = theory.createMilestoneUpgrade(2, 1);
+
+        usum.description = "Unlock summation in \\dot{\\rho_2}";
+
+        usum.info = usum.description;
+
+        usum.boughtOrRefunded = (_) => theory.invalidatePrimaryEquation();
+
+    }
 
     /////////////////
 
@@ -266,7 +294,7 @@ var tick = (elapsedTime, multiplier) => {
     
     }
     
-    currency2.value += m.level * n.level * sum
+    currency2.value += m.level * n.level * (usum.level == 1 + sum : Math.sqrt(k1.level + k2.level + 1 + k3.level))
 
 }
 
@@ -292,11 +320,11 @@ var getPrimaryEquation = () => {
 
 }
 
-theory.primaryEquationHeight = 90
+theory.primaryEquationHeight = 50
 
-theory.secondaryEquationHeight = 90
+theory.secondaryEquationHeight = 140
 
-var getSecondaryEquation = () => "\\dot{\\rho_2}=nm\\sum_{i=0}^{\\lfloor \\sqrt{k_1} \\rfloor +1}i\\sqrt{k_1+k_2+k_3}<br>" + theory.latexSymbol + "=\\max\\rho_1^{0.5(1-\\frac{1}{n+2})}\\rho_2^{0.25}";
+var getSecondaryEquation = () => `\\dot{\\rho_2}=nm${usum.level == 1 ? "\\sum_{i=0}^{\\lfloor \\sqrt{k_1} \\rfloor +1}i" : ""}\\sqrt{k_1+k_2+k_3}\\\\` + theory.latexSymbol + "=\\max\\rho_1^{0.5(1-\\frac{1}{n+2})}\\rho_2^{0.25}";
 
 var getPublicationMultiplier = (tau) => tau.pow(0.3) / BigNumber.from(2.5);
 
