@@ -112,7 +112,7 @@ var init = () => {
 
     {
 
-        let getDesc = (level) => "c_5=2^{" + level + "}";
+        let getDesc = (level) => "c_5=" + level;
 
         let getInfo = (level) => `c_5=${level}`;
 
@@ -336,13 +336,13 @@ var getPrimaryEquation = () => {
 
 theory.primaryEquationHeight = 50
 
-theory.secondaryEquationHeight = 140
+theory.secondaryEquationHeight = 125
 
 var getSecondaryEquation = () => `\\dot{\\rho_2}=nm${usum.level == 1 ? "\\sum_{i=0}^{\\lfloor \\sqrt{k_1} \\rfloor +1}i" : ""}\\sqrt{k_1+k_2+k_3}\\\\` + theory.latexSymbol + "=\\max\\rho_1^{0.5(1-\\frac{1}{n+2})}\\rho_2^{0.25}";
 
-var getPublicationMultiplier = (tau) => tau.pow(0.3) / BigNumber.from(2.5);
+var getPublicationMultiplier = (tau) => tau.pow(0.3) / BigNumber.from(2);
 
-var getPublicationMultiplierFormula = (symbol) => "\\frac{{" + symbol + "}^{0.3}}{2.5}";
+var getPublicationMultiplierFormula = (symbol) => "\\frac{{" + symbol + "}^{0.3}}{2}";
 
 var getTau = () => (currency.value.max(BigNumber.ONE) == BigNumber.ONE ? BigNumber.ONE : currency.value.pow(BigNumber.from(0.5 * (1 - 1 / (n.level + 2))))) * currency2.value.pow(BigNumber.from(0.25));
 
