@@ -44,7 +44,7 @@ var init = () => {
 
         let getDesc = (level) => "c_1=" + getC1(level).toString(0);
 
-        c1 = theory.createUpgrade(0, currency, new FirstFreeCost(new ExponentialCost(10, Math.log2(2))));
+        c1 = theory.createUpgrade(0, currency, new FirstFreeCost(new ExponentialCost(10, Math.log2(1.5))));
 
         c1.getDescription = (_) => Utils.getMath(getDesc(c1.level));
 
@@ -60,7 +60,7 @@ var init = () => {
 
         let getInfo = (level) => "c_2=" + getC2(level).toString(0);
 
-        c2 = theory.createUpgrade(1, currency, new ExponentialCost(25, Math.log2(50)));
+        c2 = theory.createUpgrade(1, currency, new ExponentialCost(25, Math.log2(35)));
 
         c2.getDescription = (_) => Utils.getMath(getDesc(c2.level));
 
@@ -76,7 +76,7 @@ var init = () => {
 
         let getInfo = (level) => "c_3=" + getC3(level).toString(0);
 
-        c3 = theory.createUpgrade(2, currency, new ExponentialCost(100, Math.log2(100)));
+        c3 = theory.createUpgrade(2, currency, new ExponentialCost(100, Math.log2(75)));
 
         c3.getDescription = (_) => Utils.getMath(getDesc(c3.level));
 
@@ -92,7 +92,7 @@ var init = () => {
 
         let getInfo = (level) => `c_4=${level}`;
 
-        c4 = theory.createUpgrade(3, currency, new ExponentialCost(50, Math.log2(80)));
+        c4 = theory.createUpgrade(3, currency, new ExponentialCost(50, Math.log2(50)));
 
         c4.getDescription = (_) => Utils.getMath(getDesc(c4.level));
 
@@ -168,11 +168,11 @@ var init = () => {
 
     // Permanent Upgrades
 
-    theory.createPublicationUpgrade(0, currency, 1e10);
+    theory.createPublicationUpgrade(0, currency, 1e9);
 
-    theory.createBuyAllUpgrade(1, currency, 1e16);
+    theory.createBuyAllUpgrade(1, currency, 1e15);
 
-    theory.createAutoBuyerUpgrade(2, currency, 1e25);
+    theory.createAutoBuyerUpgrade(2, currency, 1e23);
 
     ///////////////////////
 
@@ -242,7 +242,7 @@ var tick = (elapsedTime, multiplier) => {
 
                                    getC2(c2.level).pow(getC2Exponent(c2Exp.level)) * getC3(c3.level) * BigNumber.from(Math.E).pow(c4.level);
     
-    currency2.value += n.level
+    currency2.value += n.level * Math.sqrt(k1.level + k2.level + 1 + k3.level)
 
 }
 
@@ -268,7 +268,7 @@ var getPrimaryEquation = () => {
 
 }
 
-var getSecondaryEquation = () => "\\dot{\\rho_2}=n, \\quad" + theory.latexSymbol + "=\\max\\rho_1^{0.5(1-\\frac{1}{n+2})}\\rho_2^{0.05}";
+var getSecondaryEquation = () => "\\dot{\\rho_2}=n\\sqrt{k_1+k_2+k_3}, \\quad" + theory.latexSymbol + "=\\max\\rho_1^{0.5(1-\\frac{1}{n+2})}\\rho_2^{0.05}";
 
 var getPublicationMultiplier = (tau) => tau.pow(0.1) / BigNumber.THREE;
 
