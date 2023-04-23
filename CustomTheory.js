@@ -58,7 +58,7 @@ var init = () => {
 
         let getInfo = (level) => "c_2=" + getC2(level).toString(0);
 
-        c2 = theory.createUpgrade(1, currency, new ExponentialCost(25, Math.log2(1.5)));
+        c2 = theory.createUpgrade(1, currency, new ExponentialCost(25, Math.log2(2)));
 
         c2.getDescription = (_) => Utils.getMath(getDesc(c2.level));
 
@@ -140,7 +140,7 @@ var tick = (elapsedTime, multiplier) => {
 
     let bonus = theory.publicationMultiplier;
 
-    currency.value += 1e30 * dt * bonus * getC1(c1.level).pow(getC1Exponent(c1Exp.level)) *
+    currency.value += dt * bonus * getC1(c1.level).pow(getC1Exponent(c1Exp.level)) *
 
                                    getC2(c2.level).pow(getC2Exponent(c2Exp.level));
 
