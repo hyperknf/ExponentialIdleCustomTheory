@@ -322,7 +322,7 @@ var tick = (elapsedTime, multiplier) => {
 
 var getPrimaryEquation = () => {
 
-    return `\\dot{\\rho_1} = (\\frac{(1+\\cos n)e^{i\\pi n}}{2^{k_2}-\\pi^{k_3}})(1+\\frac{1}{k_1+1})^{k_1+1}x^{\\frac{3}{4}}`;
+    return `\\dot{\\rho_1} = (\\frac{(1+\\sin n)e^{i\\pi n}}{2^{k_2}-\\pi^{k_3}})(1+\\frac{1}{k_1+1})^{k_1+1}x^{\\frac{3}{4}}`;
     
 }
 
