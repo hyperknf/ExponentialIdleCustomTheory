@@ -150,9 +150,9 @@ var init = () => {
 
     {
 
-        let getDesc = (level) => "k_1=" + level;
+        let getDesc = (level) => "k_1=" + getK1(level);
 
-        let getInfo = (level) => `k_1=${level}`;
+        let getInfo = (level) => `k_1=${getK1(level)}`;
 
         k1 = theory.createUpgrade(6, currency, new ExponentialCost(25, Math.log2(2)));
 
@@ -304,15 +304,15 @@ var tick = (elapsedTime, multiplier) => {
 
     let bonus = theory.publicationMultiplier;
 
-    currency.value += Math.pow(-1, n.level) * (1 + Math.sin(n.level / 18 * Math.PI)) / (2 ** (1 + k2.level) - Math.PI ** (k3.level)) * (1 + 1 / (k1.level + 1)) ** (k1.level + 1) * dt * bonus * (x = (getC1(c1.level).pow(getC1Exponent(c1Exp.level)) *
+    currency.value += Math.pow(-1, n.level) * (1 + Math.sin(n.level / 18 * Math.PI)) / (2 ** (1 + k2.level) - Math.PI ** (k3.level)) * (1 + 1 / (getK1(k1.level) + 1)) ** (getK1(k1.level) + 1) * dt * bonus * (x = (getC1(c1.level).pow(getC1Exponent(c1Exp.level)) *
 
                                    getC2(c2.level).pow(getC2Exponent(c2Exp.level)) * getC3(c3.level) * BigNumber.from(Math.E).pow(c4.level) * BigNumber.from(Math.PI).pow(c5.level) * BigNumber.from(Math.E).pow(BigNumber.from(c6.level * Math.sqrt(2))))) ** 0.75;
     
     let sum = 0
     
-    for (let i = 1; i <= Math.floor(Math.sqrt(n.level)) + 1; i++) {
+    for (let i = 1; i <= Math.floor(Math.sqrt(n.level)); i++) {
     
-        sum += i * Math.sqrt(k1.level + k2.level + 1 + k3.level)
+        sum += i * Math.sqrt(getK1(k1.level) + k2.level + 1 + k3.level)
     
     }
     
@@ -330,7 +330,7 @@ theory.primaryEquationHeight = 50
 
 theory.secondaryEquationHeight = 135
 
-var getSecondaryEquation = () => `x=c_{1}${c1Exp.level != 0 ? "^{" + (1 + 0.05 * c1Exp.level) + "}" : ""}c_2${c2Exp.level != 0 ? "^{" + (1 + 0.05 * c2Exp.level) + "}" : ""}c_{3}e^{c_4}\\pi^{c_5}e^{c_6\\sqrt{2}}\\\\\\dot{\\rho_2}=m\\sum_{i=1}^{\\lfloor \\sqrt{n} \\rfloor +1}{i\\sqrt{k_1+k_2+k_3}}\\\\` + theory.latexSymbol + "=\\max\\rho_1^{0.5(1-\\frac{1}{n+2})}\\rho_2^{0.25}\\sqrt[5]{\\ln x}";
+var getSecondaryEquation = () => `x=c_{1}${c1Exp.level != 0 ? "^{" + (1 + 0.05 * c1Exp.level) + "}" : ""}c_2${c2Exp.level != 0 ? "^{" + (1 + 0.05 * c2Exp.level) + "}" : ""}c_{3}e^{c_4}\\pi^{c_5}e^{c_6\\sqrt{2}}\\\\\\dot{\\rho_2}=m\\sum_{i=1}^{\\lfloor \\sqrt{n} \\rfloor}{i\\sqrt{k_1+k_2+k_3}}\\\\` + theory.latexSymbol + "=\\max\\rho_1^{0.5(1-\\frac{1}{n+2})}\\rho_2^{0.25}\\sqrt[5]{\\ln x}";
 
 var getPublicationMultiplier = (tau) => tau.pow(0.3) / BigNumber.from(2);
 
@@ -345,6 +345,8 @@ var getC1 = (level) => Utils.getStepwisePowerSum(level, 2, 10, 0);
 var getC2 = (level) => BigNumber.TWO.pow(level);
 
 var getC3 = (level) => BigNumber.THREE.pow(level)
+
+var getK1 = (level) => Utils.getStepwisePowerSum(level, 2, 6, 0);
 
 var getC1Exponent = (level) => BigNumber.from(1 + 0.05 * level);
 
