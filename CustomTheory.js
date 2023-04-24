@@ -326,9 +326,9 @@ var getPrimaryEquation = () => {
     
 }
 
-theory.primaryEquationHeight = 50
+theory.primaryEquationHeight = 30
 
-theory.secondaryEquationHeight = 135
+theory.secondaryEquationHeight = 150
 
 var getSecondaryEquation = () => `x=\\begin{cases}c_{1}${c1Exp.level != 0 ? "^{" + (1 + 0.05 * c1Exp.level) + "}" : ""}c_2${c2Exp.level != 0 ? "^{" + (1 + 0.05 * c2Exp.level) + "}" : ""}c_{3}e^{c_4+c_6\\sqrt{2}}\\pi^{c_5}, & \\dot{\\rho_1} >= 0\\\\1.1(\\mbox{ cost of }n )-\\rho_1\\end{cases}\\\\\\dot{\\rho_2}=m\\sum_{i=1}^{\\lfloor \\sqrt{n} \\rfloor}{i\\sqrt{k_1+k_2+k_3}}\\\\` + theory.latexSymbol + "=\\max\\rho_1^{0.5(1-\\frac{1}{n+2})}\\rho_2^{0.25}\\sqrt[5]{\\ln x}";
 
