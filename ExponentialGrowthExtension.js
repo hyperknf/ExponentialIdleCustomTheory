@@ -203,7 +203,7 @@ theory.primaryEquationHeight = 60
 theory.secondaryEquationHeight = 125
 
 var getSecondaryEquation = () => `x=c_{1}${c1Exp.level != 0 ? "^{" + (1 + 0.05 * c1Exp.level) + "}" : ""}c_2${c2Exp.level != 0 ? "^{" + (1 + 0.05 * c2Exp.level) + "}" : ""}c_{3}e^{c_4+c_6\\sqrt{2}}\\pi^{c_5}\\\\\\dot{\\rho_2}=m\\sum_{i=1}^{\\lfloor \\sqrt{n} \\rfloor}{i\\sqrt{k_1+k_2+k_3}}\\\\` + theory.latexSymbol + "=\\max\\rho_1^{0.5(1-\\frac{1}{n+2})}\\rho_2^{0.25}\\sqrt[5]{\\ln (k_3x+1)}"
-var getTertiaryEquation = () => `x\\approx ${x.toString(5)}, \\quad\\sqrt[5]{\\ln (k_3x+1)}\\approx ${BigNumber.from(Math.log(x * k3.level + 1) ** 0.2).toString(5)}, \\quad k_2^{\\frac{1}{e}}-k_3^{\\frac{1}{\\pi}}\\approx ${BigNumber.from(2 ** (1 + k2.level) - Math.PI ** (k3.level)).toString(5)}`
+var getTertiaryEquation = () => `x\\approx ${x.toString(5)}, \\quad\\sqrt[5]{\\ln (k_3x+1)}\\approx ${BigNumber.from(Math.log(x * k3.level + 1) ** 0.2).toString(5)}, \\quad k_2^{\\frac{1}{e}}-k_3^{\\frac{1}{\\pi}}\\approx ${BigNumber.from((1 + k2.level) ** (1 / Math.E) - k3.level ** (1 / Math.PI)).toString(5)}`
 var getPublicationMultiplier = (tau) => tau.pow(0.3) / BigNumber.from(2)
 var getPublicationMultiplierFormula = (symbol) => "\\frac{{" + symbol + "}^{0.3}}{2}"
 var getTau = () => (currency.value.max(BigNumber.ONE) == BigNumber.ONE ? BigNumber.ONE : currency.value.pow(BigNumber.from(0.5 * (1 - 1 / (n.level + 2)))) * (Math.log(x * k3.level + 1) ** 0.2)) * currency2.value.pow(BigNumber.from(0.25))
