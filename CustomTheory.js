@@ -346,7 +346,7 @@ var getC2 = (level) => BigNumber.TWO.pow(level);
 
 var getC3 = (level) => BigNumber.THREE.pow(level)
 
-var getK1 = (level) => Utils.getStepwisePowerSum(level, 2, 6, 0);
+var getK1 = (level) => Utils.getStepwisePowerSum(level, 2, 10, 0);
 
 var getC1Exponent = (level) => BigNumber.from(1 + 0.05 * level);
 
