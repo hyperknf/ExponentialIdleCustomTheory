@@ -198,10 +198,11 @@ var getPrimaryEquation = () => {
 theory.primaryEquationHeight = 50
 theory.secondaryEquationHeight = 125
 
-var getSecondaryEquation = () => `x=c_{1}${c1Exp.level != 0 ? "^{" + (1 + 0.05 * c1Exp.level) + "}" : ""}c_2${c2Exp.level != 0 ? "^{" + (1 + 0.05 * c2Exp.level) + "}" : ""}c_{3}e^{c_4+c_6\\sqrt{2}}\\pi^{c_5}\\\\\\dot{\\rho_2}=m\\sum_{i=1}^{\\lfloor \\sqrt{n} \\rfloor}{i\\sqrt{k_1+k_2+k_3}}\\\\` + theory.latexSymbol + "=\\max\\rho_1^{0.5(1-\\frac{1}{n+2})}\\rho_2^{0.25}\\sqrt[5]{\\ln (x\\dot{\\rho_1}\\dot{\\rho_2})}"
+var getSecondaryEquation = () => `x=c_{1}${c1Exp.level != 0 ? "^{" + (1 + 0.05 * c1Exp.level) + "}" : ""}c_2${c2Exp.level != 0 ? "^{" + (1 + 0.05 * c2Exp.level) + "}" : ""}c_{3}e^{c_4+c_6\\sqrt{2}}\\pi^{c_5}\\\\\\dot{\\rho_2}=m\\sum_{i=1}^{\\lfloor \\sqrt{n} \\rfloor}{i\\sqrt{k_1+k_2+k_3}}\\\\` + theory.latexSymbol + "=\\max\\rho_1^{0.5(1-\\frac{1}{n+2})}\\rho_2^{0.25}\\sqrt[5]{\\ln k_3x}"
+var getTertiaryEquation = () => `x=${x.toString()}, \\sqrt[5]{ln k_3x}=${Math.log(x * k3.level) ** 0.2)}, 2^{k_2}-\\pi^{k_3}=${BigNumber.from(2 ** (1 + k2.level) - Math.PI ** (k3.level)).toString()}`
 var getPublicationMultiplier = (tau) => tau.pow(0.3) / BigNumber.from(2)
 var getPublicationMultiplierFormula = (symbol) => "\\frac{{" + symbol + "}^{0.3}}{2}"
-var getTau = () => (currency.value.max(BigNumber.ONE) == BigNumber.ONE ? BigNumber.ONE : currency.value.pow(BigNumber.from(0.5 * (1 - 1 / (n.level + 2)))) * (Math.log(x * dp1 * dp2) ** 0.2)) * currency2.value.pow(BigNumber.from(0.25))
+var getTau = () => (currency.value.max(BigNumber.ONE) == BigNumber.ONE ? BigNumber.ONE : currency.value.pow(BigNumber.from(0.5 * (1 - 1 / (n.level + 2)))) * (Math.log(x * k3.level) ** 0.2)) * currency2.value.pow(BigNumber.from(0.25))
 var get2DGraphValue = () => currency.value.sign * (BigNumber.ONE + currency.value.abs()).log10().toNumber()
 var getC1 = (level) => Utils.getStepwisePowerSum(level, 2, 10, 0)
 var getC2 = (level) => BigNumber.TWO.pow(level)
