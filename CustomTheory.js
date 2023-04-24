@@ -306,7 +306,7 @@ var tick = (elapsedTime, multiplier) => {
 
     currency.value += currency.value.max(BigNumber.from(0)) != BigNumber.from(0) ? (Math.pow(-1, n.level) * (1 + Math.sin(n.level / 18 * Math.PI)) / (2 ** (1 + k2.level) - Math.PI ** (k3.level)) * (1 + 1 / (getK1(k1.level) + 1)) ** (getK1(k1.level) + 1) * dt * bonus * (x = (getC1(c1.level).pow(getC1Exponent(c1Exp.level)) *
 
-                                   getC2(c2.level).pow(getC2Exponent(c2Exp.level)) * getC3(c3.level) * BigNumber.from(Math.E).pow(c4.level) * BigNumber.from(Math.PI).pow(c5.level) * BigNumber.from(Math.E).pow(BigNumber.from(c6.level * Math.sqrt(2))))) ** 0.75) : 1.1 * -currency.value;
+                                   getC2(c2.level).pow(getC2Exponent(c2Exp.level)) * getC3(c3.level) * BigNumber.from(Math.E).pow(c4.level) * BigNumber.from(Math.PI).pow(c5.level) * BigNumber.from(Math.E).pow(BigNumber.from(c6.level * Math.sqrt(2))))) ** 0.75) : 1.5 * -currency.value;
     
     let sum = 0
     
@@ -322,7 +322,7 @@ var tick = (elapsedTime, multiplier) => {
 
 var getPrimaryEquation = () => {
 
-    return `\\dot{\\rho_1}=\\begin{cases}(\\frac{(1+\\sin 10n^{\\circ})e^{i\\pi n}}{2^{k_2}-\\pi^{k_3}})(1+\\frac{1}{k_1+1})^{k_1+1}x^{\\frac{3}{4}}, & \\rho_1>=0\\\\1.1P(n)-\\rho_1, & \\rho_1<0\\end{cases}`;
+    return `\\dot{\\rho_1}=\\begin{cases}(\\frac{(1+\\sin 10n^{\\circ})e^{i\\pi n}}{2^{k_2}-\\pi^{k_3}})(1+\\frac{1}{k_1+1})^{k_1+1}x^{\\frac{3}{4}}, & \\rho_1>=0\\\\-1.5\\rho_1, & \\rho_1<0\\end{cases}`;
     
 }
 
