@@ -136,7 +136,7 @@ var init = () => {
 
         let getInfo = (level) => `c_6=${level}`;
 
-        c6 = theory.createUpgrade(7, currency, new ExponentialCost(1000, Math.log2(1000)));
+        c6 = theory.createUpgrade(7, currency, new ExponentialCost(1e6, Math.log2(1e6)));
 
         c6.getDescription = (_) => Utils.getMath(getDesc(c6.level));
 
