@@ -11,9 +11,10 @@ var version = 6
 var currency, currency2
 var c1, c2, c3, c4, c5, c6, k1, k2, k3, n, m
 var x = BigNumber.from(0)
+var dp1 = BigNumber.from(0), dp2 = BigNumber.from(0)
 var c1Exp, c2Exp
-var achievement1
-var chapter1, chapter2
+var achievements = []
+var chapters = []
 var init = () => {
     currency = theory.createCurrency()
     currency2 = theory.createCurrency()
@@ -157,13 +158,14 @@ var init = () => {
     /////////////////
     //// Achievements
 
-    achievement1 = theory.createAchievement(0, "The start of chaos", "The start of something bad...", () => c1.level > 1)
-    achievement2 = theory.createAchievement(1, "Exponential constant", "You found out about the exponential constant", () => k1.level > 1)
+    achievements.push(theory.createAchievement(0, "The start of chaos", "The start of something bad...", () => c1.level > 1))
+    achievements.push(theory.createAchievement(1, "Exponential constant", "You found out about the exponential constant", () => k1.level > 1))
 
     ///////////////////
     //// Story chapters
 
-    chapter1 = theory.createStoryChapter(0, "e", String(n.cost) + "\nYou started to find out\nthat as k approaches infinity\n(1 + 1/k)^k approaches e\nMaybe this will be useful in your research?", () => true)
+    chapters.push(theory.createStoryChapter(0, "e", "You started to find out\nthat as k approaches infinity\n(1 + 1/k)^k approaches e\nMaybe this will be useful in your research?", () => true))
+    chapters.push(theory.createStoryChapter(0, "Square roots", "After a bit of time\nyou realised that your research efficiency\nis only around 75% of intended efficiency\nYou realised you will need more time\nto finish your research", () => (dp1 >= 5000 && dp2 >= 50)))
     
     ////////////////////////
     //// Update availability
@@ -179,16 +181,18 @@ var tick = (elapsedTime, multiplier) => {
     updateAvailability()
     let dt = BigNumber.from(elapsedTime * multiplier)
     let bonus = theory.publicationMultiplier
-    currency.value += currency.value >= 0 ? (Math.pow(-1, n.level) * (1 + Math.sin(n.level / 18 * Math.PI)) / (2 ** (1 + k2.level) - Math.PI ** (k3.level)) * (1 + 1 / (getK1(k1.level) + 1)) ** (getK1(k1.level) + 1) * dt * bonus * (x = (getC1(c1.level).pow(getC1Exponent(c1Exp.level)) * getC2(c2.level).pow(getC2Exponent(c2Exp.level)) * getC3(c3.level) * BigNumber.from(Math.E).pow(c4.level) * BigNumber.from(Math.PI).pow(c5.level) * BigNumber.from(Math.E).pow(BigNumber.from(c6.level * Math.sqrt(2))))) ** 0.75) : 1.5 * -currency.value
+    dp1 = currency.value >= 0 ? (Math.pow(-1, n.level) * (1 + Math.sin(n.level / 18 * Math.PI)) / (2 ** (1 + k2.level) - Math.PI ** (k3.level)) * (1 + 1 / (getK1(k1.level) + 1)) ** (getK1(k1.level) + 1) * dt * bonus * (x = (getC1(c1.level).pow(getC1Exponent(c1Exp.level)) * getC2(c2.level).pow(getC2Exponent(c2Exp.level)) * getC3(c3.level) * BigNumber.from(Math.E).pow(c4.level) * BigNumber.from(Math.PI).pow(c5.level) * BigNumber.from(Math.E).pow(BigNumber.from(c6.level * Math.sqrt(2))))) ** 0.75) : 1.5 * n.cost.getCost(n.level) - currency.value
+    currency.value += dp1
     let sum = 0
     for (let i = 1; i <= Math.floor(Math.sqrt(n.level)); i++) {
         sum += i * Math.sqrt(getK1(k1.level) + k2.level + 1 + k3.level)
     }
-    currency2.value += m.level * sum
+    dp2 = m.level * sum
+    currency2.value += dp2
 }
 
 var getPrimaryEquation = () => {
-    return `\\dot{\\rho_1}=\\begin{cases}(\\frac{(1+\\sin 10n^{\\circ})e^{i\\pi n}}{2^{k_2}-\\pi^{k_3}})(1+\\frac{1}{k_1+1})^{k_1+1}x^{\\frac{3}{4}}, & \\rho_1>=0\\\\-1.5\\rho_1, & \\rho_1<0\\end{cases}`
+    return `\\dot{\\rho_1}=\\begin{cases}(\\frac{(1+\\sin 10n^{\\circ})e^{i\\pi n}}{2^{k_2}-\\pi^{k_3}})(1+\\frac{1}{k_1+1})^{k_1+1}x^{\\frac{3}{4}}, & \\rho_1>=0\\\\1.5cost(n)-\\rho_1, & \\rho_1<0\\end{cases}`
 }
 
 theory.primaryEquationHeight = 50
