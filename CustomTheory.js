@@ -190,6 +190,9 @@ var tick = (elapsedTime, multiplier) => {
     }
     dp2 = m.level * sum
     currency2.value += dp2
+    theory.invalidatePrimaryEquation()
+    theory.invalidateSecondaryEquation()
+    theory.invalidateTertiaryEquation()
 }
 
 var getPrimaryEquation = () => {
