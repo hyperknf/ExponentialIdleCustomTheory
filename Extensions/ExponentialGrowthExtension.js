@@ -160,12 +160,14 @@ var init = () => {
 
     achievements.push(theory.createAchievement(0, "The start of chaos", "The start of something bad...", () => c1.level > 1))
     achievements.push(theory.createAchievement(1, "Exponential constant", "You found out about the exponential constant", () => k1.level > 1))
+    achievements.push(theory.createAchievement(2, "First milestone", "You reached your first milestone, 1e15, and you're making steady progress", () => currency.value >= 1e15))
 
     ///////////////////
     //// Story chapters
 
     chapters.push(theory.createStoryChapter(0, "e", "You started to find out\nthat as k approaches infinity\n(1 + 1/k)^k approaches e\nMaybe this will be useful in your research?", () => true))
-    chapters.push(theory.createStoryChapter(1, "Decreased efficiency", "After a bit of time\nyou realised that your research efficiency\nis only around 75% of intended efficiency\nYou realised you will need more time\nto finish your research", () => c6.level >= 1))
+    chapters.push(theory.createStoryChapter(1, "Decreased efficiency", "After a bit of time\nyou realised that your research efficiency on exponential extensions\nis only around 75% of intended efficiency\nYou realised you will need more time\nto finish your research", () => c6.level >= 1))
+    chapters.push(theory.createStoryChapter(2, "Steady progress", "After some more researching\nyou have reached 1e15\nwhich is your first milestone\nYou are still very far away from the research goal\nbut you are making steady progress\nand with your immense dedication\nyou will finish the research in no time", () => currency.value >= 1e15))
     
     ////////////////////////
     //// Update availability
