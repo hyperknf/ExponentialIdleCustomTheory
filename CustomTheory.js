@@ -165,7 +165,7 @@ var init = () => {
     //// Story chapters
 
     chapters.push(theory.createStoryChapter(0, "e", "You started to find out\nthat as k approaches infinity\n(1 + 1/k)^k approaches e\nMaybe this will be useful in your research?", () => true))
-    chapters.push(theory.createStoryChapter(0, "Square roots", "After a bit of time\nyou realised that your research efficiency\nis only around 75% of intended efficiency\nYou realised you will need more time\nto finish your research", () => (dp1 >= 5000 && dp2 >= 50)))
+    chapters.push(theory.createStoryChapter(1, "Unintended efficiency", "After a bit of time\nyou realised that your research efficiency\nis only around 75% of intended efficiency\nYou realised you will need more time\nto finish your research", () => (dp1 >= 5000 && dp2 >= 50)))
     
     ////////////////////////
     //// Update availability
