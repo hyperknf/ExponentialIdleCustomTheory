@@ -5,7 +5,7 @@ import { theory } from "./api/Theory"
 import { Utils } from "./api/Utils"
 var id = "ExponentialGrowthExtension"
 var name = "Extension of Exponential Growth"
-var description = "This theory extends the exponential growth and the exponential constant, e\nMany items in this theory is the extension from the exponential constant\nExploit the exponential growth and its extension to earn currency\nTry and get high amount of currencies!\nEnjoy!"
+var description = "This theory extends the exponential growth and the exponential constant, e\n\nMany items in this theory is the extension from the exponential constant\n\nExploit the exponential growth and its extension to earn currency\n\nTry and get high amount of currencies!\n\nEnjoy!"
 var authors = "HyperKNF"
 var version = 34
 var currency, currency2
@@ -199,7 +199,7 @@ var getPrimaryEquation = () => {
     return `\\dot{\\rho_1}=\\begin{cases}(\\frac{(1+\\sin 10n^{\\circ})e^{i\\pi n}}{k_2^{\\frac{1}{e}}-k_3^{\\frac{1}{\\pi}}})(1+\\frac{1}{k_1+1})^{k_1+1}x^{\\frac{3}{4}}, & \\rho_1>=0\\\\1.5(C(n)+C(k_2))-\\rho_1, & \\rho_1<0\\end{cases}`
 }
 
-theory.primaryEquationHeight = 50
+theory.primaryEquationHeight = 60
 theory.secondaryEquationHeight = 125
 
 var getSecondaryEquation = () => `x=c_{1}${c1Exp.level != 0 ? "^{" + (1 + 0.05 * c1Exp.level) + "}" : ""}c_2${c2Exp.level != 0 ? "^{" + (1 + 0.05 * c2Exp.level) + "}" : ""}c_{3}e^{c_4+c_6\\sqrt{2}}\\pi^{c_5}\\\\\\dot{\\rho_2}=m\\sum_{i=1}^{\\lfloor \\sqrt{n} \\rfloor}{i\\sqrt{k_1+k_2+k_3}}\\\\` + theory.latexSymbol + "=\\max\\rho_1^{0.5(1-\\frac{1}{n+2})}\\rho_2^{0.25}\\sqrt[5]{\\ln (k_3x+1)}"
