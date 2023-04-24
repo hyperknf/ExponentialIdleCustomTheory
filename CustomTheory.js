@@ -136,7 +136,7 @@ var init = () => {
 
         let getInfo = (level) => `c_6=${level}`;
 
-        c6 = theory.createUpgrade(7, currency, new ExponentialCost(1e6, Math.log2(1e6)));
+        c6 = theory.createUpgrade(5, currency, new ExponentialCost(1e6, Math.log2(1e6)));
 
         c6.getDescription = (_) => Utils.getMath(getDesc(c6.level));
 
@@ -154,7 +154,7 @@ var init = () => {
 
         let getInfo = (level) => `k_1=${level}`;
 
-        k1 = theory.createUpgrade(5, currency, new ExponentialCost(25, Math.log2(2)));
+        k1 = theory.createUpgrade(6, currency, new ExponentialCost(25, Math.log2(2)));
 
         k1.getDescription = (_) => Utils.getMath(getDesc(k1.level));
 
@@ -172,7 +172,7 @@ var init = () => {
 
         let getInfo = (level) => `k_2=${1 + level}`;
 
-        k2 = theory.createUpgrade(6, currency, new ExponentialCost(10, Math.log2(1.5)));
+        k2 = theory.createUpgrade(7, currency, new ExponentialCost(10, Math.log2(1.5)));
 
         k2.getDescription = (_) => Utils.getMath(getDesc(k2.level));
 
@@ -190,7 +190,7 @@ var init = () => {
 
         let getInfo = (level) => `k_3=${level}`;
 
-        k3 = theory.createUpgrade(7, currency, new ExponentialCost(10, Math.log2(1.5)));
+        k3 = theory.createUpgrade(8, currency, new ExponentialCost(10, Math.log2(1.5)));
 
         k3.getDescription = (_) => Utils.getMath(getDesc(k3.level));
 
@@ -208,7 +208,7 @@ var init = () => {
 
         let getInfo = (level) => `n=${level}`;
 
-        n = theory.createUpgrade(8, currency, new ExponentialCost(1e3, Math.log2(1.5)));
+        n = theory.createUpgrade(9, currency, new ExponentialCost(1e3, Math.log2(1.5)));
 
         n.getDescription = (_) => Utils.getMath(getDesc(n.level));
 
@@ -226,7 +226,7 @@ var init = () => {
 
         let getInfo = (level) => `m=${level}`;
 
-        m = theory.createUpgrade(9, currency2, new FirstFreeCost(new ExponentialCost(100, Math.log2(2))));
+        m = theory.createUpgrade(10, currency2, new FirstFreeCost(new ExponentialCost(100, Math.log2(2))));
 
         m.getDescription = (_) => Utils.getMath(getDesc(m.level));
 
