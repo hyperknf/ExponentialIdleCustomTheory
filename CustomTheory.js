@@ -20,7 +20,7 @@ var version = 6;
 
 var currency, currency2;
 
-var c1, c2, c3, c4, c5, k1, k2, k3, n, m;
+var c1, c2, c3, c4, c5, c6, k1, k2, k3, n, m;
 
 var x = BigNumber.from(0);
 
@@ -125,6 +125,24 @@ var init = () => {
         c5.getInfo = (amount) => Utils.getMathTo(getInfo(c5.level), getInfo(c5.level + amount));
         
         c5.canBeRefunded = (_) => true
+
+    }
+
+    // c5
+
+    {
+
+        let getDesc = (level) => "c_6=" + level;
+
+        let getInfo = (level) => `c_6=${level}`;
+
+        c6 = theory.createUpgrade(4, currency, new ExponentialCost(1000, Math.log2(1000)));
+
+        c6.getDescription = (_) => Utils.getMath(getDesc(c6.level));
+
+        c6.getInfo = (amount) => Utils.getMathTo(getInfo(c6.level), getInfo(c6.level + amount));
+
+        c6.canBeRefunded = (_) => true
 
     }
     
@@ -286,9 +304,9 @@ var tick = (elapsedTime, multiplier) => {
 
     let bonus = theory.publicationMultiplier;
 
-    currency.value += Math.pow(-1.0001, n.level) / (2 ** (1 + k2.level) - Math.PI ** (k3.level)) * (1 + 1 / (k1.level + 1)) ** (k1.level + 1) * dt * bonus * (x = (getC1(c1.level).pow(getC1Exponent(c1Exp.level)) *
+    currency.value += Math.pow(-1, n.level) * (1 + Math.sin(n.level)) / (2 ** (1 + k2.level) - Math.PI ** (k3.level)) * (1 + 1 / (k1.level + 1)) ** (k1.level + 1) * dt * bonus * (x = (getC1(c1.level).pow(getC1Exponent(c1Exp.level)) *
 
-                                   getC2(c2.level).pow(getC2Exponent(c2Exp.level)) * getC3(c3.level) * BigNumber.from(Math.E).pow(c4.level) * BigNumber.from(Math.PI).pow(c5.level))) ** 0.75;
+                                   getC2(c2.level).pow(getC2Exponent(c2Exp.level)) * getC3(c3.level) * BigNumber.from(Math.E).pow(c4.level) * BigNumber.from(Math.PI).pow(c5.level) * BigNumber.from(Math.E).pow(BigNumber.from(c6.level * Math.sqrt(2))))) ** 0.75;
     
     let sum = 0
     
@@ -304,15 +322,15 @@ var tick = (elapsedTime, multiplier) => {
 
 var getPrimaryEquation = () => {
 
-    return `\\dot{\\rho_1} = (\\frac{(-1.001)^{n}}{2^{k_2}-\\pi^{k_3}})(1+\\frac{1}{k_1+1})^{k_1+1}x^{\\frac{3}{4}}`;
+    return `\\dot{\\rho_1} = (\\frac{(1+\\cos n)e^{i\\pi n}}{2^{k_2}-\\pi^{k_3}})(1+\\frac{1}{k_1+1})^{k_1+1}x^{\\frac{3}{4}}`;
     
 }
 
 theory.primaryEquationHeight = 50
 
-theory.secondaryEquationHeight = 150
+theory.secondaryEquationHeight = 135
 
-var getSecondaryEquation = () => `x=c_{1}${c1Exp.level != 0 ? "^{" + (1 + 0.05 * c1Exp.level) + "}" : ""}c_2${c2Exp.level != 0 ? "^{" + (1 + 0.05 * c2Exp.level) + "}" : ""}c_{3}e^{c_4}\\pi^{c_5}\\\\\\dot{\\rho_2}=m\\sum_{i=1}^{\\lfloor \\sqrt{n} \\rfloor +1}{i\\sqrt{k_1+k_2+k_3}}\\\\` + theory.latexSymbol + "=\\max\\rho_1^{0.5(1-\\frac{1}{n+2})}\\rho_2^{0.25}\\sqrt[5]{\\ln x}";
+var getSecondaryEquation = () => `x=c_{1}${c1Exp.level != 0 ? "^{" + (1 + 0.05 * c1Exp.level) + "}" : ""}c_2${c2Exp.level != 0 ? "^{" + (1 + 0.05 * c2Exp.level) + "}" : ""}c_{3}e^{c_4}\\pi^{c_5}e^{${c6.level}\\sqrt{2}}\\\\\\dot{\\rho_2}=m\\sum_{i=1}^{\\lfloor \\sqrt{n} \\rfloor +1}{i\\sqrt{k_1+k_2+k_3}}\\\\` + theory.latexSymbol + "=\\max\\rho_1^{0.5(1-\\frac{1}{n+2})}\\rho_2^{0.25}\\sqrt[5]{\\ln x}";
 
 var getPublicationMultiplier = (tau) => tau.pow(0.3) / BigNumber.from(2);
 
