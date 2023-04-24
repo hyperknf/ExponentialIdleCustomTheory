@@ -3,9 +3,9 @@ import { Localization } from "./api/Localization"
 import { BigNumber } from "./api/BigNumber"
 import { theory } from "./api/Theory"
 import { Utils } from "./api/Utils"
-var id = "HyperKNF_Exponential"
-var name = "Exponential"
-var description = "Exponential"
+var id = "ExponentialGrowthExtension"
+var name = "Extension of Exponential Growth"
+var description = "This theory extends the exponential growth and the exponential constant, e\nMany items in this theory is the extension from the exponential constant\nExploit the exponential growth and its extension to earn currency\nTry and get high amount of currencies!\nEnjoy!"
 var authors = "HyperKNF"
 var version = 34
 var currency, currency2
@@ -182,7 +182,7 @@ var tick = (elapsedTime, multiplier) => {
     let dt = BigNumber.from(elapsedTime * multiplier)
     let bonus = theory.publicationMultiplier
     x = (getC1(c1.level).pow(getC1Exponent(c1Exp.level)) * getC2(c2.level).pow(getC2Exponent(c2Exp.level)) * getC3(c3.level) * BigNumber.from(Math.E).pow(c4.level) * BigNumber.from(Math.PI).pow(c5.level) * BigNumber.from(Math.E).pow(BigNumber.from(c6.level * Math.sqrt(2))))
-    dp1 = currency.value >= 0 ? (Math.pow(-1, n.level) * (1 + Math.sin(n.level / 18 * Math.PI)) / (2 ** (1 + k2.level) - Math.PI ** (k3.level)) * (1 + 1 / (getK1(k1.level) + 1)) ** (getK1(k1.level) + 1) * dt * bonus * x ** 0.75) : 1.5 * (n.cost.getCost(n.level) + k2.cost.getCost(k2.level)) - currency.value
+    dp1 = currency.value >= 0 ? ((Math.pow(-1, n.level) * (1 + Math.sin(n.level / 18 * Math.PI)) / ((1 + k2.level) ** (1 / Math.E) - k3.level ** (1 / Math.PI)) * (1 + 1 / (getK1(k1.level) + 1)) ** (getK1(k1.level) + 1) * dt * bonus * x ** 0.75) : 1.5 * (n.cost.getCost(n.level) + k2.cost.getCost(k2.level)) - currency.value
     currency.value += dp1
     let sum = 0
     for (let i = 1; i <= Math.floor(Math.sqrt(n.level)); i++) {
@@ -196,14 +196,14 @@ var tick = (elapsedTime, multiplier) => {
 }
 
 var getPrimaryEquation = () => {
-    return `\\dot{\\rho_1}=\\begin{cases}(\\frac{(1+\\sin 10n^{\\circ})e^{i\\pi n}}{2^{k_2}-\\pi^{k_3}})(1+\\frac{1}{k_1+1})^{k_1+1}x^{\\frac{3}{4}}, & \\rho_1>=0\\\\1.5(C(n)+C(k_2))-\\rho_1, & \\rho_1<0\\end{cases}`
+    return `\\dot{\\rho_1}=\\begin{cases}(\\frac{(1+\\sin 10n^{\\circ})e^{i\\pi n}}{k_2^{\\frac{1}{e}}-k_3^{\\frac{1}{\\pi}}})(1+\\frac{1}{k_1+1})^{k_1+1}x^{\\frac{3}{4}}, & \\rho_1>=0\\\\1.5(C(n)+C(k_2))-\\rho_1, & \\rho_1<0\\end{cases}`
 }
 
 theory.primaryEquationHeight = 50
 theory.secondaryEquationHeight = 125
 
 var getSecondaryEquation = () => `x=c_{1}${c1Exp.level != 0 ? "^{" + (1 + 0.05 * c1Exp.level) + "}" : ""}c_2${c2Exp.level != 0 ? "^{" + (1 + 0.05 * c2Exp.level) + "}" : ""}c_{3}e^{c_4+c_6\\sqrt{2}}\\pi^{c_5}\\\\\\dot{\\rho_2}=m\\sum_{i=1}^{\\lfloor \\sqrt{n} \\rfloor}{i\\sqrt{k_1+k_2+k_3}}\\\\` + theory.latexSymbol + "=\\max\\rho_1^{0.5(1-\\frac{1}{n+2})}\\rho_2^{0.25}\\sqrt[5]{\\ln (k_3x+1)}"
-var getTertiaryEquation = () => `x\\approx ${x.toString(5)}, \\quad\\sqrt[5]{\\ln (k_3x+1)}\\approx ${BigNumber.from(Math.log(x * k3.level + 1) ** 0.2).toString(5)}, \\quad 2^{k_2}-\\pi^{k_3}\\approx ${BigNumber.from(2 ** (1 + k2.level) - Math.PI ** (k3.level)).toString(5)}`
+var getTertiaryEquation = () => `x\\approx ${x.toString(5)}, \\quad\\sqrt[5]{\\ln (k_3x+1)}\\approx ${BigNumber.from(Math.log(x * k3.level + 1) ** 0.2).toString(5)}, \\quad k_2^{\\frac{1}{e}}-k_3^{\\frac{1}{\\pi}}\\approx ${BigNumber.from(2 ** (1 + k2.level) - Math.PI ** (k3.level)).toString(5)}`
 var getPublicationMultiplier = (tau) => tau.pow(0.3) / BigNumber.from(2)
 var getPublicationMultiplierFormula = (symbol) => "\\frac{{" + symbol + "}^{0.3}}{2}"
 var getTau = () => (currency.value.max(BigNumber.ONE) == BigNumber.ONE ? BigNumber.ONE : currency.value.pow(BigNumber.from(0.5 * (1 - 1 / (n.level + 2)))) * (Math.log(x * k3.level + 1) ** 0.2)) * currency2.value.pow(BigNumber.from(0.25))
