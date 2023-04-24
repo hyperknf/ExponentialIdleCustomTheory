@@ -322,7 +322,7 @@ var tick = (elapsedTime, multiplier) => {
 
 var getPrimaryEquation = () => {
 
-    return `\\dot{\\rho_1}=\\start{cases}(\\frac{(1+\\sin 10n^{\\circ})e^{i\\pi n}}{2^{k_2}-\\pi^{k_3}})(1+\\frac{1}{k_1+1})^{k_1+1}x^{\\frac{3}{4}}, & \\rho_1>=0\\\\1.1P(n)-\\rho_1, & \\rho_1<0`;
+    return `\\dot{\\rho_1}=\\begin{cases}(\\frac{(1+\\sin 10n^{\\circ})e^{i\\pi n}}{2^{k_2}-\\pi^{k_3}})(1+\\frac{1}{k_1+1})^{k_1+1}x^{\\frac{3}{4}}, & \\rho_1>=0\\\\1.1P(n)-\\rho_1, & \\rho_1<0`;
     
 }
 
