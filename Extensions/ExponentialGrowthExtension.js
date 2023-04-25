@@ -135,6 +135,8 @@ var init = () => {
     // Permanent Upgrades
 
     theory.createPublicationUpgrade(0, currency, 1e10)
+    theory.createBuyAllUpgrade(1, currency, 1e20)
+    theory.createAutoBuyerUpgrade(2, currency, 1e40)
 
     ///////////////////////
     //// Milestone Upgrades
@@ -216,5 +218,4 @@ var getC3 = (level) => BigNumber.THREE.pow(level)
 var getK1 = (level) => Utils.getStepwisePowerSum(level, 2, 10, 0)
 var getC1Exponent = (level) => BigNumber.from(1 + 0.05 * level)
 var getC2Exponent = (level) => BigNumber.from(1 + 0.05 * level)
-var canResetStage = (_) => true
 init()
