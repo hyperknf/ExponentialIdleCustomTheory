@@ -166,8 +166,8 @@ var init = () => {
     //// Story chapters
 
     chapters.push(theory.createStoryChapter(0, "e", "You started to find out\nthat as k approaches infinity\n(1 + 1/k)^k approaches e\nMaybe this will be useful in your research?", () => true))
-    chapters.push(theory.createStoryChapter(1, "Decreased efficiency", "After a bit of time\nyou realised that your research efficiency on the extensions\nis only around 75% of intended efficiency\nYou realised you will need more time\nto finish your research", () => c6.level >= 1))
-    chapters.push(theory.createStoryChapter(2, "Steady progress", "After some more researching\nyou have reached 1e15\nwhich is your first milestone\nYou are still very far away from the research goal\nbut you are making steady progress\nand with your immense dedication\nyou will finish the research in no time", () => currency.value >= 1e15))
+    chapters.push(theory.createStoryChapter(1, "Decreased efficiency", "After a bit of time\nyou realised that your research efficiency on the extensions\nis only around half of intended efficiency\nYou realised you will need more time\nto finish your research", () => c6.level >= 1))
+    chapters.push(theory.createStoryChapter(2, "Steady progress", "After some more researching\nyou have reached 1e15\nwhich is your first milestone\nYou are still very far away from the research goal\nbut you are making steady progress\nand with your immense dedication\nyou will finish the research in no time", () => getTau() >= 1e15))
     
     ////////////////////////
     //// Update availability
@@ -184,7 +184,7 @@ var tick = (elapsedTime, multiplier) => {
     let dt = BigNumber.from(elapsedTime * multiplier)
     let bonus = theory.publicationMultiplier
     x = (getC1(c1.level).pow(getC1Exponent(c1Exp.level)) * getC2(c2.level).pow(getC2Exponent(c2Exp.level)) * getC3(c3.level) * BigNumber.from(Math.E).pow(c4.level) * BigNumber.from(Math.PI).pow(c5.level) * BigNumber.from(Math.E).pow(BigNumber.from(c6.level * Math.sqrt(2))))
-    dp1 = currency.value >= 0 ? (Math.pow(-1, n.level) * (1 + Math.sin(n.level / 18 * Math.PI)) / ((1 + k2.level) ** (1 / Math.E) - k3.level ** (1 / Math.PI)) * (1 + 1 / (getK1(k1.level) + 1)) ** (getK1(k1.level) + 1) * dt * bonus * x ** 0.75) : 1.5 * (n.cost.getCost(n.level) + k2.cost.getCost(k2.level)) - currency.value
+    dp1 = currency.value >= 0 ? (Math.pow(-1, n.level) * (1.1 + Math.sin(n.level / 18 * Math.PI)) / ((1 + k2.level) ** (1 / Math.E) - k3.level ** (1 / Math.PI)) * (1 + 1 / (getK1(k1.level) + 1)) ** (getK1(k1.level) + 1) * dt * bonus * Math.sqrt(x)) : 1.5 * (n.cost.getCost(n.level) + k2.cost.getCost(k2.level)) - currency.value
     currency.value += dp1
     let sum = 0
     for (let i = 1; i <= Math.floor(Math.sqrt(n.level)); i++) {
@@ -198,7 +198,7 @@ var tick = (elapsedTime, multiplier) => {
 }
 
 var getPrimaryEquation = () => {
-    return `\\dot{\\rho_1}=\\begin{cases}(\\frac{(1+\\sin 10n^{\\circ})e^{i\\pi n}}{k_2^{\\frac{1}{e}}-k_3^{\\frac{1}{\\pi}}})(1+\\frac{1}{k_1+1})^{k_1+1}x^{\\frac{3}{4}}, & \\rho_1>=0\\\\1.5(C(n)+C(k_2))-\\rho_1, & \\rho_1<0\\end{cases}`
+    return `\\dot{\\rho_1}=\\begin{cases}(\\frac{(1.1+\\sin 10n^{\\circ})e^{i\\pi n}}{k_2^{\\frac{1}{e}}-k_3^{\\frac{1}{\\pi}}})(1+\\frac{1}{k_1+1})^{k_1+1}\\sqrt{x}, & \\rho_1>=0\\\\1.5(C(n)+C(k_2))-\\rho_1, & \\rho_1<0\\end{cases}`
 }
 
 theory.primaryEquationHeight = 60
