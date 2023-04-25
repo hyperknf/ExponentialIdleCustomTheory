@@ -180,6 +180,7 @@ var init = () => {
 
 var updateAvailability = () => {
     c2Exp.isAvailable = c1Exp.level > 0
+    k3.isAvailable = k2.level >= 1
 }
 
 var tick = (elapsedTime, multiplier) => {
