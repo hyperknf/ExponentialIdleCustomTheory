@@ -109,7 +109,7 @@ var init = () => {
         k3.getDescription = (_) => Utils.getMath(getDesc(k3.level))
         k3.getInfo = (amount) => Utils.getMathTo(getInfo(k3.level), getInfo(k3.level + amount))
         k3.canBeRefunded = (_) => true
-        k3.isAvailable = (_) => k2.level >= 1
+        k3.isAvailable = k2.level >= 1
     }
     
     // n
