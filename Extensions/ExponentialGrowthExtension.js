@@ -1,8 +1,3 @@
-import { ExponentialCost, FreeCost, LinearCost } from "./api/Costs"
-import { Localization } from "./api/Localization"
-import { BigNumber } from "./api/BigNumber"
-import { theory } from "./api/Theory"
-import { Utils } from "./api/Utils"
 var id = "ExponentialGrowthExtension"
 var name = "Extension of Exponential Growth"
 var description = "This theory extends the exponential growth and the exponential constant, e\n\nMany items in this theory is the extension from the exponential constant\n\nExploit the exponential growth and its extension to earn currency\n\nTry and get high amount of currencies!\n\nEnjoy!"
@@ -158,14 +153,14 @@ var init = () => {
     }
 
     {
-        c1Exp = theory.createMilestoneUpgrade(0, 3)
+        c1Exp = theory.createMilestoneUpgrade(1, 3)
         c1Exp.description = Localization.getUpgradeIncCustomExpDesc("c_1", "0.05")
         c1Exp.info = Localization.getUpgradeIncCustomExpInfo("c_1", "0.05")
         c1Exp.boughtOrRefunded = (_) => theory.invalidatePrimaryEquation()
     }
 
     {
-        c2Exp = theory.createMilestoneUpgrade(1, 3)
+        c2Exp = theory.createMilestoneUpgrade(2, 3)
         c2Exp.description = Localization.getUpgradeIncCustomExpDesc("c_2", "0.05")
         c2Exp.info = Localization.getUpgradeIncCustomExpInfo("c_2", "0.05")
         c2Exp.boughtOrRefunded = (_) => theory.invalidatePrimaryEquation()
@@ -201,7 +196,7 @@ var tick = (elapsedTime, multiplier) => {
     let dt = BigNumber.from(elapsedTime * multiplier)
     let bonus = theory.publicationMultiplier
     x = (getC1(c1.level).pow(getC1Exponent(c1Exp.level)) * getC2(c2.level).pow(getC2Exponent(c2Exp.level)) * getC3(c3.level) * BigNumber.from(Math.E).pow(c4.level) * BigNumber.from(Math.PI).pow(c5.level) * (addTerm.level >= 2 ? BigNumber.from(Math.E).pow(BigNumber.from(c6.level * Math.sqrt(2))) : 1))
-    dp1 = currency.value >= 0 ? (addTerm.level >= 1 ? (Math.pow(-1, n.level) * (1.1 + Math.sin(n.level / 18 * Math.PI)) / ((1 + k2.level) ** (1 / Math.E) - k3.level ** (1 / Math.PI)) : 1) * (1 + 1 / (getK1(k1.level) + 1)) ** (getK1(k1.level) + 1) * dt * bonus * x ** (2 / 3)) : 1.5 * (n.cost.getCost(n.level) + k2.cost.getCost(k2.level)) - currency.value
+    dp1 = currency.value >= 0 ? ((addTerm.level >= 1 ? (Math.pow(-1, n.level) * (1.1 + Math.sin(n.level / 18 * Math.PI)) / ((1 + k2.level) ** (1 / Math.E) - k3.level ** (1 / Math.PI))) : 1) * (1 + 1 / (getK1(k1.level) + 1)) ** (getK1(k1.level) + 1) * dt * bonus * x ** (2 / 3)) : 1.5 * (n.cost.getCost(n.level) + k2.cost.getCost(k2.level)) - currency.value
     currency.value += dp1
     let sum = 0
     for (let i = 1; i <= Math.floor(Math.sqrt(n.level)); i++) {
@@ -215,7 +210,7 @@ var tick = (elapsedTime, multiplier) => {
 }
 
 var getPrimaryEquation = () => {
-    return `\\dot{\\rho_1}=\\begin{cases}${"(\\frac{addTerm.level >= 1 ? (1.1+\\sin 10n^{\\circ})e^{i\\pi n}}{k_2^{\\frac{1}{e}}-k_3^{\\frac{1}{\\pi}}})" : ""}(1+\\frac{1}{k_1+1})^{k_1+1}x^{\\frac{2}{3}}, & \\rho_1>=0\\\\1.5(C(n)+C(k_2))-\\rho_1, & \\rho_1<0\\end{cases}`
+    return `\\dot{\\rho_1}=\\begin{cases}${addTerm.level >= 1 ? "(\\frac{(1.1+\\sin 10n^{\\circ})e^{i\\pi n}}{k_2^{\\frac{1}{e}}-k_3^{\\frac{1}{\\pi}}})" : ""}(1+\\frac{1}{k_1+1})^{k_1+1}x^{\\frac{2}{3}}, & \\rho_1>=0\\\\1.5(C(n)+C(k_2))-\\rho_1, & \\rho_1<0\\end{cases}`
 }
 
 theory.primaryEquationHeight = 60
