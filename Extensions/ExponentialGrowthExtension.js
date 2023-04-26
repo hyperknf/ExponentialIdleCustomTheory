@@ -132,14 +132,14 @@ var init = () => {
     /////////////////////
     // Permanent Upgrades
 
-    theory.createPublicationUpgrade(1, currency, 1e10)
+    theory.createPublicationUpgrade(1, currency, 1e1)
     theory.createBuyAllUpgrade(2, currency, 1e20)
     theory.createAutoBuyerUpgrade(3, currency, 1e40)
 
     ///////////////////////
     //// Milestone Upgrades
 
-    theory.setMilestoneCost(new LinearCost(5, 10))
+    theory.setMilestoneCost(new LinearCost(1, 1))
     
     {
         addTerm = theory.createMilestoneUpgrade(0, 2)
