@@ -22,7 +22,7 @@ var init = () => {
     
     {
         addTerm = theory.createMilestoneUpgrade(0, 2)
-        addTerm.description = = "Adds a term to the equation"
+        addTerm.description = "Adds a term to the equation"
         addTerm.info = "Adds a term to the equation"
         addTerm.boughtOrRefunded = (_) => {
             theory.invalidatePrimaryEquation()
