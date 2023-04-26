@@ -75,7 +75,7 @@ var init = () => {
         c6.getDescription = (_) => Utils.getMath(getDesc(c6.level))
         c6.getInfo = (amount) => Utils.getMathTo(getInfo(c6.level), getInfo(c6.level + amount))
         c6.canBeRefunded = (_) => true
-        c6.isAvailable = addTerm.level >= 2
+        c6.isAvailable = addTerm ? addTerm.level >= 2 : false
     }
     
     // k1
