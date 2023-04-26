@@ -18,12 +18,12 @@ var init = () => {
     ///////////////////////
     //// Milestone Upgrades
 
-    theory.setMilestoneCost(new LinearCost(5, 7.5))
+    theory.setMilestoneCost(new LinearCost(1, 1))
     
     {
         addTerm = theory.createMilestoneUpgrade(0, 2)
         addTerm.description = addTerm.level == 0 ? "Adds a term to the equation" : "Adds the term c_6\\sqrt{2} to the equation"
-        addTerm.info = addTerm.description
+        addTerm.info = addTerm.level == 0 ? "Adds a term to the equation" : "Adds the term c_6\\sqrt{2} to the equation"
         addTerm.boughtOrRefunded = (_) => {
             theory.invalidatePrimaryEquation()
             theory.invalidateSecondaryEquation()
@@ -162,7 +162,7 @@ var init = () => {
     /////////////////////
     // Permanent Upgrades
 
-    theory.createPublicationUpgrade(1, currency, 1e5)
+    theory.createPublicationUpgrade(1, currency, 1)
     theory.createBuyAllUpgrade(2, currency, 1e12)
     theory.createAutoBuyerUpgrade(3, currency, 1e20)
 
