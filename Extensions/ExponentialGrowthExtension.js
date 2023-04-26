@@ -2,7 +2,7 @@ var id = "ExponentialGrowthExtension"
 var name = "Extension of Exponential Growth"
 var description = "This theory extends the exponential growth and the exponential constant, e\n\nMany items in this theory is the extension from the exponential constant\n\nExploit the exponential growth and its extension to earn currency\n\nTry and get high amount of currencies!\n\nEnjoy!"
 var authors = "HyperKNF"
-var version = 34
+var version = 39
 var currency, currency2
 var c1, c2, c3, c4, c5, c6, k1, k2, k3, n, m
 var x = BigNumber.from(0)
