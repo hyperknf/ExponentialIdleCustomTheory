@@ -14,6 +14,36 @@ var chapters = []
 var init = () => {
     currency = theory.createCurrency()
     currency2 = theory.createCurrency()
+    
+    ///////////////////////
+    //// Milestone Upgrades
+
+    theory.setMilestoneCost(new LinearCost(5, 7.5))
+    
+    {
+        addTerm = theory.createMilestoneUpgrade(0, 2)
+        addTerm.description = addTerm.level == 0 ? "Adds a term to the equation" : "Adds the term c_6\\sqrt{2} to the equation"
+        addTerm.info = addTerm.description
+        addTerm.boughtOrRefunded = (_) => {
+            theory.invalidatePrimaryEquation()
+            theory.invalidateSecondaryEquation()
+            theory.invalidateTertiaryEquation()
+        }
+    }
+
+    {
+        c1Exp = theory.createMilestoneUpgrade(1, 3)
+        c1Exp.description = Localization.getUpgradeIncCustomExpDesc("c_1", "0.05")
+        c1Exp.info = Localization.getUpgradeIncCustomExpInfo("c_1", "0.05")
+        c1Exp.boughtOrRefunded = (_) => theory.invalidatePrimaryEquation()
+    }
+
+    {
+        c2Exp = theory.createMilestoneUpgrade(2, 3)
+        c2Exp.description = Localization.getUpgradeIncCustomExpDesc("c_2", "0.05")
+        c2Exp.info = Localization.getUpgradeIncCustomExpInfo("c_2", "0.05")
+        c2Exp.boughtOrRefunded = (_) => theory.invalidatePrimaryEquation()
+    }
 
     ///////////////////
     // Regular Upgrades
@@ -75,7 +105,7 @@ var init = () => {
         c6.getDescription = (_) => Utils.getMath(getDesc(c6.level))
         c6.getInfo = (amount) => Utils.getMathTo(getInfo(c6.level), getInfo(c6.level + amount))
         c6.canBeRefunded = (_) => true
-        c6.isAvailable = addTerm ? addTerm.level >= 2 : false
+        c6.isAvailable = addTerm.level >= 2
     }
     
     // k1
@@ -132,39 +162,9 @@ var init = () => {
     /////////////////////
     // Permanent Upgrades
 
-    theory.createPublicationUpgrade(1, currency, 1e1)
-    theory.createBuyAllUpgrade(2, currency, 1e20)
-    theory.createAutoBuyerUpgrade(3, currency, 1e40)
-
-    ///////////////////////
-    //// Milestone Upgrades
-
-    theory.setMilestoneCost(new LinearCost(1, 1))
-    
-    {
-        addTerm = theory.createMilestoneUpgrade(0, 2)
-        addTerm.description = addTerm.level == 0 ? "Adds the term \\frac{1.1+\\sin 10n^{\\circ})e^{i\\pi n}}{k_2^{\\frac{1}{e}}-k_3^{\\frac{1}{\\pi}}} to the equation" : "Adds the term c_6\\sqrt{2} to the equation"
-        addTerm.info = addTerm.description
-        addTerm.boughtOrRefunded = (_) => {
-            theory.invalidatePrimaryEquation()
-            theory.invalidateSecondaryEquation()
-            theory.invalidateTertiaryEquation()
-        }
-    }
-
-    {
-        c1Exp = theory.createMilestoneUpgrade(1, 3)
-        c1Exp.description = Localization.getUpgradeIncCustomExpDesc("c_1", "0.05")
-        c1Exp.info = Localization.getUpgradeIncCustomExpInfo("c_1", "0.05")
-        c1Exp.boughtOrRefunded = (_) => theory.invalidatePrimaryEquation()
-    }
-
-    {
-        c2Exp = theory.createMilestoneUpgrade(2, 3)
-        c2Exp.description = Localization.getUpgradeIncCustomExpDesc("c_2", "0.05")
-        c2Exp.info = Localization.getUpgradeIncCustomExpInfo("c_2", "0.05")
-        c2Exp.boughtOrRefunded = (_) => theory.invalidatePrimaryEquation()
-    }
+    theory.createPublicationUpgrade(1, currency, 1e5)
+    theory.createBuyAllUpgrade(2, currency, 1e13)
+    theory.createAutoBuyerUpgrade(3, currency, 1e20)
 
     /////////////////
     //// Achievements
@@ -217,7 +217,7 @@ theory.primaryEquationHeight = 60
 theory.secondaryEquationHeight = 125
 
 var getSecondaryEquation = () => `x=c_{1}${c1Exp.level != 0 ? "^{" + (1 + 0.05 * c1Exp.level) + "}" : ""}c_2${c2Exp.level != 0 ? "^{" + (1 + 0.05 * c2Exp.level) + "}" : ""}c_{3}e^{c_4${addTerm.level >= 2 ? "+c_6\\sqrt{2}" : ""}}\\pi^{c_5}\\\\\\dot{\\rho_2}=m\\sum_{i=1}^{\\lfloor \\sqrt{n} \\rfloor}{i\\sqrt{k_1+k_2+k_3}}\\\\` + theory.latexSymbol + "=\\max\\rho_1^{0.5(1-\\frac{1}{n+2})}\\rho_2^{0.25}\\sqrt[5]{\\ln (k_3x+1)}"
-var getTertiaryEquation = () => `x\\approx ${x.toString(5)}, \\quad\\sqrt[5]{\\ln (k_3x+1)}\\approx ${BigNumber.from(Math.log(x * k3.level + 1) ** 0.2).toString(5)}${addTerm.level >= 1 ? ", \\quad k_2^{\\frac{1}{e}}-k_3^{\\frac{1}{\\pi}}\\approx ${BigNumber.from((1 + k2.level) ** (1 / Math.E) - k3.level ** (1 / Math.PI)).toString(5)}" : ""}`
+var getTertiaryEquation = () => `x\\approx ${x.toString(5)}, \\quad\\sqrt[5]{\\ln (k_3x+1)}\\approx ${BigNumber.from(Math.log(x * k3.level + 1) ** 0.2).toString(5)}${addTerm.level >= 1 ? `, \\quad k_2^{\\frac{1}{e}}-k_3^{\\frac{1}{\\pi}}\\approx ${BigNumber.from((1 + k2.level) ** (1 / Math.E) - k3.level ** (1 / Math.PI)).toString(5)}` : ""}`
 var getPublicationMultiplier = (tau) => tau.pow(0.3) / BigNumber.from(2)
 var getPublicationMultiplierFormula = (symbol) => "\\frac{{" + symbol + "}^{0.3}}{2}"
 var getTau = () => (currency.value.max(BigNumber.ONE) == BigNumber.ONE ? BigNumber.ONE : currency.value.pow(BigNumber.from(0.5 * (1 - 1 / (n.level + 2)))) * (Math.log(x * k3.level + 1) ** 0.2)) * currency2.value.pow(BigNumber.from(0.25))
