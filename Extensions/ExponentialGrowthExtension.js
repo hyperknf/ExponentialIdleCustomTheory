@@ -178,7 +178,7 @@ var init = () => {
 
     chapters.push(theory.createStoryChapter(0, "e", "You started to find out\nthat as k approaches infinity\n(1 + 1/k)^k approaches e\nMaybe this will be useful in your research?", () => true))
     chapters.push(theory.createStoryChapter(1, "Decreased efficiency", "After a bit of time\nyou realised that your research efficiency on the extensions\nis only around half of intended efficiency\nYou realised you will need more time\nto finish your research", () => c6.level >= 1))
-    chapters.push(theory.createStoryChapter(2, "Steady progress", "After some more researching\nyou have reached 1e15\nwhich is your first milestone\nYou are still very far away from the research goal\nbut you are making steady progress\nand with your immense dedication\nyou will finish the research in no time", () => getTau() >= 1e15))
+    chapters.push(theory.createStoryChapter(2, "Steady progress", "After some more researching\nyou have reached 1e12.5\nwhich is your first milestone\nYou are still very far away from the research goal\nbut you are making steady progress\nand with your immense dedication\nyou will finish the research in no time", () => getTau() >= Math.pow(10, 12.5)))
     
     ////////////////////////
     //// Update availability
