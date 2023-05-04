@@ -29,6 +29,24 @@ var c1Exp, c2Exp
 
 var achievements = [], chapters = []
 
+var factorial = num => {
+    var g = 7
+    var C = [0.99999999999980993, 676.5203681218851, -1259.1392167224028, 771.32342877765313, -176.61502916214059, 12.507343278686905, -0.13857109526572012, 9.9843695780195716 * Math.pow(10, -6), 1.5056327351493116 * Math.pow(10, -7)]
+    function gamma(z) {
+        if (z < 0.5) {
+            return Math.PI / (Math.sin(Math.PI * z) * gamma(1 - z))
+        } else {
+            z -= 1
+            var x = C[0]
+            for (var i = 1; i < g + 2; i++)
+            x += C[i] / (z + i)
+            var t = z + g + 0.5
+            return Math.sqrt(2 * Math.PI) * Math.pow(t, (z + 0.5)) * Math.exp(-t) * x
+        }
+    }
+    return gamma(num + 1)
+}
+
 var init = () => {
     currency = theory.createCurrency()
 
@@ -87,11 +105,11 @@ var updateAvailability = () => {
 var tick = (elapsedTime, multiplier) => {
     let dt = BigNumber.from(elapsedTime * multiplier);
     let bonus = theory.publicationMultiplier;
-    currency.value += dt * bonus * getC1(c1.level).pow(getC1Exponent(c1Exp.level)) * getC2(c2.level).pow(getC2Exponent(c2Exp.level))
+    currency.value += factorial(Math.sqrt(dt * bonus * getC1(c1.level).pow(getC1Exponent(c1Exp.level)) * getC2(c2.level).pow(getC2Exponent(c2Exp.level))))
 }
 
 var getPrimaryEquation = () => {
-    let result = "\\dot{\\rho} = c_1"
+    let result = "\\sqrt{\\dot{\\rho} = c_1"
 
     if (c1Exp.level == 1) result += "^{1.05}"
     if (c1Exp.level == 2) result += "^{1.1}"
@@ -103,7 +121,7 @@ var getPrimaryEquation = () => {
     if (c2Exp.level == 2) result += "^{1.1}"
     if (c2Exp.level == 3) result += "^{1.15}"
 
-    return result
+    return result + "}!"
 }
 
 var getSecondaryEquation = () => theory.latexSymbol + "=\\max\\rho"
