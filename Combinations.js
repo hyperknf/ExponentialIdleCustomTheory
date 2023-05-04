@@ -101,18 +101,19 @@ var init = () => {
 var updateAvailability = () => {
     // c2Exp.isAvailable = c1Exp.level > 0
 }
+var hahahaha = 0
 
 var tick = (elapsedTime, multiplier) => {
     let dt = BigNumber.from(elapsedTime * multiplier);
     let bonus = theory.publicationMultiplier;
-    currency.value += factorial(Math.sqrt(dt * bonus * getC1(c1.level) * getC2(c2.level)))
+    currency.value += (haha = factorial(Math.sqrt(dt * bonus * getC1(c1.level) * getC2(c2.level))))
 }
 
 var getPrimaryEquation = () => {
     return "\\dot{\\rho} = \\sqrt{c_1c_2}!"
 }
 
-var getSecondaryEquation = () => theory.latexSymbol + "=\\max\\rho"
+var getSecondaryEquation = () => theory.latexSymbol + "=\\max\\rho" + hahahaha
 var getPublicationMultiplier = (tau) => tau.pow(0.164) / BigNumber.THREE
 var getPublicationMultiplierFormula = (symbol) => "\\frac{{" + symbol + "}^{0.164}}{3}"
 var getTau = () => currency.value
