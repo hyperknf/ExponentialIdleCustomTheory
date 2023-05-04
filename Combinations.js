@@ -109,7 +109,7 @@ var tick = (elapsedTime, multiplier) => {
 }
 
 var getPrimaryEquation = () => {
-    return "\\sqrt{\\dot{\\rho} = sqrt{c_1c_2}!"
+    return "\\dot{\\rho} = sqrt{c_1c_2}!"
 }
 
 var getSecondaryEquation = () => theory.latexSymbol + "=\\max\\rho"
