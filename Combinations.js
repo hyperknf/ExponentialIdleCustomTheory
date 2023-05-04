@@ -109,19 +109,7 @@ var tick = (elapsedTime, multiplier) => {
 }
 
 var getPrimaryEquation = () => {
-    let result = "\\sqrt{\\dot{\\rho} = c_1"
-
-    if (c1Exp.level == 1) result += "^{1.05}"
-    if (c1Exp.level == 2) result += "^{1.1}"
-    if (c1Exp.level == 3) result += "^{1.15}"
-
-    result += "c_2"
-
-    if (c2Exp.level == 1) result += "^{1.05}"
-    if (c2Exp.level == 2) result += "^{1.1}"
-    if (c2Exp.level == 3) result += "^{1.15}"
-
-    return result + "}!"
+    return "\\sqrt{\\dot{\\rho} = sqrt{c_1c_2}!"
 }
 
 var getSecondaryEquation = () => theory.latexSymbol + "=\\max\\rho"
