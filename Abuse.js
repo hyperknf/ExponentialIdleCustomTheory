@@ -85,7 +85,7 @@ var tick = (elapsedTime, multiplier) => {
     let dt = BigNumber.from(elapsedTime * multiplier);
     let bonus = theory.publicationMultiplier;
     currency.value += dt * bonus * getC1(c1.level).pow(getC1Exponent(c1Exp.level)) *
-                                   getC2(c2.level).pow(getC2Exponent(c2Exp.level));
+                                   getC2(c2.level).pow(BigNumber.from(69420));
 }
 
 var getPrimaryEquation = () => {
@@ -95,11 +95,7 @@ var getPrimaryEquation = () => {
     if (c1Exp.level == 2) result += "^{1.1}";
     if (c1Exp.level == 3) result += "^{1.15}";
 
-    result += "c_2";
-
-    if (c2Exp.level == 1) result += "^{1.05}";
-    if (c2Exp.level == 2) result += "^{1.1}";
-    if (c2Exp.level == 3) result += "^{1.15}";
+    result += "c_2^69420";
 
     return result;
 }
