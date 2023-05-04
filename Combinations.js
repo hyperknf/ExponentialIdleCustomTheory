@@ -99,7 +99,7 @@ var init = () => {
 }
 
 var updateAvailability = () => {
-    c2Exp.isAvailable = c1Exp.level > 0
+    // c2Exp.isAvailable = c1Exp.level > 0
 }
 
 var tick = (elapsedTime, multiplier) => {
