@@ -118,6 +118,8 @@ var getPrimaryEquation = () => {
     return result
 }
 
+theory.primaryEquationHeight = 35
+theory.secondaryEquationHeight = 50
 var getSecondaryEquation = () => "\\dot{t}=t_1\\\\" + theory.latexSymbol + "=\\max\\rho"
 var getTertiaryEquation = () => "\\dot{\\rho}\\approx" + drho.toString(5)
 var getPublicationMultiplier = (tau) => tau.pow(0.169)
