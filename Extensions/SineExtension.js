@@ -97,14 +97,14 @@ var updateAvailability = () => {
 var tick = (elapsedTime, multiplier) => {
     let dt = BigNumber.from(elapsedTime * multiplier);
     let bonus = theory.publicationMultiplier;
-    tcurrency.value += getT(t1.level)
+    tcurrency.value += getT1(t1.level)
     currency.value += dt * bonus * getC1(c1.level) * getC2(c2.level) * (1 + Math.sin(tcurrency.value))
 }
 
 var getPrimaryEquation = () => {
     let result = "\\dot{\\rho} = c_1"
 
-    result += "c_2"
+    result += "c_2(1+\\sin{t})"
 
     return result
 }
