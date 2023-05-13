@@ -99,6 +99,10 @@ var init = () => {
     "none"
 
     updateAvailability()
+    
+    theory.invalidatePrimaryEquation()
+    theory.invalidateSecondaryEquation()
+    theory.invalidateTertiaryEquation()
 }
 
 var updateAvailability = () => {
