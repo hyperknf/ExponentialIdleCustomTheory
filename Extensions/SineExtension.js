@@ -55,9 +55,18 @@ var init = () => {
 
     // c2
     {
-        let getDesc = (level) => "c_2=2^{" + level + "}";
+        let getDesc = (level) => "c_2=2^{" + level + "}"
         let getInfo = (level) => "c_2=" + getC2(level).toString(0)
         c2 = theory.createUpgrade(2, currency, new ExponentialCost(5, Math.log2(10)))
+        c2.getDescription = (_) => Utils.getMath(getDesc(c2.level))
+        c2.getInfo = (amount) => Utils.getMathTo(getInfo(c2.level), getInfo(c2.level + amount))
+    }
+    
+    // c2
+    {
+        let getDesc = (level) => "c_3=2^{" + level + "}"
+        let getInfo = (level) => "c_2=" + getC2(level).toString(0)
+        c2 = theory.createUpgrade(3, currency, new ExponentialCost(5, Math.log2(10)))
         c2.getDescription = (_) => Utils.getMath(getDesc(c2.level))
         c2.getInfo = (amount) => Utils.getMathTo(getInfo(c2.level), getInfo(c2.level + amount))
     }
@@ -95,8 +104,8 @@ var updateAvailability = () => {
 }
 
 var tick = (elapsedTime, multiplier) => {
-    let dt = BigNumber.from(elapsedTime * multiplier);
-    let bonus = theory.publicationMultiplier;
+    let dt = BigNumber.from(elapsedTime * multiplier)
+    let bonus = theory.publicationMultiplier
     tcurrency.value += getT1(t1.level)
     currency.value += dt * bonus * getC1(c1.level) * getC2(c2.level) * (1 + Math.sin(tcurrency.value))
 }
