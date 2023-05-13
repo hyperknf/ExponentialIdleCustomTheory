@@ -82,13 +82,13 @@ var init = () => {
 }
 
 var updateAvailability = () => {
-    "nothing currently"
+    
 }
 
 var tick = (elapsedTime, multiplier) => {
     let dt = BigNumber.from(elapsedTime * multiplier);
     let bonus = theory.publicationMultiplier;
-    currency.value += dt * bonus * getC1(c1.level)) * getC2(c2.level))
+    currency.value += dt * bonus * getC1(c1.level) * getC2(c2.level)
 }
 
 var getPrimaryEquation = () => {
@@ -101,7 +101,7 @@ var getPrimaryEquation = () => {
 
 var getSecondaryEquation = () => theory.latexSymbol + "=\\max\\rho"
 var getPublicationMultiplier = (tau) => tau.pow(0.169)
-var getPublicationMultiplierFormula = (symbol) => "{" + symbol + "}^{0.164}}"
+var getPublicationMultiplierFormula = (symbol) => "{" + symbol + "}^{0.164}"
 var getTau = () => currency.value
 var get2DGraphValue = () => currency.value.sign * (BigNumber.ONE + currency.value.abs()).log10().toNumber()
 var getC1 = (level) => Utils.getStepwisePowerSum(level, 2, 10, 0)
