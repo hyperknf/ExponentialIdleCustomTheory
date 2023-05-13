@@ -82,38 +82,28 @@ var init = () => {
 }
 
 var updateAvailability = () => {
-    c2Exp.isAvailable = c1Exp.level > 0
+    "nothing currently"
 }
 
 var tick = (elapsedTime, multiplier) => {
     let dt = BigNumber.from(elapsedTime * multiplier);
     let bonus = theory.publicationMultiplier;
-    currency.value += dt * bonus * getC1(c1.level).pow(getC1Exponent(c1Exp.level)) * getC2(c2.level).pow(getC2Exponent(c2Exp.level))
+    currency.value += dt * bonus * getC1(c1.level)) * getC2(c2.level))
 }
 
 var getPrimaryEquation = () => {
     let result = "\\dot{\\rho} = c_1"
 
-    if (c1Exp.level == 1) result += "^{1.05}"
-    if (c1Exp.level == 2) result += "^{1.1}"
-    if (c1Exp.level == 3) result += "^{1.15}"
-
     result += "c_2"
-
-    if (c2Exp.level == 1) result += "^{1.05}"
-    if (c2Exp.level == 2) result += "^{1.1}"
-    if (c2Exp.level == 3) result += "^{1.15}"
 
     return result
 }
 
 var getSecondaryEquation = () => theory.latexSymbol + "=\\max\\rho"
-var getPublicationMultiplier = (tau) => tau.pow(0.164) / BigNumber.THREE
-var getPublicationMultiplierFormula = (symbol) => "\\frac{{" + symbol + "}^{0.164}}{3}"
+var getPublicationMultiplier = (tau) => tau.pow(0.169)
+var getPublicationMultiplierFormula = (symbol) => "{" + symbol + "}^{0.164}}"
 var getTau = () => currency.value
 var get2DGraphValue = () => currency.value.sign * (BigNumber.ONE + currency.value.abs()).log10().toNumber()
 var getC1 = (level) => Utils.getStepwisePowerSum(level, 2, 10, 0)
 var getC2 = (level) => BigNumber.TWO.pow(level)
-var getC1Exponent = (level) => BigNumber.from(1 + 0.05 * level)
-var getC2Exponent = (level) => BigNumber.from(1 + 0.05 * level)
 init()
