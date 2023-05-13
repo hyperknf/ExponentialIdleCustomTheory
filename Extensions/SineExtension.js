@@ -39,7 +39,7 @@ var init = () => {
     
     // t
     {
-        let getDesc (level) => "t_1=" + getT1(level).toString(1)
+        let getDesc = (level) => "t_1=" + getT1(level).toString(1)
         t1 = theory.createUpgrade(0, currency, new FirstFreeCost(new ExponentialCost(100, Math.log2(100))))
         t1.getDescription = (_) => Utils.getMath(getDesc(t1.level))
         t1.getInfo = (amount) => Utils.getMathTo(getDesc(t1.level), getDesc(t1.level + amount))
