@@ -64,8 +64,8 @@ var init = () => {
     
     // c3
     {
-        let getDesc = (level) => "c_3=\\frac{e}{" + getC3(level) + "}"
-        let getInfo = (level) => "c_3=\\frac{e}{" + getC3(level).toString(0) + "}"
+        let getDesc = (level) => "c_3=\\frac{\\pi}{" + getC3(level) + "}"
+        let getInfo = (level) => "c_3=\\frac{\\pi}{" + getC3(level).toString(0) + "}"
         c3 = theory.createUpgrade(3, currency, new ExponentialCost(1000, Math.log2(1000)))
         c3.getDescription = (_) => Utils.getMath(getDesc(c3.level))
         c3.getInfo = (amount) => Utils.getMathTo(getInfo(c3.level), getInfo(c3.level + amount))
@@ -107,23 +107,24 @@ var tick = (elapsedTime, multiplier) => {
     let dt = BigNumber.from(elapsedTime * multiplier)
     let bonus = theory.publicationMultiplier
     tcurrency.value += getT1(t1.level)
-    currency.value += dt * bonus * getC1(c1.level) * getC2(c2.level) * (1 + Math.sin(tcurrency.value))
+    currency.value += dt * bonus * getC1(c1.level) * getC2(c2.level) * (Math.PI / getC3(c3.level)) * (1 + Math.sin(tcurrency.value))
 }
 
 var getPrimaryEquation = () => {
     let result = "\\dot{\\rho} = c_1"
 
-    result += "c_2(1+\\sin{t})"
+    result += "c_2c_3^{-\\log_{5}{1+t}}(1+\\sin{t})"
 
     return result
 }
 
 var getSecondaryEquation = () => "\\dot{t}=t_1\\\\" + theory.latexSymbol + "=\\max\\rho"
 var getPublicationMultiplier = (tau) => tau.pow(0.169)
-var getPublicationMultiplierFormula = (symbol) => "{" + symbol + "}^{0.164}"
+var getPublicationMultiplierFormula = (symbol) => "{" + symbol + "}^{0.169}"
 var getTau = () => currency.value
 var get2DGraphValue = () => currency.value.sign * (BigNumber.ONE + currency.value.abs()).log10().toNumber()
 var getT1 = (level) => level / 10
 var getC1 = (level) => Utils.getStepwisePowerSum(level, 2, 10, 0)
 var getC2 = (level) => BigNumber.TWO.pow(level)
+var getC3 = (level) => 1 + Utils.getStepwisePowerSum(level, 1.5, 4, 0)
 init()
