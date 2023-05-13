@@ -24,6 +24,7 @@ var authors = "HyperKNF"
 var version = 1
 
 var currency, tcurrency
+var t1
 var c1, c2
 var c1Exp, c2Exp
 
@@ -35,11 +36,19 @@ var init = () => {
 
     ///////////////////
     // Regular Upgrades
+    
+    // t
+    {
+        let getDesc (level) => "t_1=" + getT1(level).toString(1)
+        t1 = theory.createUpgrade(0, currency, new FirstFreeCost(new ExponentialCost(100, Math.log2(100))))
+        t1.getDescription = (_) => Utils.getMath(getDesc(t1.level))
+        t1.getInfo = (amount) => Utils.getMathTo(getDesc(t1.level), getDesc(t1.level + amount))
+    } 
 
     // c1
     {
         let getDesc = (level) => "c_1=" + getC1(level).toString(0)
-        c1 = theory.createUpgrade(0, currency, new FirstFreeCost(new ExponentialCost(15, Math.log2(2))))
+        c1 = theory.createUpgrade(1, currency, new FirstFreeCost(new ExponentialCost(15, Math.log2(2))))
         c1.getDescription = (_) => Utils.getMath(getDesc(c1.level))
         c1.getInfo = (amount) => Utils.getMathTo(getDesc(c1.level), getDesc(c1.level + amount))
     }
@@ -48,7 +57,7 @@ var init = () => {
     {
         let getDesc = (level) => "c_2=2^{" + level + "}";
         let getInfo = (level) => "c_2=" + getC2(level).toString(0)
-        c2 = theory.createUpgrade(1, currency, new ExponentialCost(5, Math.log2(10)))
+        c2 = theory.createUpgrade(2, currency, new ExponentialCost(5, Math.log2(10)))
         c2.getDescription = (_) => Utils.getMath(getDesc(c2.level))
         c2.getInfo = (amount) => Utils.getMathTo(getInfo(c2.level), getInfo(c2.level + amount))
     }
@@ -88,7 +97,8 @@ var updateAvailability = () => {
 var tick = (elapsedTime, multiplier) => {
     let dt = BigNumber.from(elapsedTime * multiplier);
     let bonus = theory.publicationMultiplier;
-    currency.value += dt * bonus * getC1(c1.level) * getC2(c2.level)
+    tcurrency.value += getT(t1.level)
+    currency.value += dt * bonus * getC1(c1.level) * getC2(c2.level) * (1 + Math.sin(tcurrency.value))
 }
 
 var getPrimaryEquation = () => {
@@ -99,11 +109,12 @@ var getPrimaryEquation = () => {
     return result
 }
 
-var getSecondaryEquation = () => theory.latexSymbol + "=\\max\\rho"
+var getSecondaryEquation = () => "\\dot{t}=t_1\\\\" + theory.latexSymbol + "=\\max\\rho"
 var getPublicationMultiplier = (tau) => tau.pow(0.169)
 var getPublicationMultiplierFormula = (symbol) => "{" + symbol + "}^{0.164}"
 var getTau = () => currency.value
 var get2DGraphValue = () => currency.value.sign * (BigNumber.ONE + currency.value.abs()).log10().toNumber()
+var getT1 = (level) => level / 10
 var getC1 = (level) => Utils.getStepwisePowerSum(level, 2, 10, 0)
 var getC2 = (level) => BigNumber.TWO.pow(level)
 init()
