@@ -25,7 +25,7 @@ var version = 1
 
 var currency, tcurrency
 var t1
-var c1, c2
+var c1, c2, c3
 var c1Exp, c2Exp
 
 var achievements = [], chapters = []
@@ -62,19 +62,19 @@ var init = () => {
         c2.getInfo = (amount) => Utils.getMathTo(getInfo(c2.level), getInfo(c2.level + amount))
     }
     
-    // c2
+    // c3
     {
-        let getDesc = (level) => "c_3=2^{" + level + "}"
-        let getInfo = (level) => "c_2=" + getC2(level).toString(0)
-        c2 = theory.createUpgrade(3, currency, new ExponentialCost(5, Math.log2(10)))
-        c2.getDescription = (_) => Utils.getMath(getDesc(c2.level))
-        c2.getInfo = (amount) => Utils.getMathTo(getInfo(c2.level), getInfo(c2.level + amount))
+        let getDesc = (level) => "c_3=\\frac{e}{" + getC3(level) + "}"
+        let getInfo = (level) => "c_3=\\frac{e}{" + getC3(level).toString(0) + "}"
+        c3 = theory.createUpgrade(3, currency, new ExponentialCost(1000, Math.log2(1000)))
+        c3.getDescription = (_) => Utils.getMath(getDesc(c3.level))
+        c3.getInfo = (amount) => Utils.getMathTo(getInfo(c3.level), getInfo(c3.level + amount))
     }
 
     /////////////////////
     // Permanent Upgrades
     theory.createPublicationUpgrade(0, currency, 1e10)
-    theory.createBuyAllUpgrade(1, currency, 1e13)
+    theory.createBuyAllUpgrade(1, currency, 1e17)
     theory.createAutoBuyerUpgrade(2, currency, 1e30)
 
     ///////////////////////
