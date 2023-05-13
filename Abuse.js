@@ -95,7 +95,7 @@ var getPrimaryEquation = () => {
     if (c1Exp.level == 2) result += "^{1.1}";
     if (c1Exp.level == 3) result += "^{1.15}";
 
-    result += "c_2^69420";
+    result += "c_2^{69420}";
 
     return result;
 }
