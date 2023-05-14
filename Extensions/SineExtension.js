@@ -119,14 +119,14 @@ var tick = (elapsedTime, multiplier) => {
 }
 
 var getPrimaryEquation = () => {
-    let result = "\\dot{\\rho}=\\sqrt{\\rho_2}(1+\\sin{t})"
+    let result = "\\dot{\\rho_1}=(1+\\sin{t})\\sqrt{\\rho_2}"
     return result
 }
 
 theory.primaryEquationHeight = 35
 theory.secondaryEquationHeight = 75
 var getSecondaryEquation = () => "\\dot{t}=t_1\\\\\\dot{\\rho_2}=c_1c_2c_3^{-\\log_{5}{(1+t)}}\\\\" + theory.latexSymbol + "=\\max\\rho"
-var getTertiaryEquation = () => "\\dot{\\rho}\\approx" + drho.toString(5)
+var getTertiaryEquation = () => "\\dot{\\rho_1}\\approx" + drho1.toString(5) + ",\\quad\\dot{\\rho_2}\\approx" + drho2.toString(5)
 var getPublicationMultiplier = (tau) => tau.pow(0.169)
 var getPublicationMultiplierFormula = (symbol) => "{" + symbol + "}^{0.169}"
 var getTau = () => currency.value
