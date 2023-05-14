@@ -109,10 +109,12 @@ var updateAvailability = () => {
 var tick = (elapsedTime, multiplier) => {
     let dt = BigNumber.from(elapsedTime * multiplier)
     let bonus = theory.publicationMultiplier
-    tcurrency.value += getT1(t1.level)
-    currency2.value += (drho2 = (getC1(c1.level) * getC2(c2.level) * (Math.PI / getC3(c3.level)) ** (-Math.log(tcurrency.value) / Math.log(5))))
-    currency.value += (drho1 = dt * bonus * Math.sqrt(currency2.value) * (1 + Math.sin(tcurrency.value)))
+    drho1 = dt * bonus * Math.sqrt(currency2.value) * (1 + Math.sin(tcurrency.value))
+    drho2 = (getC1(c1.level) * getC2(c2.level) * (Math.PI / getC3(c3.level)) ** (-Math.log(tcurrency.value) / Math.log(5)))
     
+    tcurrency.value += getT1(t1.level)
+    currency.value += drho1
+    currency2.value += drho2
     theory.invalidatePrimaryEquation()
     theory.invalidateSecondaryEquation()
     theory.invalidateTertiaryEquation()
