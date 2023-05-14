@@ -105,7 +105,7 @@ var init = () => {
         c6.getDescription = (_) => Utils.getMath(getDesc(c6.level))
         c6.getInfo = (amount) => Utils.getMathTo(getInfo(c6.level), getInfo(c6.level + amount))
         c6.canBeRefunded = (_) => true
-        c6.isAvailable = (_) => addTerm.level >= 2
+        c6.isAvailable = addTerm.level >= 2
     }
     
     // k1
@@ -187,6 +187,7 @@ var init = () => {
 }
 
 var updateAvailability = () => {
+    c6.isAvailable = addTerm.level >= 2
     c2Exp.isAvailable = c1Exp.level > 0
     k3.isAvailable = k2.level >= 1
 }
