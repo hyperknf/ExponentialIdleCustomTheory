@@ -28,12 +28,13 @@ var t1
 var c1, c2, c3
 var c1Exp, c2Exp
 
-var drho = BigNumber.from(0)
+var drho1 = BigNumber.from(0), drho2 = BigNumber.from(0)
 
 var achievements = [], chapters = []
 
 var init = () => {
     currency = theory.createCurrency()
+    currency2 = theory.createCurrency()
     tcurrency = theory.createCurrency("t", "t")
 
     ///////////////////
@@ -109,7 +110,8 @@ var tick = (elapsedTime, multiplier) => {
     let dt = BigNumber.from(elapsedTime * multiplier)
     let bonus = theory.publicationMultiplier
     tcurrency.value += getT1(t1.level)
-    currency.value += (drho = dt * bonus * getC1(c1.level) * getC2(c2.level) * ((Math.PI / getC3(c3.level)) ** (Math.log(tcurrency.value) / Math.log(5))) * (1 + Math.sin(tcurrency.value)))
+    currency2.value += (drho2 = (getC1(c1.level) * getC2(c2.level) * (Math.PI / getC3(c3.level)) ** (-Math.log(tcurrency.value) / Math.log(5))))
+    currency.value += (drho1 = dt * bonus * Math.sqrt(currency2.value) * (1 + Math.sin(tcurrency.value)))
     
     theory.invalidatePrimaryEquation()
     theory.invalidateSecondaryEquation()
@@ -117,14 +119,13 @@ var tick = (elapsedTime, multiplier) => {
 }
 
 var getPrimaryEquation = () => {
-    let result = "\\dot{\\rho} = c_1"
-    result += "c_2c_3^{-\\log_{5}{(1+t)}}(1+\\sin{t})"
+    let result = "\\dot{\\rho}=\\sqrt{\\rho_2}(1+\\sin{t})"
     return result
 }
 
 theory.primaryEquationHeight = 35
-theory.secondaryEquationHeight = 50
-var getSecondaryEquation = () => "\\dot{t}=t_1\\\\" + theory.latexSymbol + "=\\max\\rho"
+theory.secondaryEquationHeight = 75
+var getSecondaryEquation = () => "\\dot{t}=t_1\\\\\\dot{\\rho_2}=c_1c_2c_3^{-\\log_{5}{(1+t)}}\\\\" + theory.latexSymbol + "=\\max\\rho"
 var getTertiaryEquation = () => "\\dot{\\rho}\\approx" + drho.toString(5)
 var getPublicationMultiplier = (tau) => tau.pow(0.169)
 var getPublicationMultiplierFormula = (symbol) => "{" + symbol + "}^{0.169}"
