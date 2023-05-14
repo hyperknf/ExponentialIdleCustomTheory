@@ -109,7 +109,7 @@ var updateAvailability = () => {
 var tick = (elapsedTime, multiplier) => {
     let dt = BigNumber.from(elapsedTime * multiplier)
     let bonus = theory.publicationMultiplier
-    drho1 = dt * bonus * Math.sqrt(currency2.value) * (1 + Math.sin(tcurrency.value))
+    drho1 = dt * bonus * Math.sqrt(currency2.value) * Math.abs(Math.sin(tcurrency.value))
     drho2 = getC1(c1.level) * getC2(c2.level) * Math.pow((Math.PI / getC3(c3.level)), -(Math.log(tcurrency.value + 1) / Math.log(5)))
     tcurrency.value += getT1(t1.level)
     currency.value += drho1
@@ -120,7 +120,7 @@ var tick = (elapsedTime, multiplier) => {
 }
 
 var getPrimaryEquation = () => {
-    let result = "\\dot{\\rho_1}=(1+\\sin{t})\\sqrt{\\rho_2}"
+    let result = "\\dot{\\rho_1}=|\\sin{t}|\\sqrt{\\rho_2}"
     return result
 }
 
