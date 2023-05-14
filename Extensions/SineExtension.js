@@ -127,7 +127,7 @@ var getPrimaryEquation = () => {
 theory.primaryEquationHeight = 35
 theory.secondaryEquationHeight = 75
 var getSecondaryEquation = () => "\\dot{t}=t_1\\\\\\dot{\\rho_2}=c_1c_2c_3^{-\\log_{5}{(1+t)}}\\\\" + theory.latexSymbol + "=\\max\\rho"
-var getTertiaryEquation = () => "\\dot{\\rho_1}\\approx" + (10 * drho1).toString(5) + ",\\quad\\dot{\\rho_2}\\approx" + (10 * drho2).toString(5)
+var getTertiaryEquation = () => "\\dot{\\rho_1}\\approx" + drho1.toString(5) + ",\\quad\\dot{\\rho_2}\\approx" + drho2.toString(5)
 var getPublicationMultiplier = (tau) => tau.pow(0.169)
 var getPublicationMultiplierFormula = (symbol) => "{" + symbol + "}^{0.169}"
 var getTau = () => currency.value
