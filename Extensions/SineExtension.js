@@ -120,7 +120,7 @@ var tick = (elapsedTime, multiplier) => {
 }
 
 var getPrimaryEquation = () => {
-    let result = "\\dot{\\rho_1}=|\\sin{t}|\\sqrt{\\rho_2}"
+    let result = "\\dot{\\rho_1}=\\mid\\sin{t}\\mid\\sqrt{\\rho_2}"
     return result
 }
 
