@@ -112,22 +112,24 @@ var init = () => {
 
     ///////////////////////
     //// Milestone Upgrades
-    theory.setMilestoneCost(new CustomCost(BigNumber.from((milestone) => {
-        switch (milestone) {
-            case 0:
-                return 0
-            case 1:
-                return 20
-            case 2:
-                return 50
-            case 3:
-                return 115
-            case 4:
-                return 190
-            default:
-                return 300 + 150 * (milestone - 5)
-        } 
-    })))
+    theory.setMilestoneCost(new CustomCost((milestone) => {
+        return BigNumber.from((() => {
+            switch (milestone) {
+                case 0:
+                    return 0
+                case 1:
+                    return 20
+                case 2:
+                    return 50
+                case 3:
+                    return 115
+                case 4:
+                    return 190
+                default:
+                    return 300 + 150 * (milestone - 5)
+            }
+        })())
+    }))
 
     {
         unlock = theory.createMilestoneUpgrade(0, 1)
