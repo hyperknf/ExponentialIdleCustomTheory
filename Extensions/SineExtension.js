@@ -18,10 +18,10 @@ import { theory } from "./api/Theory"
 import { Utils } from "./api/Utils"
 
 var id = "SineExtension"
-var name = "Extension of Sine"
-var description = "Extension of Sine by HyperKNF"
+var name = "Trigonometric Functions"
+var description = "Trigonometric Functions by HyperKNF"
 var authors = "HyperKNF"
-var version = 1
+var version = 4
 
 var currency, tcurrency
 var t1, t2
@@ -85,13 +85,22 @@ var init = () => {
 
     /////////////////////
     // Permanent Upgrades
-    theory.createPublicationUpgrade(0, currency, 1e10)
-    theory.createBuyAllUpgrade(1, currency, 1e17)
-    theory.createAutoBuyerUpgrade(2, currency, 1e30)
+    theory.createPublicationUpgrade(0, currency, 1e7)
+    theory.createBuyAllUpgrade(1, currency, 1e14)
+    theory.createAutoBuyerUpgrade(2, currency, 1e27)
 
     ///////////////////////
     //// Milestone Upgrades
-    theory.setMilestoneCost(new LinearCost(25, 25))
+    theory.setMilestoneCost(new CustomCost((milestone) => {
+        switch (milestone) {
+            case 0: 0
+            case 1: 20
+            case 2: 50
+            case 3: 115
+            case 4: 190
+            default: 300 + 150 * (milestone - 5)
+        } 
+    }))
 
     /*{
         c1Exp = theory.createMilestoneUpgrade(0, 3);
