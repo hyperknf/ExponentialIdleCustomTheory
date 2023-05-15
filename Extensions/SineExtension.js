@@ -26,7 +26,10 @@ var version = 4
 var currency, tcurrency
 var t1, t2
 var c1, c2, c3
-var c1Exp, c2Exp
+var sa, sg
+var unlock
+
+var page = 1
 
 var dtime = BigNumber.from(0)
 var drho1 = BigNumber.from(0), drho2 = BigNumber.from(0)
@@ -77,10 +80,28 @@ var init = () => {
     // c3
     {
         let getDesc = (level) => "c_3=\\frac{\\pi}{" + getC3(level) + "}"
-        let getInfo = (level) => "c_3=\\frac{\\pi}{" + getC3(level).toString(0) + "}"
+        let getInfo = (level) => "c_3=\\frac{\\pi}{" + getC3(level) + "}"
         c3 = theory.createUpgrade(4, currency, new ExponentialCost(1000, Math.log2(1000)))
         c3.getDescription = (_) => Utils.getMath(getDesc(c3.level))
         c3.getInfo = (amount) => Utils.getMathTo(getInfo(c3.level), getInfo(c3.level + amount))
+    }
+    
+    // sa
+    {
+        let getDesc = (level) => "S_a=" + getSa(level) + ""
+        let getInfo = (level) => "S_a=" + getSa(level) + ""
+        sa = theory.createUpgrade(5, currency, new ExponentialCost(1e5, Math.log2(2.5)))
+        sa.getDescription = (_) => Utils.getMath(getDesc(sa.level))
+        sa.getInfo = (amount) => Utils.getMathTo(getInfo(sa.level), getInfo(sa.level + amount))
+    }
+    
+    // sg
+    {
+        let getDesc = (level) => "S_\\gamma=" + getSg(level) + "^{\circ}"
+        let getInfo = (level) => "S_\\gamma=" + getSg(level) + "^{\circ}"
+        sg = theory.createUpgrade(6, currency, new ExponentialCost(1e5, Math.log2(3)))
+        sg.getDescription = (_) => Utils.getMath(getDesc(sg.level))
+        sg.getInfo = (amount) => Utils.getMathTo(getInfo(sg.level), getInfo(sg.level + amount))
     }
 
     /////////////////////
@@ -91,23 +112,28 @@ var init = () => {
 
     ///////////////////////
     //// Milestone Upgrades
-    theory.setMilestoneCost(new CustomCost((milestone) => {
+    theory.setMilestoneCost(new CustomCost(BigNumber.from((milestone) => {
         switch (milestone) {
-            case 0: 0
-            case 1: 20
-            case 2: 50
-            case 3: 115
-            case 4: 190
-            default: 300 + 150 * (milestone - 5)
+            case 0:
+                return 0
+            case 1:
+                return 20
+            case 2:
+                return 50
+            case 3:
+                return 115
+            case 4:
+                return 190
+            default:
+                return 300 + 150 * (milestone - 5)
         } 
-    }))
+    })))
 
-    /*{
-        c1Exp = theory.createMilestoneUpgrade(0, 3);
-        c1Exp.description = Localization.getUpgradeIncCustomExpDesc("c_1", "0.05");
-        c1Exp.info = Localization.getUpgradeIncCustomExpInfo("c_1", "0.05");
-        c1Exp.boughtOrRefunded = (_) => theory.invalidatePrimaryEquation();
-    }*/
+    {
+        unlock = theory.createMilestoneUpgrade(0, 1)
+        unlock.description = "Unlocks Cosine Theorem"
+        unlock.info = "Unlocks Cosine Theorem"
+    }
     
     /////////////////
     //// Achievements
@@ -125,10 +151,16 @@ var updateAvailability = () => {
 }
 
 var tick = (elapsedTime, multiplier) => {
+    function CosineTheorem() {
+        const sb = Math.max(getSa(sa), tcurrency.value / 500)
+        const radians = (Math.PI / 180) * getSg(sg)
+        return Math.sqrt(getSa(sa) ** 2 + getSb(sb) ** 2 - 2 * getSa(sa) * sb * Math.cos(radians))
+    }
+    
     let dt = BigNumber.from(elapsedTime * multiplier)
     let bonus = theory.publicationMultiplier
     dtime = getT1(t1.level) * t2.level
-    drho1 = dt * bonus * Math.sqrt(currency2.value) * Math.abs(Math.sin(tcurrency.value))
+    drho1 = dt * bonus * Math.sqrt(currency2.value) * Math.abs(Math.sin(tcurrency.value)) * (unlock.level >= 1 ? CosineTheorem() : 1)
     drho2 = getC1(c1.level) * getC2(c2.level) * Math.pow((Math.PI / getC3(c3.level)), -(Math.log(tcurrency.value + 1) / Math.log(5)))
     tcurrency.value += dtime
     currency.value += drho1
@@ -139,14 +171,23 @@ var tick = (elapsedTime, multiplier) => {
 }
 
 var getPrimaryEquation = () => {
-    let result = "\\dot{\\rho_1}=\\mid\\sin{t}\\mid\\sqrt{\\rho_2}"
-    return result
+    if (page == 1) {
+        theory.primaryEquationHeight = 35
+        theory.secondaryEquationHeight = 75
+        return "\\dot{\\rho_1}=\\mid\\sin{t}\\mid\\sqrt{\\rho_2}"
+    } else return "W.I.P."
+}
+var getSecondaryEquation = () => {
+    if (page == 1) {
+        return "\\dot{t}=t_1\\\\\\dot{\\rho_2}=c_1c_2c_3^{-\\log_{5}{(1+t)}}\\\\" + theory.latexSymbol + "=\\max\\rho_1"
+    } else return "W.I.P."
+}
+var getTertiaryEquation = () => {
+    if (page == 1) {
+        return "\\dot{\\rho_1}\\approx" + drho1.toString(5) + ",\\quad\\dot{\\rho_2}\\approx" + drho2.toString(5)
+    } else return "W.I.P."
 }
 
-theory.primaryEquationHeight = 35
-theory.secondaryEquationHeight = 75
-var getSecondaryEquation = () => "\\dot{t}=t_1\\\\\\dot{\\rho_2}=c_1c_2c_3^{-\\log_{5}{(1+t)}}\\\\" + theory.latexSymbol + "=\\max\\rho_1"
-var getTertiaryEquation = () => "\\dot{\\rho_1}\\approx" + drho1.toString(5) + ",\\quad\\dot{\\rho_2}\\approx" + drho2.toString(5)
 var getPublicationMultiplier = (tau) => tau.pow(0.169)
 var getPublicationMultiplierFormula = (symbol) => "{" + symbol + "}^{0.169}"
 var getTau = () => currency.value
@@ -155,4 +196,12 @@ var getT1 = (level) => level / 10
 var getC1 = (level) => Utils.getStepwisePowerSum(level, 2, 10, 0)
 var getC2 = (level) => BigNumber.TWO.pow(level)
 var getC3 = (level) => 1 + Utils.getStepwisePowerSum(level, 1.5, 4, 0)
+var getSa = (level) => 5 + Utils.getStepwisePowerSum(level, 2, 5, 0)
+var getSg = (level) => 90 - 90 * (4 / 5) ** level
+
+var canGoToPreviousStage = () => page == 1;
+var goToPreviousStage = () => page--
+var canGoToNextStage = () => page == 0
+var goToNextStage = () => stage++
+
 init()
