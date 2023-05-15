@@ -149,7 +149,7 @@ var init = () => {
 }
 
 var updateAvailability = () => {
-    
+    sa.isAvailable = sg.isAvailable = unlock.level >= 1
 }
 
 var tick = (elapsedTime, multiplier) => {
