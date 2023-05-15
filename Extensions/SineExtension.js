@@ -24,10 +24,11 @@ var authors = "HyperKNF"
 var version = 1
 
 var currency, tcurrency
-var t1
+var t1, t2
 var c1, c2, c3
 var c1Exp, c2Exp
 
+var dtime = BigNumber.from(0)
 var drho1 = BigNumber.from(0), drho2 = BigNumber.from(0)
 
 var achievements = [], chapters = []
@@ -40,18 +41,26 @@ var init = () => {
     ///////////////////
     // Regular Upgrades
     
-    // t
+    // t1
     {
         let getDesc = (level) => "t_1=" + getT1(level).toString()
         t1 = theory.createUpgrade(0, currency, new FirstFreeCost(new ExponentialCost(100, Math.log2(100))))
         t1.getDescription = (_) => Utils.getMath(getDesc(t1.level))
         t1.getInfo = (amount) => Utils.getMathTo(getDesc(t1.level), getDesc(t1.level + amount))
     } 
+    
+    // t2
+    {
+        let getDesc = (level) => "t_2=" + level
+        t2 = theory.createUpgrade(1, currency, new FirstFreeCost(new ExponentialCost(1e5, Math.log2(1e5))))
+        t2.getDescription = (_) => Utils.getMath(getDesc(t2.level))
+        t2.getInfo = (amount) => Utils.getMathTo(getDesc(t2.level), getDesc(t2.level + amount))
+    } 
 
     // c1
     {
         let getDesc = (level) => "c_1=" + getC1(level).toString(0)
-        c1 = theory.createUpgrade(1, currency, new FirstFreeCost(new ExponentialCost(15, Math.log2(2))))
+        c1 = theory.createUpgrade(2, currency, new FirstFreeCost(new ExponentialCost(15, Math.log2(2))))
         c1.getDescription = (_) => Utils.getMath(getDesc(c1.level))
         c1.getInfo = (amount) => Utils.getMathTo(getDesc(c1.level), getDesc(c1.level + amount))
     }
@@ -60,7 +69,7 @@ var init = () => {
     {
         let getDesc = (level) => "c_2=2^{" + level + "}"
         let getInfo = (level) => "c_2=" + getC2(level).toString(0)
-        c2 = theory.createUpgrade(2, currency, new ExponentialCost(5, Math.log2(10)))
+        c2 = theory.createUpgrade(3, currency, new ExponentialCost(5, Math.log2(10)))
         c2.getDescription = (_) => Utils.getMath(getDesc(c2.level))
         c2.getInfo = (amount) => Utils.getMathTo(getInfo(c2.level), getInfo(c2.level + amount))
     }
@@ -69,7 +78,7 @@ var init = () => {
     {
         let getDesc = (level) => "c_3=\\frac{\\pi}{" + getC3(level) + "}"
         let getInfo = (level) => "c_3=\\frac{\\pi}{" + getC3(level).toString(0) + "}"
-        c3 = theory.createUpgrade(3, currency, new ExponentialCost(1000, Math.log2(1000)))
+        c3 = theory.createUpgrade(4, currency, new ExponentialCost(1000, Math.log2(1000)))
         c3.getDescription = (_) => Utils.getMath(getDesc(c3.level))
         c3.getInfo = (amount) => Utils.getMathTo(getInfo(c3.level), getInfo(c3.level + amount))
     }
@@ -109,9 +118,10 @@ var updateAvailability = () => {
 var tick = (elapsedTime, multiplier) => {
     let dt = BigNumber.from(elapsedTime * multiplier)
     let bonus = theory.publicationMultiplier
+    dtime = getT1(t1.level) * t2.level
     drho1 = dt * bonus * Math.sqrt(currency2.value) * Math.abs(Math.sin(tcurrency.value))
     drho2 = getC1(c1.level) * getC2(c2.level) * Math.pow((Math.PI / getC3(c3.level)), -(Math.log(tcurrency.value + 1) / Math.log(5)))
-    tcurrency.value += getT1(t1.level)
+    tcurrency.value += dtime
     currency.value += drho1
     currency2.value += drho2
     theory.invalidatePrimaryEquation()
