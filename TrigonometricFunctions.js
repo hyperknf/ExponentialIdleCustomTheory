@@ -154,7 +154,7 @@ var updateAvailability = () => {
 
 var tick = (elapsedTime, multiplier) => {
     function CosineTheorem() {
-        const sb = Math.max(getSa(sa), tcurrency.value / 500)
+        const sb = getSa(sa) >= tcurrency.value / 500 ? getSa(sa) : tcurrency.value / 500
         const radians = (Math.PI / 180) * getSg(sg)
         return Math.sqrt(getSa(sa) ** 2 + getSb(sb) ** 2 - 2 * getSa(sa) * sb * Math.cos(radians))
     }
@@ -184,7 +184,7 @@ var getPrimaryEquation = () => {
 var getSecondaryEquation = () => {
     if (page == 1) {
         theory.secondaryEquationHeight = 75
-        return "\\dot{t}=t_1\\\\\\dot{\\rho_2}=c_1c_2c_3^{-\\log_{5}{(1+t)}}\\\\" + theory.latexSymbol + "=\\max\\rho_1"
+        return "\\dot{t}=t_1t_2\\\\\\dot{\\rho_2}=c_1c_2c_3^{-\\log_{5}{(1+t)}}\\\\" + theory.latexSymbol + "=\\max\\rho_1"
     } else {
         theory.secondaryEquationHeight = 100
         return "a=S_a\\\\\\begin{cases}\\frac{t}{500},\\quad\\frac{t}{500}\\leS_a\\\\S_a,\\quad\\frac{t}{500}>S_a\\end{cases}\\\\\\gamma=S_\\gamma"
