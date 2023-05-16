@@ -106,7 +106,7 @@ var init = () => {
 
     /////////////////////
     // Permanent Upgrades
-    theory.createPublicationUpgrade(0, currency, 1e7)
+    theory.createPublicationUpgrade(0, currency, 1e2)
     theory.createBuyAllUpgrade(1, currency, 1e14)
     theory.createAutoBuyerUpgrade(2, currency, 1e27)
 
@@ -175,14 +175,20 @@ var tick = (elapsedTime, multiplier) => {
 var getPrimaryEquation = () => {
     if (page == 1) {
         theory.primaryEquationHeight = 35
-        theory.secondaryEquationHeight = 75
         return "\\dot{\\rho_1}=\\mid\\sin{t}\\mid\\sqrt{\\rho_2}"
-    } else return "W.I.P."
+    } else {
+        theory.primaryEquationHeight = 35
+        return "c=\\sqrt{a^2+b^2-2ab\\cos{\\gamma}}"
+    }
 }
 var getSecondaryEquation = () => {
     if (page == 1) {
+        theory.secondaryEquationHeight = 75
         return "\\dot{t}=t_1\\\\\\dot{\\rho_2}=c_1c_2c_3^{-\\log_{5}{(1+t)}}\\\\" + theory.latexSymbol + "=\\max\\rho_1"
-    } else return "W.I.P."
+    } else {
+        theory.secondaryEquationHeight = 100
+        return "a=S_a\\\\\\begin{cases}\\frac{t}{500},\\quad\\frac{t}{500}\\leS_a\\\\S_a,\\quad\\frac{t}{500}>S_a\\end{cases}\\\\\\gamma=S_\\gamma"
+    }
 }
 var getTertiaryEquation = () => {
     if (page == 1) {
