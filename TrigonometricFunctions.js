@@ -10,6 +10,11 @@
  **                                   |___/                               ** 
  **                                                                       **
  ***************************************************************************/
+/*
+    Even though I really wanted to use "let" and "const" instead of "var",
+    using them causes an error in the Exponential Idle custom theory API,
+    so I'm not using them and it's causing me mental issues
+*/
 
 import { ExponentialCost, FreeCost, LinearCost } from "./api/Costs"
 import { Localization } from "./api/Localization"
