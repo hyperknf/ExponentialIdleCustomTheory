@@ -10,11 +10,6 @@
  **                                   |___/                               ** 
  **                                                                       **
  ***************************************************************************/
-/*
-    Even though I really wanted to use "let" and "const" instead of "var",
-    using them causes an error in the Exponential Idle custom theory API,
-    so I'm not using them and it's causing me mental issues
-*/
 
 import { ExponentialCost, FreeCost, LinearCost } from "./api/Costs"
 import { Localization } from "./api/Localization"
@@ -111,7 +106,7 @@ var init = () => {
 
     /////////////////////
     // Permanent Upgrades
-    theory.createPublicationUpgrade(0, currency, 1e2)
+    theory.createPublicationUpgrade(0, currency, 1e7)
     theory.createBuyAllUpgrade(1, currency, 1e14)
     theory.createAutoBuyerUpgrade(2, currency, 1e27)
 
@@ -164,8 +159,8 @@ var tick = (elapsedTime, multiplier) => {
         return Math.sqrt(getSa(sa) ** 2 + getSb(sb) ** 2 - 2 * getSa(sa) * sb * Math.cos(radians))
     }
     
-    let dt = BigNumber.from(elapsedTime * multiplier)
-    let bonus = theory.publicationMultiplier
+    var dt = BigNumber.from(elapsedTime * multiplier)
+    var bonus = theory.publicationMultiplier
     dtime = getT1(t1.level) * t2.level
     drho1 = dt * bonus * Math.sqrt(currency2.value) * Math.abs(Math.sin(tcurrency.value)) * (unlock.level >= 1 ? CosineTheorem() : 1)
     drho2 = getC1(c1.level) * getC2(c2.level) * Math.pow((Math.PI / getC3(c3.level)), -(Math.log(tcurrency.value + 1) / Math.log(5)))
