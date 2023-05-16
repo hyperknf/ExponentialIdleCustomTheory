@@ -153,7 +153,7 @@ var updateAvailability = () => {
 }
 
 var tick = (elapsedTime, multiplier) => {
-    function CosineTheorem() {
+    var CosineTheorem = () => {
         var sb = Math.max(getSa(sa), (tcurrency.value / 500))
         var radians = (Math.PI / 180) * getSg(sg)
         return Math.sqrt(getSa(sa) ** 2 + getSb(sb) ** 2 - 2 * getSa(sa) * sb * Math.cos(radians))
