@@ -153,14 +153,16 @@ var updateAvailability = () => {
 }
 
 var tick = (elapsedTime, multiplier) => {
-    const sb = Math.max(getSa(sa), tcurrency.value / 500)
-    const radians = (Math.PI / 180) * getSg(sg)
-    const ct = Math.sqrt(getSa(sa) ** 2 + getSb(sb) ** 2 - 2 * getSa(sa) * sb * Math.cos(radians))
+    function CosineTheorem() {
+        var sb = Math.max(getSa(sa), (tcurrency.value / 500))
+        var radians = (Math.PI / 180) * getSg(sg)
+        return Math.sqrt(getSa(sa) ** 2 + getSb(sb) ** 2 - 2 * getSa(sa) * sb * Math.cos(radians))
+    }
     
     let dt = BigNumber.from(elapsedTime * multiplier)
     let bonus = theory.publicationMultiplier
     dtime = getT1(t1.level) * t2.level
-    drho1 = dt * bonus * Math.sqrt(currency2.value) * Math.abs(Math.sin(tcurrency.value)) * (unlock.level >= 1 ? ct : 1)
+    drho1 = dt * bonus * Math.sqrt(currency2.value) * Math.abs(Math.sin(tcurrency.value)) * (unlock.level >= 1 ? CosineTheorem : 1)
     drho2 = getC1(c1.level) * getC2(c2.level) * Math.pow((Math.PI / getC3(c3.level)), -(Math.log(tcurrency.value + 1) / Math.log(5)))
     tcurrency.value += dtime
     currency.value += drho1
