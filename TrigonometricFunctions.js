@@ -190,24 +190,33 @@ var getSecondaryEquation = () => {
         return "a=S_a\\\\\\begin{cases}\\frac{t}{500},\\quad\\frac{t}{500}\\leS_a\\\\S_a,\\quad\\frac{t}{500}>S_a\\end{cases}\\\\\\gamma=S_\\gamma"
     }
 }
-var getTertiaryEquation = () => "v4"
+var getTertiaryEquation = () => "\\text{Version 4}"
 var getQuaternaryEntries = () => {
     var entries = () => {
         if (page == 1) {
             return [
-                "\\dot{\\rho_1}\\approx" + drho1.toString(5),
-                "\\dot{\\rho_2}\\approx" + drho2.toString(5),
-                "c_3^{-\\log_{5}{(1+t)}}=" + (
-                    Math.pow((Math.PI / getC3(c3.level)), 
-                    -(Math.log(tcurrency.value + 1) / Math.log(5)))
-                )
+                [
+                    "\\dot{\\rho_1}\\approx",
+                    drho1.toString(5)
+                ],
+                [
+                    "\\dot{\\rho_2}\\approx",
+                    drho2.toString(5)
+                ],
+                [
+                    "c_3^{-\\log_{5}{(1+t)}}=",
+                    (
+                        Math.pow((Math.PI / getC3(c3.level)), 
+                        -(Math.log(tcurrency.value + 1) / Math.log(5)))
+                    )
+                ]
             ]
         } else return [
-            "W.I.P."
+            ["a", "a"]
         ]
     }
     const equations = entries()
-    for (let index in equations) equations[index] = new QuaternaryEntry(equations[index], null)
+    for (let index in equations) equations[index] = new QuaternaryEntry(equations[index][0], equations[index][1])
     return equations
 }
 
