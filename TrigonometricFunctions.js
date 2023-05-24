@@ -192,7 +192,7 @@ var getSecondaryEquation = () => {
 }
 var getTertiaryEquation = () => {
     if (page == 1) {
-        return "\\dot{\\rho_1}\\approx" + drho1.toString(5) + ",\\quad\\dot{\\rho_2}\\approx" + drho2.toString(5)
+        return "\\dot{\\rho_1}\\approx" + drho1.toString(5) + ",\\quad\\dot{\\rho_2}\\approx" + drho2.toString(5) + ",\\quadc_3^{-\\log_{5}{(1+t)}}=" + (Math.pow((Math.PI / getC3(c3.level)), -(Math.log(tcurrency.value + 1) / Math.log(5))))
     } else return "W.I.P."
 }
 
