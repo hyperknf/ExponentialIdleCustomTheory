@@ -190,7 +190,7 @@ var getSecondaryEquation = () => {
         return "a=S_a\\\\\\begin{cases}\\frac{t}{500},\\quad\\frac{t}{500}\\leS_a\\\\S_a,\\quad\\frac{t}{500}>S_a\\end{cases}\\\\\\gamma=S_\\gamma"
     }
 }
-var getTertiaryEquation = () => "v1.0.0"
+var getTertiaryEquation = () => "v4"
 var getQuaternaryEntries = () => {
     var entries = () => {
         if (page == 1) {
@@ -208,6 +208,7 @@ var getQuaternaryEntries = () => {
     }
     const equations = entries()
     for (let index in equations) equations[index] = new QuaternaryEntry(equations[index], null)
+    return equations
 }
 
 var getPublicationMultiplier = (tau) => tau.pow(0.169)
