@@ -167,9 +167,11 @@ var tick = (elapsedTime, multiplier) => {
     tcurrency.value += dtime
     currency.value += drho1
     currency2.value += drho2
+
     theory.invalidatePrimaryEquation()
     theory.invalidateSecondaryEquation()
     theory.invalidateTertiaryEquation()
+    theory.invalidateQuaternaryEquation()
 }
 
 var getPrimaryEquation = () => {
@@ -190,7 +192,7 @@ var getSecondaryEquation = () => {
         return "a=S_a\\\\\\begin{cases}\\frac{t}{500},\\quad\\frac{t}{500}\\leS_a\\\\S_a,\\quad\\frac{t}{500}>S_a\\end{cases}\\\\\\gamma=S_\\gamma"
     }
 }
-var getTertiaryEquation = () => "\\text{Version 4}"
+var getTertiaryEquation = () => "\\text{Version 5}"
 var getQuaternaryEntries = () => {
     var entries = () => {
         if (page == 1) {
@@ -205,7 +207,10 @@ var getQuaternaryEntries = () => {
                 ]
             ]
         } else return [
-            ["a", "a"]
+            [
+                "a",
+                "a"
+            ]
         ]
     }
     const equations = entries()
