@@ -171,7 +171,7 @@ var tick = (elapsedTime, multiplier) => {
     theory.invalidatePrimaryEquation()
     theory.invalidateSecondaryEquation()
     theory.invalidateTertiaryEquation()
-    theory.invalidateQuaternaryEquation()
+    theory.invalidateQuaternaryValues()
 }
 
 var getPrimaryEquation = () => {
