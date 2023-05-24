@@ -196,19 +196,12 @@ var getQuaternaryEntries = () => {
         if (page == 1) {
             return [
                 [
-                    "\\dot{\\rho_1}\\approx",
+                    "\\dot{\\rho_1}",
                     drho1.toString(5)
                 ],
                 [
-                    "\\dot{\\rho_2}\\approx",
+                    "\\dot{\\rho_2}",
                     drho2.toString(5)
-                ],
-                [
-                    "c_3^{-\\log_{5}{(1+t)}}=",
-                    (
-                        Math.pow((Math.PI / getC3(c3.level)), 
-                        -(Math.log(tcurrency.value + 1) / Math.log(5)))
-                    )
                 ]
             ]
         } else return [
