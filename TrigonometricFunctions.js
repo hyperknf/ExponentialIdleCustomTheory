@@ -14,7 +14,7 @@
 import { ExponentialCost, FreeCost, LinearCost } from "./api/Costs"
 import { Localization } from "./api/Localization"
 import { BigNumber } from "./api/BigNumber"
-import { theory } from "./api/Theory"
+import { theory, QuaternaryEntry } from "./api/Theory"
 import { Utils } from "./api/Utils"
 
 var id = "SineExtension"
@@ -190,19 +190,24 @@ var getSecondaryEquation = () => {
         return "a=S_a\\\\\\begin{cases}\\frac{t}{500},\\quad\\frac{t}{500}\\leS_a\\\\S_a,\\quad\\frac{t}{500}>S_a\\end{cases}\\\\\\gamma=S_\\gamma"
     }
 }
-var getQuaternaryEntries  = () => {
-    if (page == 1) {
-        return [
-            "\\dot{\\rho_1}\\approx" + drho1.toString(5),
-            "\\dot{\\rho_2}\\approx" + drho2.toString(5),
-            "c_3^{-\\log_{5}{(1+t)}}=" + (
-                Math.pow((Math.PI / getC3(c3.level)), 
-                -(Math.log(tcurrency.value + 1) / Math.log(5)))
-            )
+var getTertiaryEquation = () => "v1.0.0"
+var getQuaternaryEntries = () => {
+    var entries = () => {
+        if (page == 1) {
+            return [
+                "\\dot{\\rho_1}\\approx" + drho1.toString(5),
+                "\\dot{\\rho_2}\\approx" + drho2.toString(5),
+                "c_3^{-\\log_{5}{(1+t)}}=" + (
+                    Math.pow((Math.PI / getC3(c3.level)), 
+                    -(Math.log(tcurrency.value + 1) / Math.log(5)))
+                )
+            ]
+        } else return [
+            "W.I.P."
         ]
-    } else return [
-        "W.I.P."
-    ]
+    }
+    var equations = entries()
+    for (let i in equations) equations[i] = new QuaternaryEntry(equations[i], null)
 }
 
 var getPublicationMultiplier = (tau) => tau.pow(0.169)
