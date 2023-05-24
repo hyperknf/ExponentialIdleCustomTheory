@@ -206,8 +206,8 @@ var getQuaternaryEntries = () => {
             "W.I.P."
         ]
     }
-    var equations = entries()
-    for (let i in equations) equations[i] = new QuaternaryEntry(equations[i], null)
+    const equations = entries()
+    for (let index in equations) equations[index] = new QuaternaryEntry(equations[index], null)
 }
 
 var getPublicationMultiplier = (tau) => tau.pow(0.169)
