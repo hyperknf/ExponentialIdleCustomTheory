@@ -17,6 +17,8 @@ var c1Exp, c2Exp;
 var achievement1, achievement2;
 var chapter1, chapter2;
 
+var temp = BigNumber.ZERO
+
 var init = () => {
     currency = theory.createCurrency();
 
@@ -100,7 +102,8 @@ var gamma = (z) => {
 var tick = (elapsedTime, multiplier) => {
     let dt = BigNumber.from(elapsedTime * multiplier);
     let bonus = theory.publicationMultiplier;
-    currency.value += dt * bonus * gamma(getC1(c1.level).pow(getC1Exponent(c1Exp.level)) * getC2(c2.level) + 1);
+    currency.value += dt * bonus * (temp = gamma(getC1(c1.level).pow(getC1Exponent(c1Exp.level)) * getC2(c2.level) + 1));
+    theory.invalidateTertiaryEquation()
 }
 
 var getPrimaryEquation = () => {
@@ -116,6 +119,7 @@ var getPrimaryEquation = () => {
 }
 
 var getSecondaryEquation = () => theory.latexSymbol + "=\\max\\rho";
+var getTertiaryEquation = () => "\\text{Temporary value}=" + temp
 var getPublicationMultiplier = (tau) => tau.pow(0.164) / BigNumber.THREE;
 var getPublicationMultiplierFormula = (symbol) => "\\frac{{" + symbol + "}^{0.164}}{3}";
 var getTau = () => currency.value;
