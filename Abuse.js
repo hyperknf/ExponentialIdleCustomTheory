@@ -81,21 +81,36 @@ var updateAvailability = () => {
     c2Exp.isAvailable = c1Exp.level > 0;
 }
 
+var g = 7;
+var C = [0.99999999999980993, 676.5203681218851, -1259.1392167224028,771.32342877765313, -176.61502916214059, 12.507343278686905, -0.13857109526572012, 9.9843695780195716e-6, 1.5056327351493116e-7];
+var gamma = (z) => {
+    if (z < 0.5) return Math.PI / (Math.sin(Math.PI * z) * gamma(1 - z));
+    else {
+        z -= 1;
+
+        var x = C[0];
+        for (var i = 1; i < g + 2; i++)
+        x += C[i] / (z + i);
+
+        var t = z + g + 0.5;
+        return Math.sqrt(2 * Math.PI) * Math.pow(t, (z + 0.5)) * Math.exp(-t) * x;
+    }
+}
+
 var tick = (elapsedTime, multiplier) => {
     let dt = BigNumber.from(elapsedTime * multiplier);
     let bonus = theory.publicationMultiplier;
-    currency.value += dt * bonus * getC1(c1.level).pow(getC1Exponent(c1Exp.level)) *
-                                   getC2(c2.level).pow(BigNumber.from(69420));
+    currency.value += dt * bonus * gamma(getC1(c1.level).pow(getC1Exponent(c1Exp.level)) * getC2(c2.level) + 1);
 }
 
 var getPrimaryEquation = () => {
-    let result = "\\dot{\\rho} = c_1";
+    let result = "\\dot{\\rho} = (c_1";
 
     if (c1Exp.level == 1) result += "^{1.05}";
     if (c1Exp.level == 2) result += "^{1.1}";
     if (c1Exp.level == 3) result += "^{1.15}";
 
-    result += "c_2^{69420}";
+    result += "c_2)!";
 
     return result;
 }
