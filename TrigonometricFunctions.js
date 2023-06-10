@@ -229,7 +229,7 @@ var getC3 = (level) => 1 + Utils.getStepwisePowerSum(level, 1.5, 4, 0)
 var getSa = (level) => 5 + Utils.getStepwisePowerSum(level, 2, 5, 0)
 var getSg = (level) => 90 - 90 * (4 / 5) ** level
 
-var canGoToPreviousStage = () => page == 1;
+var canGoToPreviousStage = () => page == 1 && unlock.level >= 1
 var goToPreviousStage = () => page--
 var canGoToNextStage = () => page == 0
 var goToNextStage = () => stage++
