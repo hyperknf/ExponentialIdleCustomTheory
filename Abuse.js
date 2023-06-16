@@ -100,7 +100,7 @@ var gamma = (z) => {
 }
 var factorial = (num) => {
     if (num <= 2) return gamma(num + 1)
-    return BigNumber.from(BigNumber.from(2) * BigNumber.PI * BigNumber.from(num)) * BigNumber.from(BigNumber.from(num) / BigNumber.E).exp(BigNumber.from(num))
+    return BigNumber.from(BigNumber.from(2) * BigNumber.PI * num) * BigNumber.from(num / BigNumber.E).pow(num)
 }
 
 var tick = (elapsedTime, multiplier) => {
