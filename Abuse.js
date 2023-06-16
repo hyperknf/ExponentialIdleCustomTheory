@@ -41,6 +41,15 @@ var init = () => {
         c2.getDescription = (_) => Utils.getMath(getDesc(c2.level));
         c2.getInfo = (amount) => Utils.getMathTo(getInfo(c2.level), getInfo(c2.level + amount));
     }
+    
+    // c3
+    {
+        let getDesc = (level) => "c_3=x_" + level;
+        let getInfo = (level) => "c_3=" + getC3(level).toString(0);
+        c3 = theory.createUpgrade(2, currency, new ExponentialCost(5, Math.log2(10)));
+        c3.getDescription = (_) => Utils.getMath(getDesc(c3.level));
+        c3.getInfo = (amount) => Utils.getMathTo(getInfo(c3.level), getInfo(c3.level + amount));
+    }
 
     /////////////////////
     // Permanent Upgrades
@@ -106,7 +115,7 @@ var factorial = (num) => {
 var tick = (elapsedTime, multiplier) => {
     let dt = BigNumber.from(elapsedTime * multiplier);
     let bonus = theory.publicationMultiplier;
-    currency.value += dt * bonus * (temp = factorial(getC1(c1.level).pow(getC1Exponent(c1Exp.level)) * getC2(c2.level)));
+    currency.value += dt * bonus * (temp = factorial(getC1(c1.level).pow(getC1Exponent(c1Exp.level)) * getC2(c2.level) * getC3(c3.level)));
     theory.invalidateTertiaryEquation()
 }
 
@@ -117,12 +126,12 @@ var getPrimaryEquation = () => {
     if (c1Exp.level == 2) result += "^{1.1}";
     if (c1Exp.level == 3) result += "^{1.15}";
 
-    result += "c_2)!";
+    result += "c_2c_3)!";
 
     return result;
 }
 
-var getSecondaryEquation = () => theory.latexSymbol + "=\\max\\rho";
+var getSecondaryEquation = () => theory.latexSymbol + "x_i=x_{i-1}!,\\quad x_0=3\\\\=\\max\\rho";
 var getTertiaryEquation = () => "\\text{Temporary value}=" + temp
 var getPublicationMultiplier = (tau) => tau.pow(0.164) / BigNumber.THREE;
 var getPublicationMultiplierFormula = (symbol) => "\\frac{{" + symbol + "}^{0.164}}{3}";
@@ -131,6 +140,11 @@ var get2DGraphValue = () => currency.value.sign * (BigNumber.ONE + currency.valu
 
 var getC1 = (level) => BigNumber.from(69).pow(level);
 var getC2 = (level) => BigNumber.from(420).pow(level);
+var getC3 = level => {
+    var result = BigNumber.from(3)
+    for (let i = 1; i <= level; i++) result = factorial(result)
+    return result
+}
 var getC1Exponent = (level) => BigNumber.from(1 + 0.05 * level);
 var getC2Exponent = (level) => BigNumber.from(1 + 0.05 * level);
 
