@@ -131,7 +131,7 @@ var getPrimaryEquation = () => {
     return result;
 }
 
-var getSecondaryEquation = () => theory.latexSymbol + "x_i=x_{i-1}!,\\quad x_0=3\\\\=\\max\\rho";
+var getSecondaryEquation = () => "x_i=x_{i-1}!,\\quad x_0=3\\\\" + theory.latexSymbol + "=\\max\\rho";
 var getTertiaryEquation = () => "\\text{Temporary value}=" + temp
 var getPublicationMultiplier = (tau) => tau.pow(0.164) / BigNumber.THREE;
 var getPublicationMultiplierFormula = (symbol) => "\\frac{{" + symbol + "}^{0.164}}{3}";
