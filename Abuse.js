@@ -98,6 +98,10 @@ var gamma = (z) => {
         return Math.sqrt(2 * Math.PI) * t.pow(z + 0.5) * BigNumber.E.pow(-t) * x;
     }
 }
+var factorial = (num) => {
+    if (num <= 2) return gamma(num + 1)
+    return BigNumber.from(BigNumber.from(2) * BigNumber.PI * BigNumber.from(num)) * BigNumber.from(BigNumber.from(num) / BigNumber.E).exp(BigNumber.from(num))
+}
 
 var tick = (elapsedTime, multiplier) => {
     let dt = BigNumber.from(elapsedTime * multiplier);
