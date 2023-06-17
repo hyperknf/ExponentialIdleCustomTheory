@@ -136,7 +136,7 @@ var getTertiaryEquation = () => "\\text{Temporary value}=" + temp
 var getPublicationMultiplier = (tau) => tau.pow(0.164) / BigNumber.THREE;
 var getPublicationMultiplierFormula = (symbol) => "\\frac{{" + symbol + "}^{0.164}}{3}";
 var getTau = () => currency.value;
-var get2DGraphValue = () => currency.value.sign.toNumber();
+var get2DGraphValue = () => 0;
 
 var getC1 = (level) => BigNumber.from(69).pow(level);
 var getC2 = (level) => BigNumber.from(420).pow(level);
