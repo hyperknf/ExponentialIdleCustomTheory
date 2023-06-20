@@ -21,7 +21,7 @@ var id = "SineExtension"
 var name = "Trigonometric Functions"
 var description = "Trigonometric Functions by HyperKNF"
 var authors = "HyperKNF"
-var version = 4
+var version = 5
 
 var currency, tcurrency
 var t1, t2
@@ -79,8 +79,8 @@ var init = () => {
     
     // c3
     {
-        let getDesc = (level) => "c_3=\\frac{\\pi}{" + getC3(level) + "}"
-        let getInfo = (level) => "c_3=\\frac{\\pi}{" + getC3(level) + "}"
+        let getDesc = (level) => "c_3=\\frac{\\pi}{" + getC3Denominator(level) + "}"
+        let getInfo = (level) => "c_3=" + getC3(level)
         c3 = theory.createUpgrade(4, currency, new ExponentialCost(1000, Math.log2(1000)))
         c3.getDescription = (_) => Utils.getMath(getDesc(c3.level))
         c3.getInfo = (amount) => Utils.getMathTo(getInfo(c3.level), getInfo(c3.level + amount))
@@ -163,7 +163,7 @@ var tick = (elapsedTime, multiplier) => {
     var bonus = theory.publicationMultiplier
     dtime = getT1(t1.level) * t2.level
     drho1 = dt * bonus * Math.sqrt(currency2.value) * Math.abs(Math.sin(tcurrency.value)) * (unlock.level >= 1 ? CosineTheorem() : 1)
-    drho2 = getC1(c1.level) * getC2(c2.level) * Math.pow((Math.PI / getC3(c3.level)), -(Math.log(tcurrency.value + 1) / Math.log(5)))
+    drho2 = getC1(c1.level) * getC2(c2.level) * Math.pow(1 + getC3(c3.level), -(Math.log(tcurrency.value + 1) / Math.log(10)))
     tcurrency.value += dtime
     currency.value += drho1
     currency2.value += drho2
@@ -186,13 +186,13 @@ var getPrimaryEquation = () => {
 var getSecondaryEquation = () => {
     if (page == 1) {
         theory.secondaryEquationHeight = 75
-        return "\\dot{t}=t_1t_2\\\\\\dot{\\rho_2}=c_1c_2c_3^{-\\log_{5}{(1+t)}}\\\\" + theory.latexSymbol + "=\\max\\rho_1"
+        return "\\dot{t}=t_1t_2\\\\\\dot{\\rho_2}=c_1c_2(1+c_3)^{-\\log_{10}{(1+t)}}\\\\" + theory.latexSymbol + "=\\max\\rho_1"
     } else {
         theory.secondaryEquationHeight = 100
         return "a=S_a\\\\\\begin{cases}\\frac{t}{500},\\quad\\frac{t}{500}\\le S_a\\\\S_a,\\quad\\frac{t}{500}>S_a\\end{cases}\\\\\\gamma=S_\\gamma"
     }
 }
-var getTertiaryEquation = () => "\\text{Version 5}"
+var getTertiaryEquation = () => "\\text{Version " + version + "}"
 var getQuaternaryEntries = () => {
     var entries = () => {
         if (page == 1) {
@@ -225,7 +225,8 @@ var get2DGraphValue = () => currency.value.sign * (BigNumber.ONE + currency.valu
 var getT1 = (level) => level / 10
 var getC1 = (level) => Utils.getStepwisePowerSum(level, 2, 10, 0)
 var getC2 = (level) => BigNumber.TWO.pow(level)
-var getC3 = (level) => 1 + Utils.getStepwisePowerSum(level, 1.5, 4, 0)
+var getC3Denominator = (level) => 1 + Utils.getStepwisePowerSum(level, 1.5, 4, 0)
+var getC3 = (level) => BigNumber.PI / getC3Denominator(level)
 var getSa = (level) => 5 + Utils.getStepwisePowerSum(level, 2, 5, 0)
 var getSg = (level) => 90 - 90 * (4 / 5) ** level
 
