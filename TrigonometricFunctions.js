@@ -228,7 +228,7 @@ var getC2 = (level) => BigNumber.TWO.pow(level)
 var getC3Denominator = (level) => 1 + Utils.getStepwisePowerSum(level, 1.5, 4, 0)
 var getC3 = (level) => BigNumber.PI / getC3Denominator(level)
 var getSa = (level) => 5 + Utils.getStepwisePowerSum(level, 2, 5, 0)
-var getSb = () => Math.max(getSa(sa), (tcurrency.value / 500))
+var getSb = () => 5
 var getSg = (level) => 90 - 90 * (4 / 5) ** level
 
 var canGoToPreviousStage = () => page == 1 && unlock.level >= 1
