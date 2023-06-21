@@ -177,7 +177,7 @@ var tick = (elapsedTime, multiplier) => {
 var getPrimaryEquation = () => {
     if (page == 1) {
         theory.primaryEquationHeight = 35
-        return "\\dot{\\rho_1}=\\mid\\sin{t}\\mid\\rho_2^{0.75}\\ln{t+1}"
+        return "\\dot{\\rho_1}=\\mid\\sin{t}\\mid\\rho_2^{0.75}\\ln{(t+1)}"
     } else {
         theory.primaryEquationHeight = 35
         return "c=\\sqrt{a^2+b^2-2ab\\cos{\\gamma}}"
