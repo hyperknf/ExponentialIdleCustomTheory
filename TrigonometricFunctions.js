@@ -154,9 +154,9 @@ var updateAvailability = () => {
 
 var tick = (elapsedTime, multiplier) => {
     var CosineTheorem = () => {
-        var sb = Math.max(getSa(sa), (tcurrency.value / 500))
+        var sb = getSb()
         var radians = (Math.PI / 180) * getSg(sg)
-        return Math.sqrt(getSa(sa) ** 2 + getSb(sb) ** 2 - 2 * getSa(sa) * sb * Math.cos(radians))
+        return Math.sqrt(getSa(sa) ** 2 + sb ** 2 - 2 * getSa(sa) * sb * Math.cos(radians))
     }
     
     var dt = BigNumber.from(elapsedTime * multiplier)
@@ -228,6 +228,7 @@ var getC2 = (level) => BigNumber.TWO.pow(level)
 var getC3Denominator = (level) => 1 + Utils.getStepwisePowerSum(level, 1.5, 4, 0)
 var getC3 = (level) => BigNumber.PI / getC3Denominator(level)
 var getSa = (level) => 5 + Utils.getStepwisePowerSum(level, 2, 5, 0)
+var getSb = () => Math.max(getSa(sa), (tcurrency.value / 500))
 var getSg = (level) => 90 - 90 * (4 / 5) ** level
 
 var canGoToPreviousStage = () => page == 1 && unlock.level >= 1
