@@ -17,7 +17,7 @@ import { BigNumber } from "./api/BigNumber"
 import { theory, QuaternaryEntry } from "./api/Theory"
 import { Utils } from "./api/Utils"
 
-var id = "SineExtension"
+var id = "TrigonometricFunctions"
 var name = "Trigonometric Functions"
 var description = "Trigonometric Functions by HyperKNF"
 var authors = "HyperKNF"
