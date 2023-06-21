@@ -12,7 +12,7 @@
  ***************************************************************************/
 
 import { ExponentialCost, FreeCost, LinearCost } from "./api/Costs"
-import { Localization } from "./api/Localization"
+import { Localization } from "./api/Localization" 
 import { BigNumber } from "./api/BigNumber"
 import { theory, QuaternaryEntry } from "./api/Theory"
 import { Utils } from "./api/Utils"
@@ -162,7 +162,7 @@ var tick = (elapsedTime, multiplier) => {
     var dt = BigNumber.from(elapsedTime * multiplier)
     var bonus = theory.publicationMultiplier
     dtime = getT1(t1.level) * t2.level
-    drho1 = dt * bonus * currency2.value.pow(0.75) * Math.abs(Math.sin(tcurrency.value)) * tcurrency.value.log() * (unlock.level >= 1 ? CosineTheorem() : 1)
+    drho1 = dt * bonus * currency2.value.pow(0.75) * Math.abs(Math.sin(tcurrency.value)) * (tcurrency.value + 1).log() * (unlock.level >= 1 ? CosineTheorem() : 1)
     drho2 = getC1(c1.level) * getC2(c2.level) * Math.pow(1 + getC3(c3.level), -(Math.log(tcurrency.value + 1) / Math.log(10)))
     tcurrency.value += dtime
     currency.value += drho1
@@ -177,7 +177,7 @@ var tick = (elapsedTime, multiplier) => {
 var getPrimaryEquation = () => {
     if (page == 1) {
         theory.primaryEquationHeight = 35
-        return "\\dot{\\rho_1}=\\mid\\sin{t}\\mid\\rho_2^{0.75}\\ln{t}"
+        return "\\dot{\\rho_1}=\\mid\\sin{t}\\mid\\rho_2^{0.75}\\ln{t+1}"
     } else {
         theory.primaryEquationHeight = 35
         return "c=\\sqrt{a^2+b^2-2ab\\cos{\\gamma}}"
