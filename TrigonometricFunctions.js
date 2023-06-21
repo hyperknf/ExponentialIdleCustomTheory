@@ -97,8 +97,8 @@ var init = () => {
     
     // sg
     {
-        let getDesc = (level) => "S_\\gamma=" + getSg(level) + "^{\circ}"
-        let getInfo = (level) => "S_\\gamma=" + getSg(level) + "^{\circ}"
+        let getDesc = (level) => "S_\\gamma=" + getSg(level) + "^{\\circ}"
+        let getInfo = (level) => "S_\\gamma=" + getSg(level) + "^{\\circ}"
         sg = theory.createUpgrade(6, currency, new ExponentialCost(1e5, Math.log2(3)))
         sg.getDescription = (_) => Utils.getMath(getDesc(sg.level))
         sg.getInfo = (amount) => Utils.getMathTo(getInfo(sg.level), getInfo(sg.level + amount))
@@ -133,7 +133,7 @@ var init = () => {
 
     {
         unlock = theory.createMilestoneUpgrade(0, 1)
-        unlock.description = "Unlocks Cosine Theorem"
+        unlock.description = "Unlock Cosine Theorem"
         unlock.info = "Unlocks Cosine Theorem"
     }
     
@@ -177,7 +177,7 @@ var tick = (elapsedTime, multiplier) => {
 var getPrimaryEquation = () => {
     if (page == 1) {
         theory.primaryEquationHeight = 35
-        return "\\dot{\\rho_1}=\\mid\\sin{t}\\mid\\rho_2^{0.75}"
+        return "\\dot{\\rho_1}=\\mid\\sin{t}\\mid\\rho_2^{0.75}\\ln{t}"
     } else {
         theory.primaryEquationHeight = 35
         return "c=\\sqrt{a^2+b^2-2ab\\cos{\\gamma}}"
