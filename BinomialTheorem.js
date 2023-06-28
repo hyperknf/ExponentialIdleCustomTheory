@@ -62,7 +62,7 @@ var integerFactorial = (number) => {
 var tick = (elapsedTime, multiplier) => {
     let dt = BigNumber.from(elapsedTime * multiplier)
     let bonus = theory.publicationMultiplier
-    currency.value += dt * bonus * (temp = factorial(getC1(c1.level).pow(getC1Exponent(c1Exp.level)) * getC2(c2.level) * getC3(c3.level)))
+    currency.value += dt * bonus * 0
     theory.invalidateTertiaryEquation()
 }
 
