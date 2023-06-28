@@ -4,9 +4,9 @@ import { BigNumber } from "./api/BigNumber"
 import { theory } from "./api/Theory"
 import { Utils } from "./api/Utils"
 
-var id = "BinomialTheorem"
-var name = "Binomial Theorem"
-var description = "Binomial Theorem by HyperKNF"
+var id = "CombinationsAndPermutations"
+var name = "Combinations and Permutations"
+var description = "Combinations and Permutations by HyperKNF"
 var authors = "HyperKNF"
 var version = 1
 
