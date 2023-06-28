@@ -68,11 +68,9 @@ var init = () => {
     "NONE CURRENTLY"
 
     // NO ACHIEVEMENTS OR STORY CHAPTERS
-
-    updateAvailability()
 }
 
-var integerFactorial = (number) => {
+function integerFactorial(number) {
     if (number <= 1) return 1
     return number * integerFactorial(number - 1)
 }
@@ -86,7 +84,7 @@ var tick = (elapsedTime, multiplier) => {
 var getPrimaryEquation = () => {
     return "\\dot{\\rho}=c_1c_2\\sum^n_kC^n_kx^ky^{n-k}"
 }
-
+var getSecondaryEquation = () => theory.latexSymbol + "=\\max\\rho"
 var getPublicationMultiplier = (tau) => tau.pow(0.164) / BigNumber.THREE
 var getPublicationMultiplierFormula = (symbol) => "\\frac{{" + symbol + "}^{0.164}}{3}"
 var getTau = () => currency.value
@@ -96,7 +94,5 @@ var getC1 = (level) => Utils.getStepwisePowerSum(level, 2, 5, 0)
 var getC2 = (level) => BigNumber.from(2).pow(BigNumber.from(level))
 var getN = level => level
 var getK = level => level
-var getC1Exponent = (level) => BigNumber.from(1 + 0.05 * level)
-var getC2Exponent = (level) => BigNumber.from(1 + 0.05 * level)
 
 init()
