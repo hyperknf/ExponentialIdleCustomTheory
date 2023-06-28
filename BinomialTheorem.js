@@ -36,6 +36,24 @@ var init = () => {
         c2.getDescription = (_) => Utils.getMath(getDesc(c2.level))
         c2.getInfo = (amount) => Utils.getMathTo(getInfo(c2.level), getInfo(c2.level + amount))
     }
+    
+    // n
+    {
+        let getDesc = level => "n=" + getN(level).toString(0)
+        let getInfo = getDesc
+        n = theory.createUpgrade(2, currency, new ExponentialCost(10, Math.log2(10)))
+        n.getDescription = () => Utils.getMath(getDesc(n.level))
+        n.getInfo = amount => Utils.getMathTo(getInfo(n.level), getInfo(n.level + amount))
+    }
+
+    // k
+    {
+        let getDesc = level => "k=" + getK(level).toString(0)
+        let getInfo = getDesc
+        n = theory.createUpgrade(3, currency, new ExponentialCost(50, Math.log2(100)))
+        n.getDescription = () => Utils.getMath(getDesc(n.level))
+        n.getInfo = amount => Utils.getMathTo(getInfo(n.level), getInfo(n.level + amount))
+    }
 
     /////////////////////
     // Permanent Upgrades
@@ -63,11 +81,10 @@ var tick = (elapsedTime, multiplier) => {
     let dt = BigNumber.from(elapsedTime * multiplier)
     let bonus = theory.publicationMultiplier
     currency.value += dt * bonus * 0
-    theory.invalidateTertiaryEquation()
 }
 
 var getPrimaryEquation = () => {
-    return "\\dot{\\rho}=\\sum^n_kC^n_kx^ky^{n-k}"
+    return "\\dot{\\rho}=c_1c_2\\sum^n_kC^n_kx^ky^{n-k}"
 }
 
 var getPublicationMultiplier = (tau) => tau.pow(0.164) / BigNumber.THREE
@@ -77,6 +94,8 @@ var get2DGraphValue = () => currency.value.log10()
 
 var getC1 = (level) => Utils.getStepwisePowerSum(level, 2, 5, 0)
 var getC2 = (level) => BigNumber.from(2).pow(BigNumber.from(level))
+var getN = level => level
+var getK = level => level
 var getC1Exponent = (level) => BigNumber.from(1 + 0.05 * level)
 var getC2Exponent = (level) => BigNumber.from(1 + 0.05 * level)
 
