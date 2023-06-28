@@ -21,8 +21,8 @@ var init = () => {
 
     // c1
     {
-        let getDesc = (level) => "c_1=" + getC1(level).toString(0)
-        let getInfo = (level) => "c_1=" + getC1(level).toString(0)
+        let getDesc = (level) => "c_1=" + getC1(level)
+        let getInfo = (level) => "c_1=" + getC1(level)
         c1 = theory.createUpgrade(0, currency, new FirstFreeCost(new ExponentialCost(10, Math.log2(5))))
         c1.getDescription = (_) => Utils.getMath(getDesc(c1.level))
         c1.getInfo = (amount) => Utils.getMathTo(getDesc(c1.level), getDesc(c1.level + amount))
@@ -30,8 +30,8 @@ var init = () => {
 
     // c2
     {
-        let getDesc = (level) => "c_2=" + getC2(level).toString(0)
-        let getInfo = (level) => "c_2=" + getC2(level).toString(0)
+        let getDesc = (level) => "c_2=" + getC2(level)
+        let getInfo = (level) => "c_2=" + getC2(level)
         c2 = theory.createUpgrade(1, currency, new ExponentialCost(50, Math.log2(25)))
         c2.getDescription = (_) => Utils.getMath(getDesc(c2.level))
         c2.getInfo = (amount) => Utils.getMathTo(getInfo(c2.level), getInfo(c2.level + amount))
@@ -39,7 +39,7 @@ var init = () => {
     
     // n
     {
-        let getDesc = level => "n=" + getN(level).toString(0)
+        let getDesc = level => "n=" + getN(level)
         let getInfo = getDesc
         n = theory.createUpgrade(2, currency, new ExponentialCost(10, Math.log2(10)))
         n.getDescription = () => Utils.getMath(getDesc(n.level))
@@ -48,7 +48,7 @@ var init = () => {
 
     // k
     {
-        let getDesc = level => "k=" + getK(level).toString(0)
+        let getDesc = level => "k=" + getK(level)
         let getInfo = getDesc
         n = theory.createUpgrade(3, currency, new ExponentialCost(50, Math.log2(100)))
         n.getDescription = () => Utils.getMath(getDesc(n.level))
