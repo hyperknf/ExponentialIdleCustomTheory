@@ -31,7 +31,7 @@ var init = () => {
 
     // c2
     {
-        let getDesc = (level) => "c_2=" + getC2(level)
+        let getDesc = (level) => "c_2=2^" + level
         let getInfo = (level) => "c_2=" + getC2(level)
         c2 = theory.createUpgrade(1, currency, new ExponentialCost(50, Math.log2(10)))
         c2.getDescription = (_) => Utils.getMath(getDesc(c2.level))
@@ -85,7 +85,7 @@ var init = () => {
 
     /////////////////////
     // Permanent Upgrades
-    theory.createPublicationUpgrade(0, currency, 1e7)
+    theory.createPublicationUpgrade(0, currency, 1e5)
     theory.createBuyAllUpgrade(1, currency, 1e15)
     theory.createAutoBuyerUpgrade(2, currency, 1e30)
 
@@ -97,8 +97,8 @@ var init = () => {
                 (
                     () => {
                         switch (milestone) {
-                            case 0: return 15
-                            case 1: return 40
+                            case 0: return 5
+                            case 1: return 35
                             case 2: return 85
                             case 3: return 150
                             default: return 150 + 75 * (milestone - 3)
@@ -181,7 +181,7 @@ var getTau = () => currency.value.pow(0.1)
 var get2DGraphValue = () => currency.value.sign * (BigNumber.ONE + currency.value.abs()).log10().toNumber()
 
 var getC1 = (level) => Utils.getStepwisePowerSum(level, 2, 5, 0)
-var getC2 = (level) => BigNumber.from(2).pow(level)
+var getC2 = (level) => BigNumber.TWO.pow(level)
 var getR1 = level => BigNumber.from(level)
 var getR2 = level => BigNumber.from(level)
 var getN1 = level => BigNumber.from(level)
