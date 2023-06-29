@@ -67,7 +67,7 @@ var init = () => {
 
     // r1
     {
-        let getDesc = level => "r_1=" + getK(level)
+        let getDesc = level => "r_1=" + getR1(level)
         let getInfo = getDesc
         r1 = theory.createUpgrade(5, currency, new ExponentialCost(50, Math.log2(100)))
         r1.getDescription = () => Utils.getMath(getDesc(r1.level))
@@ -76,7 +76,7 @@ var init = () => {
 
     // r2
     {
-        let getDesc = level => "r_2=" + getK(level)
+        let getDesc = level => "r_2=" + getR2(level)
         let getInfo = getDesc
         r2 = theory.createUpgrade(6, currency, new ExponentialCost(50, Math.log2(100)))
         r2.getDescription = () => Utils.getMath(getDesc(r2.level))
@@ -133,7 +133,7 @@ var tick = (elapsedTime, multiplier) => {
     ) * (
         unlock.level >= 2 ? combinations(getN2(n2.level), getR2(r2.level)) : 1
     ) * (
-        unlock.level >= 3 ? binomialTheorem(getN3(n3.level)) : 1
+        unlock.level >= 3 ? binomialTheorem(getC1(c1.level), getC2(c2.level), getN3(n3.level)) : 1
     )
     
     unlock.description = unlock.level == 1 ? "Unlock Permutations" : unlock.level >= 2 ? "Unlock Binomial Theorem" : "Unlock Combinations"
