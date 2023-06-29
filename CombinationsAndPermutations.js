@@ -103,8 +103,8 @@ var getTau = () => currency.value.pow(0.1)
 var get2DGraphValue = () => currency.value.sign * (BigNumber.ONE + currency.value.abs()).log10().toNumber()
 
 var getC1 = (level) => Utils.getStepwisePowerSum(level, 2, 5, 0)
-var getC2 = (level) => BigNumber.from(2).pow(BigNumber.from(level))
-var getN = level => level
-var getK = level => level
+var getC2 = (level) => BigNumber.from(2).pow(level)
+var getN = level => BigNumber.from(level)
+var getK = level => BigNumber.from(level)
 
 init()
