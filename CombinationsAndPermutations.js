@@ -11,7 +11,7 @@ var authors = "HyperKNF"
 var version = 1
 
 var currency
-var c1, c2, n, k
+var c1, c2, n1, n2, n3, r1, r2, k
 var unlock
 
 var init = () => {
@@ -38,22 +38,49 @@ var init = () => {
         c2.getInfo = (amount) => Utils.getMathTo(getInfo(c2.level), getInfo(c2.level + amount))
     }
     
-    // n
+    // n1
     {
-        let getDesc = level => "n=" + getN(level)
+        let getDesc = level => "n_1=" + getN1(level)
         let getInfo = getDesc
-        n = theory.createUpgrade(2, currency, new ExponentialCost(10, Math.log2(10)))
-        n.getDescription = () => Utils.getMath(getDesc(n.level))
-        n.getInfo = amount => Utils.getMathTo(getInfo(n.level), getInfo(n.level + amount))
+        n1 = theory.createUpgrade(2, currency, new ExponentialCost(10, Math.log2(10)))
+        n1.getDescription = () => Utils.getMath(getDesc(n1.level))
+        n1.getInfo = amount => Utils.getMathTo(getInfo(n1.level), getInfo(n1.level + amount))
     }
 
-    // k
+    // n2
     {
-        let getDesc = level => "k=" + getK(level)
+        let getDesc = level => "n_2=" + getN2(level)
         let getInfo = getDesc
-        n = theory.createUpgrade(3, currency, new ExponentialCost(50, Math.log2(100)))
-        n.getDescription = () => Utils.getMath(getDesc(n.level))
-        n.getInfo = amount => Utils.getMathTo(getInfo(n.level), getInfo(n.level + amount))
+        n2 = theory.createUpgrade(3, currency, new ExponentialCost(10, Math.log2(10)))
+        n2.getDescription = () => Utils.getMath(getDesc(n2.level))
+        n2.getInfo = amount => Utils.getMathTo(getInfo(n2.level), getInfo(n2.level + amount))
+    }
+
+    // n3
+    {
+        let getDesc = level => "n_3=" + getN3(level)
+        let getInfo = getDesc
+        n3 = theory.createUpgrade(4, currency, new ExponentialCost(10, Math.log2(10)))
+        n3.getDescription = () => Utils.getMath(getDesc(n3.level))
+        n3.getInfo = amount => Utils.getMathTo(getInfo(n3.level), getInfo(n3.level + amount))
+    }
+
+    // r1
+    {
+        let getDesc = level => "r_1=" + getK(level)
+        let getInfo = getDesc
+        r1 = theory.createUpgrade(3, currency, new ExponentialCost(50, Math.log2(100)))
+        r1.getDescription = () => Utils.getMath(getDesc(r1.level))
+        r1.getInfo = amount => Utils.getMathTo(getInfo(r1.level), getInfo(r1.level + amount))
+    }
+
+    // r2
+    {
+        let getDesc = level => "r_2=" + getK(level)
+        let getInfo = getDesc
+        r2 = theory.createUpgrade(3, currency, new ExponentialCost(50, Math.log2(100)))
+        r2.getDescription = () => Utils.getMath(getDesc(r2.level))
+        r2.getInfo = amount => Utils.getMathTo(getInfo(r2.level), getInfo(r2.level + amount))
     }
 
     /////////////////////
@@ -79,22 +106,58 @@ var init = () => {
 }
 
 function integerFactorial(number) {
+    number = BigNumber.from(number)
     if (number <= 1) return 1
     return number * integerFactorial(number - 1)
+}
+
+function combinations(n, r) {
+    return integerFactorial(n) / (integerFactorial(r) * integerFactorial(n - r))
+}
+
+function permutations(n, r) {
+    return integerFactorial(n) / integerFactorial(n - r)
+}
+
+function binomialTheorem(x, y, n) {
+    let result = 0
+    for (let i = 0; i <= n; i++) result += combinations(n, i) * x.pow(i) * y.pow(n - i)
+    return BigNumber.from(result)
 }
 
 var tick = (elapsedTime, multiplier) => {
     let dt = BigNumber.from(elapsedTime * multiplier)
     let bonus = theory.publicationMultiplier
-    currency.value += dt * bonus * getC1(c1.level) * getC2(c2.level)
+    currency.value += dt * bonus * getC1(c1.level) * getC2(c2.level) * (
+        unlock.level >= 1 ? combinations(getN1(n1.level), getR1(r1.level)) : 1
+    ) * (
+        unlock.level >= 2 ? combinations(getN2(n2.level), getR2(r2.level)) : 1
+    ) * (
+        unlock.level >= 3 ? binomialTheorem(getN3(n3.level)) : 1
+    )
     
     unlock.description = unlock.level == 1 ? "Unlock Permutations" : unlock.level >= 2 ? "Unlock Binomial Theorem" : "Unlock Combinations"
     unlock.info = unlock.level == 1 ? "Unlocks Permutations" : unlock.level >= 2 ? "Unlocks Binomial Theorem" : "Unlocks Combinations"
+
+    n1.isAvailable = unlock.level >= 1
+    n2.isAvailable = unlock.level >= 2
+    n3.isAvailable = unlock.level >= 3
+    r1.isAvailable = unlock.level >= 1
+    r2.isAvailable = unlock.level >= 2
+    k.isAvailable = unlock.level >= 3
+
+    r1.maxLevel = Math.floor(n1.level / 2)
+    r2.maxLevel = Math.floor(n2.level / 2)
+    k.maxLevel = Math.floor(n3.level / 2)
 }
 
 var getPrimaryEquation = () => {
     theory.primaryEquationHeight = 50
-    return "\\dot{\\rho}=c_1c_2\\sum^n_kC^n_kx^ky^{n-k}"
+    let result = "\\dot{\\rho}="
+    result += unlock.level >= 3 ? "(c_1c_2)^{n_3}" : "c_1c_2"
+    if (unlock.level >= 1) result += "C^{n_1}_{r_1}"
+    if (unlock.level >= 2) result += "P^{n_2}_{r_2}"
+    if (unlock.level >= 3) result += "\\sum^{n_3}_kC^{n_3}_kx^ky^{{n_3}-k}"
 }
 var getSecondaryEquation = () => theory.latexSymbol + "=\\max\\rho^{0.1}"
 var getPublicationMultiplier = (tau) => tau.pow(2) / BigNumber.THREE
@@ -104,7 +167,10 @@ var get2DGraphValue = () => currency.value.sign * (BigNumber.ONE + currency.valu
 
 var getC1 = (level) => Utils.getStepwisePowerSum(level, 2, 5, 0)
 var getC2 = (level) => BigNumber.from(2).pow(level)
-var getN = level => BigNumber.from(level)
-var getK = level => BigNumber.from(level)
+var getR1 = level => BigNumber.from(level)
+var getR2 = level => BigNumber.from(level)
+var getN1 = level => BigNumber.from(level)
+var getN2 = level => BigNumber.from(level)
+var getN3 = level => BigNumber.from(level)
 
 init()
