@@ -88,7 +88,7 @@ var getSecondaryEquation = () => theory.latexSymbol + "=\\max\\rho"
 var getPublicationMultiplier = (tau) => tau.pow(0.164) / BigNumber.THREE
 var getPublicationMultiplierFormula = (symbol) => "\\frac{{" + symbol + "}^{0.164}}{3}"
 var getTau = () => currency.value
-var get2DGraphValue = () => currency.value.sign * currency.value.log10().toNumber()
+var get2DGraphValue = () => currency.value.sign * (BigNumber.ONE + currency.value.abs()).log10().toNumber()
 
 var getC1 = (level) => Utils.getStepwisePowerSum(level, 2, 5, 0)
 var getC2 = (level) => BigNumber.from(2).pow(BigNumber.from(level))
