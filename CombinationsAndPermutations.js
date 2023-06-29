@@ -11,7 +11,7 @@ var authors = "HyperKNF"
 var version = 1
 
 var currency
-var c1, c2, n1, n2, n3, r1, r2, k
+var c1, c2, n1, n2, n3, r1, r2
 var unlock
 
 var init = () => {
@@ -144,11 +144,9 @@ var tick = (elapsedTime, multiplier) => {
     n3.isAvailable = unlock.level >= 3
     r1.isAvailable = unlock.level >= 1
     r2.isAvailable = unlock.level >= 2
-    k.isAvailable = unlock.level >= 3
 
     r1.maxLevel = Math.floor(n1.level / 2)
     r2.maxLevel = Math.floor(n2.level / 2)
-    k.maxLevel = Math.floor(n3.level / 2)
 }
 
 var getPrimaryEquation = () => {
