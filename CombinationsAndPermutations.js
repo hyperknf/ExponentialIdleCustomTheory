@@ -1,4 +1,4 @@
-import { ExponentialCost, FreeCost, LinearCost } from "./api/Costs"
+import { ExponentialCost, FreeCost, LinearCost, CustomCost } from "./api/Costs"
 import { Localization } from "./api/Localization"
 import { BigNumber } from "./api/BigNumber"
 import { theory } from "./api/Theory"
@@ -24,7 +24,7 @@ var init = () => {
     {
         let getDesc = (level) => "c_1=" + getC1(level)
         let getInfo = (level) => "c_1=" + getC1(level)
-        c1 = theory.createUpgrade(0, currency, new FirstFreeCost(new ExponentialCost(10, Math.log2(5))))
+        c1 = theory.createUpgrade(0, currency, new FirstFreeCost(new ExponentialCost(10, Math.log2(2))))
         c1.getDescription = (_) => Utils.getMath(getDesc(c1.level))
         c1.getInfo = (amount) => Utils.getMathTo(getDesc(c1.level), getDesc(c1.level + amount))
     }
@@ -33,7 +33,7 @@ var init = () => {
     {
         let getDesc = (level) => "c_2=" + getC2(level)
         let getInfo = (level) => "c_2=" + getC2(level)
-        c2 = theory.createUpgrade(1, currency, new ExponentialCost(50, Math.log2(25)))
+        c2 = theory.createUpgrade(1, currency, new ExponentialCost(50, Math.log2(10)))
         c2.getDescription = (_) => Utils.getMath(getDesc(c2.level))
         c2.getInfo = (amount) => Utils.getMathTo(getInfo(c2.level), getInfo(c2.level + amount))
     }
@@ -91,7 +91,23 @@ var init = () => {
 
     ///////////////////////
     //// Milestone Upgrades
-    theory.setMilestoneCost(new LinearCost(25, 25))
+    theory.setMilestoneCost(new CustomCost(
+        (milestone) => {
+            BigNumber.from(
+                (
+                    () => {
+                        switch (milestone) {
+                            case 0: return 15
+                            case 1: return 40
+                            case 2: return 85
+                            case 3: return 150
+                            default: return 150 + 75 * (milestone - 3)
+                        }
+                    }
+                )()
+            )
+        }
+    ))
     
     // unlock
     {
