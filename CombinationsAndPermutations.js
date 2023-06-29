@@ -152,10 +152,11 @@ var tick = (elapsedTime, multiplier) => {
 var getPrimaryEquation = () => {
     theory.primaryEquationHeight = 50
     let result = "\\dot{\\rho}="
-    result += unlock.level >= 3 ? "(c_1c_2)^{n_3}" : "c_1c_2"
     if (unlock.level >= 1) result += "C^{n_1}_{r_1}"
     if (unlock.level >= 2) result += "P^{n_2}_{r_2}"
     if (unlock.level >= 3) result += "\\sum^{n_3}_kC^{n_3}_kx^ky^{{n_3}-k}"
+    result += unlock.level >= 3 ? "(c_1c_2)^{n_3}" : "c_1c_2"
+    return result
 }
 var getSecondaryEquation = () => theory.latexSymbol + "=\\max\\rho^{0.1}"
 var getPublicationMultiplier = (tau) => tau.pow(2) / BigNumber.THREE
