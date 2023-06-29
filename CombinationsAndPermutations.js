@@ -69,7 +69,7 @@ var init = () => {
     {
         let getDesc = level => "r_1=" + getK(level)
         let getInfo = getDesc
-        r1 = theory.createUpgrade(3, currency, new ExponentialCost(50, Math.log2(100)))
+        r1 = theory.createUpgrade(5, currency, new ExponentialCost(50, Math.log2(100)))
         r1.getDescription = () => Utils.getMath(getDesc(r1.level))
         r1.getInfo = amount => Utils.getMathTo(getInfo(r1.level), getInfo(r1.level + amount))
     }
@@ -78,7 +78,7 @@ var init = () => {
     {
         let getDesc = level => "r_2=" + getK(level)
         let getInfo = getDesc
-        r2 = theory.createUpgrade(3, currency, new ExponentialCost(50, Math.log2(100)))
+        r2 = theory.createUpgrade(6, currency, new ExponentialCost(50, Math.log2(100)))
         r2.getDescription = () => Utils.getMath(getDesc(r2.level))
         r2.getInfo = amount => Utils.getMathTo(getInfo(r2.level), getInfo(r2.level + amount))
     }
