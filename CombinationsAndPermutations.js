@@ -12,6 +12,7 @@ var version = 1
 
 var currency
 var c1, c2, n, k
+var unlock
 
 var init = () => {
     currency = theory.createCurrency()
@@ -64,6 +65,13 @@ var init = () => {
     ///////////////////////
     //// Milestone Upgrades
     theory.setMilestoneCost(new LinearCost(25, 25))
+    
+    // unlock
+    {
+        unlock = theory.createMilestoneUpgrade(0, 3)
+        unlock.description = "Unlock Combinations"
+        unlock.info = "Unlocks Combinations"
+    }
 
     "NONE CURRENTLY"
 
@@ -78,17 +86,20 @@ function integerFactorial(number) {
 var tick = (elapsedTime, multiplier) => {
     let dt = BigNumber.from(elapsedTime * multiplier)
     let bonus = theory.publicationMultiplier
-    currency.value += dt * bonus * 0
+    currency.value += dt * bonus * getC1(c1.level) * getC2(c2.level)
+    
+    unlock.description = unlock.level == 1 ? "Unlock Permutations" : unlock.level >= 2 ? "Unlock Binomial Theorem : "Unlock Combinations"
+    unlock.info = unlock.level == 1 ? "Unlocks Permutations" : unlock.level >= 2 ? "Unlocks Binomial Theorem : "Unlocks Combinations"
 }
 
 var getPrimaryEquation = () => {
     theory.primaryEquationHeight = 50
     return "\\dot{\\rho}=c_1c_2\\sum^n_kC^n_kx^ky^{n-k}"
 }
-var getSecondaryEquation = () => theory.latexSymbol + "=\\max\\rho"
-var getPublicationMultiplier = (tau) => tau.pow(0.164) / BigNumber.THREE
-var getPublicationMultiplierFormula = (symbol) => "\\frac{{" + symbol + "}^{0.164}}{3}"
-var getTau = () => currency.value
+var getSecondaryEquation = () => theory.latexSymbol + "=\\max\\rho^{0.1}"
+var getPublicationMultiplier = (tau) => tau.pow(2) / BigNumber.THREE
+var getPublicationMultiplierFormula = (symbol) => "\\frac{{" + symbol + "}^{2}}{3}"
+var getTau = () => currency.value.pow(0.1)
 var get2DGraphValue = () => currency.value.sign * (BigNumber.ONE + currency.value.abs()).log10().toNumber()
 
 var getC1 = (level) => Utils.getStepwisePowerSum(level, 2, 5, 0)
