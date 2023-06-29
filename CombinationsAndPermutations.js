@@ -82,6 +82,7 @@ var tick = (elapsedTime, multiplier) => {
 }
 
 var getPrimaryEquation = () => {
+    theory.primaryEquationHeight = 50
     return "\\dot{\\rho}=c_1c_2\\sum^n_kC^n_kx^ky^{n-k}"
 }
 var getSecondaryEquation = () => theory.latexSymbol + "=\\max\\rho"
