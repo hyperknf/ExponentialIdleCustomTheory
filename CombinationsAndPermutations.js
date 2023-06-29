@@ -88,8 +88,8 @@ var tick = (elapsedTime, multiplier) => {
     let bonus = theory.publicationMultiplier
     currency.value += dt * bonus * getC1(c1.level) * getC2(c2.level)
     
-    unlock.description = unlock.level == 1 ? "Unlock Permutations" : unlock.level >= 2 ? "Unlock Binomial Theorem : "Unlock Combinations"
-    unlock.info = unlock.level == 1 ? "Unlocks Permutations" : unlock.level >= 2 ? "Unlocks Binomial Theorem : "Unlocks Combinations"
+    unlock.description = unlock.level == 1 ? "Unlock Permutations" : unlock.level >= 2 ? "Unlock Binomial Theorem" : "Unlock Combinations"
+    unlock.info = unlock.level == 1 ? "Unlocks Permutations" : unlock.level >= 2 ? "Unlocks Binomial Theorem" : "Unlocks Combinations"
 }
 
 var getPrimaryEquation = () => {
