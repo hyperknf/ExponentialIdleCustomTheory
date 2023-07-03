@@ -94,10 +94,10 @@ var init = () => {
     theory.setMilestoneCost(new CustomCost(
         (milestone) => {
             switch (milestone) {
-                case 0: return BigNumber.from(1e5)
-                case 1: return BigNumber.from(1e15)
-                case 2: return BigNumber.from(1e45)
-                case 3: return BigNumber.from(1e85)
+                case 0: return BigNumber.from(5)
+                case 1: return BigNumber.from(15)
+                case 2: return BigNumber.from(45)
+                case 3: return BigNumber.from(85)
                 default: return BigNumber.from(150 + 75 * (milestone - 3))
             }
         }
