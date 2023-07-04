@@ -171,6 +171,8 @@ var tick = (elapsedTime, multiplier) => {
 
     r1.maxLevel = Math.floor(n1.level / 2)
     r2.maxLevel = Math.floor(n2.level / 2)
+    
+    theory.invalidatePrimaryEquation()
 }
 
 var getPrimaryEquation = () => {
