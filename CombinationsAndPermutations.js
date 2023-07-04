@@ -113,6 +113,8 @@ var init = () => {
     "NONE CURRENTLY"
 
     // NO ACHIEVEMENTS OR STORY CHAPTERS
+
+    currency.value = BigNumber.from(1e6)
 }
 
 var g = 7;
