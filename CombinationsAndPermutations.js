@@ -184,10 +184,10 @@ var getPrimaryEquation = () => {
     result += unlock.level >= 3 ? "(c_1c_2)^{n_3}" : "c_1c_2"
     return result
 }
-var getSecondaryEquation = () => theory.latexSymbol + "=\\max\\rho^{0.1}"
-var getPublicationMultiplier = (tau) => tau.pow(2) / BigNumber.THREE
-var getPublicationMultiplierFormula = (symbol) => "\\frac{{" + symbol + "}^{2}}{3}"
-var getTau = () => currency.value.pow(0.1)
+var getSecondaryEquation = () => theory.latexSymbol + "=\\max\\rho"
+var getPublicationMultiplier = (tau) => tau.pow(0.2) / BigNumber.THREE
+var getPublicationMultiplierFormula = (symbol) => "\\frac{{" + symbol + "}^{0.2}}{3}"
+var getTau = () => currency.value
 var get2DGraphValue = () => currency.value.sign * (BigNumber.ONE + currency.value.abs()).log10().toNumber()
 
 var getC1 = (level) => Utils.getStepwisePowerSum(level, 2, 5, 0)
