@@ -164,7 +164,7 @@ var tick = (elapsedTime, multiplier) => {
     let dt = BigNumber.from(elapsedTime * multiplier)
     let bonus = theory.publicationMultiplier
 
-    t += t >= getTCap(tc.level) ? getTCap(tc.level) - t : Math.log(Math.log(currency.value))
+    t += t >= getTCap(tc.level) ? getTCap(tc.level) - t : Math.log(Math.log(currency.value + 1))
     
     currency.value += dt * bonus * t * getC1(c1.level) * getC2(c2.level) * (
         unlock.level >= 1 ? combinations(getN1(n1.level), getR1(r1.level)) : 1
@@ -200,7 +200,7 @@ var getPrimaryEquation = () => {
     result += unlock.level >= 3 ? "(c_1c_2)^{n_3}" : "c_1c_2"
     return result
 }
-var getSecondaryEquation = () => `t=\\begin{cases}\\ln(1+\\rho), & t<t_c\\\\t_c-t, & t>=t_c\\end{cases}\\\\${theory.latexSymbol}=\\max\\rho`
+var getSecondaryEquation = () => `t=\\begin{cases}\\ln\\ln(1+\\rho), & t<t_c\\\\t_c-t, & t>=t_c\\end{cases}\\\\${theory.latexSymbol}=\\max\\rho`
 var getTertiaryEquation = () => `t=${t}`
 var getPublicationMultiplier = (tau) => tau.pow(0.2) / BigNumber.THREE
 var getPublicationMultiplierFormula = (symbol) => "\\frac{{" + symbol + "}^{0.2}}{3}"
