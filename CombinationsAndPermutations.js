@@ -95,6 +95,7 @@ var init = () => {
     //// Milestone Upgrades
     theory.setMilestoneCost(new CustomCost(
         (milestone) => {
+            return BigNumber.from(5)
             switch (milestone) {
                 case 0: return BigNumber.from(5)
                 case 1: return BigNumber.from(15)
