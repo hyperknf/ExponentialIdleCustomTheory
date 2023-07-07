@@ -11,13 +11,17 @@ var authors = "HyperKNF"
 var version = 1
 
 var currency
-var t
+var t = BigNumber.from(1)
 var c1, c2, n1, n2, n3, r1, r2, tc
 var unlock
 
+function resetT() {
+    t = BigNumber.from(1)
+}
+
 var init = () => {
     currency = theory.createCurrency()
-    t = BigNumber.from(1)
+    resetT()
 
     ///////////////////
     // Regular Upgrades
@@ -92,6 +96,11 @@ var init = () => {
         tc = theory.createUpgrade(7, currency, new ExponentialCost(100000, Math.log2(50)))
         tc.getDescription = () => Utils.getMath(getDesc(tc.level))
         tc.getInfo = amount => Utils.getMathTo(getInfo(tc.level), getInfo(tc.level + amount))
+        tc.maxLevel = 1
+        tc.bought = () => {
+            tc.maxLevel++
+            resetT()
+        }
     }
 
     /////////////////////
