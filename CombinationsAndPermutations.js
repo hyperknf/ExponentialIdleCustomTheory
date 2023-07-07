@@ -210,7 +210,7 @@ var getPrimaryEquation = () => {
     return result
 }
 var getSecondaryEquation = () => {
-    theory.primaryEquationHeight = 50
+    theory.primaryEquationHeight = 100
     return `t=\\begin{cases}\\ln\\ln(1+\\rho), & t<t_c\\\\t_c-t, & t>=t_c\\end{cases}\\\\${theory.latexSymbol}=\\max\\rho`
 }
 var getTertiaryEquation = () => `t=${t}`
