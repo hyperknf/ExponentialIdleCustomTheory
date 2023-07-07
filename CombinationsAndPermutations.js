@@ -190,7 +190,7 @@ var getPrimaryEquation = () => {
     return result
 }
 var getSecondaryEquation = () => theory.latexSymbol + "=\\max\\rho"
-var getTertiaryEquation = ()=> `\\text{${comp}}`
+var getTertiaryEquation = ()=> `\\text{${comb}}`
 var getPublicationMultiplier = (tau) => tau.pow(0.2) / BigNumber.THREE
 var getPublicationMultiplierFormula = (symbol) => "\\frac{{" + symbol + "}^{0.2}}{3}"
 var getTau = () => currency.value
