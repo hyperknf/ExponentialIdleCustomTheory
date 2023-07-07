@@ -193,7 +193,7 @@ var tick = (elapsedTime, multiplier) => {
 
 var getPrimaryEquation = () => {
     theory.primaryEquationHeight = 50
-    let result = "\\dot{\\rho}="
+    let result = "\\dot{\\rho}=t"
     if (unlock.level >= 1) result += "C^{n_1}_{r_1}"
     if (unlock.level >= 2) result += "P^{n_2}_{r_2}"
     if (unlock.level >= 3) result += "\\sum^{n_3}_kC^{n_3}_kx^ky^{{n_3}-k}"
