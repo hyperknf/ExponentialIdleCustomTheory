@@ -134,10 +134,7 @@ var gamma = (z) => {
         return Math.sqrt(2 * Math.PI) * t.pow(z + 0.5) * BigNumber.E.pow(-t) * x;
     }
 }
-var factorial = (num) => {
-    if (num <= 2) return gamma(num + 1)
-    return BigNumber.from(BigNumber.from(2) * BigNumber.PI * num) * BigNumber.from(num / BigNumber.E).pow(num)
-}
+var factorial = (num) => gamma(num + 1)
 
 function combinations(n, r) {
     comb = factorial(n) / (factorial(r) * factorial(n - r))
