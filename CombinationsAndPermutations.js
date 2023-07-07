@@ -200,7 +200,7 @@ var getPrimaryEquation = () => {
     result += unlock.level >= 3 ? "(c_1c_2)^{n_3}" : "c_1c_2"
     return result
 }
-var getSecondaryEquation = () => theory.latexSymbol + "=\\max\\rho"
+var getSecondaryEquation = () => `t=\\begin{cases}\\ln(1+\\rho), & t<t_c\\\\t_c-t, & t>=t_c\\end{cases}\\\\${theory.latexSymbol}=\\max\\rho`
 var getTertiaryEquation = () => `t=${t}`
 var getPublicationMultiplier = (tau) => tau.pow(0.2) / BigNumber.THREE
 var getPublicationMultiplierFormula = (symbol) => "\\frac{{" + symbol + "}^{0.2}}{3}"
