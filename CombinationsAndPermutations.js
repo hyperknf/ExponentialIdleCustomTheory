@@ -97,7 +97,7 @@ var init = () => {
         tc.getDescription = () => Utils.getMath(getDesc(tc.level))
         tc.getInfo = amount => Utils.getMathTo(getInfo(tc.level), getInfo(tc.level + amount))
         tc.maxLevel = 1
-        tc.bought = () => {
+        tc.bought = amount => {
             tc.maxLevel++
             resetT()
         }
