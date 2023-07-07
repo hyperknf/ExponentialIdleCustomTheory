@@ -131,7 +131,7 @@ var gamma = (z) => {
         for (var i = 1; i < g + 2; i++)
         x += C[i] / (z + i);
 
-        var t = z + g + 0.5;
+        var t = BigNumber.from(z + g + 0.5)
         return Math.sqrt(2 * Math.PI) * t.pow(z + 0.5) * BigNumber.E.pow(-t) * x;
     }
 }
