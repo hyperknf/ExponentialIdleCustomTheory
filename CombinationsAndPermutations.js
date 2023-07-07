@@ -11,13 +11,13 @@ var authors = "HyperKNF"
 var version = 1
 
 var currency
-var c1, c2, n1, n2, n3, r1, r2
+var t
+var c1, c2, n1, n2, n3, r1, r2, tc
 var unlock
-
-var comb = BigNumber.from(0)
 
 var init = () => {
     currency = theory.createCurrency()
+    t = BigNumber.from(1)
 
     ///////////////////
     // Regular Upgrades
@@ -85,6 +85,15 @@ var init = () => {
         r2.getInfo = amount => Utils.getMathTo(getInfo(r2.level), getInfo(r2.level + amount))
     }
 
+    // tc
+    {
+        let getDesc = level => "t_c=" + getTCap(level)
+        let getInfo = getDesc
+        tc = theory.createUpgrade(7, currency, new ExponentialCost(100000, Math.log2(50)))
+        tc.getDescription = () => Utils.getMath(getDesc(tc.level))
+        tc.getInfo = amount => Utils.getMathTo(getInfo(tc.level), getInfo(tc.level + amount))
+    }
+
     /////////////////////
     // Permanent Upgrades
     theory.createPublicationUpgrade(0, currency, 1)
@@ -138,7 +147,6 @@ var gamma = (z) => {
 var factorial = (num) => gamma(num + 1)
 
 function combinations(n, r) {
-    comb = factorial(n) / (factorial(r) * factorial(n - r))
     return factorial(n) / (factorial(r) * factorial(n - r))
 }
 
@@ -155,7 +163,10 @@ function binomialTheorem(x, y, n) {
 var tick = (elapsedTime, multiplier) => {
     let dt = BigNumber.from(elapsedTime * multiplier)
     let bonus = theory.publicationMultiplier
-    currency.value += dt * bonus * getC1(c1.level) * getC2(c2.level) * (
+
+    t += t >= getTCap(tc.level) ? getTCap(tc.level) - t : Math.log(Math.log(currency.value))
+    
+    currency.value += dt * bonus * t * getC1(c1.level) * getC2(c2.level) * (
         unlock.level >= 1 ? combinations(getN1(n1.level), getR1(r1.level)) : 1
     ) * (
         unlock.level >= 2 ? permutations(getN2(n2.level), getR2(r2.level)) : 1
@@ -190,7 +201,7 @@ var getPrimaryEquation = () => {
     return result
 }
 var getSecondaryEquation = () => theory.latexSymbol + "=\\max\\rho"
-var getTertiaryEquation = ()=> `\\text{${comb}}`
+var getTertiaryEquation = () => `t=${t}`
 var getPublicationMultiplier = (tau) => tau.pow(0.2) / BigNumber.THREE
 var getPublicationMultiplierFormula = (symbol) => "\\frac{{" + symbol + "}^{0.2}}{3}"
 var getTau = () => currency.value
@@ -203,5 +214,6 @@ var getR2 = level => BigNumber.from(level)
 var getN1 = level => BigNumber.from(level)
 var getN2 = level => BigNumber.from(level)
 var getN3 = level => BigNumber.from(level)
+var getTCap = level => BigNumber.from(1000) * BigNumber.from(10).pow(level)
 
 init()
