@@ -140,7 +140,7 @@ var factorial = (num) => {
 }
 
 function combinations(n, r) {
-    comp = factorial(n) / (factorial(r) * factorial(n - r))
+    comb = factorial(n) / (factorial(r) * factorial(n - r))
     return factorial(n) / (factorial(r) * factorial(n - r))
 }
 
