@@ -14,6 +14,8 @@ var currency
 var c1, c2, n1, n2, n3, r1, r2
 var unlock
 
+var comb = BigNumber.from(0)
+
 var init = () => {
     currency = theory.createCurrency()
 
@@ -138,6 +140,7 @@ var factorial = (num) => {
 }
 
 function combinations(n, r) {
+    comp = factorial(n) / (factorial(r) * factorial(n - r))
     return factorial(n) / (factorial(r) * factorial(n - r))
 }
 
@@ -157,7 +160,7 @@ var tick = (elapsedTime, multiplier) => {
     currency.value += dt * bonus * getC1(c1.level) * getC2(c2.level) * (
         unlock.level >= 1 ? combinations(getN1(n1.level), getR1(r1.level)) : 1
     ) * (
-        unlock.level >= 2 ? combinations(getN2(n2.level), getR2(r2.level)) : 1
+        unlock.level >= 2 ? permutations(getN2(n2.level), getR2(r2.level)) : 1
     ) * (
         unlock.level >= 3 ? binomialTheorem(getC1(c1.level), getC2(c2.level), getN3(n3.level)) : 1
     )
@@ -187,6 +190,7 @@ var getPrimaryEquation = () => {
     return result
 }
 var getSecondaryEquation = () => theory.latexSymbol + "=\\max\\rho"
+var getTertiaryEquation = ()=> `\\text{${comp}}`
 var getPublicationMultiplier = (tau) => tau.pow(0.2) / BigNumber.THREE
 var getPublicationMultiplierFormula = (symbol) => "\\frac{{" + symbol + "}^{0.2}}{3}"
 var getTau = () => currency.value
