@@ -143,7 +143,7 @@ var getC1 = (level) => BigNumber.from(69).pow(level);
 var getC2 = (level) => BigNumber.from(420).pow(level);
 var getC3 = level => {
     var result = BigNumber.from(3)
-    for (let i = 1; i <= level; i++) result = BigNumber.E ** factorial(result)
+    for (let i = 1; i <= level; i++) result = factorial(BigNumber.E ** result)
     return result
 }
 var getC1Exponent = (level) => BigNumber.from(1 + 0.05 * level);
