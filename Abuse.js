@@ -49,6 +49,7 @@ var init = () => {
         c3 = theory.createUpgrade(2, currency, new ExponentialCost(5, Math.log2(10)));
         c3.getDescription = (_) => Utils.getMath(getDesc(c3.level));
         c3.getInfo = (amount) => Utils.getMathTo(getInfo(c3.level), getInfo(c3.level + amount));
+        c3.maxLevel = 10
     }
 
     /////////////////////
@@ -131,7 +132,7 @@ var getPrimaryEquation = () => {
     return result;
 }
 
-var getSecondaryEquation = () => "x_i=x_{i-1}!,\\quad x_0=3\\\\" + theory.latexSymbol + "=\\max\\rho";
+var getSecondaryEquation = () => "x_i=e^{x_{i-1}}!,\\quad x_0=3\\\\" + theory.latexSymbol + "=\\max\\rho";
 var getTertiaryEquation = () => "\\text{Temporary value}=" + temp
 var getPublicationMultiplier = (tau) => tau.pow(0.164) / BigNumber.THREE;
 var getPublicationMultiplierFormula = (symbol) => "\\frac{{" + symbol + "}^{0.164}}{3}";
@@ -142,7 +143,7 @@ var getC1 = (level) => BigNumber.from(69).pow(level);
 var getC2 = (level) => BigNumber.from(420).pow(level);
 var getC3 = level => {
     var result = BigNumber.from(3)
-    for (let i = 1; i <= level; i++) result = factorial(result)
+    for (let i = 1; i <= level; i++) result = BigNumber.E ** factorial(result)
     return result
 }
 var getC1Exponent = (level) => BigNumber.from(1 + 0.05 * level);
