@@ -4,9 +4,9 @@ import { BigNumber } from "./api/BigNumber";
 import { theory } from "./api/Theory";
 import { Utils } from "./api/Utils";
 
-var id = "AnOrdinaryFunction";
-var name = "An Ordinary Function";
-var description = "An Ordinary Function by HyperKNF";
+var id = "SomeFunctions";
+var name = "Some Functions";
+var description = "Some Functions by HyperKNF";
 var authors = "HyperKNF";
 var version = 1;
 
