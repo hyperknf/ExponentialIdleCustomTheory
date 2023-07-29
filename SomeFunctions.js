@@ -90,7 +90,7 @@ var getPrimaryEquation = () => {
 var getPublicationMultiplier = (tau) => tau.pow(0.164) / BigNumber.THREE;
 var getPublicationMultiplierFormula = (symbol) => "\\frac{{" + symbol + "}^{0.164}}{3}";
 var getTau = () => currency.value;
-var get2DGraphValue = () => 0;
+var get2DGraphValue = () => currency.value.sign * (BigNumber.ONE + currency.value.abs()).log10().toNumber();
 
 var getK = level => Utils.getStepwisePowerSum(level, 2, 5, 0)
 var getC1 = level => 1 + 0.5 * level
