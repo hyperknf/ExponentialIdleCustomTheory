@@ -11,7 +11,7 @@ var authors = "HyperKNF";
 var version = 1;
 
 var currency;
-var k, c1, c2, x1;
+var k, c1, c2, x1, x2;
 var unlock
 
 var achievement1, achievement2;
@@ -123,8 +123,8 @@ var getTau = () => currency.value;
 var get2DGraphValue = () => currency.value.sign * (BigNumber.ONE + currency.value.abs()).log10().toNumber();
 
 var getK = level => Utils.getStepwisePowerSum(level, 2, 5, 0)
-var getC1 = level => 1 + 0.5 * level
-var getC2 = level => 1 + 0.25 * level
-var getX1 = level => 1 + 0.01 * level
+var getC1 = level => 1 + Utils.getStepwisePowerSum(level, 2, 20) / 2
+var getC2 = level => 1 + Utils.getStepwisePowerSum(level, 2, 20) / 4
+var getX1 = level => 1 + Utils.getStepwisePowerSum(level, 2, 10) / 100
 
 init();
