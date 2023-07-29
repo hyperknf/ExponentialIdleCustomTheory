@@ -26,7 +26,7 @@ var init = () => {
     // c1
     {
         let getDesc = (level) => "c_1=" + getC1(level);
-        c1 = theory.createUpgrade(0, currency, new FirstFreeCost(new ExponentialCost(15, Math.log2(2))));
+        c1 = theory.createUpgrade(0, currency, new ExponentialCost(15, Math.log2(2)));
         c1.getDescription = (_) => Utils.getMath(getDesc(c1.level));
         c1.getInfo = (amount) => Utils.getMathTo(getDesc(c1.level), getDesc(c1.level + amount));
     }
@@ -84,7 +84,7 @@ var getPublicationMultiplierFormula = (symbol) => "\\frac{{" + symbol + "}^{0.16
 var getTau = () => currency.value;
 var get2DGraphValue = () => 0;
 
-var getC1 = level => 1 + 0.2 * level
-var getC2 = level => 1 + 0.2 * level
+var getC1 = level => 1 + 0.5 * level
+var getC2 = level => 1 + 0.5 * level
 
 init();
