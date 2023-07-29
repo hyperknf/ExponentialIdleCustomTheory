@@ -11,8 +11,8 @@ var authors = "HyperKNF";
 var version = 1;
 
 var currency;
-var k, c1, c2;
-var c1Exp, c2Exp;
+var k, c1, c2, x1;
+var unlock
 
 var achievement1, achievement2;
 var chapter1, chapter2;
@@ -48,6 +48,14 @@ var init = () => {
         c2.getInfo = (amount) => Utils.getMathTo(getInfo(c2.level), getInfo(c2.level + amount));
     }
 
+    // x1
+    {
+        let getDesc = level => "x_1=" + getX1(level)
+        x1 = theory.createUpgrade(3, currency, new ExponentialCost(1e25, Math.log2(50)))
+        x1.getDescription = _ => Utils.getMath(getDesc(x1.level))
+        x1.getInfo = amount => Utils.getMathTo(getDesc(x1.level), getDesc(x1.level + amount))
+    }
+
     /////////////////////
     // Permanent Upgrades
     theory.createPublicationUpgrade(0, currency, 1e10);
@@ -57,6 +65,12 @@ var init = () => {
     ///////////////////////
     //// Milestone Upgrades
     theory.setMilestoneCost(new LinearCost(25, 25));
+
+    { 
+        unlock = theory.createMilestoneUpgrade(0, 2); 
+        unlock.description = "Unlock x_1" 
+        unlock.info = "Unlocks x_1"
+    }
     
     /////////////////
     //// Achievements
@@ -68,22 +82,38 @@ var init = () => {
     chapter1 = theory.createStoryChapter(0, "My First Chapter", "This is line 1,\nand this is line 2.\n\nNice.", () => c1.level > 0);
     chapter2 = theory.createStoryChapter(1, "My Second Chapter", "This is line 1 again,\nand this is line 2... again.\n\nNice again.", () => c2.level > 0);
 
+    updateMilestoneUpgradeInfo()
     updateAvailability();
 }
 
+var updateMilestoneUpgradeInfo = () => {
+    unlock.description =
+        unlock.level == 0 ? "Unlock x_1" :
+        "Unlock x_2"
+    unlock.info =
+        unlock.level == 0 ? "Unlocks x_1" :
+        "Unlocks x_2"
+}
+
 var updateAvailability = () => {
-  
+    x1.isAvailable = unlock.level >= 1
 }
 
 var tick = (elapsedTime, multiplier) => {
     let dt = BigNumber.from(elapsedTime * multiplier);
     let bonus = theory.publicationMultiplier;
-    currency.value += dt * bonus * getK(k.level) * getC1(c1.level) ** getC2(c2.level)
+    currency.value += dt * bonus * getK(k.level) * getC1(c1.level) ** (getC2(c2.level) * (
+        unlock.level >= 1 ? getX1(x1.level) : 1
+    ))
+
+    theory.invalidatePrimaryEquation()
+    theory.invalidateSecondaryEquation()
+    theory.invalidateTertiaryEquation()
 }
 
 var getPrimaryEquation = () => {
-    result = "\\dot{\\rho}=kc_1^{c_2}\\\\" + theory.latexSymbol + "=\\max\\rho"
-
+    theory.primaryEquationHeight = 50
+    result = `\\dot{\\rho}=kc_1^{c_2${unlock.level >= 1 ? "x_1" : ""}}\\\\` + theory.latexSymbol + "=\\max\\rho"
     return result;
 }
 
@@ -95,5 +125,6 @@ var get2DGraphValue = () => currency.value.sign * (BigNumber.ONE + currency.valu
 var getK = level => Utils.getStepwisePowerSum(level, 2, 5, 0)
 var getC1 = level => 1 + 0.5 * level
 var getC2 = level => 1 + 0.25 * level
+var getX1 = level => 1 + 0.1 * level
 
 init();
