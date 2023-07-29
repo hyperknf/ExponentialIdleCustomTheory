@@ -92,8 +92,8 @@ var getPublicationMultiplierFormula = (symbol) => "\\frac{{" + symbol + "}^{0.16
 var getTau = () => currency.value;
 var get2DGraphValue = () => 0;
 
-var getK = level => Utils.getStepwisePowerSum(level, 1, 5, 2)
-var getC1 = level => level
-var getC2 = level => 1 + 0.5 * level
+var getK = level => Utils.getStepwisePowerSum(level, 2, 5, 0)
+var getC1 = level => 1 + 0.5 * level
+var getC2 = level => 1 + 0.25 * level
 
 init();
