@@ -17,8 +17,6 @@ var c1Exp, c2Exp;
 var achievement1, achievement2;
 var chapter1, chapter2;
 
-var temp = BigNumber.ZERO
-
 var init = () => {
     currency = theory.createCurrency();
 
@@ -72,24 +70,21 @@ var updateAvailability = () => {
 var tick = (elapsedTime, multiplier) => {
     let dt = BigNumber.from(elapsedTime * multiplier);
     let bonus = theory.publicationMultiplier;
-    currency.value += dt * bonus * BigNumber.fromComponents(1, getC1(c1.level), getC2(c2.level))
-    theory.invalidateTertiaryEquation()
+    currency.value += dt * bonus * getC1(c1.level) * getC2(c2.level)
 }
 
 var getPrimaryEquation = () => {
-    result = "\\dot{\\rho}=x_c_1"
+    result = "\\dot{\\rho}=c_1^{c_2}"
 
     return result;
 }
 
-var getSecondaryEquation = () => "\\\\x_i=10^{x_{i-1}},\\quad x_0=c_2\\\\" + theory.latexSymbol + "=\\max\\rho";
-var getTertiaryEquation = () => "\\text{Temporary value}=" + temp
 var getPublicationMultiplier = (tau) => tau.pow(0.164) / BigNumber.THREE;
 var getPublicationMultiplierFormula = (symbol) => "\\frac{{" + symbol + "}^{0.164}}{3}";
 var getTau = () => currency.value;
 var get2DGraphValue = () => 0;
 
-var getC1 = level => level
-var getC2 = level => Utils.getStepwisePowerSum(level, 1, 5, 2)
+var getC1 = level => 1 + 0.2 * level
+var getC2 = level => 1 + 0.1 * level
 
 init();
