@@ -99,7 +99,7 @@ var tick = (elapsedTime, multiplier) => {
     let dt = BigNumber.from(elapsedTime * multiplier);
     let bonus = theory.publicationMultiplier;
     q += dt * getQ1(q1.level) * getQ2(q2.level) / q
-    currency.value += dt * bonus * getK(k.level) * getC1(c1.level) ** getC2(c2.level)
+    currency.value += dt * bonus * getK(k.level) * q * getC1(c1.level) ** getC2(c2.level)
 
     theory.invalidateTertiaryEquation()
 }
