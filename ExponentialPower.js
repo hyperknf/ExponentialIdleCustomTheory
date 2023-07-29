@@ -59,6 +59,15 @@ var init = () => {
         x1.getDescription = _ => Utils.getMath(getDesc(x1.level))
         x1.getInfo = amount => Utils.getMathTo(getDesc(x1.level), getDesc(x1.level + amount))
     }
+    
+    // x1
+    {
+        let getDesc = level => "x_2=" + getX2(level)
+        let getInfo = level => "x_2=e^{" + level + "}"
+        x2 = theory.createUpgrade(4, currency, new ExponentialCost(1e50, Math.log2(5)))
+        x2.getDescription = _ => Utils.getMath(getDesc(x2.level))
+        x2.getInfo = amount => Utils.getMathTo(getInfo(x2.level), getInfo(x2.level + amount))
+    }
 
     /////////////////////
     // Permanent Upgrades
@@ -98,6 +107,7 @@ var updateMilestoneUpgradeInfo = () => {
 
 var updateAvailability = () => {
     x1.isAvailable = unlock.level >= 1
+    x2.isAvailable = unlock.level >= 2
 }
 
 var tick = (elapsedTime, multiplier) => {
@@ -105,7 +115,9 @@ var tick = (elapsedTime, multiplier) => {
     let bonus = theory.publicationMultiplier;
     currency.value += dt * bonus * getK(k.level) * getC1(c1.level) ** (getC2(c2.level) * (
         unlock.level >= 1 ? getX1(x1.level) : 1
-    ))
+    )) * (
+        unlock.level >= 2 ? getX2(x2.level) : 1
+    )
 
     theory.invalidatePrimaryEquation()
     theory.invalidateSecondaryEquation()
@@ -117,7 +129,7 @@ var tick = (elapsedTime, multiplier) => {
 
 var getPrimaryEquation = () => {
     theory.primaryEquationHeight = 43
-    result = `\\dot{\\rho}=kc_1^{c_2${unlock.level >= 1 ? "x_1" : ""}}\\\\` + theory.latexSymbol + "=\\max\\rho"
+    result = `\\dot{\\rho}=kc_1^{c_2${unlock.level >= 1 ? "x_1" : ""}}${unlock.level >= 2 ? "x_2" : ""}\\\\` + theory.latexSymbol + "=\\max\\rho"
     return result;
 }
 
@@ -130,5 +142,6 @@ var getK = level => Utils.getStepwisePowerSum(level, 2, 5, 0)
 var getC1 = level => BigNumber.ONE + 0.5 * level
 var getC2 = level => BigNumber.ONE + 0.25 * level
 var getX1 = level => BigNumber.ONE + 0.01 * level
+var getX2 = level => BigNumber.E.pow(1 + 0.5 * level)
 
 init();
