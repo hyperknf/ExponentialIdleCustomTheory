@@ -11,7 +11,7 @@ var authors = "HyperKNF";
 var version = 1;
 
 var currency;
-var c1, c2;
+var k, c1, c2;
 var c1Exp, c2Exp;
 
 var achievement1, achievement2;
@@ -22,6 +22,14 @@ var init = () => {
 
     ///////////////////
     // Regular Upgrades
+
+    // k
+    {
+        let getDesc = (level) => "k=" + getK(level);
+        k = theory.createUpgrade(0, currency, new ExponentialCost(10, Math.log2(1.5)));
+        k.getDescription = (_) => Utils.getMath(getDesc(k.level));
+        k.getInfo = (amount) => Utils.getMathTo(getDesc(k.level), getDesc(k.level + amount));
+    }
 
     // c1
     {
@@ -70,11 +78,11 @@ var updateAvailability = () => {
 var tick = (elapsedTime, multiplier) => {
     let dt = BigNumber.from(elapsedTime * multiplier);
     let bonus = theory.publicationMultiplier;
-    currency.value += dt * bonus * getC1(c1.level) * getC2(c2.level)
+    currency.value += dt * bonus * getK(k.level) * getC1(c1.level) ** getC2(c2.level)
 }
 
 var getPrimaryEquation = () => {
-    result = "\\dot{\\rho}=c_1^{c_2}"
+    result = "\\dot{\\rho}=kc_1^{c_2}"
 
     return result;
 }
@@ -84,7 +92,8 @@ var getPublicationMultiplierFormula = (symbol) => "\\frac{{" + symbol + "}^{0.16
 var getTau = () => currency.value;
 var get2DGraphValue = () => 0;
 
-var getC1 = level => 1 + 0.5 * level
+var getK = level => Utils.getStepwisePowerSum(level, 1, 5, 2)
+var getC1 = level => level
 var getC2 = level => 1 + 0.5 * level
 
 init();
