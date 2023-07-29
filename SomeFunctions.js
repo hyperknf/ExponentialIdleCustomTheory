@@ -100,6 +100,8 @@ var tick = (elapsedTime, multiplier) => {
     let bonus = theory.publicationMultiplier;
     q += dt * getQ1(q1.level) * getQ2(q2.level) / q
     currency.value += dt * bonus * getK(k.level) * getC1(c1.level) ** getC2(c2.level)
+
+    theory.invalidateTertiaryEquation
 }
 
 var getPrimaryEquation = () => {
@@ -107,6 +109,7 @@ var getPrimaryEquation = () => {
 
     return result;
 }
+var getSecondaryEquation = () => "\\dot{q}=\\frac{q_1q_2}{q}"
 var getTertiaryEquation = () => "q=" + q
 var getPublicationMultiplier = (tau) => tau.pow(0.164) / BigNumber.THREE;
 var getPublicationMultiplierFormula = (symbol) => "\\frac{{" + symbol + "}^{0.164}}{3}";
