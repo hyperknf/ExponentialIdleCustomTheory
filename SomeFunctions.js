@@ -82,7 +82,7 @@ var tick = (elapsedTime, multiplier) => {
 }
 
 var getPrimaryEquation = () => {
-    result = "\\dot{\\rho}=kc_1^{c_2}"
+    result = "\\dot{\\rho}=kc_1^{c_2}\\\\" + theory.latexSymbol + "=\\max\\rho"
 
     return result;
 }
