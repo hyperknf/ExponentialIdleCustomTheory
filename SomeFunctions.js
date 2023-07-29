@@ -119,7 +119,7 @@ var get2DGraphValue = () => currency.value.sign * (BigNumber.ONE + currency.valu
 var getK = level => Utils.getStepwisePowerSum(level, 2, 5, 0)
 var getC1 = level => 1 + 0.5 * level
 var getC2 = level => 1 + 0.25 * level
-var getQ1 = level => Utils.getStepwisePowerSum(level, 1.5, 3, 0)
+var getQ1 = level => Utils.getStepwisePowerSum(level, 2, 5, 0)
 var getQ2 = level => BigNumber.TWO.pow(level)
 
 init();
