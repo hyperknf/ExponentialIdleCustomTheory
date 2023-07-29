@@ -11,8 +11,10 @@ var authors = "HyperKNF";
 var version = 1;
 
 var currency;
-var k, c1, c2;
+var k, c1, c2, q1, q2;
 var c1Exp, c2Exp;
+
+var q = BigNumber.ONE
 
 var achievement1, achievement2;
 var chapter1, chapter2;
@@ -48,6 +50,22 @@ var init = () => {
         c2.getInfo = (amount) => Utils.getMathTo(getInfo(c2.level), getInfo(c2.level + amount));
     }
 
+    // q1
+    {
+        let getDesc = (level) => "q_1=" + getC1(level);
+        q1 = theory.createUpgrade(3, currency, new ExponentialCost(15, Math.log2(2)));
+        q1.getDescription = (_) => Utils.getMath(getDesc(q1.level));
+        q1.getInfo = (amount) => Utils.getMathTo(getDesc(q1.level), getDesc(q1.level + amount));
+    }
+
+    // q2
+    {
+        let getDesc = (level) => "q_2=" + getC1(level);
+        q2 = theory.createUpgrade(4, currency, new ExponentialCost(15, Math.log2(2)));
+        q2.getDescription = (_) => Utils.getMath(getDesc(q2.level));
+        q2.getInfo = (amount) => Utils.getMathTo(getDesc(q2.level), getDesc(q2.level + amount));
+    }
+
     /////////////////////
     // Permanent Upgrades
     theory.createPublicationUpgrade(0, currency, 1e10);
@@ -78,15 +96,16 @@ var updateAvailability = () => {
 var tick = (elapsedTime, multiplier) => {
     let dt = BigNumber.from(elapsedTime * multiplier);
     let bonus = theory.publicationMultiplier;
+    q += dt * getQ1(q1.level) * getQ2(q2.level) / q
     currency.value += dt * bonus * getK(k.level) * getC1(c1.level) ** getC2(c2.level)
 }
 
 var getPrimaryEquation = () => {
-    result = "\\dot{\\rho}=kc_1^{c_2}"
+    result = "\\dot{\\rho}=kqc_1^{c_2}"
 
     return result;
 }
-
+var getTertiaryEquation = () => "q=" + q
 var getPublicationMultiplier = (tau) => tau.pow(0.164) / BigNumber.THREE;
 var getPublicationMultiplierFormula = (symbol) => "\\frac{{" + symbol + "}^{0.164}}{3}";
 var getTau = () => currency.value;
