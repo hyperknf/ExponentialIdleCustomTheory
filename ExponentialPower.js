@@ -127,8 +127,8 @@ var getTau = () => currency.value;
 var get2DGraphValue = () => currency.value.sign * (BigNumber.ONE + currency.value.abs()).log10().toNumber();
 
 var getK = level => Utils.getStepwisePowerSum(level, 2, 5, 0)
-var getC1 = level => 1 + 0.5 * level
-var getC2 = level => 1 + 0.2 * level
-var getX1 = level => 1 + 0.01 * level
+var getC1 = level => BigNumber.ONE + 0.5 * level
+var getC2 = level => BigNumber.ONE + 0.25 * level
+var getX1 = level => BigNumber.ONE + 0.01 * level
 
 init();
