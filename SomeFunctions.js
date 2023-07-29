@@ -85,6 +85,6 @@ var getTau = () => currency.value;
 var get2DGraphValue = () => 0;
 
 var getC1 = level => 1 + 0.2 * level
-var getC2 = level => 1 + 0.1 * level
+var getC2 = level => 1 + 0.2 * level
 
 init();
