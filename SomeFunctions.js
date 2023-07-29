@@ -101,7 +101,7 @@ var tick = (elapsedTime, multiplier) => {
     q += dt * getQ1(q1.level) * getQ2(q2.level) / q
     currency.value += dt * bonus * getK(k.level) * getC1(c1.level) ** getC2(c2.level)
 
-    theory.invalidateTertiaryEquation
+    theory.invalidateTertiaryEquation()
 }
 
 var getPrimaryEquation = () => {
