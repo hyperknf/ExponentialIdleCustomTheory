@@ -93,6 +93,8 @@ var updateAvailability = () => {
   
 }
 
+var postPublish = () => q = BigNumber.ONE
+
 var tick = (elapsedTime, multiplier) => {
     let dt = BigNumber.from(elapsedTime * multiplier);
     let bonus = theory.publicationMultiplier;
