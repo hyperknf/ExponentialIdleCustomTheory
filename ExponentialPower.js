@@ -8,9 +8,9 @@ import { BigNumber } from "./api/BigNumber";
 import { theory } from "./api/Theory";
 import { Utils } from "./api/Utils";
 
-var id = "SomeFunctions";
-var name = "Some Functions";
-var description = "Some Functions by HyperKNF";
+var id = "ExponentialPower";
+var name = "Exponential Power";
+var description = "Exponential Power by HyperKNF";
 var authors = "HyperKNF";
 var version = 1;
 
