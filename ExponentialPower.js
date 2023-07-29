@@ -98,11 +98,11 @@ var init = () => {
 
 var updateMilestoneUpgradeInfo = () => {
     unlock.description =
-        unlock.level == 0 ? "Unlock x_1" :
-        "Unlock x_2"
+        unlock.level == 0 ? "$\\text{Unlock }x_1$" :
+        "$\\text{Unlock }x_2$"
     unlock.info =
-        unlock.level == 0 ? "Unlocks x_1" :
-        "Unlocks x_2"
+        unlock.level == 0 ? "$\\text{Unlocks }x_1$" :
+        "$\\text{Unlocks }x_2$"
 }
 
 var updateAvailability = () => {
