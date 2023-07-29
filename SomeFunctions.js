@@ -2,6 +2,10 @@ import { ExponentialCost, FreeCost, LinearCost } from "./api/Costs";
 import { Localization } from "./api/Localization";
 import { BigNumber } from "./api/BigNumber";
 import { theory } from "./api/Theory";
+import { ExponentialCost, FreeCost, LinearCost } from "./api/Costs";
+import { Localization } from "./api/Localization";
+import { BigNumber } from "./api/BigNumber";
+import { theory } from "./api/Theory";
 import { Utils } from "./api/Utils";
 
 var id = "SomeFunctions";
@@ -11,7 +15,7 @@ var authors = "HyperKNF";
 var version = 1;
 
 var currency;
-var k, c1, c2, x1, x2;
+var k, c1, c2, x1;
 var unlock
 
 var achievement1, achievement2;
@@ -123,8 +127,8 @@ var getTau = () => currency.value;
 var get2DGraphValue = () => currency.value.sign * (BigNumber.ONE + currency.value.abs()).log10().toNumber();
 
 var getK = level => Utils.getStepwisePowerSum(level, 2, 5, 0)
-var getC1 = level => 1 + Utils.getStepwisePowerSum(level, 2, 20, 0) / 2
-var getC2 = level => 1 + Utils.getStepwisePowerSum(level, 2, 20, 0) / 4
-var getX1 = level => 1 + Utils.getStepwisePowerSum(level, 2, 20, 0) / 100
+var getC1 = level => 1 + 0.5 * level
+var getC2 = level => 1 + 0.25 * level
+var getX1 = level => 1 + 0.02 * level
 
 init();
