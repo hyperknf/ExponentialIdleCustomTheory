@@ -44,7 +44,7 @@ var init = () => {
             level => {
                 function stepwiseProduct(...exponents) {
                     let product = BigNumber.from(15)
-                    for (const index in exponents) {
+                    for (let index = 0; index <= exponents.length - 1; index++) {
                         product *= BigNumber.from(2 ** (index + 1)).pow(exponents[index])
                     }
                     return product
@@ -56,8 +56,7 @@ var init = () => {
                     if (i != step) {
                         exponents.push(50)
                         continue
-                    }
-                    exponents.push(levels)
+                    } else exponents.push(levels)
                 }
                 yoyo = JSON.stringify(exponents)
                 return stepwiseProduct(...exponents)
