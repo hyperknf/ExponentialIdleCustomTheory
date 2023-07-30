@@ -53,7 +53,10 @@ var init = () => {
                 const levels = level % 50
                 const exponents = []
                 for (let i = 0; i <= step; i++) {
-                    if (i != step) exponents.push(100)
+                    if (i != step) {
+                        exponents.push(50)
+                        continue
+                    }
                     exponents.push(levels)
                 }
                 yoyo = JSON.stringify(exponents)
