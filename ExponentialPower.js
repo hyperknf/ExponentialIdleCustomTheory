@@ -50,7 +50,7 @@ var init = () => {
                 const step = Math.floor(level / 50)
                 const levels = level % 50
                 const exponents = []
-                for (let i = 1; i <= step; i++) {
+                for (let i = 0; i <= step; i++) {
                     if (i != step) exponents.push(100)
                     exponents.push(levels)
                 }
