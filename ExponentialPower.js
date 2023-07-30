@@ -148,8 +148,12 @@ var tick = (elapsedTime, multiplier) => {
 
 var getPrimaryEquation = () => {
     theory.primaryEquationHeight = 43
-    result = `\\dot{\\rho}=kc_1^{c_2${unlock.level >= 1 ? "x_1" : ""}}${unlock.level >= 2 ? "x_2" : ""}\\\\` + theory.latexSymbol + "=\\max\\rho"
+    let result = `\\dot{\\rho}=kc_1^{c_2${unlock.level >= 1 ? "x_1" : ""}}${unlock.level >= 2 ? "x_2" : ""}\\\\` + theory.latexSymbol + "=\\max\\rho"
     return result;
+}
+var getTertiaryEquation = () => {
+    let result = `c_1^{c_2}=${getC1(c1.level) ** getC2(c2.level)}`
+    return result
 }
 
 var getPublicationMultiplier = (tau) => tau.pow(0.12);
