@@ -84,7 +84,7 @@ var init = () => {
     // x1
     {
         let getDesc = level => "x_2=" + getX2(level)
-        let getInfo = level => "x_2=e^{" + getX2Exponent(level) + "}"
+        let getInfo = level => "x_2=\\ln_{5000}{" + (level + 1) + theory.latexSymbol + "}"
         x2 = theory.createUpgrade(4, currency, new ExponentialCost(1e50, Math.log2(5)))
         x2.getDescription = _ => Utils.getMath(getDesc(x2.level))
         x2.getInfo = amount => Utils.getMathTo(getInfo(x2.level), getInfo(x2.level + amount))
@@ -164,7 +164,6 @@ var getK = level => Utils.getStepwisePowerSum(level, 2, 5, 0)
 var getC1 = level => BigNumber.ONE + 0.5 * level
 var getC2 = level => BigNumber.ONE + 0.25 * level
 var getX1 = level => BigNumber.ONE + 0.01 * level
-var getX2Exponent = level => 1 + 0.5 * level
-var getX2 = level => BigNumber.E.pow(getX2Exponent(level))
+var getX2 = level => Math.log((level + 1) * currency.value) / Math.log(5000)
 
 init();
