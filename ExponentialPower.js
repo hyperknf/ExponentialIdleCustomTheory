@@ -153,7 +153,7 @@ var getPrimaryEquation = () => {
     result = `\\dot{\\rho}=kc_1^{c_2${unlock.level >= 1 ? "x_1" : ""}}${unlock.level >= 2 ? "x_2" : ""}\\\\` + theory.latexSymbol + "=\\max\\rho"
     return result;
 }
-var getTertiaryEquation = () => "Debug: " + yoyo
+var getTertiaryEquation = () => "\\text{Debug: }" + yoyo
 
 var getPublicationMultiplier = (tau) => tau.pow(0.2);
 var getPublicationMultiplierFormula = (symbol) => "{" + symbol + "}^{0.2}";
