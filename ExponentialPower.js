@@ -22,6 +22,8 @@ var achievement1, achievement2;
 var chapter1, chapter2;
 
 Utils.getStepwisePowerProduct = (level, base, step_length, offset) => {
+    if (offset != 0) throw new Error("I don't know how to implement non-zero offset :)")
+    
     const step = Math.floor(level / step_length)
     const levels = level % step_length
     const exponents = Array.from({
@@ -33,7 +35,7 @@ Utils.getStepwisePowerProduct = (level, base, step_length, offset) => {
             return product * BigNumber.from(base ** (index + 1)).pow(value)
         }, 1
     )
-    return BigNumber.from(15) * product
+    return product
 }
 
 var init = () => {
@@ -55,7 +57,7 @@ var init = () => {
         let getDesc = (level) => "c_1=" + getC1(level);
         c1 = theory.createUpgrade(1, currency, new CustomCost(
             level => {
-                
+                Utils.getStepwisePowerProduct(level, 2, 50, 0)
             }
         ));
         c1.getDescription = (_) => Utils.getMath(getDesc(c1.level));
