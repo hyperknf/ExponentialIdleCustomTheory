@@ -44,20 +44,17 @@ var init = () => {
             level => {
                 const step = Math.floor(level / 50)
                 const levels = level % 50
-                const exponents = []
-                for (let i = 0; i <= step; i++) {
-                    if (i != step) {
-                        exponents.push(50)
-                        continue
-                    }
-                    exponents.push(levels)
-                }
+                const exponents = Array.from({
+                    length: step
+                }, () => 50)
+                exponents.push(levels)
                 yoyo = JSON.stringify(exponents)
-                let product = BigNumber.from(15)
-                for (let index = 0; index <= exponents.length - 1; index++) {
-                    product *= BigNumber.from(2 ** (index + 1)).pow(exponents[index])
-                }
-                return product
+                const product = exponents.reduce(
+                    (product, value, index) => {
+                        return product * BigNumber.from(2 ** (index + 1)).pow(value)
+                    }, 1
+                )
+                return BigNumber.from(15) * product
             }
         ));
         c1.getDescription = (_) => Utils.getMath(getDesc(c1.level));
