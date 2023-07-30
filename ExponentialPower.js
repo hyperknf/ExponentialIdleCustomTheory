@@ -164,7 +164,7 @@ var getK = level => Utils.getStepwisePowerSum(level, 2, 5, 0)
 var getC1 = level => BigNumber.ONE + 0.5 * level
 var getC2 = level => BigNumber.ONE + 0.25 * level
 var getX1 = level => BigNumber.ONE + 0.01 * level
-var getX2Exponent = level => 1 + 0.05 * level
+var getX2Exponent = level => 1 + 0.1 * level
 var getX2 = level => BigNumber.E.pow(getX2Exponent(level))
 
 init();
