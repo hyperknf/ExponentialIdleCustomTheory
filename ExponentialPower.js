@@ -38,7 +38,25 @@ var init = () => {
     // c1
     {
         let getDesc = (level) => "c_1=" + getC1(level);
-        c1 = theory.createUpgrade(1, currency, new ExponentialCost(15, Math.log2(2)));
+        c1 = theory.createUpgrade(1, currency, new CustomCost(
+            level => {
+                function stepwiseProduct(...exponents) {
+                    let product = BigNumber.from(15)
+                    for (const index in exponents) {
+                        product *= BigNumber.from(2 ** (index + 1)).pow(exponents[index])
+                    }
+                    return product
+                }
+                const step = Math.floor(level / 50)
+                const levels = level % 50
+                const exponents = []
+                for (let i = 1; i <= step; i++) {
+                    if (i != step) exponents.push(100)
+                    exponents.push(levels)
+                }
+                return stepwiseProduct(...exponents)
+            }
+        ));
         c1.getDescription = (_) => Utils.getMath(getDesc(c1.level));
         c1.getInfo = (amount) => Utils.getMathTo(getDesc(c1.level), getDesc(c1.level + amount));
     }
