@@ -21,7 +21,7 @@ var unlock
 var achievement1, achievement2;
 var chapter1, chapter2;
 
-Utils.getStepwisePowerProduct = (level, base, step_length, offset) => {
+var getStepwisePowerProduct = (level, base, step_length, offset) => {
     if (offset != 0) throw new Error("I don't know how to implement non-zero offset :)")
     
     const step = Math.floor(level / step_length)
@@ -56,9 +56,7 @@ var init = () => {
     {
         let getDesc = (level) => "c_1=" + getC1(level);
         c1 = theory.createUpgrade(1, currency, new CustomCost(
-            level => {
-                Utils.getStepwisePowerProduct(level, 2, 50, 0)
-            }
+            level => 15 * getStepwisePowerProduct(level, 2, 50, 0)
         ));
         c1.getDescription = (_) => Utils.getMath(getDesc(c1.level));
         c1.getInfo = (amount) => Utils.getMathTo(getDesc(c1.level), getDesc(c1.level + amount));
