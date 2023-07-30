@@ -152,7 +152,7 @@ var getPrimaryEquation = () => {
     return result;
 }
 var getTertiaryEquation = () => {
-    let result = `c_1^{c_2}=${(getC1(c1.level) ** getC2(c2.level)).toString(2)}`
+    let result = `c_1^{c_2}=${BigNumber.from(getC1(c1.level) ** getC2(c2.level)).toString(2)}`
     return result
 }
 
