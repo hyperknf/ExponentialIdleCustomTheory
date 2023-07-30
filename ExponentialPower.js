@@ -42,13 +42,6 @@ var init = () => {
         let getDesc = (level) => "c_1=" + getC1(level);
         c1 = theory.createUpgrade(1, currency, new CustomCost(
             level => {
-                function stepwiseProduct(...exponents) {
-                    let product = BigNumber.from(15)
-                    for (let index = 0; index <= exponents.length - 1; index++) {
-                        product *= BigNumber.from(2 ** (index + 1)).pow(exponents[index])
-                    }
-                    return product
-                }
                 const step = Math.floor(level / 50)
                 const levels = level % 50
                 const exponents = []
@@ -56,10 +49,15 @@ var init = () => {
                     if (i != step) {
                         exponents.push(50)
                         continue
-                    } else exponents.push(levels)
+                    }
+                    exponents.push(levels)
                 }
                 yoyo = JSON.stringify(exponents)
-                return stepwiseProduct(...exponents)
+                let product = BigNumber.from(15)
+                for (let index = 0; index <= exponents.length - 1; index++) {
+                    product *= BigNumber.from(2 ** (index + 1)).pow(exponents[index])
+                }
+                return product
             }
         ));
         c1.getDescription = (_) => Utils.getMath(getDesc(c1.level));
