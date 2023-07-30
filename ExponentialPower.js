@@ -21,6 +21,21 @@ var unlock
 var achievement1, achievement2;
 var chapter1, chapter2;
 
+Utils.getStepwisePowerProduct = (level, base, step_length, offset) => {
+    const step = Math.floor(level / step_length)
+    const levels = level % step_length
+    const exponents = Array.from({
+        length: step
+    }, () => step_length)
+    exponents.push(levels)
+    const product = exponents.reduce(
+        (product, value, index) => {
+            return product * BigNumber.from(base ** (index + 1)).pow(value)
+        }, 1
+    )
+    return BigNumber.from(15) * product
+}
+
 var init = () => {
     currency = theory.createCurrency();
 
@@ -40,18 +55,7 @@ var init = () => {
         let getDesc = (level) => "c_1=" + getC1(level);
         c1 = theory.createUpgrade(1, currency, new CustomCost(
             level => {
-                const step = Math.floor(level / 50)
-                const levels = level % 50
-                const exponents = Array.from({
-                    length: step
-                }, () => 50)
-                exponents.push(levels)
-                const product = exponents.reduce(
-                    (product, value, index) => {
-                        return product * BigNumber.from(2 ** (index + 1)).pow(value)
-                    }, 1
-                )
-                return BigNumber.from(15) * product
+                
             }
         ));
         c1.getDescription = (_) => Utils.getMath(getDesc(c1.level));
