@@ -159,7 +159,7 @@ var get2DGraphValue = () => currency.value.sign * (BigNumber.ONE + currency.valu
 
 var getK = level => Utils.getStepwisePowerSum(level, 2, 5, 0)
 var getC1 = level => BigNumber.ONE + 0.5 * level
-var getC2 = level => BigNumber.ONE + 0.25 * level
+var getC2 = level => BigNumber.ONE + 0.25 * Math.max(level, 30) + (level - 30 > 0 ? 0.25 * (1 - BigNumber.from(0.99).pow(level - 30)) / (1 - 0.99) : 1)
 var getX1 = level => BigNumber.ONE + 0.01 * level
 var getX2Exponent = level => 1 + 0.1 * level
 var getX2 = level => BigNumber.E.pow(getX2Exponent(level))
