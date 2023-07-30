@@ -18,6 +18,8 @@ var currency;
 var k, c1, c2, x1;
 var unlock
 
+var yoyo = ""
+
 var achievement1, achievement2;
 var chapter1, chapter2;
 
@@ -54,6 +56,7 @@ var init = () => {
                     if (i != step) exponents.push(100)
                     exponents.push(levels)
                 }
+                yoyo = JSON.stringify(exponents)
                 return stepwiseProduct(...exponents)
             }
         ));
@@ -150,6 +153,7 @@ var getPrimaryEquation = () => {
     result = `\\dot{\\rho}=kc_1^{c_2${unlock.level >= 1 ? "x_1" : ""}}${unlock.level >= 2 ? "x_2" : ""}\\\\` + theory.latexSymbol + "=\\max\\rho"
     return result;
 }
+var getTertiaryEquation = () => "Debug: " + yoyo
 
 var getPublicationMultiplier = (tau) => tau.pow(0.2);
 var getPublicationMultiplierFormula = (symbol) => "{" + symbol + "}^{0.2}";
