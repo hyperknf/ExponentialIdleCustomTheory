@@ -156,7 +156,7 @@ var getTertiaryEquation = () => {
     return result
 }
 
-var getPublicationMultiplier = (tau) => tau.pow(0.12);
+var getPublicationMultiplier = (tau) => tau.pow(0.15);
 var getPublicationMultiplierFormula = (symbol) => "{" + symbol + "}^{0.12}";
 var getTau = () => currency.value;
 var get2DGraphValue = () => currency.value.sign * (BigNumber.ONE + currency.value.abs()).log10().toNumber();
