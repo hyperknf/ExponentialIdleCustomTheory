@@ -32,7 +32,7 @@ var getStepwisePowerProduct = (level, base, step_length, offset) => {
     exponents.push(levels)
     const product = exponents.reduce(
         (product, value, index) => {
-            return product * BigNumber.from(base ** (index + 1)).pow(value)
+            return product * BigNumber.from(base).pow(index + 1).pow(value)
         }, 1
     )
     return product
