@@ -142,12 +142,12 @@ var tick = (elapsedTime, multiplier) => {
 }
 
 var getPrimaryEquation = () => {
-    theory.primaryEquationHeight = 45
+    theory.primaryEquationHeight = 50
     let result = `\\dot{\\rho}=kc_1^{B(c_2)${unlock.level >= 1 ? "x_1" : ""}}${unlock.level >= 2 ? "x_2" : ""}\\\\` + theory.latexSymbol + "=\\max\\rho"
     return result;
 }
 var getSecondaryEquation = () => {
-    theory.secondaryEquationHeight = 35
+    theory.secondaryEquationHeight = 37
     let result = `B(x)=\\frac{x}{\\sqrt{\\log_{e15}{\\max{(\\rho, e15)}}}}`
     return result
 }
