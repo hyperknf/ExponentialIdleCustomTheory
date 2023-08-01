@@ -16,6 +16,10 @@ var unlock
 var achievement1, achievement2;
 var chapter1, chapter2;
 
+var tertiary_display = Array.from({
+    length: 2
+}, () => BigNumber.from(0))
+
 var getStepwisePowerProduct = (level, base, step_length, offset) => {
     if (offset != 0) throw new Error("I don't know how to implement non-zero offset :)")
     
@@ -127,11 +131,13 @@ var updateAvailability = () => {
 var tick = (elapsedTime, multiplier) => {
     let dt = BigNumber.from(elapsedTime * multiplier);
     let bonus = theory.publicationMultiplier;
-    currency.value += dt * bonus * getK(k.level) * getC1(c1.level) ** (getC2(c2.level) * (
+    currency.value += dt * bonus * getK(k.level) * (tertiary_display[0] = BigNumber.from(getC1(c1.level) ** (getC2Balance(getC2(c2.level)) * (
         unlock.level >= 1 ? getX1(x1.level) : 1
-    )) * (
+    )))) * (
         unlock.level >= 2 ? getX2(x2.level) : 1
     )
+
+    tertiary_display[1] = BigNumber.from(currency.log() / Math.log(1e15)).sqrt()
 
     theory.invalidatePrimaryEquation()
     theory.invalidateSecondaryEquation()
@@ -152,7 +158,7 @@ var getSecondaryEquation = () => {
     return result
 }
 var getTertiaryEquation = () => {
-    let result = `c_1^{B(c_2)${unlock.level >= 1 ? "x_1" : ""}}=${BigNumber.from(getC1(c1.level)).pow(getC2(c2.level) * getX1(x1.level)).toString(2)}`
+    let result = `c_1^{B(c_2)${unlock.level >= 1 ? "x_1" : ""}}=${tertiary_display[0].toString(3)},\\quad\\sqrt{\\log_{e15}{\\rho}}=${tertiary_display[1].toString(3)}`
     return result
 }
 
