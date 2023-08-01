@@ -152,11 +152,11 @@ var getPrimaryEquation = () => {
 }
 var getSecondaryEquation = () => {
     theory.secondaryEquationHeight = 37
-    let result = `B(x)=\\frac{x}{\\sqrt{\\log_{e15}{\\max{(\\rho, e15)}}}}`
+    let result = `B(x)=\\frac{x}{\\sqrt{\\log_{e15}{\\max{(\\rho, e20)}}}}`
     return result
 }
 var getTertiaryEquation = () => {
-    let result = `c_1^{B(c_2)${unlock.level >= 1 ? "x_1" : ""}}=${tertiary_display[0].toString(3)},\\quad\\sqrt{\\log_{e15}{\\rho}}=${tertiary_display[1].toString(3)}`
+    let result = `c_1^{B(c_2)${unlock.level >= 1 ? "x_1" : ""}}=${tertiary_display[0].toString(3)},\\quad\\sqrt{\\log_{e20}{\\rho}}=${tertiary_display[1].toString(3)}`
     return result
 }
 
@@ -169,7 +169,7 @@ var getK = level => Utils.getStepwisePowerSum(level, 2, 5, 0)
 var getC1 = level => BigNumber.ONE + 0.5 * level
 var getC2Balance = c2 => {
     tertiary_display[1] = BigNumber.from(Math.log(currency.value) / Math.log(1e15)).sqrt()
-    return c2 / BigNumber.from(Math.log(Math.max(currency.value, 1e15)) / Math.log(1e15)).sqrt()
+    return c2 / BigNumber.from(Math.log(Math.max(currency.value, 1e20)) / Math.log(1e20)).sqrt()
 }
 var getC2 = level => BigNumber.ONE + 0.25 * Math.min(level, 30) + (level > 30 ? (0.25 * (1 - 0.975 ** (level - 30)) / (1 - 0.975)) : 0)
 var getX1 = level => BigNumber.ONE + 0.01 * level
