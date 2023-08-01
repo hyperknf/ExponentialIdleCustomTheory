@@ -137,7 +137,7 @@ var tick = (elapsedTime, multiplier) => {
         unlock.level >= 2 ? getX2(x2.level) : 1
     )
 
-    tertiary_display[1] = BigNumber.from(currency.log() / Math.log(1e15)).sqrt()
+    tertiary_display[1] = BigNumber.from(currency.value.log() / Math.log(1e15)).sqrt()
 
     theory.invalidatePrimaryEquation()
     theory.invalidateSecondaryEquation()
