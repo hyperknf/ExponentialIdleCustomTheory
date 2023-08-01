@@ -131,3 +131,36 @@ var tick = (elapsedTime, multiplier) => {
         unlock.level >= 1 ? getX1(x1.level) : 1
     )) * (
         unlock.level >= 2 ? getX2(x2.level) : 1
+    )
+
+    theory.invalidatePrimaryEquation()
+    theory.invalidateSecondaryEquation()
+    theory.invalidateTertiaryEquation()
+
+    updateMilestoneUpgradeInfo()
+    updateAvailability()
+}
+
+var getPrimaryEquation = () => {
+    theory.primaryEquationHeight = 43
+    let result = `\\dot{\\rho}=kc_1^{c_2${unlock.level >= 1 ? "x_1" : ""}}${unlock.level >= 2 ? "x_2" : ""}\\\\` + theory.latexSymbol + "=\\max\\rho"
+    return result;
+}
+var getTertiaryEquation = () => {
+    let result = `c_1^{c_2}=${BigNumber.from(getC1(c1.level) ** getC2(c2.level)).toString(2)}`
+    return result
+}
+
+var getPublicationMultiplier = (tau) => tau.pow(0.15);
+var getPublicationMultiplierFormula = (symbol) => "{" + symbol + "}^{0.15}";
+var getTau = () => currency.value;
+var get2DGraphValue = () => currency.value.sign * (BigNumber.ONE + currency.value.abs()).log10().toNumber();
+
+var getK = level => Utils.getStepwisePowerSum(level, 2, 5, 0)
+var getC1 = level => BigNumber.ONE + 0.5 * level
+var getC2 = level => BigNumber.ONE + 0.25 * Math.min(level, 30) + (level > 30 ? (0.25 * (1 - 0.975 ** (level - 30)) / (1 - 0.975)) : 0)
+var getX1 = level => BigNumber.ONE + 0.01 * level
+var getX2Exponent = level => BigNumber.from(1 + 0.1 * level)
+var getX2 = level => BigNumber.E.pow(getX2Exponent(level))
+
+init();
