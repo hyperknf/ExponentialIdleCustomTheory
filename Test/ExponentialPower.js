@@ -142,7 +142,7 @@ var tick = (elapsedTime, multiplier) => {
 }
 
 var getPrimaryEquation = () => {
-    theory.primaryEquationHeight = 50
+    theory.primaryEquationHeight = 55
     let result = `\\dot{\\rho}=kc_1^{B(c_2)${unlock.level >= 1 ? "x_1" : ""}}${unlock.level >= 2 ? "x_2" : ""}\\\\` + theory.latexSymbol + "=\\max\\rho"
     return result;
 }
