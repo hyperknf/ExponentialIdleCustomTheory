@@ -147,8 +147,8 @@ var getPrimaryEquation = () => {
     return result;
 }
 var getSecondaryEquation = () => {
-    theory.secondaryEquationHeight = 65
-    let result = `B(x)=\\begin{cases}x, & \\rho\\le 10^{15} \\\\ \\frac{x}{\\sqrt{\\log_{10^{15}}{\\rho}}}, & \\rho >10^{15}\\end{cases}`
+    theory.secondaryEquationHeight = 20
+    let result = `B(x)=\\frac{x}{\\sqrt{\\log_{e15}{\\max{(\\rho, e15)}}}}`
     return result
 }
 var getTertiaryEquation = () => {
