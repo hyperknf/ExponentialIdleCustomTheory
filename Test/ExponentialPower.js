@@ -148,7 +148,7 @@ var getPrimaryEquation = () => {
 }
 var getSecondaryEquation = () => {
     theory.secondaryEquationHeight = 60
-    let result = `B(x)=\\begin{cases}x,\\quad \\rho\\le 10^{15} \\\\ \\frac{x}{\\sqrt{\\log_{10^{15}}{\\rho}}},\\quad \\rho >10^{15}\\end{cases}`
+    let result = `B(x)=\\begin{cases}x, & \\rho\\le 10^{15} \\\\ \\frac{x}{\\sqrt{\\log_{10^{15}}{\\rho}}}, & \\rho >10^{15}\\end{cases}`
     return result
 }
 var getTertiaryEquation = () => {
