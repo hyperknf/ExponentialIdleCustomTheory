@@ -3,8 +3,8 @@ import { BigNumber } from "./api/BigNumber";
 import { theory } from "./api/Theory";
 import { Utils } from "./api/Utils";
 
-var id = "ExponentialPower";
-var name = "Exponential Power";
+var id = "ExponentialPowerTest";
+var name = "Exponential Power (Test)";
 var description = "Exponential Power by HyperKNF";
 var authors = "HyperKNF";
 var version = 1;
@@ -146,8 +146,13 @@ var getPrimaryEquation = () => {
     let result = `\\dot{\\rho}=kc_1^{c_2${unlock.level >= 1 ? "x_1" : ""}}${unlock.level >= 2 ? "x_2" : ""}\\\\` + theory.latexSymbol + "=\\max\\rho"
     return result;
 }
+var getSecondaryEquation = () => {
+    theory.secondaryEquationHeight = 140
+    let result = `B(x)=\\begin{cases}x,\\quad \\rho\\le 10^{15} \\\\ \\frac{x}{\\sqrt{\\log_{10^{15}}{\\rho}}},\\quad \\rho >10^{15}\\end{cases}`
+    return result
+}
 var getTertiaryEquation = () => {
-    let result = `c_1^{c_2}=${BigNumber.from(getC1(c1.level) ** getC2(c2.level)).toString(2)}`
+    let result = `c_1^{B(c_2)${unlock.level >= 1 ? "x_1" : ""}}=${BigNumber.from(getC1(c1.level) ** getC2(c2.level)).toString(2)}`
     return result
 }
 
@@ -158,6 +163,10 @@ var get2DGraphValue = () => currency.value.sign * (BigNumber.ONE + currency.valu
 
 var getK = level => Utils.getStepwisePowerSum(level, 2, 5, 0)
 var getC1 = level => BigNumber.ONE + 0.5 * level
+var getC2Balance = c2 => {
+    if (currency.value > 1e15) return c2 / BigNumber.from(Math.log(currency.value) / Math.log(1e15)).sqrt()
+    return c2
+}
 var getC2 = level => BigNumber.ONE + 0.25 * Math.min(level, 30) + (level > 30 ? (0.25 * (1 - 0.975 ** (level - 30)) / (1 - 0.975)) : 0)
 var getX1 = level => BigNumber.ONE + 0.01 * level
 var getX2Exponent = level => BigNumber.from(1 + 0.1 * level)
