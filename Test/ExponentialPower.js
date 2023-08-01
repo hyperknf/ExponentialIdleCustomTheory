@@ -152,7 +152,7 @@ var getSecondaryEquation = () => {
     return result
 }
 var getTertiaryEquation = () => {
-    let result = `c_1^{B(c_2)${unlock.level >= 1 ? "x_1" : ""}}=${BigNumber.from(getC1(c1.level) ** getC2(c2.level)).toString(2)}`
+    let result = `c_1^{B(c_2)${unlock.level >= 1 ? "x_1" : ""}}=${BigNumber.from(getC1(c1.level).pow(getC2(c2.level) * getX1(x1.level)).toString(2)}`
     return result
 }
 
