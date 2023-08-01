@@ -163,10 +163,7 @@ var get2DGraphValue = () => currency.value.sign * (BigNumber.ONE + currency.valu
 
 var getK = level => Utils.getStepwisePowerSum(level, 2, 5, 0)
 var getC1 = level => BigNumber.ONE + 0.5 * level
-var getC2Balance = c2 => {
-    if (currency.value > 1e15) return c2 / BigNumber.from(Math.log(currency.value) / Math.log(1e15)).sqrt()
-    return c2
-}
+var getC2Balance = c2 => c2 / BigNumber.from(Math.log(Math.max(currency.value, 1e15)) / Math.log(1e15)).sqrt()
 var getC2 = level => BigNumber.ONE + 0.25 * Math.min(level, 30) + (level > 30 ? (0.25 * (1 - 0.975 ** (level - 30)) / (1 - 0.975)) : 0)
 var getX1 = level => BigNumber.ONE + 0.01 * level
 var getX2Exponent = level => BigNumber.from(1 + 0.1 * level)
