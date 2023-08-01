@@ -152,7 +152,7 @@ var getPrimaryEquation = () => {
 }
 var getSecondaryEquation = () => {
     theory.secondaryEquationHeight = 37
-    let result = `B(x)=\\frac{x}{\\sqrt{\\log_{e15}{\\max{(\\rho, e20)}}}}`
+    let result = `B(x)=\\frac{x}{\\sqrt{\\log_{e20}{\\max{(\\rho, e20)}}}}`
     return result
 }
 var getTertiaryEquation = () => {
