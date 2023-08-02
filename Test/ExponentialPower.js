@@ -7,10 +7,10 @@ var id = "ExponentialPowerTest";
 var name = "Exponential Power (Test)";
 var description = "Exponential Power by HyperKNF";
 var authors = "HyperKNF";
-var version = 1;
+var version = 2;
 
 var currency;
-var k, c1, c2, x1;
+var k, n, c1, c2, x1;
 var unlock
 
 var achievement1, achievement2;
@@ -126,16 +126,17 @@ var init = () => {
 
 var updateMilestoneUpgradeInfo = () => {
     unlock.description =
-        unlock.level == 0 ? "$\\text{Unlock }x_1$" :
+        unlock.level >= 2 ? "$\\text{Unlock }x_1$" :
         "$\\text{Unlock }x_2$"
     unlock.info =
-        unlock.level == 0 ? "$\\text{Unlocks }x_1$" :
+        unlock.level >= 2 ? "$\\text{Unlocks }x_1$" :
         "$\\text{Unlocks }x_2$"
 }
 
 var updateAvailability = () => {
-    x1.isAvailable = unlock.level >= 1
-    x2.isAvailable = unlock.level >= 2
+    n.isAvailable = unlock.level >= 1
+    x1.isAvailable = unlock.level >= 2
+    x2.isAvailable = unlock.level >= 3
 }
 
 var tick = (elapsedTime, multiplier) => {
@@ -145,9 +146,9 @@ var tick = (elapsedTime, multiplier) => {
     E = BigNumber.E - (BigNumber.ONE + BigNumber.ONE / getN(n.level)).pow(getN(n.level))
     
     currency.value += dt * bonus * getK(k.level) * (tertiary_display[0] = BigNumber.from(getC1(c1.level) ** (getC2Balance(getC2(c2.level)) * (
-        unlock.level >= 1 ? getX1(x1.level) : 1
+        unlock.level >= 2 ? getX1(x1.level) : 1
     )))) * (
-        unlock.level >= 2 ? getX2(x2.level) : 1
+        unlock.level >= 3 ? getX2(x2.level) : 1
     )
 
     theory.invalidatePrimaryEquation()
@@ -160,7 +161,7 @@ var tick = (elapsedTime, multiplier) => {
 
 var getPrimaryEquation = () => {
     theory.primaryEquationHeight = 55
-    let result = `\\dot{\\rho}=kc_1^{B(c_2)${unlock.level >= 1 ? "x_1" : ""}}${unlock.level >= 2 ? "x_2" : ""}\\\\` + theory.latexSymbol + "=\\max\\rho"
+    let result = `\\dot{\\rho}=kc_1^{B(c_2)${unlock.level >= 2 ? "x_1" : ""}}${unlock.level >= 3 ? "x_2" : ""}\\\\` + theory.latexSymbol + "=\\max\\rho"
     return result;
 }
 var getSecondaryEquation = () => {
@@ -169,7 +170,7 @@ var getSecondaryEquation = () => {
     return result
 }
 var getTertiaryEquation = () => {
-    let result = `c_1^{B(c_2)${unlock.level >= 1 ? "x_1" : ""}}=${tertiary_display[0].toString(3)},\\quad\\sqrt{\\log_{e20}{\\rho}}=${tertiary_display[1].toString(3)}`
+    let result = `c_1^{B(c_2)${unlock.level >= 2 ? "x_1" : ""}}=${tertiary_display[0].toString(3)},\\quad\\sqrt{\\log_{e20}{\\rho}}=${tertiary_display[1].toString(3)}`
     return result
 }
 
