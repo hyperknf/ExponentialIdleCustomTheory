@@ -148,9 +148,9 @@ var tick = (elapsedTime, multiplier) => {
 
     E = BigNumber.E - (BigNumber.ONE + BigNumber.ONE / getN(n.level)).pow(getN(n.level))
     
-    currency.value += dt * bonus * getK(k.level) * (tertiary_display[0] = BigNumber.from(getC1(c1.level) ** (getC2Balance(getC2(c2.level)) * (
+    currency.value += dt * bonus * getK(k.level) * (
         unlock.level >= 1 ? E.pow(-1) : 1
-    ) * (
+    ) * (tertiary_display[0] = BigNumber.from(getC1(c1.level) ** (getC2Balance(getC2(c2.level)) * (
         unlock.level >= 2 ? getX1(x1.level) : 1
     )))) * (
         unlock.level >= 3 ? getX2(x2.level) : 1
