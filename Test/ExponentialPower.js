@@ -41,6 +41,7 @@ var getStepwisePowerProduct = (level, base, step_length, offset) => {
 
 var init = () => {
     currency = theory.createCurrency();
+    currency.value += 1e20
 
     ///////////////////
     // Regular Upgrades
@@ -148,10 +149,13 @@ var tick = (elapsedTime, multiplier) => {
     E = BigNumber.E - (BigNumber.ONE + BigNumber.ONE / getN(n.level)).pow(getN(n.level))
     
     currency.value += dt * bonus * getK(k.level) * (tertiary_display[0] = BigNumber.from(getC1(c1.level) ** (getC2Balance(getC2(c2.level)) * (
+        unlock.level >= 1 ? E.pow(-1) : 1
+    ) * (
         unlock.level >= 2 ? getX1(x1.level) : 1
     )))) * (
         unlock.level >= 3 ? getX2(x2.level) : 1
     )
+    
 
     theory.invalidatePrimaryEquation()
     theory.invalidateSecondaryEquation()
@@ -163,12 +167,12 @@ var tick = (elapsedTime, multiplier) => {
 
 var getPrimaryEquation = () => {
     theory.primaryEquationHeight = 55
-    let result = `\\dot{\\rho}=kc_1^{B(c_2)${unlock.level >= 2 ? "x_1" : ""}}${unlock.level >= 3 ? "x_2" : ""}\\\\` + theory.latexSymbol + "=\\max\\rho"
+    let result = `\\dot{\\rho}=k${unlock.level >= 1 ? "E^{-1}" : ""}c_1^{B(c_2)${unlock.level >= 2 ? "x_1" : ""}}${unlock.level >= 3 ? "x_2" : ""}\\\\` + theory.latexSymbol + "=\\max\\rho"
     return result;
 }
 var getSecondaryEquation = () => {
-    theory.secondaryEquationHeight = 37
-    let result = `B(x)=\\frac{x}{\\sqrt{\\log_{e20}{\\max{(\\rho, e20)}}}}`
+    theory.secondaryEquationHeight = unlock.level >= 1 ? 70 : 37
+    let result = `B(x)=\\frac{x}{\\sqrt{\\log_{e20}{\\max{(\\rho, e20)}}}}${unlock.level >= 1 ? "\\\\E=e-(1+\\frac{1}{n})^n" : ""}`
     return result
 }
 var getTertiaryEquation = () => {
@@ -182,7 +186,7 @@ var getTau = () => currency.value;
 var get2DGraphValue = () => currency.value.sign * (BigNumber.ONE + currency.value.abs()).log10().toNumber();
 
 var getK = level => Utils.getStepwisePowerSum(level, 2, 5, 0)
-var getN = level => 1 + Utils.getStepwisePowerSum(level, 2, 10, 0)
+var getN = level => 1 + Utils.getStepwisePowerSum(level, 2, 20, 0)
 var getC1 = level => BigNumber.ONE + 0.5 * level
 var getC2Balance = c2 => {
     tertiary_display[1] = BigNumber.from(Math.log(1 + currency.value) / Math.log(1e20)).sqrt()
