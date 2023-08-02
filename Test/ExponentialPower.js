@@ -176,7 +176,7 @@ var getSecondaryEquation = () => {
     return result
 }
 var getTertiaryEquation = () => {
-    let result = `c_1^{B(c_2)${unlock.level >= 2 ? "x_1" : ""}}=${tertiary_display[0].toString(3)},\\quad\\sqrt{\\log_{e20}{\\rho}}=${tertiary_display[1].toString(3)}`
+    let result = `c_1^{B(c_2)${unlock.level >= 2 ? "x_1" : ""}}=${tertiary_display[0].toString(3)},\\quad\\sqrt{\\log_{e20}{\\rho}}=${tertiary_display[1].toString(3)}${unlock.level >= 1 ? `,\\quad E=${E}` : ""}`
     return result
 }
 
