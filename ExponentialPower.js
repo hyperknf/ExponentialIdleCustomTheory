@@ -7,14 +7,18 @@ var id = "ExponentialPower";
 var name = "Exponential Power";
 var description = "Exponential Power by HyperKNF";
 var authors = "HyperKNF";
-var version = 1;
+var version = 2;
 
 var currency;
-var k, c1, c2, x1;
+var k, c1, c2, x1, x2;
 var unlock
 
 var achievement1, achievement2;
 var chapter1, chapter2;
+
+var tertiary_display = Array.from({
+    length: 2
+}, () => BigNumber.from(0))
 
 var getStepwisePowerProduct = (level, base, step_length, offset) => {
     if (offset != 0) throw new Error("I don't know how to implement non-zero offset :)")
@@ -69,7 +73,7 @@ var init = () => {
     // x1
     {
         let getDesc = level => "x_1=" + getX1(level)
-        x1 = theory.createUpgrade(3, currency, new ExponentialCost(1e25, Math.log2(50)))
+        x1 = theory.createUpgrade(3, currency, new ExponentialCost(1e20, Math.log2(50)))
         x1.getDescription = _ => Utils.getMath(getDesc(x1.level))
         x1.getInfo = amount => Utils.getMathTo(getDesc(x1.level), getDesc(x1.level + amount))
     }
@@ -78,7 +82,7 @@ var init = () => {
     {
         let getDesc = level => "x_2=" + getX2(level)
         let getInfo = level => "x_2=e^{" + getX2Exponent(level) + "}"
-        x2 = theory.createUpgrade(4, currency, new ExponentialCost(1e50, Math.log2(10 ** 2.5)))
+        x2 = theory.createUpgrade(4, currency, new ExponentialCost(1e40, Math.log2(10 ** 2.5)))
         x2.getDescription = _ => Utils.getMath(getDesc(x2.level))
         x2.getInfo = amount => Utils.getMathTo(getInfo(x2.level), getInfo(x2.level + amount))
     }
@@ -91,7 +95,7 @@ var init = () => {
 
     ///////////////////////
     //// Milestone Upgrades
-    theory.setMilestoneCost(new LinearCost(25, 25));
+    theory.setMilestoneCost(new LinearCost(20, 20));
 
     { 
         unlock = theory.createMilestoneUpgrade(0, 2); 
@@ -127,9 +131,9 @@ var updateAvailability = () => {
 var tick = (elapsedTime, multiplier) => {
     let dt = BigNumber.from(elapsedTime * multiplier);
     let bonus = theory.publicationMultiplier;
-    currency.value += dt * bonus * getK(k.level) * getC1(c1.level) ** (getC2(c2.level) * (
+    currency.value += dt * bonus * getK(k.level) * (tertiary_display[0] = BigNumber.from(getC1(c1.level) ** (getC2Balance(getC2(c2.level)) * (
         unlock.level >= 1 ? getX1(x1.level) : 1
-    )) * (
+    )))) * (
         unlock.level >= 2 ? getX2(x2.level) : 1
     )
 
@@ -142,12 +146,17 @@ var tick = (elapsedTime, multiplier) => {
 }
 
 var getPrimaryEquation = () => {
-    theory.primaryEquationHeight = 43
-    let result = `\\dot{\\rho}=kc_1^{c_2${unlock.level >= 1 ? "x_1" : ""}}${unlock.level >= 2 ? "x_2" : ""}\\\\` + theory.latexSymbol + "=\\max\\rho"
+    theory.primaryEquationHeight = 55
+    let result = `\\dot{\\rho}=kc_1^{B(c_2)${unlock.level >= 1 ? "x_1" : ""}}${unlock.level >= 2 ? "x_2" : ""}\\\\` + theory.latexSymbol + "=\\max\\rho"
     return result;
 }
+var getSecondaryEquation = () => {
+    theory.secondaryEquationHeight = 37
+    let result = `B(x)=\\frac{x}{\\sqrt{\\log_{e20}{\\max{(\\rho, e20)}}}}`
+    return result
+}
 var getTertiaryEquation = () => {
-    let result = `c_1^{c_2}=${BigNumber.from(getC1(c1.level) ** getC2(c2.level)).toString(2)}`
+    let result = `c_1^{B(c_2)${unlock.level >= 1 ? "x_1" : ""}}=${tertiary_display[0].toString(3)},\\quad\\sqrt{\\log_{e20}{\\rho}}=${tertiary_display[1].toString(3)}`
     return result
 }
 
@@ -158,6 +167,10 @@ var get2DGraphValue = () => currency.value.sign * (BigNumber.ONE + currency.valu
 
 var getK = level => Utils.getStepwisePowerSum(level, 2, 5, 0)
 var getC1 = level => BigNumber.ONE + 0.5 * level
+var getC2Balance = c2 => {
+    tertiary_display[1] = BigNumber.from(Math.log(1 + currency.value) / Math.log(1e20)).sqrt()
+    return c2 / BigNumber.from(Math.log(Math.max(currency.value, 1e20)) / Math.log(1e20)).sqrt()
+}
 var getC2 = level => BigNumber.ONE + 0.25 * Math.min(level, 30) + (level > 30 ? (0.25 * (1 - 0.975 ** (level - 30)) / (1 - 0.975)) : 0)
 var getX1 = level => BigNumber.ONE + 0.01 * level
 var getX2Exponent = level => BigNumber.from(1 + 0.1 * level)
