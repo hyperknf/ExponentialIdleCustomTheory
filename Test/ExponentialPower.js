@@ -16,6 +16,8 @@ var unlock
 var achievement1, achievement2;
 var chapter1, chapter2;
 
+var E = BigNumber.E
+
 var tertiary_display = Array.from({
     length: 2
 }, () => BigNumber.from(0))
@@ -51,10 +53,18 @@ var init = () => {
         k.getInfo = (amount) => Utils.getMathTo(getDesc(k.level), getDesc(k.level + amount));
     }
 
+    // n
+    {
+        let getDesc = (level) => "n=" + getN(level);
+        n = theory.createUpgrade(1, currency, new FirstFreeCost(new ExponentialCost(1e20, Math.log2(2.5))));
+        n.getDescription = (_) => Utils.getMath(getDesc(n.level));
+        n.getInfo = (amount) => Utils.getMathTo(getDesc(n.level), getDesc(n.level + amount));
+    }
+
     // c1
     {
         let getDesc = (level) => "c_1=" + getC1(level);
-        c1 = theory.createUpgrade(1, currency, new CustomCost(
+        c1 = theory.createUpgrade(2, currency, new CustomCost(
             level => 15 * getStepwisePowerProduct(level, 2, 50, 0)
         ));
         c1.getDescription = (_) => Utils.getMath(getDesc(c1.level));
@@ -65,7 +75,7 @@ var init = () => {
     {
         let getDesc = (level) => "c_2=" + getC2(level);
         let getInfo = (level) => "c_2=" + getC2(level);
-        c2 = theory.createUpgrade(2, currency, new ExponentialCost(50, Math.log2(10)));
+        c2 = theory.createUpgrade(3, currency, new ExponentialCost(50, Math.log2(10)));
         c2.getDescription = (_) => Utils.getMath(getDesc(c2.level));
         c2.getInfo = (amount) => Utils.getMathTo(getInfo(c2.level), getInfo(c2.level + amount));
     }
@@ -73,7 +83,7 @@ var init = () => {
     // x1
     {
         let getDesc = level => "x_1=" + getX1(level)
-        x1 = theory.createUpgrade(3, currency, new ExponentialCost(1e20, Math.log2(50)))
+        x1 = theory.createUpgrade(4, currency, new ExponentialCost(1e20, Math.log2(50)))
         x1.getDescription = _ => Utils.getMath(getDesc(x1.level))
         x1.getInfo = amount => Utils.getMathTo(getDesc(x1.level), getDesc(x1.level + amount))
     }
@@ -82,7 +92,7 @@ var init = () => {
     {
         let getDesc = level => "x_2=" + getX2(level)
         let getInfo = level => "x_2=e^{" + getX2Exponent(level) + "}"
-        x2 = theory.createUpgrade(4, currency, new ExponentialCost(1e40, Math.log2(10 ** 2.5)))
+        x2 = theory.createUpgrade(5, currency, new ExponentialCost(1e40, Math.log2(10 ** 2.5)))
         x2.getDescription = _ => Utils.getMath(getDesc(x2.level))
         x2.getInfo = amount => Utils.getMathTo(getInfo(x2.level), getInfo(x2.level + amount))
     }
@@ -131,6 +141,9 @@ var updateAvailability = () => {
 var tick = (elapsedTime, multiplier) => {
     let dt = BigNumber.from(elapsedTime * multiplier);
     let bonus = theory.publicationMultiplier;
+
+    E = BigNumber.E - (BigNumber.ONE + BigNumber.ONE / getN(n.level)).pow(getN(n.level))
+    
     currency.value += dt * bonus * getK(k.level) * (tertiary_display[0] = BigNumber.from(getC1(c1.level) ** (getC2Balance(getC2(c2.level)) * (
         unlock.level >= 1 ? getX1(x1.level) : 1
     )))) * (
@@ -166,6 +179,7 @@ var getTau = () => currency.value;
 var get2DGraphValue = () => currency.value.sign * (BigNumber.ONE + currency.value.abs()).log10().toNumber();
 
 var getK = level => Utils.getStepwisePowerSum(level, 2, 5, 0)
+var getN = level => 1 + Utils.getStepwisePowerSum(level, 2, 10, 0)
 var getC1 = level => BigNumber.ONE + 0.5 * level
 var getC2Balance = c2 => {
     tertiary_display[1] = BigNumber.from(Math.log(1 + currency.value) / Math.log(1e20)).sqrt()
