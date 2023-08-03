@@ -168,12 +168,12 @@ var tick = (elapsedTime, multiplier) => {
 var getPrimaryEquation = () => {
     theory.primaryEquationHeight = 55
     let result = `\\dot{\\rho}=k${unlock.level >= 1 ? "E^{-1}" : ""}c_1^{B(c_2)${unlock.level >= 2 ? "x_1" : ""}}${unlock.level >= 3 ? "x_2" : ""}\\\\` + theory.latexSymbol + "=\\max\\rho"
-    return "\\begin{matrix}" result + "\\end{matrix}";
+    return "\\begin{matrix}" + result + "\\end{matrix}";
 }
 var getSecondaryEquation = () => {
     theory.secondaryEquationHeight = unlock.level >= 1 ? 70 : 37
     let result = `B(x)=\\frac{x}{\\sqrt{\\log_{e20}{\\max{(\\rho, e20)}}}}${unlock.level >= 1 ? "\\\\E=e-(1+\\frac{1}{n})^n" : ""}`
-    return "\\begin{matrix}" result + "\\end{matrix}"
+    return "\\begin{matrix}" + result + "\\end{matrix}"
 }
 var getTertiaryEquation = () => {
     let result = `c_1^{B(c_2)${unlock.level >= 2 ? "x_1" : ""}}=${tertiary_display[0].toString(3)},\\quad\\sqrt{\\log_{e20}{\\rho}}=${tertiary_display[1].toString(3)}${unlock.level >= 1 ? `,\\quad E=${getEDisplay(E)}` : ""}`
