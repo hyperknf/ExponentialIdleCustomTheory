@@ -186,7 +186,7 @@ var getTau = () => currency.value;
 var get2DGraphValue = () => currency.value.sign * (BigNumber.ONE + currency.value.abs()).log10().toNumber();
 
 var getK = level => Utils.getStepwisePowerSum(level, 2, 5, 0)
-var getN = level => Utils.getStepwisePowerSum(level, 2, 5, 0)
+var getN = level => Utils.getStepwisePowerSum(level, 2, 4, 0)
 var getC1 = level => BigNumber.ONE + 0.5 * level
 var getC2Balance = c2 => {
     tertiary_display[1] = BigNumber.from(Math.log(1 + currency.value) / Math.log(1e20)).sqrt()
