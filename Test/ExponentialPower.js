@@ -200,7 +200,7 @@ var getX2 = level => BigNumber.E.pow(getX2Exponent(level))
 var getEDisplay = E => {
     const exponent = E.log10().floor()
     const base = BigNumber.from(E / BigNumber.TEN.pow(exponent))
-    return `${base.toString(3)}e${exponent}`
+    return `${base.toString(2)}e${exponent.toString(0)}`
 }
 
 init();
