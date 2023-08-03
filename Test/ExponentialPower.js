@@ -110,8 +110,8 @@ var init = () => {
 
     { 
         unlock = theory.createMilestoneUpgrade(0, 3); 
-        unlock.description = "$\\text{Unlock }n$" 
-        unlock.info = "$\\text{Unlocks }n$"
+        unlock.description = "$\\text{Unlock }E$" 
+        unlock.info = "$\\text{Unlocks }E$"
     }
     
     /////////////////
@@ -127,11 +127,11 @@ var init = () => {
 
 var updateMilestoneUpgradeInfo = () => {
     unlock.description =
-        unlock.level == 0 ? "$\\text{Unlock }n$" :
+        unlock.level == 0 ? "$\\text{Unlock }E$" :
         unlock.level == 1 ? "$\\text{Unlock }x_1$" :
         "$\\text{Unlock }x_2$"
     unlock.info =
-        unlock.level == 0 ? "$\\text{Unlocks }n$" :
+        unlock.level == 0 ? "$\\text{Unlocks }E$" :
         unlock.level == 1 ? "$\\text{Unlocks }x_1$" :
         "$\\text{Unlocks }x_2$"
 }
