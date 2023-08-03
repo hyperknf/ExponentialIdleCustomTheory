@@ -197,4 +197,10 @@ var getX1 = level => BigNumber.ONE + 0.01 * level
 var getX2Exponent = level => BigNumber.from(1 + 0.1 * level)
 var getX2 = level => BigNumber.E.pow(getX2Exponent(level))
 
+var getEDisplay = E => {
+    const exponent = Math.floor(E.log10())
+    const base = E - BigNumber.TEN.pow(exponent)
+    return `${base}e\\text{-}${exponent}`
+}
+
 init();
