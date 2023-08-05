@@ -197,7 +197,7 @@ var getPrimaryEquation = () => {
         result = `\\dot{\\rho}=k${unlock.level >= 1 ? "E^{-1}" : ""}c_1^{B(c_2)${unlock.level >= 2 ? "x_1" : ""}}${unlock.level >= 3 ? "x_2" : ""}\\\\` + theory.latexSymbol + "=\\max\\rho"
     } else if (page == 2) {
         theory.primaryEquationHeight = 40
-        result = `E=\\prod_{i}{(e-E_i)}`
+        result = `E=\\prod_{i}{(e-e_i)}`
     } else result = "\\text{Invalid Page}"
     return "\\begin{array}{c}" + result + "\\end{array}";
 }
@@ -208,7 +208,7 @@ var getSecondaryEquation = () => {
         result = `B(x)=\\frac{x}{\\sqrt{\\log_{e20}{\\max{(\\rho, e20)}}}}`
     } else if (page == 2) {
         theory.secondaryEquationHeight = 35 * unlockE.level + 36
-        result = "E_1=(1+\\frac{1}{n})^n"
+        result = "e_1=(1+\\frac{1}{n})^n"
     } else result = "\\text{Invalid Page}"
     return "\\begin{array}{c}" + result + "\\end{array}"
 }
@@ -223,12 +223,12 @@ var getQuaternaryEntries = () => {
     const result = []
     if (page == 1) {
         result.push(formatQuaternaryEntry(
-            "E^{-1}",
+            "E",
             unlock.level >= 1 ? getEDisplay(E) : null
         ))
     } else if (page == 2) {
         result.push(formatQuaternaryEntry(
-            "E_1",
+            "e_1",
             EDisplay[0].toString(3)
         ))
     }
