@@ -223,7 +223,7 @@ var getQuaternaryEntries = () => {
     const result = []
     if (page == 1) {
         result.push(formatQuaternaryEntry(
-            "E",
+            "E^{-1}",
             unlock.level >= 1 ? getEDisplay(E) : null
         ))
     } else if (page == 2) {
