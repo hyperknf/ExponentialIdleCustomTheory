@@ -110,11 +110,13 @@ var init = () => {
         let getDesc = level => `\\text{Unlock }E_{${level + 1}}`
         let getInfo = level => `\\text{Unlocks }E_{${level + 1}}`
         unlockE = theory.createPermanentUpgrade(3, currency, new CustomCost(
-            level => switch (level) {
-                case 0:
-                    return BigNumber.from(5e30)
-                case 1:
-                    return BigNumber.from(5e40)
+            level => {
+                switch (level) {
+                    case 0:
+                        return BigNumber.from(5e30)
+                    case 1:
+                        return BigNumber.from(5e40)
+                }
             }
         ))
         unlockE.getDescription = getDesc
