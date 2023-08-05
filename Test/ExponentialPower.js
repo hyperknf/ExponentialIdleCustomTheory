@@ -114,15 +114,16 @@ var init = () => {
             level => {
                 switch (level) {
                     case 0:
-                        return BigNumber.from(5e30)
+                        return BigNumber.ZERO
                     case 1:
+                        return BigNumber.from(5e30)
+                    case 2:
                         return BigNumber.from(5e40)
                 }
             }
         ))
         unlockE.getDescription = _ => Utils.getMath(getDesc(unlockE.level))
         unlockE.getInfo = _ => Utils.getMath(getInfo(unlockE.level))
-        unlockE.level = 1
         unlockE.maxLevel = 3
     }
 
