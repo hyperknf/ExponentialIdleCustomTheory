@@ -121,7 +121,7 @@ var init = () => {
         ))
         unlockE.getDescription = _ => Utils.getMath(getDesc(unlockE.level))
         unlockE.getInfo = _ => Utils.getMath(getInfo(unlockE.level))
-        unlock.level = 1
+        unlockE.level = 1
         unlockE.maxLevel = 3
     }
 
