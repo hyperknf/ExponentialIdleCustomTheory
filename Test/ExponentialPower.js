@@ -16,6 +16,7 @@ var unlock
 var achievement1, achievement2;
 var chapter1, chapter2;
 
+var page = 0
 var E = BigNumber.E
 
 var tertiary_display = Array.from({
@@ -202,5 +203,10 @@ var getEDisplay = E => {
     const base = BigNumber.from(E / BigNumber.TEN.pow(exponent))
     return `${base.toString(2)}e${exponent.toString(0)}`
 }
+
+var canGoToPreviousStage = () => page == 2
+var goToPreviousStage = () => stage = 1
+var canGoToNextStage = () => page == 1
+var goToNextStage = () => stage = 2
 
 init();
