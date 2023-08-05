@@ -108,8 +108,8 @@ var init = () => {
     theory.createAutoBuyerUpgrade(2, currency, 1e30);
 
     {
-        let getDesc = level => `\\text{Unlock }E_{${level + 1}}`
-        let getInfo = level => `\\text{Unlocks }E_{${level + 1}}`
+        let getDesc = level => `\\text{Unlock }e_{${level + 1}}`
+        let getInfo = level => `\\text{Unlocks }e_{${level + 1}}`
         unlockE = theory.createPermanentUpgrade(3, currency, new CustomCost(
             level => {
                 switch (level) {
