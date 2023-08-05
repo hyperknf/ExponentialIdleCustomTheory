@@ -166,7 +166,7 @@ var tick = (elapsedTime, multiplier) => {
     let dt = BigNumber.from(elapsedTime * multiplier);
     let bonus = theory.publicationMultiplier;
 
-    E = BigNumber.E - (BigNumber.ONE + BigNumber.ONE / getN(n.level)).pow(getN(n.level))
+    E = BigNumber.E - BigNumber.from(BigNumber.ONE + BigNumber.ONE / getN(n.level)).pow(getN(n.level))
     
     currency.value += dt * bonus * getK(k.level) * (
         unlock.level >= 1 ? E.pow(-1) : 1
