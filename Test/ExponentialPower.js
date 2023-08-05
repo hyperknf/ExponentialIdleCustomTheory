@@ -17,7 +17,7 @@ var unlockE
 var achievement1, achievement2;
 var chapter1, chapter2;
 
-var page = 0
+var page = 1
 var E = BigNumber.E
 
 var tertiary_display = Array.from({
@@ -190,7 +190,10 @@ var getSecondaryEquation = () => {
     return "\\begin{array}{c}" + result + "\\end{array}"
 }
 var getTertiaryEquation = () => {
-    let result = `c_1^{B(c_2)${unlock.level >= 2 ? "x_1" : ""}}=${tertiary_display[0].toString(3)},\\quad\\sqrt{\\log_{e20}{\\rho}}=${tertiary_display[1].toString(3)}${unlock.level >= 1 ? `,\\quad E=${getEDisplay(E)}` : ""}`
+    let result
+    if (page == 1) {
+        result = `c_1^{B(c_2)${unlock.level >= 2 ? "x_1" : ""}}=${tertiary_display[0].toString(3)},\\quad\\sqrt{\\log_{e20}{\\rho}}=${tertiary_display[1].toString(3)}${unlock.level >= 1 ? `,\\quad E=${getEDisplay(E)}` : ""}`
+    } else result = ""
     return result
 }
 
