@@ -106,6 +106,22 @@ var init = () => {
     theory.createBuyAllUpgrade(1, currency, 1e13);
     theory.createAutoBuyerUpgrade(2, currency, 1e30);
 
+    {
+        let getDesc = level => `\\text{Unlock }E_{${level + 1}}`
+        let getInfo = level => `\\text{Unlocks }E_{${level + 1}}`
+        unlockE = theory.createPermanentUpgrade(3, currency, new CustomCost(
+            level => switch (level) {
+                case 0:
+                    return BigNumber.from(5e30)
+                case 1:
+                    return BigNumber.from(5e40)
+            }
+        ))
+        unlockE.getDescription = getDesc
+        unlockE.getInfo = getInfo
+        unlockE.maxLevel = 2
+    }
+
     ///////////////////////
     //// Milestone Upgrades
     theory.setMilestoneCost(new LinearCost(20, 20));
