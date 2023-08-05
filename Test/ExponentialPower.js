@@ -192,7 +192,7 @@ var getPrimaryEquation = () => {
         result = `\\dot{\\rho}=k${unlock.level >= 1 ? "E^{-1}" : ""}c_1^{B(c_2)${unlock.level >= 2 ? "x_1" : ""}}${unlock.level >= 3 ? "x_2" : ""}\\\\` + theory.latexSymbol + "=\\max\\rho"
     } else if (page == 2) {
         theory.primaryEquationHeight = 40
-        result = `E=\\Pi_{i}{(e-E_i)}`
+        result = `E=\\prod_{i}{(e-E_i)}`
     } else result = "\\text{Invalid Page}"
     return "\\begin{array}{c}" + result + "\\end{array}";
 }
