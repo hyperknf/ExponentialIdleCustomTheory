@@ -1,6 +1,6 @@
 import { ExponentialCost, FreeCost, LinearCost } from "./api/Costs";
 import { BigNumber } from "./api/BigNumber";
-import { theory } from "./api/Theory";
+import { theory, QuaternaryEntry } from "./api/Theory";
 import { Utils } from "./api/Utils";
 
 var id = "ExponentialPowerTest";
