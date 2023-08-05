@@ -181,8 +181,8 @@ var getPrimaryEquation = () => {
 var getSecondaryEquation = () => {
     let result
     if (page == 1) {
-        theory.secondaryEquationHeight = unlock.level >= 1 ? 70 : 37
-        result = `B(x)=\\frac{x}{\\sqrt{\\log_{e20}{\\max{(\\rho, e20)}}}}${unlock.level >= 1 ? "\\\\E=e-(1+\\frac{1}{n})^n" : ""}`
+        theory.secondaryEquationHeight = unlock.level >= 1 ? 37
+        result = `B(x)=\\frac{x}{\\sqrt{\\log_{e20}{\\max{(\\rho, e20)}}}}`
     } else if (page == 2) {
         theory.secondaryEquationHeight = 37 * unlockE.level
         result = "E_1=(1+\\frac{1}{n})^n"
