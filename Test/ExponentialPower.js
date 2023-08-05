@@ -19,6 +19,7 @@ var chapter1, chapter2;
 
 var page = 1
 var E = BigNumber.E
+var EDisplay = [BigNumber.ZERO]
 
 var tertiary_display = Array.from({
     length: 2
@@ -167,7 +168,7 @@ var tick = (elapsedTime, multiplier) => {
     let dt = BigNumber.from(elapsedTime * multiplier);
     let bonus = theory.publicationMultiplier;
 
-    E = BigNumber.E - (BigNumber.ONE + BigNumber.ONE / getN(n.level)).pow(getN(n.level))
+    E = BigNumber.E - (EDisplay[0] = (BigNumber.ONE + BigNumber.ONE / getN(n.level)).pow(getN(n.level)))
     
     currency.value += dt * bonus * getK(k.level) * (
         unlock.level >= 1 ? E.pow(-1) : 1
@@ -205,7 +206,7 @@ var getSecondaryEquation = () => {
         theory.secondaryEquationHeight = 37
         result = `B(x)=\\frac{x}{\\sqrt{\\log_{e20}{\\max{(\\rho, e20)}}}}`
     } else if (page == 2) {
-        theory.secondaryEquationHeight = 37 * unlockE.level + 37
+        theory.secondaryEquationHeight = 35 * unlockE.level + 36
         result = "E_1=(1+\\frac{1}{n})^n"
     } else result = "\\text{Invalid Page}"
     return "\\begin{array}{c}" + result + "\\end{array}"
@@ -213,8 +214,23 @@ var getSecondaryEquation = () => {
 var getTertiaryEquation = () => {
     let result
     if (page == 1) {
-        result = `c_1^{B(c_2)${unlock.level >= 2 ? "x_1" : ""}}=${tertiary_display[0].toString(3)},\\quad\\sqrt{\\log_{e20}{\\rho}}=${tertiary_display[1].toString(3)}${unlock.level >= 1 ? `,\\quad E=${getEDisplay(E)}` : ""}`
+        result = `c_1^{B(c_2)${unlock.level >= 2 ? "x_1" : ""}}=${tertiary_display[0].toString(3)},\\quad\\sqrt{\\log_{e20}{\\rho}}=${tertiary_display[1].toString(3)}`
     } else result = ""
+    return result
+}
+var getQuaternaryEntries = () => {
+    const result = []
+    if (page == 1) {
+        result.push(formatQuaternaryEntry(
+            "E",
+            unlock.level >= 1 ? getEDisplay(E) : null
+        ))
+    } else if (page == 2) {
+        result.push(formatQuaternaryEntry(
+            "E_1",
+            EDisplay[0].toString(3)
+        ))
+    }
     return result
 }
 
