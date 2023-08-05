@@ -12,6 +12,7 @@ var version = 2;
 var currency;
 var k, n, c1, c2, x1;
 var unlock
+var unlockE
 
 var achievement1, achievement2;
 var chapter1, chapter2;
@@ -183,7 +184,8 @@ var getSecondaryEquation = () => {
         theory.secondaryEquationHeight = unlock.level >= 1 ? 70 : 37
         result = `B(x)=\\frac{x}{\\sqrt{\\log_{e20}{\\max{(\\rho, e20)}}}}${unlock.level >= 1 ? "\\\\E=e-(1+\\frac{1}{n})^n" : ""}`
     } else if (page == 2) {
-        return ""
+        theory.secondaryEquationHeight = 37 * unlockE.level
+        result = "E_1=(1+\\frac{1}{n})^n"
     } else result = "\\text{Invalid Page}"
     return "\\begin{array}{c}" + result + "\\end{array}"
 }
@@ -217,7 +219,7 @@ var getEDisplay = E => {
 
 var canGoToPreviousStage = () => page == 2
 var goToPreviousStage = () => stage = 1
-var canGoToNextStage = () => page == 1
+var canGoToNextStage = () => page == 1 && unlock.level >= 1
 var goToNextStage = () => stage = 2
 
 init();
