@@ -167,13 +167,24 @@ var tick = (elapsedTime, multiplier) => {
 }
 
 var getPrimaryEquation = () => {
-    theory.primaryEquationHeight = 55
-    let result = `\\dot{\\rho}=k${unlock.level >= 1 ? "E^{-1}" : ""}c_1^{B(c_2)${unlock.level >= 2 ? "x_1" : ""}}${unlock.level >= 3 ? "x_2" : ""}\\\\` + theory.latexSymbol + "=\\max\\rho"
+    let result
+    if (page == 1) {
+        theory.primaryEquationHeight = 55
+        result = `\\dot{\\rho}=k${unlock.level >= 1 ? "E^{-1}" : ""}c_1^{B(c_2)${unlock.level >= 2 ? "x_1" : ""}}${unlock.level >= 3 ? "x_2" : ""}\\\\` + theory.latexSymbol + "=\\max\\rho"
+    } else if (page == 2) {
+        theory.primaryEquationHeight = 40
+        result = `E=\\Pi_{i}{(e-E_i)}`
+    } else result = "\\text{Invalid Page}"
     return "\\begin{array}{c}" + result + "\\end{array}";
 }
 var getSecondaryEquation = () => {
-    theory.secondaryEquationHeight = unlock.level >= 1 ? 70 : 37
-    let result = `B(x)=\\frac{x}{\\sqrt{\\log_{e20}{\\max{(\\rho, e20)}}}}${unlock.level >= 1 ? "\\\\E=e-(1+\\frac{1}{n})^n" : ""}`
+    let result
+    if (page == 1) {
+        theory.secondaryEquationHeight = unlock.level >= 1 ? 70 : 37
+        result = `B(x)=\\frac{x}{\\sqrt{\\log_{e20}{\\max{(\\rho, e20)}}}}${unlock.level >= 1 ? "\\\\E=e-(1+\\frac{1}{n})^n" : ""}`
+    } else if (page == 2) {
+        return ""
+    } else result = "\\text{Invalid Page}"
     return "\\begin{array}{c}" + result + "\\end{array}"
 }
 var getTertiaryEquation = () => {
