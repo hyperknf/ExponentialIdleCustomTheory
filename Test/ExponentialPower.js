@@ -186,6 +186,8 @@ var tick = (elapsedTime, multiplier) => {
     updateAvailability()
 }
 
+var formatQuaternaryEntry = (...args) => new QuaternaryEntry(...args)
+
 var getPrimaryEquation = () => {
     let result
     if (page == 1) {
