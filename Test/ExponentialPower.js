@@ -182,7 +182,7 @@ var tick = (elapsedTime, multiplier) => {
     theory.invalidatePrimaryEquation()
     theory.invalidateSecondaryEquation()
     theory.invalidateTertiaryEquation()
-    theory.invalidateQuaternaryEntries()
+    theory.invalidateQuaternaryValues()
 
     updateMilestoneUpgradeInfo()
     updateAvailability()
