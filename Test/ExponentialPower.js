@@ -221,8 +221,8 @@ var getEDisplay = E => {
 }
 
 var canGoToPreviousStage = () => page == 2
-var goToPreviousStage = () => stage = 1
+var goToPreviousStage = () => page = 1
 var canGoToNextStage = () => page == 1 && unlock.level >= 1
-var goToNextStage = () => stage = 2
+var goToNextStage = () => page = 2
 
 init();
