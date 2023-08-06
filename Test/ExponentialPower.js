@@ -19,7 +19,8 @@ var chapter1, chapter2;
 
 var page = 1
 var E = BigNumber.E
-var EDisplay = [BigNumber.ZERO]
+var E1 = BigNumber.E, E2 = BigNumber.E, E3 = BigNumber.E, E4 = BigNumber.E
+var EDisplay = [BigNumber.ZERO, BigNumber.ZERO, BigNumber.ZERO, BigNumber.ZERO]
 
 var tertiary_display = Array.from({
     length: 2
@@ -169,10 +170,12 @@ var tick = (elapsedTime, multiplier) => {
     let dt = BigNumber.from(elapsedTime * multiplier);
     let bonus = theory.publicationMultiplier;
 
-    E = BigNumber.E - (EDisplay[0] = (BigNumber.ONE + BigNumber.ONE / getN(n.level)).pow(getN(n.level)))
+    E1 = EDisplay[0] = (BigNumber.ONE + BigNumber.ONE / getN(n.level)).pow(getN(n.level))
+    E2 = EDisplay[1] = BigNumber.E
+    E = (BigNumber.E - E1)
     
     currency.value += dt * bonus * getK(k.level) * (
-        unlock.level >= 1 ? E.pow(-1) : 1
+        unlock.level >= 1 && unlockE.level >= 1 ? E.pow(-1) : 1
     ) * (tertiary_display[0] = BigNumber.from(getC1(c1.level) ** (getC2Balance(getC2(c2.level)) * (
         unlock.level >= 2 ? getX1(x1.level) : 1
     )))) * (
