@@ -191,10 +191,10 @@ var tick = (elapsedTime, multiplier) => {
     let dt = BigNumber.from(elapsedTime * multiplier);
     let bonus = theory.publicationMultiplier;
 
-    E1 = EDisplay[0] = (BigNumber.ONE + BigNumber.ONE / getN(n.level)).pow(getN(n.level))
-    E2 = EDisplay[1] = (BigNumber.ONE + getA(a.level) / getB(b.level)).pow(getB(b.level) / getA(a.level))
-    E = (BigNumber.E - E1)
-    if (unlockE.level >= 2) E *= (BigNumber.E - E2)
+    E1 = EDisplay[0] = BigNumber.E - (BigNumber.ONE + BigNumber.ONE / getN(n.level)).pow(getN(n.level))
+    E2 = EDisplay[1] = BigNumber.E - (BigNumber.ONE + getA(a.level) / getB(b.level)).pow(getB(b.level) / getA(a.level))
+    E = E1
+    if (unlockE.level >= 2) E *= E2
     
     currency.value += dt * bonus * getK(k.level) * (
         unlock.level >= 1 && unlockE.level >= 1 ? E.pow(-1) : 1
@@ -256,11 +256,11 @@ var getQuaternaryEntries = () => {
     } else if (page == 2) {
         result.push(formatQuaternaryEntry(
             "e_1",
-            EDisplay[0].toString(3)
+            formatEDisplay(EDisplay[0])
         ))
         result.push(formatQuaternaryEntry(
             "e_2",
-            unlockE.level >= 2 ? EDisplay[1].toString(3) : null
+            unlockE.level >= 2 ? formatEDisplay(EDisplay[1]) : null
         ))
     }
     return result
