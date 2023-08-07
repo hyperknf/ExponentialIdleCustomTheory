@@ -4,19 +4,24 @@ import { theory, QuaternaryEntry } from "./api/Theory";
 import { Utils } from "./api/Utils";
 
 const TextResource = {
-    "name": {
-        "en": "Exponential Power (Test)",
-        "zh-Hant": "指數力量 (測試)"
-    },
-    "description": {
-        "en": "Exponential Power by HyperKNF",
-        "zh-Hant": "指數力量由HyperKNF設計"
-    }
+    
 }
 
 var id = "ExponentialPowerTest";
-var getName = language => TextResource.name[language] ?? TextResource.name.en
-var getDescription = language => TextResource.description[language] ?? TextResource.description.en
+var getName = language => {
+    const names = {
+        "en": "Exponential Power (Test)",
+        "zh-Hant": "指數力量 (測試)"
+    }
+    return names[language] ?? names.en
+}
+var getDescription = language => {
+    const descriptions = {
+        "en": "Exponential Power by HyperKNF",
+        "zh-Hant": "指數力量由HyperKNF設計"
+    }
+    return descriptions[language] ?? descriptions.en
+}
 var authors = "HyperKNF";
 var version = 2;
 
