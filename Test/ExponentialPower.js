@@ -180,14 +180,12 @@ var updateMilestoneUpgradeInfo = () => {
 }
 
 var updateAvailability = () => {
-    k.isAvailable = c1.isAvailable = c2.isAvailable = page == 1
-    
-    n.isAvailable = unlock.level >= 1 && unlockE.level >= 1 && page == 2
-    a.isAvailable = b.isAvailable = unlock.level >= 1 && unlockE.level >= 2 && page == 2
-    x1.isAvailable = unlock.level >= 2 && page == 1
-    x2.isAvailable = unlock.level >= 3 && page == 1
+    n.isAvailable = unlock.level >= 1 && unlockE.level >= 1
+    a.isAvailable = b.isAvailable = unlock.level >= 1 && unlockE.level >= 2
+    x1.isAvailable = unlock.level >= 2
+    x2.isAvailable = unlock.level >= 3
 
-    unlockE.isAvailable = page == 2
+    unlockE.isAvailable = unlock.level >= 1
 }
 
 var tick = (elapsedTime, multiplier) => {
