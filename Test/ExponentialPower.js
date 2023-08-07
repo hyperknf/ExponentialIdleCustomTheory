@@ -249,12 +249,11 @@ var getTertiaryEquation = () => {
 }
 var getQuaternaryEntries = () => {
     const result = []
-    if (page == 1) {
-        result.push(formatQuaternaryEntry(
-            "E",
-            unlock.level >= 1 ? getEDisplay(E) : null
-        ))
-    } else if (page == 2) {
+    result.push(formatQuaternaryEntry(
+        "E",
+        unlock.level >= 1 ? getEDisplay(E) : null
+    ))
+    if (page == 2) {
         result.push(formatQuaternaryEntry(
             "e_1",
             getEDisplay(EDisplay[0])
