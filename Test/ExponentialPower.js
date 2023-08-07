@@ -276,9 +276,9 @@ var getC2Balance = c2 => {
     tertiary_display[1] = BigNumber.from(Math.log(1 + currency.value) / Math.log(1e20)).sqrt()
     return c2 / BigNumber.from(Math.log(Math.max(currency.value, 1e20)) / Math.log(1e20)).sqrt()
 }
-var getC2 = level => BigNumber.ONE + 0.25 * Math.min(level, 30) + (level > 30 ? (0.25 * (1 - 0.975 ** (level - 30)) / (1 - 0.975)) : 0)
+var getC2 = level => BigNumber.ONE + 0.25 * Math.min(level, 30) + (level > 30 ? (0.25 * (1 - 0.99 ** (level - 30)) / (1 - 0.99)) : 0)
 var getN = level => 1 + Utils.getStepwisePowerSum(level, 2, 4, 0)
-var getA = level => BigNumber.TWO.pow(1 + 0.25 * level)
+var getA = level => BigNumber.TWO.pow(-0.2 * level)
 var getB = level => 1 + Utils.getStepwisePowerSum(level, 2, 5, 0)
 var getX1 = level => BigNumber.ONE + 0.01 * level
 var getX2Exponent = level => BigNumber.from(1 + 0.1 * level)
