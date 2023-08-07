@@ -233,8 +233,9 @@ var getSecondaryEquation = () => {
         theory.secondaryEquationHeight = 37
         result = `B(x)=\\frac{x}{\\sqrt{\\log_{e20}{\\max{(\\rho, e20)}}}}`
     } else if (page == 2) {
-        theory.secondaryEquationHeight = 35 * unlockE.level + 36
+        theory.secondaryEquationHeight = 35 * unlockE.level + 37
         result = "e_1=(1+\\frac{1}{n})^n"
+        if (unlockE.level >= 2) result += "\\\\e_2=(1+\\frac{a}{b})^{\\frac{b}{a}}"
     } else result = "\\text{Invalid Page}"
     return "\\begin{array}{c}" + result + "\\end{array}"
 }
