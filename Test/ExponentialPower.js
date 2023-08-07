@@ -256,11 +256,11 @@ var getQuaternaryEntries = () => {
     } else if (page == 2) {
         result.push(formatQuaternaryEntry(
             "e_1",
-            formatEDisplay(EDisplay[0])
+            getEDisplay(EDisplay[0])
         ))
         result.push(formatQuaternaryEntry(
             "e_2",
-            unlockE.level >= 2 ? formatEDisplay(EDisplay[1]) : null
+            unlockE.level >= 2 ? getEDisplay(EDisplay[1]) : null
         ))
     }
     return result
