@@ -195,7 +195,7 @@ var tick = (elapsedTime, multiplier) => {
     let bonus = theory.publicationMultiplier;
 
     E1 = EDisplay[0] = BigNumber.E - (BigNumber.ONE + BigNumber.ONE / getN(n.level)).pow(getN(n.level))
-    E2 = EDisplay[1] = BigNumber.E.pow(getA(a.level)) - (BigNumber.ONE + getA(a.level) / getB(b.level)).pow(getB(b.level))
+    E2 = EDisplay[1] = BigNumber.E - (BigNumber.ONE + getA(a.level) / getB(b.level)).pow(getB(b.level) / getA(a.level))
     E = E1
     if (unlockE.level >= 2) E *= E2
     
@@ -238,7 +238,7 @@ var getSecondaryEquation = () => {
     } else if (page == 2) {
         theory.secondaryEquationHeight = 37 * unlockE.level
         result = "e_1=e-(1+\\frac{1}{n})^n"
-        if (unlockE.level >= 2) result += "\\\\e_2=e^a-(1+\\frac{a}{b})^b"
+        if (unlockE.level >= 2) result += "\\\\e_2=e-(1+\\frac{a}{b})^{\\frac{b}{a}}"
     } else result = "\\text{Invalid Page}"
     return "\\begin{array}{c}" + result + "\\end{array}"
 }
