@@ -45,7 +45,7 @@ var getStepwisePowerProduct = (level, base, step_length, offset) => {
 
 var init = () => {
     currency = theory.createCurrency();
-    currency.value += 1e20
+    currency.value += 1e21
 
     ///////////////////
     // Regular Upgrades
@@ -120,6 +120,8 @@ var init = () => {
                         return BigNumber.from(5e30)
                     case 2:
                         return BigNumber.from(5e40)
+                    case 3:
+                        return BigNumber.from(5e50)
                 }
             }
         ))
@@ -171,7 +173,7 @@ var tick = (elapsedTime, multiplier) => {
     let bonus = theory.publicationMultiplier;
 
     E1 = EDisplay[0] = (BigNumber.ONE + BigNumber.ONE / getN(n.level)).pow(getN(n.level))
-    E2 = EDisplay[1] = BigNumber.E
+    E2 = EDisplay[1] = BigNumber.ZERO
     E = (BigNumber.E - E1)
     
     currency.value += dt * bonus * getK(k.level) * (
@@ -234,6 +236,10 @@ var getQuaternaryEntries = () => {
         result.push(formatQuaternaryEntry(
             "e_1",
             EDisplay[0].toString(3)
+        ))
+        result.push(formatQuaternaryEntry(
+            "e_2",
+            unlockE.level >= 2 ? EDisplay[1].toString(3) : null
         ))
     }
     return result
