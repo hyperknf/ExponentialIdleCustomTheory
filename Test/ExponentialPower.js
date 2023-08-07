@@ -192,7 +192,7 @@ var tick = (elapsedTime, multiplier) => {
     let bonus = theory.publicationMultiplier;
 
     E1 = EDisplay[0] = BigNumber.E - (BigNumber.ONE + BigNumber.ONE / getN(n.level)).pow(getN(n.level))
-    E2 = EDisplay[1] = BigNumber.E - (BigNumber.ONE + getA(a.level) / getB(b.level)).pow(getB(b.level) / getA(a.level))
+    E2 = EDisplay[1] = BigNumber.E.pow(getA(a.level)) - (BigNumber.ONE + getA(a.level) / getB(b.level)).pow(getB(b.level))
     E = E1
     if (unlockE.level >= 2) E *= E2
     
@@ -223,7 +223,7 @@ var getPrimaryEquation = () => {
         result = `\\dot{\\rho}=k${unlock.level >= 1 ? "E^{-1}" : ""}c_1^{B(c_2)${unlock.level >= 2 ? "x_1" : ""}}${unlock.level >= 3 ? "x_2" : ""}\\\\` + theory.latexSymbol + "=\\max\\rho"
     } else if (page == 2) {
         theory.primaryEquationHeight = 40
-        result = `E=\\prod_{i}{(e-e_i)}`
+        result = `E=\\prod_{i}{e_i}`
     } else result = "\\text{Invalid Page}"
     return "\\begin{array}{c}" + result + "\\end{array}";
 }
@@ -234,8 +234,8 @@ var getSecondaryEquation = () => {
         result = `B(x)=\\frac{x}{\\sqrt{\\log_{e20}{\\max{(\\rho, e20)}}}}`
     } else if (page == 2) {
         theory.secondaryEquationHeight = 37 * unlockE.level
-        result = "e_1=(1+\\frac{1}{n})^n"
-        if (unlockE.level >= 2) result += "\\\\e_2=(1+\\frac{a}{b})^{\\frac{b}{a}}"
+        result = "e_1=e-(1+\\frac{1}{n})^n"
+        if (unlockE.level >= 2) result += "\\\\e_2=e^a-(1+\\frac{a}{b})^b"
     } else result = "\\text{Invalid Page}"
     return "\\begin{array}{c}" + result + "\\end{array}"
 }
