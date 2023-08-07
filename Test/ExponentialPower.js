@@ -192,8 +192,9 @@ var tick = (elapsedTime, multiplier) => {
     let bonus = theory.publicationMultiplier;
 
     E1 = EDisplay[0] = (BigNumber.ONE + BigNumber.ONE / getN(n.level)).pow(getN(n.level))
-    E2 = EDisplay[1] = BigNumber.ZERO
+    E2 = EDisplay[1] = (BigNumber.ONE + getA(a.level) / getB(b.level)).pow(getB(b.level) / getA(a.level))
     E = (BigNumber.E - E1)
+    if (unlockE.level >= 2) E *= (BigNumber.E - E2)
     
     currency.value += dt * bonus * getK(k.level) * (
         unlock.level >= 1 && unlockE.level >= 1 ? E.pow(-1) : 1
@@ -270,13 +271,15 @@ var getTau = () => currency.value;
 var get2DGraphValue = () => currency.value.sign * (BigNumber.ONE + currency.value.abs()).log10().toNumber();
 
 var getK = level => Utils.getStepwisePowerSum(level, 2, 5, 0)
-var getN = level => 1 + Utils.getStepwisePowerSum(level, 2, 4, 0)
 var getC1 = level => BigNumber.ONE + 0.5 * level
 var getC2Balance = c2 => {
     tertiary_display[1] = BigNumber.from(Math.log(1 + currency.value) / Math.log(1e20)).sqrt()
     return c2 / BigNumber.from(Math.log(Math.max(currency.value, 1e20)) / Math.log(1e20)).sqrt()
 }
 var getC2 = level => BigNumber.ONE + 0.25 * Math.min(level, 30) + (level > 30 ? (0.25 * (1 - 0.975 ** (level - 30)) / (1 - 0.975)) : 0)
+var getN = level => 1 + Utils.getStepwisePowerSum(level, 2, 4, 0)
+var getA = level => 1 + Utils.getStepwisePowerSum(level, 10, 9, 0)
+var getB = level => 1 + Utils.getStepwisePowerSum(level, 2, 5, 0)
 var getX1 = level => BigNumber.ONE + 0.01 * level
 var getX2Exponent = level => BigNumber.from(1 + 0.1 * level)
 var getX2 = level => BigNumber.E.pow(getX2Exponent(level))
