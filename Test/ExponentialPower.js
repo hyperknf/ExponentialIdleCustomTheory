@@ -10,7 +10,7 @@ var authors = "HyperKNF";
 var version = 2;
 
 var currency;
-var k, n, c1, c2, x1;
+var k, c1, c2, n, a, b, x1, x2;
 var unlock
 var unlockE
 
@@ -58,18 +58,10 @@ var init = () => {
         k.getInfo = (amount) => Utils.getMathTo(getDesc(k.level), getDesc(k.level + amount));
     }
 
-    // n
-    {
-        let getDesc = (level) => "n=" + getN(level);
-        n = theory.createUpgrade(1, currency, new ExponentialCost(1e20, Math.log2(2.5)));
-        n.getDescription = (_) => Utils.getMath(getDesc(n.level));
-        n.getInfo = (amount) => Utils.getMathTo(getDesc(n.level), getDesc(n.level + amount));
-    }
-
     // c1
     {
         let getDesc = (level) => "c_1=" + getC1(level);
-        c1 = theory.createUpgrade(2, currency, new CustomCost(
+        c1 = theory.createUpgrade(1, currency, new CustomCost(
             level => 15 * getStepwisePowerProduct(level, 2, 50, 0)
         ));
         c1.getDescription = (_) => Utils.getMath(getDesc(c1.level));
@@ -80,24 +72,48 @@ var init = () => {
     {
         let getDesc = (level) => "c_2=" + getC2(level);
         let getInfo = (level) => "c_2=" + getC2(level);
-        c2 = theory.createUpgrade(3, currency, new ExponentialCost(50, Math.log2(10)));
+        c2 = theory.createUpgrade(2, currency, new ExponentialCost(50, Math.log2(10)));
         c2.getDescription = (_) => Utils.getMath(getDesc(c2.level));
         c2.getInfo = (amount) => Utils.getMathTo(getInfo(c2.level), getInfo(c2.level + amount));
+    }
+
+    // n
+    {
+        let getDesc = (level) => "n=" + getN(level);
+        n = theory.createUpgrade(3, currency, new ExponentialCost(1e20, Math.log2(2.5)));
+        n.getDescription = (_) => Utils.getMath(getDesc(n.level));
+        n.getInfo = (amount) => Utils.getMathTo(getDesc(n.level), getDesc(n.level + amount));
+    }
+
+    // a
+    {
+        let getDesc = (level) => "a=" + getA(level);
+        a = theory.createUpgrade(4, currency, new ExponentialCost(1e30, Math.log2(2)));
+        a.getDescription = (_) => Utils.getMath(getDesc(a.level));
+        a.getInfo = (amount) => Utils.getMathTo(getDesc(a.level), getDesc(a.level + amount));
+    }
+
+    // b
+    {
+        let getDesc = (level) => "b=" + getB(level);
+        b = theory.createUpgrade(5, currency, new ExponentialCost(1e30, Math.log2(3)));
+        b.getDescription = (_) => Utils.getMath(getDesc(b.level));
+        b.getInfo = (amount) => Utils.getMathTo(getDesc(b.level), getDesc(b.level + amount));
     }
 
     // x1
     {
         let getDesc = level => "x_1=" + getX1(level)
-        x1 = theory.createUpgrade(4, currency, new ExponentialCost(1e20, Math.log2(50)))
+        x1 = theory.createUpgrade(6, currency, new ExponentialCost(1e20, Math.log2(50)))
         x1.getDescription = _ => Utils.getMath(getDesc(x1.level))
         x1.getInfo = amount => Utils.getMathTo(getDesc(x1.level), getDesc(x1.level + amount))
     }
     
-    // x1
+    // x2
     {
         let getDesc = level => "x_2=" + getX2(level)
         let getInfo = level => "x_2=e^{" + getX2Exponent(level) + "}"
-        x2 = theory.createUpgrade(5, currency, new ExponentialCost(1e40, Math.log2(10 ** 2.5)))
+        x2 = theory.createUpgrade(7, currency, new ExponentialCost(1e40, Math.log2(10 ** 2.5)))
         x2.getDescription = _ => Utils.getMath(getDesc(x2.level))
         x2.getInfo = amount => Utils.getMathTo(getInfo(x2.level), getInfo(x2.level + amount))
     }
@@ -163,9 +179,12 @@ var updateMilestoneUpgradeInfo = () => {
 }
 
 var updateAvailability = () => {
-    n.isAvailable = unlock.level >= 1
-    x1.isAvailable = unlock.level >= 2
-    x2.isAvailable = unlock.level >= 3
+    k.isAvailable = c1.isAvailable = c2.isAvailable = page == 1
+    
+    n.isAvailable = unlock.level >= 1 && unlockE.level >= 1 && page == 2
+    a.isAvailable = b.isAvailable = unlock.level >= 1 && unlockE.level >= 2 && page == 2
+    x1.isAvailable = unlock.level >= 2 && page == 1
+    x2.isAvailable = unlock.level >= 3 && page == 1
 }
 
 var tick = (elapsedTime, multiplier) => {
