@@ -80,7 +80,7 @@ var init = () => {
     // n
     {
         let getDesc = (level) => "n=" + getN(level);
-        n = theory.createUpgrade(3, currency, new ExponentialCost(1e20, Math.log2(2.5)));
+        n = theory.createUpgrade(3, currency, new ExponentialCost(1e20, Math.log2(1.5)));
         n.getDescription = (_) => Utils.getMath(getDesc(n.level));
         n.getInfo = (amount) => Utils.getMathTo(getDesc(n.level), getDesc(n.level + amount));
     }
@@ -96,7 +96,7 @@ var init = () => {
     // b
     {
         let getDesc = (level) => "b=" + getB(level);
-        b = theory.createUpgrade(5, currency, new ExponentialCost(1e30, Math.log2(3)));
+        b = theory.createUpgrade(5, currency, new ExponentialCost(1e30, Math.log2(2.5)));
         b.getDescription = (_) => Utils.getMath(getDesc(b.level));
         b.getInfo = (amount) => Utils.getMathTo(getDesc(b.level), getDesc(b.level + amount));
     }
