@@ -3,6 +3,12 @@ import { BigNumber } from "./api/BigNumber";
 import { theory, QuaternaryEntry } from "./api/Theory";
 import { Utils } from "./api/Utils";
 
+const TextResource = {
+    name: {
+        en: "Exponential Power (Test)"
+    }
+}
+
 var id = "ExponentialPowerTest";
 var name = "Exponential Power (Test)";
 var description = "Exponential Power by HyperKNF";
