@@ -11,14 +11,16 @@ var id = "ExponentialPowerTest";
 var getName = language => {
     const names = {
         "en": "Exponential Power (Test)",
-        "zh-Hant": "指數力量 (測試)"
+        "zh-Hant": "指數力量 (測試)",
+        "fi": "Eksponentiaalinen Teho (Testi)"
     }
     return names[language] ?? names.en
 }
 var getDescription = language => {
     const descriptions = {
         "en": "Exponential Power by HyperKNF",
-        "zh-Hant": "指數力量由HyperKNF設計"
+        "zh-Hant": "指數力量由HyperKNF設計",
+        "fi": "HyperKNF:stä Eksponentiaalinen Teho"
     }
     return descriptions[language] ?? descriptions.en
 }
