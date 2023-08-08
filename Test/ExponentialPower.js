@@ -123,8 +123,8 @@ var init = () => {
     
     // x2
     {
-        let getDesc = level => "x_2=" + getX2(level)
-        let getInfo = level => "x_2=e^{" + getX2Exponent(level) + "}"
+        let getInfo = level => "x_2=" + getX2(level)
+        let getDesc = level => "x_2=e^{" + getX2Exponent(level) + "}"
         x2 = theory.createUpgrade(4, currency, new ExponentialCost(1e40, Math.log2(10 ** 2.5)))
         x2.getDescription = _ => Utils.getMath(getDesc(x2.level))
         x2.getInfo = amount => Utils.getMathTo(getInfo(x2.level), getInfo(x2.level + amount))
@@ -140,8 +140,8 @@ var init = () => {
 
     // a
     {
-        let getDesc = (level) => "a=" + getEDisplay(getA(level));
-        let getInfo = level => "a=2^{" + (-0.05 * level) + "}"
+        let getInfo = (level) => "a=" + getEDisplay(getA(level));
+        let getDesc = level => "a=2^{" + (BigNumber.from(-0.05) * level) + "}"
         a = theory.createUpgrade(6, currency, new ExponentialCost(1e30, Math.log2(2)));
         a.getDescription = (_) => Utils.getMath(getDesc(a.level));
         a.getInfo = (amount) => Utils.getMathTo(getInfo(a.level), getInfo(a.level + amount));
@@ -315,7 +315,7 @@ var getC2Balance = c2 => {
 }
 var getC2 = level => BigNumber.ONE + 0.25 * Math.min(level, 30) + (level > 30 ? (0.25 * (1 - 0.99 ** (level - 30)) / (1 - 0.99)) : 0)
 var getN = level => BigNumber.ONE + Utils.getStepwisePowerSum(level, 2, 10, 0)
-var getA = level => BigNumber.TWO.pow(-0.05 * level)
+var getA = level => BigNumber.TWO.pow(-0.05).pow(level)
 var getB = level => BigNumber.ONE + Utils.getStepwisePowerSum(level, 2, 10, 0)
 var getX1 = level => BigNumber.ONE + 0.01 * level
 var getX2Exponent = level => BigNumber.from(1 + 0.1 * level)
