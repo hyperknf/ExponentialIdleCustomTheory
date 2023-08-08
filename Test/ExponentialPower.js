@@ -302,9 +302,9 @@ var getQuaternaryEntries = () => {
     return result
 }
 
-var getPublicationMultiplier = tau => tau;
-var getPublicationMultiplierFormula = symbol => "\\frac{" + symbol + "}{2.5}";
-var getTau = () => currency.value.pow(0.15);
+var getPublicationMultiplier = tau => tau.pow(0.13);
+var getPublicationMultiplierFormula = symbol => "{" + symbol + "}^{0.13}";
+var getTau = () => currency.value;
 var get2DGraphValue = () => currency.value.sign * (BigNumber.ONE + currency.value.abs()).log10().toNumber();
 
 var getK = level => BigNumber.ZERO + Utils.getStepwisePowerSum(level, 2, 5, 0)
