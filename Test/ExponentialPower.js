@@ -257,7 +257,7 @@ var getPrimaryEquation = () => {
     let result
     if (page == 1) {
         theory.primaryEquationHeight = 55
-        result = `\\dot{\\rho}=k${unlock.level >= 1 ? "E^{-1}" : ""}c_1^{B(c_2)${unlock.level >= 2 ? "x_1" : ""}}${unlock.level >= 3 ? "x_2" : ""}\\\\` + theory.latexSymbol + "=\\max\\rho"
+        result = `\\dot{\\rho}=k${unlock.level >= 1 ? "E^{-1}" : ""}c_1^{B(c_2)${unlock.level >= 2 ? "x_1" : ""}}${unlock.level >= 3 ? "x_2" : ""}\\\\` + theory.latexSymbol + "=\\max\\rho^{0.15}"
     } else if (page == 2) {
         theory.primaryEquationHeight = 40
         result = `E=\\prod_{i}{e_i}`
@@ -302,9 +302,9 @@ var getQuaternaryEntries = () => {
     return result
 }
 
-var getPublicationMultiplier = (tau) => tau.pow(0.15);
-var getPublicationMultiplierFormula = (symbol) => "{" + symbol + "}^{0.15}";
-var getTau = () => currency.value;
+var getPublicationMultiplier = tau => tau;
+var getPublicationMultiplierFormula = symbol => "\\frac{" + symbol + "}{2.5}";
+var getTau = () => currency.value.pow(0.15);
 var get2DGraphValue = () => currency.value.sign * (BigNumber.ONE + currency.value.abs()).log10().toNumber();
 
 var getK = level => BigNumber.ZERO + Utils.getStepwisePowerSum(level, 2, 5, 0)
