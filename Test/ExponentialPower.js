@@ -248,7 +248,7 @@ var tick = (elapsedTime, multiplier) => {
     theory.invalidateQuaternaryValues()
 
     updateMilestoneUpgradeInfo()
-    updateAvailability()Q
+    updateAvailability()
 }
 
 var formatQuaternaryEntry = (...args) => new QuaternaryEntry(...args)
