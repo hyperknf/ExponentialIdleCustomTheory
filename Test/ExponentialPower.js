@@ -234,7 +234,7 @@ var tick = (elapsedTime, multiplier) => {
     if (unlockE.level >= 2) E *= E2
     
     currency.value += dt * bonus * BigNumber.from(getK(k.level)) * (
-        unlock.level >= 1 && unlockE.level >= 1 ? (1 / E) : 1
+        unlock.level >= 1 && unlockE.level >= 1 ? (1 / E.pow(0.9)) : 1
     ) * (tertiary_display[0] = BigNumber.from(getC1(c1.level)).pow(getC2Balance(getC2(c2.level)) * (
         unlock.level >= 2 ? getX1(x1.level) : 1
     ))) * (
@@ -257,7 +257,7 @@ var getPrimaryEquation = () => {
     let result
     if (page == 1) {
         theory.primaryEquationHeight = 55
-        result = `\\dot{\\rho}=k${unlock.level >= 1 ? "E^{-1}" : ""}c_1^{B(c_2)${unlock.level >= 2 ? "x_1" : ""}}${unlock.level >= 3 ? "x_2" : ""}\\\\` + theory.latexSymbol + "=\\max\\rho^{0.15}"
+        result = `\\dot{\\rho}=k${unlock.level >= 1 ? "E^{-0.9}" : ""}c_1^{B(c_2)${unlock.level >= 2 ? "x_1" : ""}}${unlock.level >= 3 ? "x_2" : ""}\\\\` + theory.latexSymbol + "=\\max\\rho"
     } else if (page == 2) {
         theory.primaryEquationHeight = 40
         result = `E=\\prod_{i}{e_i}`
@@ -279,7 +279,7 @@ var getSecondaryEquation = () => {
 var getTertiaryEquation = () => {
     let result
     if (page == 1) {
-        result = `c_1^{B(c_2)${unlock.level >= 2 ? "x_1" : ""}}=${tertiary_display[0].toString(3)},\\quad\\sqrt{\\log_{e20}{1+\\rho}}=${tertiary_display[1].toString(3)}`
+        result = `c_1^{B(c_2)${unlock.level >= 2 ? "x_1" : ""}}=${tertiary_display[0].toString(3)},\\quad\\sqrt{\\log_{e20}{(1+\\rho)}}=${tertiary_display[1].toString(3)}`
     } else result = ""
     return result
 }
