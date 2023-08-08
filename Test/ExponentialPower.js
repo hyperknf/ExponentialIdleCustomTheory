@@ -88,7 +88,7 @@ var init = () => {
 
     // k
     {
-        let getDesc = (level) => "k=" + getK(level);
+        let getDesc = (level) => "k=" + getK(level).toString(0);
         k = theory.createUpgrade(0, currency, new FirstFreeCost(new ExponentialCost(10, Math.log2(1.5))));
         k.getDescription = (_) => Utils.getMath(getDesc(k.level));
         k.getInfo = (amount) => Utils.getMathTo(getDesc(k.level), getDesc(k.level + amount));
@@ -96,7 +96,7 @@ var init = () => {
 
     // c1
     {
-        let getDesc = (level) => "c_1=" + getC1(level);
+        let getDesc = (level) => "c_1=" + getC1(level).toString(1);
         c1 = theory.createUpgrade(1, currency, new CustomCost(
             level => 15 * getStepwisePowerProduct(level, 2, 50, 0)
         ));
@@ -106,8 +106,8 @@ var init = () => {
 
     // c2
     {
-        let getDesc = (level) => "c_2=" + getC2(level);
-        let getInfo = (level) => "c_2=" + getC2(level);
+        let getDesc = (level) => "c_2=" + getC2(level).toString(5);
+        let getInfo = (level) => "c_2=" + getC2(level).toString(5);
         c2 = theory.createUpgrade(2, currency, new ExponentialCost(50, Math.log2(10)));
         c2.getDescription = (_) => Utils.getMath(getDesc(c2.level));
         c2.getInfo = (amount) => Utils.getMathTo(getInfo(c2.level), getInfo(c2.level + amount));
@@ -132,7 +132,7 @@ var init = () => {
 
     // n
     {
-        let getDesc = (level) => "n=" + getN(level);
+        let getDesc = (level) => "n=" + getN(level).toString(0);
         n = theory.createUpgrade(5, currency, new ExponentialCost(1e20, Math.log2(1.5)));
         n.getDescription = (_) => Utils.getMath(getDesc(n.level));
         n.getInfo = (amount) => Utils.getMathTo(getDesc(n.level), getDesc(n.level + amount));
@@ -141,7 +141,7 @@ var init = () => {
     // a
     {
         let getInfo = (level) => "a=" + getEDisplay(getA(level));
-        let getDesc = level => "a=2^{" + (BigNumber.from(-0.05) * level) + "}"
+        let getDesc = level => "a=2^{" + (BigNumber.from(-0.05) * level).toString(0) + "}"
         a = theory.createUpgrade(6, currency, new ExponentialCost(1e30, Math.log2(2)));
         a.getDescription = (_) => Utils.getMath(getDesc(a.level));
         a.getInfo = (amount) => Utils.getMathTo(getInfo(a.level), getInfo(a.level + amount));
