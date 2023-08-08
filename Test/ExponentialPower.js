@@ -141,7 +141,7 @@ var init = () => {
     // a
     {
         let getInfo = (level) => "a=" + getEDisplay(getA(level));
-        let getDesc = level => "a=2^{" + (BigNumber.from(-0.05) * level).toString(0) + "}"
+        let getDesc = level => "a=2^{" + (BigNumber.from(-0.05) * level).toString(2) + "}"
         a = theory.createUpgrade(6, currency, new ExponentialCost(1e30, Math.log2(2)));
         a.getDescription = (_) => Utils.getMath(getDesc(a.level));
         a.getInfo = (amount) => Utils.getMathTo(getInfo(a.level), getInfo(a.level + amount));
