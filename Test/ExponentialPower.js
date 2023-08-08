@@ -55,7 +55,7 @@ var chapter1, chapter2;
 
 var page = 1
 var E = BigNumber.E
-var E1 = BigNumber.E, E2 = BigNumber.E, E3 = BigNumber.E, E4 = BigNumber.E
+var E1 = BigNumber.ZERO, E2 = BigNumber.ZERO, E3 = BigNumber.ZERO, E4 = BigNumber.ZERO
 var EDisplay = [BigNumber.ZERO, BigNumber.ZERO, BigNumber.ZERO, BigNumber.ZERO]
 
 var tertiary_display = Array.from({
@@ -81,7 +81,7 @@ var getStepwisePowerProduct = (level, base, step_length, offset) => {
 
 var init = () => {
     currency = theory.createCurrency();
-    currency.value += 1e50
+    currency.value += 1e60
 
     ///////////////////
     // Regular Upgrades
@@ -235,9 +235,9 @@ var tick = (elapsedTime, multiplier) => {
     
     currency.value += dt * bonus * BigNumber.from(getK(k.level)) * (
         unlock.level >= 1 && unlockE.level >= 1 ? E.pow(-0.9) : 1
-    ) * (tertiary_display[0] = BigNumber.from(getC1(c1.level)).pow(getC2Balance(getC2(c2.level)) * (
+    ) * (tertiary_display[0] = BigNumber.from(getC1(c1.level)).pow(getC2Balance(getC2(c2.level))).pow(
         unlock.level >= 2 ? getX1(x1.level) : 1
-    ))) * (
+    )) * (
         unlock.level >= 3 ? getX2(x2.level) : 1
     )
     
