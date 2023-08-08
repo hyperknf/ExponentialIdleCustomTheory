@@ -12,17 +12,35 @@ var getName = language => {
     const names = {
         "en": "Exponential Power (Test)",
         "zh-Hant": "指數力量 (測試)",
+        "zh": "指数力量 (测试)",
         "fi": "Eksponentiaalinen Teho (Testi)"
     }
     return names[language] ?? names.en
 }
 var getDescription = language => {
     const descriptions = {
-        "en": "Exponential Power by HyperKNF",
-        "zh-Hant": "指數力量由HyperKNF設計",
-        "fi": "HyperKNF:stä Eksponentiaalinen Teho"
+        "en": [
+            "Exponential Power by HyperKNF",
+            "",
+            "Chinese Traditional, Chinese Simplified and Finnish are translated by HyperKNF"
+        ],
+        "zh-Hant": [
+            "指數力量由HyperKNF設計",
+            "",
+            "繁體中文由HyperKNF翻譯"
+        ],
+        "zh": [
+            "指数力量由HyperKNF设计",
+            "",
+            "简体中文由HyperKNF翻译"
+        ],
+        "fi": [
+            "HyperKNF:stä Eksponentiaalinen Teho",
+            "",
+            "Suomeksi kääntänyt HyperKNF"
+        ]
     }
-    return descriptions[language] ?? descriptions.en
+    return (descriptions[language] ?? descriptions.en).join("\n")
 }
 var authors = "HyperKNF";
 var version = 2;
