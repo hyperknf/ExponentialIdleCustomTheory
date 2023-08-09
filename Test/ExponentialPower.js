@@ -83,7 +83,7 @@ var getStepwisePowerProduct = (level, base, step_length, offset) => {
 
 var init = () => {
     currency = theory.createCurrency();
-    currency.value += 1e50
+    currency.value += 1e60
 
     ///////////////////
     // Regular Upgrades
