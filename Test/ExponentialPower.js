@@ -237,7 +237,7 @@ var tick = (elapsedTime, multiplier) => {
     
     const drho = dt * bonus * getK(k.level) * (
         unlock.level >= 1 && unlockE.level >= 1 ? E.pow(-0.9) : 1
-    ) * (tertiary_display[0] = BigNumber.from(getC1(c1.level)).pow(getC2Balance(getC2(c2.level)) * (
+    ) * (tertiary_display[0] = getC1(c1.level).pow(getC2Balance(getC2(c2.level)) * (
         unlock.level >= 2 ? getX1(x1.level) : 1
     ))) * (
         unlock.level >= 3 ? getX2(x2.level) : 1
@@ -321,7 +321,7 @@ var getN = level => BigNumber.ONE + Utils.getStepwisePowerSum(level, 2, 10, 0)
 var getA = level => BigNumber.TWO.pow(-0.05).pow(level)
 var getB = level => BigNumber.ONE + Utils.getStepwisePowerSum(level, 2, 10, 0)
 var getX1 = level => BigNumber.ONE + 0.015 * level
-var getX2Exponent = level => BigNumber.from(1 + 0.1 * level)
+var getX2Exponent = level => BigNumber.ONE + 0.1 * level
 var getX2 = level => BigNumber.E.pow(getX2Exponent(level))
 
 var getEDisplay = E => {
