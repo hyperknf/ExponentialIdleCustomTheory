@@ -304,8 +304,8 @@ var getQuaternaryEntries = () => {
     return result
 }
 
-var getPublicationMultiplier = tau => tau.pow(0.125) / (1 + tau).log10()
-var getPublicationMultiplierFormula = symbol => `\\frac{{${symbol}}^{0.125}}{\\log_10(1+${symbol})}`;
+var getPublicationMultiplier = tau => tau.pow(0.125) / (10 + tau).log10()
+var getPublicationMultiplierFormula = symbol => `\\frac{{${symbol}}^{0.125}}{\\log_10(10+${symbol})}`;
 var getTau = () => currency.value;
 var get2DGraphValue = () => currency.value.sign * (BigNumber.ONE + currency.value.abs()).log10().toNumber();
 
