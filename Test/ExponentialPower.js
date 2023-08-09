@@ -62,6 +62,8 @@ var tertiary_display = Array.from({
     length: 2
 }, () => BigNumber.from(0))
 
+var log = (base, value) => BigNumber.from(value).log() / BigNumber.from(base).log()
+
 var getStepwisePowerProduct = (level, base, step_length, offset) => {
     if (offset != 0) throw new Error("I don't know how to implement non-zero offset :)")
     
@@ -310,8 +312,9 @@ var get2DGraphValue = () => currency.value.sign * (BigNumber.ONE + currency.valu
 var getK = level => BigNumber.ZERO + Utils.getStepwisePowerSum(level, 2, 5, 0)
 var getC1 = level => BigNumber.ONE + 0.5 * level
 var getC2Balance = c2 => {
+    const e20 = BigNumber.TEN.pow(20)
     tertiary_display[1] = ((1 + currency.value).log() / BigNumber.TEN.pow(20).log()).sqrt()
-    return c2 / BigNumber.from(currency.value.max(BigNumber.TEN.pow(20)).log() / Math.log(1e20)).sqrt()
+    return c2 / BigNumber.from(log(e20, currency.value.max(e20))).sqrt()
 }
 var getC2 = level => BigNumber.ONE + 0.25 * Math.min(level, 30) + (level > 30 ? (0.25 * (1 - 0.99 ** (level - 30)) / (1 - 0.99)) : 0)
 var getN = level => BigNumber.ONE + Utils.getStepwisePowerSum(level, 2, 10, 0)
