@@ -235,14 +235,14 @@ var tick = (elapsedTime, multiplier) => {
     E = E1
     if (unlockE.level >= 2) E *= E2
     
-    currency.value += dt * bonus * BigNumber.from(getK(k.level)) * (
+    const drho = dt * bonus * getK(k.level) * (
         unlock.level >= 1 && unlockE.level >= 1 ? E.pow(-0.9) : 1
     ) * (tertiary_display[0] = BigNumber.from(getC1(c1.level)).pow(getC2Balance(getC2(c2.level)) * (
         unlock.level >= 2 ? getX1(x1.level) : 1
     ))) * (
         unlock.level >= 3 ? getX2(x2.level) : 1
     )
-    
+    currency.value += drho
 
     theory.invalidatePrimaryEquation()
     theory.invalidateSecondaryEquation()
