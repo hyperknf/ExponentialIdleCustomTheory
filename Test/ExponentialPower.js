@@ -206,6 +206,10 @@ var init = () => {
     chapter2 = theory.createStoryChapter(1, "My Second Chapter", "This is line 1 again,\nand this is line 2... again.\n\nNice again.", () => c2.level > 0);
 }
 
+var updatePage = () => {
+    if (unlock.level < 1 && page == 2) page = 1
+}
+
 var updateMilestoneUpgradeInfo = () => {
     unlock.description =
         unlock.level == 0 ? "$\\text{Unlock }E$" :
@@ -249,6 +253,7 @@ var tick = (elapsedTime, multiplier) => {
     theory.invalidateTertiaryEquation()
     theory.invalidateQuaternaryValues()
 
+    updatePage()
     updateMilestoneUpgradeInfo()
     updateAvailability()
 }
