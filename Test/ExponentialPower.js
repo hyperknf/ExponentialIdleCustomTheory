@@ -231,7 +231,6 @@ var updateAvailability = () => {
 }
 
 var tick = (elapsedTime, multiplier) => {
-    throw new Error("Never gonna give you up")
     let dt = BigNumber.from(elapsedTime * multiplier);
     let bonus = theory.publicationMultiplier;
 
