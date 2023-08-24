@@ -231,6 +231,8 @@ var updateAvailability = () => {
 }
 
 var tick = (elapsedTime, multiplier) => {
+    try {
+    
     let dt = BigNumber.from(elapsedTime * multiplier);
     let bonus = theory.publicationMultiplier;
 
@@ -256,6 +258,19 @@ var tick = (elapsedTime, multiplier) => {
     updatePage()
     updateMilestoneUpgradeInfo()
     updateAvailability()
+
+    } catch (exception) {
+        const values = [
+            ["rho", currency.value]
+            ["k", getK(k.level)],
+            ["E", E],
+            ["c_1", getC1(c1.level)],
+            ["B(c_2)", getC2Balance(getC2(c2.level))],
+            ["x_1", getX1(x1.level)],
+            ["x_2", getX2(x2.level)]
+        ]
+        throw new Error(`Exception caught:\n${exception}\n${values.reduce((total, value) => total.push(value.join("="), []))}`)
+    }
 }
 
 var formatQuaternaryEntry = (...args) => new QuaternaryEntry(...args)
