@@ -261,7 +261,7 @@ var tick = (elapsedTime, multiplier) => {
 
     } catch (exception) {
         const values = [
-            ["rho", currency.value]
+            ["rho", currency.value],
             ["k", getK(k.level)],
             ["E", E],
             ["c_1", getC1(c1.level)],
