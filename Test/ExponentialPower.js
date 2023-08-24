@@ -269,7 +269,7 @@ var tick = (elapsedTime, multiplier) => {
             ["x_1", getX1(x1.level)],
             ["x_2", getX2(x2.level)]
         ]
-        throw new Error(`Exception caught:\n${exception}\n${values.reduce((total, value) => total.push(value.join("="), []))}`)
+        throw new Error(`Exception caught:\n${exception}\n${values.reduce((total, value) => total + value.join("="), "")}`)
     }
 }
 
