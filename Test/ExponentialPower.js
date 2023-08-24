@@ -270,7 +270,7 @@ var tick = (elapsedTime, multiplier) => {
             ["x_2", getX2(x2.level)]
         ]
         let total = ""
-        for (let i = 0; i <= values.length - 1; i++) total += values[i] ? `\n${values[i][0]}=${values[i][1]}` : ""
+        for (let i = 0; i <= values.length - 1; i++) total += values[i - 2] ? `\n${values[i][0]}=${values[i][1]}` : ""
         throw new Error(`\nException caught:\n${exception}\n${total}`)
     }
 }
