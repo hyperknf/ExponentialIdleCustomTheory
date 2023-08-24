@@ -269,9 +269,9 @@ var tick = (elapsedTime, multiplier) => {
             ["x_1", getX1(x1.level)],
             ["x_2", getX2(x2.level)]
         ]
-        const total = []
-        for (let i = 0; i <= values.length - 1; i++) total.push(values[i].join("="))
-        throw new Error(`\nException caught:\n${exception}\n${total.join("\n")}`)
+        let total = ""
+        for (let i = 0; i <= values.length - 1; i++) total += `${values[i][0]}=${values[i][1]}`
+        throw new Error(`\nException caught:\n${exception}\n${total}`)
     }
 }
 
