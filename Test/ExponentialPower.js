@@ -263,11 +263,13 @@ var tick = (elapsedTime, multiplier) => {
         const values = [
             ["rho", currency.value],
             ["k", getK(k.level)],
-            ["E", E],
+            ["E", getEDisplay(E)],
             ["c_1", getC1(c1.level)],
             ["B(c_2)", getC2Balance(getC2(c2.level))],
             ["x_1", getX1(x1.level)],
-            ["x_2", getX2(x2.level)]
+            ["x_2", getX2(x2.level)],
+            ["Tertiary display 1", tertiary_display[0]],
+            ["Tertiary diaplay 2", tertiary_display[1]]
         ]
         let total = values.reduce((acc, val) => acc + "\n" + val.join("="), "")
         //for (let i = ; i <= values.length - 1; i++) total += values[i] ? `\n${values[i][0]}=${values[i][1]}` : ""
