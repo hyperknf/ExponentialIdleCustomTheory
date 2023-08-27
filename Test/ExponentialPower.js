@@ -205,7 +205,7 @@ var init = () => {
     {
         const test_upgrade = theory.createSingularUpgrade(0, currency, new FreeCost())
         test_upgrade.getDescription = test_upgrade.getInfo = _ => Utils.getMath(`\\text{${getTextResource(TextResource.TestUpgrade)}}`)
-        test_upgrade.onBoughtOrRefund = _ => currency.value *= 1e5
+        test_upgrade.bought = _ => currency.value *= 1e5
     }
 
     ///////////////////////
@@ -306,7 +306,7 @@ var getPrimaryEquation = () => {
     let result
     if (page == 1) {
         theory.primaryEquationHeight = 55
-        result = `\\dot{\\rho}=k${unlock.level >= 1 ? "E^{-0.9}" : ""}c_1^{B(c_2)${unlock.level >= 2 ? "x_1" : ""}}${unlock.level >= 3 ? "x_2" : ""}\\\\` + theory.latexSymbol + "=\\max\\rho"
+        result = `\\dot{\\rho}=km${unlock.level >= 1 ? "E^{-0.9}" : ""}c_1^{B(c_2)${unlock.level >= 2 ? "x_1" : ""}}${unlock.level >= 3 ? "x_2" : ""}\\\\` + theory.latexSymbol + "=\\max\\rho"
     } else if (page == 2) {
         theory.primaryEquationHeight = 40
         result = `E=\\prod_{i}{e_i}`
@@ -317,7 +317,7 @@ var getSecondaryEquation = () => {
     let result
     if (page == 1) {
         theory.secondaryEquationHeight = 57
-        result = `B(x)=\\frac{x}{\\sqrt{\\log_{e20}{\\max{(1+\\rho, e20)}}}}\\\\M=\\text{${getTextResource(TextResource.PublicationMultiplier)}}`
+        result = `B(x)=\\frac{x}{\\sqrt{\\log_{e20}{\\max{(1+\\rho, e20)}}}}\\\\m=\\text{${getTextResource(TextResource.PublicationMultiplier)}}`
     } else if (page == 2) {
         theory.secondaryEquationHeight = 37 * unlockE.level
         result = "e_1=e-(1+\\frac{1}{n})^n"
@@ -338,6 +338,12 @@ var getQuaternaryEntries = () => {
         "\\dot\\rho",
         drho.toString(5)
     ))
+    if (page == 1) {
+        result.push(formatQuaternaryEntry(
+            "m",
+            BigNumber.from(theory.publicationMultiplier).toString(5)
+        ))
+    }
     result.push(formatQuaternaryEntry(
         "E",
         unlock.level >= 1 ? getEDisplay(E) : null
