@@ -44,17 +44,17 @@ var getDescription = language => {
         "zh-Hant": [
             "指數力量由HyperKNF設計",
             "",
-            "繁體中文由HyperKNF翻譯"
+            "繁體中文，簡體中文和芬蘭語由HyperKNF翻譯"
         ],
         "zh-Hans": [
             "指数力量由HyperKNF设计",
             "",
-            "简体中文由HyperKNF翻译"
+            "简体中文，简体中文和芬兰语由HyperKNF翻译"
         ],
         "fi": [
             "HyperKNF:stä Eksponentiaalinen Teho",
             "",
-            "Suomeksi kääntänyt HyperKNF"
+            "Perinteinen kiina, yksinkertaistettu kiina ja suomeksi käännetty HyperKNF"
         ]
     }
     return (descriptions[language] ?? descriptions.en).join("\n")
