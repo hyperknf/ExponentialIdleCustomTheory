@@ -4,7 +4,12 @@ import { theory, QuaternaryEntry } from "./api/Theory";
 import { Utils } from "./api/Utils";
 
 const TextResource = {
-    
+    "PublicationMultiplier": {
+        "en": "Publication Multiplier",
+        "zh-Hant": "出版物倍率",
+        "zh-Hans": "出版物倍率",
+        "fi": "Julkaisukerroin"
+    }
 }
 
 var id = "ExponentialPowerTest";
@@ -295,7 +300,7 @@ var getPrimaryEquation = () => {
 var getSecondaryEquation = () => {
     let result
     if (page == 1) {
-        theory.secondaryEquationHeight = 37
+        theory.secondaryEquationHeight = 57
         result = `B(x)=\\frac{x}{\\sqrt{\\log_{e20}{\\max{(1+\\rho, e20)}}}}`
     } else if (page == 2) {
         theory.secondaryEquationHeight = 37 * unlockE.level
