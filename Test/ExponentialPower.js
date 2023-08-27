@@ -9,6 +9,12 @@ const TextResource = {
         "zh-Hant": "出版物倍率",
         "zh-Hans": "出版物倍率",
         "fi": "Julkaisukerroin"
+    },
+    "TestUpgrade": {
+        "en": "Free e5",
+        "zh-Hant": "免費e5",
+        "zh-Hans": "免费e5",
+        "fi": "Ihmainen e5"
     }
 }
 
@@ -191,6 +197,15 @@ var init = () => {
         unlockE.getDescription = _ => Utils.getMath(getDesc(unlockE.level))
         unlockE.getInfo = _ => Utils.getMath(getInfo(unlockE.level))
         unlockE.maxLevel = 3
+    }
+
+    //////////////////
+    //// Test Upgrades
+
+    {
+        const test_upgrade = theory.createSingularUpgrade(0, currency, new FreeCost())
+        test_upgrade.getDescription = test_upgrade.getInfo = _ => `\\text{${getTextResource(TextResource.TestUpgrade)}}`
+        test_upgrade.onBoughtOrRefund = _ => currency.value *= 1e5
     }
 
     ///////////////////////
