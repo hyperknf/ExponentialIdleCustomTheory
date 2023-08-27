@@ -204,7 +204,7 @@ var init = () => {
 
     {
         const test_upgrade = theory.createSingularUpgrade(0, currency, new FreeCost())
-        test_upgrade.getDescription = test_upgrade.getInfo = _ => `\\text{${getTextResource(TextResource.TestUpgrade)}}`
+        test_upgrade.getDescription = test_upgrade.getInfo = _ => Utils.getMath(`\\text{${getTextResource(TextResource.TestUpgrade)}}`)
         test_upgrade.onBoughtOrRefund = _ => currency.value *= 1e5
     }
 
