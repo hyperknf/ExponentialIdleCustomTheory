@@ -394,7 +394,7 @@ var getEDisplay = E => {
 }
 
 var getEquationOverlay = _ => {
-    const tph_display = `\\log_{10}${theory.latexSymbol}/\\text{${getTextResource(TextResource.Hour)}}=${tph.toString(5)}`
+    const tph_display = `\\log_{10}\\rho/\\text{${getTextResource(TextResource.Hour)}}=${tph.toString(5)}`
     let result = ui.createLatexLabel({
         text: Utils.getMath(`\\text{${version}}\\\\${tph_display}`),
         displacementY: 4,
