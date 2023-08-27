@@ -70,6 +70,7 @@ var tertiary_display = Array.from({
 }, () => BigNumber.from(0))
 
 var log = (base, value) => BigNumber.from(value).log() / BigNumber.from(base).log()
+var getTextResource = resource => resource[Localization.language] ?? resource.en
 
 var getStepwisePowerProduct = (level, base, step_length, offset) => {
     if (offset != 0) throw new Error("I don't know how to implement non-zero offset :)")
@@ -301,7 +302,7 @@ var getSecondaryEquation = () => {
     let result
     if (page == 1) {
         theory.secondaryEquationHeight = 57
-        result = `B(x)=\\frac{x}{\\sqrt{\\log_{e20}{\\max{(1+\\rho, e20)}}}}`
+        result = `B(x)=\\frac{x}{\\sqrt{\\log_{e20}{\\max{(1+\\rho, e20)}}}}\\\\M=\\text{${getTextResource(TextResource.PublicationMultiplier)}}`
     } else if (page == 2) {
         theory.secondaryEquationHeight = 37 * unlockE.level
         result = "e_1=e-(1+\\frac{1}{n})^n"
