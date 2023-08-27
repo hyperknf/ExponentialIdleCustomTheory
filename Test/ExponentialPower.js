@@ -277,7 +277,7 @@ var tick = (elapsedTime, multiplier) => {
     ))) * (
         unlock.level >= 3 ? getX2(x2.level) : 1
     )
-    tph = ((1 + currency.value + drho) - (1 + currency.value).log()) * 36000
+    tph = (log(10, 1 + currency.value + drho) - log(10, 1 + currency.value)) * 36000
     currency.value += drho
 
     theory.invalidatePrimaryEquation()
