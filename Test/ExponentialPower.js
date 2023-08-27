@@ -365,6 +365,17 @@ var getEDisplay = E => {
     return `${base.toString(2)}e${exponent.toString(0)}`
 }
 
+var getEquationOverlay = _ => {
+    let result = ui.createLatexLabel({
+        text: version,
+        displacementY: 4,
+        displacementX: 4,
+        fontSize: 10, 
+        textColor: Color.TEXT_MEDIUM
+    });
+    return result;
+}
+
 var canGoToPreviousStage = () => page == 2
 var goToPreviousStage = () => page = 1
 var canGoToNextStage = () => page == 1 && unlock.level >= 1
