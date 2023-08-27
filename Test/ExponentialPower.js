@@ -43,7 +43,9 @@ var getDescription = language => {
     return (descriptions[language] ?? descriptions.en).join("\n")
 }
 var authors = "HyperKNF";
-var version = 2;
+var version = "1.2.test";
+
+var drho = BigNumber.ZERO
 
 var currency;
 var k, c1, c2, n, a, b, x1, x2;
@@ -241,7 +243,7 @@ var tick = (elapsedTime, multiplier) => {
     E = E1
     if (unlockE.level >= 2) E *= E2
     
-    const drho = dt * bonus * getK(k.level) * (
+    drho = dt * bonus * getK(k.level) * (
         unlock.level >= 1 && unlockE.level >= 1 ? E.pow(-0.9) : 1
     ) * (tertiary_display[0] = getC1(c1.level).pow(getC2Balance(getC2(c2.level)) * (
         unlock.level >= 2 ? getX1(x1.level) : 1
@@ -311,6 +313,10 @@ var getTertiaryEquation = () => {
 }
 var getQuaternaryEntries = () => {
     const result = []
+    result.push(formatQuaternaryEntry(
+        "\\dot\\rho",
+        drho.toString(5)
+    ))
     result.push(formatQuaternaryEntry(
         "E",
         unlock.level >= 1 ? getEDisplay(E) : null
