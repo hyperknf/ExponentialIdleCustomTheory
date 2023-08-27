@@ -241,11 +241,11 @@ var updatePage = () => {
 
 var updateMilestoneUpgradeInfo = () => {
     unlock.description =
-        unlock.level == 0 ? "$\\text{Unlock }E$" :
+        unlock.level == 0 ? "$\\text{Unlock convergents}$" :
         unlock.level == 1 ? "$\\text{Unlock }x_1$" :
         "$\\text{Unlock }x_2$"
     unlock.info =
-        unlock.level == 0 ? "$\\text{Unlocks }E$" :
+        unlock.level == 0 ? "$\\text{Unlocks convergents}$" :
         unlock.level == 1 ? "$\\text{Unlocks }x_1$" :
         "$\\text{Unlocks }x_2$"
 }
@@ -357,7 +357,7 @@ var getQuaternaryEntries = () => {
     if (page == 2) {
         result.push(formatQuaternaryEntry(
             "e_1",
-            getEDisplay(EDisplay[0])
+            unlock.level >= 1 ? getEDisplay(EDisplay[0]) : null
         ))
         result.push(formatQuaternaryEntry(
             "e_2",
@@ -394,7 +394,7 @@ var getEDisplay = E => {
 }
 
 var getEquationOverlay = _ => {
-    const tph_display = `\\log_{10}\\rho/\\text{${getTextResource(TextResource.Hour)}}=${tph.toString(5)}`
+    const tph_display = `\\log\\rho/\\text{${getTextResource(TextResource.Hour)}}=${tph.toString(5)}`
     let result = ui.createLatexLabel({
         text: Utils.getMath(`\\text{${version}}\\\\${tph_display}`),
         displacementY: 4,
