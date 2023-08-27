@@ -296,7 +296,6 @@ var tick = (elapsedTime, multiplier) => {
             ["e_2", E2]
         ]
         let total = values.reduce((acc, val) => acc + "\n" + val.join("="), "")
-        //for (let i = ; i <= values.length - 1; i++) total += values[i] ? `\n${values[i][0]}=${values[i][1]}` : ""
         throw new Error(`\nException caught:\n${exception}\n${total}`)
     }
 }
@@ -389,7 +388,7 @@ var getEDisplay = E => {
 }
 
 var getEquationOverlay = _ => {
-    const tph_display = `\\log ${theory.latexSymbol}/h=${tph.toString(5)}`
+    const tph_display = `\\log_{10}${theory.latexSymbol}/h=${tph.toString(5)}`
     let result = ui.createLatexLabel({
         text: `${version}\\\\${tph_display}`,
         displacementY: 4,
