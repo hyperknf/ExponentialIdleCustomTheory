@@ -54,9 +54,10 @@ var getDescription = language => {
     return (descriptions[language] ?? descriptions.en).join("\n")
 }
 var authors = "HyperKNF";
-var version = "1.2.test";
+var version = "v1.2.test";
 
 var drho = BigNumber.ZERO
+var tph = BigNumber.ZERO
 
 var currency;
 var k, c1, c2, n, a, b, x1, x2;
@@ -262,7 +263,7 @@ var tick = (elapsedTime, multiplier) => {
     E2 = EDisplay[1] = BigNumber.E - (BigNumber.ONE + getA(a.level) / getB(b.level)).pow(getB(b.level) / getA(a.level))
     E = E1
     if (unlockE.level >= 2) E *= E2
-    
+
     drho = dt * bonus * getK(k.level) * (
         unlock.level >= 1 && unlockE.level >= 1 ? E.pow(-0.9) : 1
     ) * (tertiary_display[0] = getC1(c1.level).pow(getC2Balance(getC2(c2.level)) * (
@@ -270,6 +271,7 @@ var tick = (elapsedTime, multiplier) => {
     ))) * (
         unlock.level >= 3 ? getX2(x2.level) : 1
     )
+    tph = ((1 + currency.value + drho) - (1 + currency.value).log()) * 36000
     currency.value += drho
 
     theory.invalidatePrimaryEquation()
@@ -387,8 +389,9 @@ var getEDisplay = E => {
 }
 
 var getEquationOverlay = _ => {
+    const tph_display = `\\log ${theory.latexSymbol}/h=${tph.toString(5)}`
     let result = ui.createLatexLabel({
-        text: version,
+        text: `${version}\\\\${tph_display}`,
         displacementY: 4,
         displacementX: 4,
         fontSize: 10, 
