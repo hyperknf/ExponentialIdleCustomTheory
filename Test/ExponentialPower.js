@@ -54,7 +54,7 @@ var getDescription = language => {
         "fi": [
             "HyperKNF:stä Eksponentiaalinen Teho",
             "",
-            "Perinteinen kiina, yksinkertaistettu kiina ja suomeksi käännetty HyperKNF"
+            "Perinteinen kiina, yksinkertaistettu kiina ja suomeksi kääntänyt HyperKNF"
         ]
     }
     return (descriptions[language] ?? descriptions.en).join("\n")
