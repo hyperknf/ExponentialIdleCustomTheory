@@ -398,8 +398,6 @@ var getEquationOverlay = _ => {
         children: [
             ui.createLatexLabel({
                 text: version,
-                displacementY: 4,
-                displacementX: 4,
                 fontSize: 10, 
                 textColor: Color.TEXT_MEDIUM
             }),
@@ -408,8 +406,6 @@ var getEquationOverlay = _ => {
                     const tph_display = `\\log\\rho/\\text{${getTextResource(TextResource.Hour)}}=${tph.toString(5)}`
                     return Utils.getMath(tph_display)
                 },
-                displacementY: 4,
-                displacementX: -4,
                 fontSize: 10, 
                 textColor: Color.TEXT_MEDIUM,
                 horizontalOptions: LayoutOptions.END
