@@ -418,8 +418,8 @@ var getEquationOverlay = _ => {
 }
 
 var canGoToPreviousStage = () => page == 2
-var goToPreviousStage = () => page = 1
+var goToPreviousStage = () => page--
 var canGoToNextStage = () => page == 1 && unlock.level >= 1
-var goToNextStage = () => page = 2
+var goToNextStage = () => page++
 
 init();
