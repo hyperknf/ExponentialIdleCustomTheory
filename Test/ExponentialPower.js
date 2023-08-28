@@ -413,7 +413,7 @@ var getEquationOverlay = _ => {
                 fontSize: 10, 
                 textColor: Color.TEXT_MEDIUM,
                 horizontalOptions: LayoutOptions.END
-            });
+            })
         ]
     })
     return layout;
