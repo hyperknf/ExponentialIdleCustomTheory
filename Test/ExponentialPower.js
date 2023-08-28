@@ -409,7 +409,7 @@ var getEquationOverlay = _ => {
                     return Utils.getMath(tph_display)
                 },
                 displacementY: 4,
-                displacementX: 4,
+                displacementX: -4,
                 fontSize: 10, 
                 textColor: Color.TEXT_MEDIUM,
                 horizontalOptions: LayoutOptions.END
