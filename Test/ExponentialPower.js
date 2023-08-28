@@ -394,27 +394,28 @@ var getEDisplay = E => {
 }
 
 var getEquationOverlay = _ => {
-    const layout = new Layout()
-    layout.children = [
-        ui.createLatexLabel({
-            text: version,
-            displacementY: 4,
-            displacementX: 4,
-            fontSize: 10, 
-            textColor: Color.TEXT_MEDIUM
-        }),
-        ui.createLatexLabel({
-            text: () => {
-                const tph_display = `\\log\\rho/\\text{${getTextResource(TextResource.Hour)}}=${tph.toString(5)}`
-                return Utils.getMath(tph_display)
-            },
-            displacementY: 4,
-            displacementX: 4,
-            fontSize: 10, 
-            textColor: Color.TEXT_MEDIUM,
-            horizontalOptions: LayoutOptions.END
-        });
-    ]
+    const grind = ui.createGrid({
+        children: [
+            ui.createLatexLabel({
+                text: version,
+                displacementY: 4,
+                displacementX: 4,
+                fontSize: 10, 
+                textColor: Color.TEXT_MEDIUM
+            }),
+            ui.createLatexLabel({
+                text: () => {
+                    const tph_display = `\\log\\rho/\\text{${getTextResource(TextResource.Hour)}}=${tph.toString(5)}`
+                    return Utils.getMath(tph_display)
+                },
+                displacementY: 4,
+                displacementX: 4,
+                fontSize: 10, 
+                textColor: Color.TEXT_MEDIUM,
+                horizontalOptions: LayoutOptions.END
+            });
+        ]
+    })
     return layout;
 }
 
