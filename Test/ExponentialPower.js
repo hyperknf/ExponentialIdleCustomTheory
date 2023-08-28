@@ -394,7 +394,7 @@ var getEDisplay = E => {
 }
 
 var getEquationOverlay = _ => {
-    const grind = ui.createGrid({
+    const grid = ui.createGrid({
         children: [
             ui.createLatexLabel({
                 text: version,
@@ -416,7 +416,7 @@ var getEquationOverlay = _ => {
             })
         ]
     })
-    return layout;
+    return grid
 }
 
 var canGoToPreviousStage = () => page == 2
