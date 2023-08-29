@@ -138,7 +138,7 @@ var init = () => {
     // x1
     {
         let getDesc = level => "x_1=" + getX1(level).toString(3)
-        x1 = theory.createUpgrade(3, currency, new ExponentialCost(1e20, Math.log2(75)))
+        x1 = theory.createUpgrade(3, currency, new ExponentialCost(1e40, Math.log2(75)))
         x1.getDescription = _ => Utils.getMath(getDesc(x1.level))
         x1.getInfo = amount => Utils.getMathTo(getDesc(x1.level), getDesc(x1.level + amount))
     }
@@ -147,7 +147,7 @@ var init = () => {
     {
         let getInfo = level => "x_2=" + getX2(level).toString(3)
         let getDesc = level => "x_2=e^{" + getX2Exponent(level) + "}"
-        x2 = theory.createUpgrade(4, currency, new ExponentialCost(1e40, Math.log2(10 ** 2.5)))
+        x2 = theory.createUpgrade(4, currency, new ExponentialCost(1e60, Math.log2(10 ** 2.5)))
         x2.getDescription = _ => Utils.getMath(getDesc(x2.level))
         x2.getInfo = amount => Utils.getMathTo(getInfo(x2.level), getInfo(x2.level + amount))
     }
@@ -367,8 +367,8 @@ var getQuaternaryEntries = () => {
     return result
 }
 
-var getPublicationMultiplier = tau => 100 * tau.pow(0.125) / (10 + tau).log10()
-var getPublicationMultiplierFormula = symbol => `\\frac{100{${symbol}}^{0.125}}{\\log_{10}(10+${symbol})}`;
+var getPublicationMultiplier = tau => 100 * tau.pow(0.1125) / (10 + tau).log10()
+var getPublicationMultiplierFormula = symbol => `\\frac{100{${symbol}}^{0.1125}}{\\log_{10}(10+${symbol})}`;
 var getTau = () => currency.value;
 var get2DGraphValue = () => currency.value.sign * (BigNumber.ONE + currency.value.abs()).log10().toNumber();
 
