@@ -476,6 +476,8 @@ var getInverseEDisplay = E => {
 
 var getEquationOverlay = _ => {
     const grid = ui.createGrid({
+        inputTransparent: true,
+        cascadeInputTransparent: true,
         children: [
             ui.createLatexLabel({
                 text: version,
@@ -495,7 +497,7 @@ var getEquationOverlay = _ => {
             })
         ]
     })
-    return
+    return grid
 }
 
 var canGoToPreviousStage = () => page == 2
