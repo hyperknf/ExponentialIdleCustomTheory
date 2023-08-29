@@ -429,7 +429,7 @@ var getQuaternaryEntries = () => {
     if (page == 1) {
         result.push(formatQuaternaryEntry(
             "t",
-            t.toString(2)
+            time.toString(2)
         ))
     }
     if (page == 1 && publication.level >= 1) {
@@ -474,7 +474,7 @@ var getB = level => BigNumber.ONE + Utils.getStepwisePowerSum(level, 2, 10, 0)
 var getX1 = level => BigNumber.ONE + 0.01 * level
 var getX2Exponent = level => BigNumber.ONE + 0.1 * level
 var getX2 = level => BigNumber.E.pow(getX2Exponent(level))
-var getDT = level => 0.1 * level
+var getDT = level => BigNumber.ONE / 10 * level
 
 var getE1 = n => {
     if (n <= 100) return 1 / (BigNumber.E - (BigNumber.ONE + 1 / n).pow(n))
