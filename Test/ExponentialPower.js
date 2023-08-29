@@ -495,7 +495,7 @@ var getEquationOverlay = _ => {
             })
         ]
     })
-    return grid
+    return
 }
 
 var canGoToPreviousStage = () => page == 2
