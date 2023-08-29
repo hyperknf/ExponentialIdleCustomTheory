@@ -265,8 +265,8 @@ var tick = (elapsedTime, multiplier) => {
     let dt = BigNumber.from(elapsedTime * multiplier);
     let bonus = theory.publicationMultiplier;
 
-    E1 = EDisplay[0] = BigNumber.E - (BigNumber.ONE + BigNumber.ONE / getN(n.level)).pow(getN(n.level))
-    E2 = EDisplay[1] = BigNumber.E - (BigNumber.ONE + getA(a.level) / getB(b.level)).pow(getB(b.level) / getA(a.level))
+    E1 = EDisplay[0] = getE1(getN(n.level))
+    E2 = EDisplay[1] = getE2(getA(a.level), getB(b.level))
     E = E1
     if (unlockE.level >= 2) E *= E2
 
@@ -386,6 +386,13 @@ var getB = level => BigNumber.ONE + Utils.getStepwisePowerSum(level, 2, 10, 0)
 var getX1 = level => BigNumber.ONE + 0.015 * level
 var getX2Exponent = level => BigNumber.ONE + 0.1 * level
 var getX2 = level => BigNumber.E.pow(getX2Exponent(level))
+
+var getE1 = n => {
+    if (n <= 100) return 1 / (BigNumber.E - (BigNumber.ONE + 1 / n).pow(n))
+    // Laurent Series
+    return 2 * n / BigNumber.E + 11 * n / (6 * BigNumber.E) - 5 / (72 * BigNumber.E * n) + 17 / (540 * BigNumber.E * BigNumber.from(n).pow(2))
+}
+var getE2 = (a, b) => getE1(b / a)
 
 var getEDisplay = E => {
     const exponent = E.log10().floor()
