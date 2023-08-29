@@ -138,7 +138,7 @@ var init = () => {
     // x1
     {
         let getDesc = level => "x_1=" + getX1(level).toString(3)
-        x1 = theory.createUpgrade(3, currency, new ExponentialCost(1e20, Math.log2(50)))
+        x1 = theory.createUpgrade(3, currency, new ExponentialCost(1e20, Math.log2(75)))
         x1.getDescription = _ => Utils.getMath(getDesc(x1.level))
         x1.getInfo = amount => Utils.getMathTo(getDesc(x1.level), getDesc(x1.level + amount))
     }
@@ -155,7 +155,7 @@ var init = () => {
     // n
     {
         let getDesc = (level) => "n=" + getN(level).toString(0);
-        n = theory.createUpgrade(5, currency, new ExponentialCost(1e20, Math.log2(1.5)));
+        n = theory.createUpgrade(5, currency, new ExponentialCost(1e20, Math.log2(1.75)));
         n.getDescription = (_) => Utils.getMath(getDesc(n.level));
         n.getInfo = (amount) => Utils.getMathTo(getDesc(n.level), getDesc(n.level + amount));
     }
@@ -164,7 +164,7 @@ var init = () => {
     {
         let getInfo = (level) => "a=" + getEDisplay(getA(level));
         let getDesc = level => "a=2^{" + (BigNumber.from(-0.05) * level).toString(2) + "}"
-        a = theory.createUpgrade(6, currency, new ExponentialCost(1e30, Math.log2(2)));
+        a = theory.createUpgrade(6, currency, new ExponentialCost(1e30, Math.log2(2.3)));
         a.getDescription = (_) => Utils.getMath(getDesc(a.level));
         a.getInfo = (amount) => Utils.getMathTo(getInfo(a.level), getInfo(a.level + amount));
     }
@@ -172,7 +172,7 @@ var init = () => {
     // b
     {
         let getDesc = (level) => "b=" + getB(level).toString(0);
-        b = theory.createUpgrade(7, currency, new ExponentialCost(1e30, Math.log2(2.5)));
+        b = theory.createUpgrade(7, currency, new ExponentialCost(1e30, Math.log2(2.85)));
         b.getDescription = (_) => Utils.getMath(getDesc(b.level));
         b.getInfo = (amount) => Utils.getMathTo(getDesc(b.level), getDesc(b.level + amount));
     }
@@ -380,10 +380,10 @@ var getC2Balance = c2 => {
     return c2 / BigNumber.from(log(e20, currency.value.max(e20))).sqrt()
 }
 var getC2 = level => BigNumber.ONE + 0.25 * Math.min(level, 30) + (level > 30 ? (0.25 * (1 - 0.99 ** (level - 30)) / (1 - 0.99)) : 0)
-var getN = level => BigNumber.ONE + Utils.getStepwisePowerSum(level, 2, 10, 0)
+var getN = level => BigNumber.ONE + Utils.getStepwisePowerSum(level, 2, 15, 0)
 var getA = level => BigNumber.TWO.pow(-0.05).pow(level)
-var getB = level => BigNumber.ONE + Utils.getStepwisePowerSum(level, 2, 10, 0)
-var getX1 = level => BigNumber.ONE + 0.015 * level
+var getB = level => BigNumber.ONE + Utils.getStepwisePowerSum(level, 2, 15, 0)
+var getX1 = level => BigNumber.ONE + 0.01 * level
 var getX2Exponent = level => BigNumber.ONE + 0.1 * level
 var getX2 = level => BigNumber.E.pow(getX2Exponent(level))
 
