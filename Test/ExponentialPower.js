@@ -352,7 +352,7 @@ var tick = (elapsedTime, multiplier) => {
         unlock.level >= 2 ? getX1(x1.level) : 1
     ))) * (
         unlock.level >= 3 ? getX2(x2.level) : 1
-    ) * time.sqrt()
+    ) * time.pow(0.5)
     tph = (log(10, 1 + currency.value + 36000 * drho) - log(10, 1 + currency.value))
     currency.value += drho
 
@@ -394,7 +394,7 @@ var getPrimaryEquation = () => {
     let result
     if (page == 1) {
         theory.primaryEquationHeight = 55
-        result = `\\dot{\\rho}=k${publication.level >= 1 ? "m" : ""}${unlock.level >= 1 ? "E^{-0.9}" : ""}c_1^{B(c_2)${unlock.level >= 2 ? "x_1" : ""}}${unlock.level >= 3 ? "x_2" : ""}\\sqrt{t}\\\\` + theory.latexSymbol + "=\\max\\rho"
+        result = `\\dot{\\rho}=k${publication.level >= 1 ? "m" : ""}${unlock.level >= 1 ? "E^{-0.9}" : ""}c_1^{B(c_2)${unlock.level >= 2 ? "x_1" : ""}}${unlock.level >= 3 ? "x_2" : ""}t^{0.5}\\\\` + theory.latexSymbol + "=\\max\\rho"
     } else if (page == 2) {
         theory.primaryEquationHeight = 40
         result = `E=\\prod_{i}{e_i}`
