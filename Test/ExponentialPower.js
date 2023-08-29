@@ -107,7 +107,7 @@ var drho = BigNumber.ZERO
 var tph = BigNumber.ZERO
 
 var currency;
-var k, c1, c2, n, a, b, x1, x2;
+var k, c1, c2, n, a, b, x1, x2, dt;
 var unlock
 var publication, unlockE
 
@@ -124,6 +124,7 @@ var page = 1
 var E = BigNumber.E
 var E1 = BigNumber.ZERO, E2 = BigNumber.ZERO, E3 = BigNumber.ZERO, E4 = BigNumber.ZERO
 var EDisplay = [BigNumber.ZERO, BigNumber.ZERO, BigNumber.ZERO, BigNumber.ZERO]
+var time = BigNumber.ZERO
 
 var tertiary_display = Array.from({
     length: 2
@@ -222,6 +223,15 @@ var init = () => {
         b = theory.createUpgrade(7, currency, new ExponentialCost(1e30, Math.log2(2.85)));
         b.getDescription = (_) => Utils.getMath(getDesc(b.level));
         b.getInfo = (amount) => Utils.getMathTo(getDesc(b.level), getDesc(b.level + amount));
+    }
+
+    // dt
+    {
+        let getDesc = (level) => "\\dot{t}=" + getDT(level).toString(0);
+        dt = theory.createUpgrade(999, currency, new FirstFreeCost(new ExponentialCost(1e3, Math.log2(1e3))));
+        dt.getDescription = (_) => Utils.getMath(getDesc(dt.level));
+        dt.getInfo = (amount) => Utils.getMathTo(getDesc(dt.level), getDesc(dt.level + amount));
+        dt.maxLevel = 10
     }
 
     /////////////////////
@@ -335,13 +345,14 @@ var tick = (elapsedTime, multiplier) => {
     E = E1
     if (unlockE.level >= 2) E *= E2
 
+    time += dt * getDT(dt.level)
     drho = dt * bonus * getK(k.level) * (
         unlock.level >= 1 && unlockE.level >= 1 ? E.pow(0.9) : 1
     ) * (tertiary_display[0] = getC1(c1.level).pow(getC2Balance(getC2(c2.level)) * (
         unlock.level >= 2 ? getX1(x1.level) : 1
     ))) * (
         unlock.level >= 3 ? getX2(x2.level) : 1
-    )
+    ) * time.sqrt()
     tph = (log(10, 1 + currency.value + 36000 * drho) - log(10, 1 + currency.value))
     currency.value += drho
 
@@ -375,13 +386,15 @@ var tick = (elapsedTime, multiplier) => {
     }
 }
 
+var postPublish = () => time = BigNumber.ZERO
+
 var formatQuaternaryEntry = (...args) => new QuaternaryEntry(...args)
 
 var getPrimaryEquation = () => {
     let result
     if (page == 1) {
         theory.primaryEquationHeight = 55
-        result = `\\dot{\\rho}=k${publication.level >= 1 ? "m" : ""}${unlock.level >= 1 ? "E^{-0.9}" : ""}c_1^{B(c_2)${unlock.level >= 2 ? "x_1" : ""}}${unlock.level >= 3 ? "x_2" : ""}\\\\` + theory.latexSymbol + "=\\max\\rho"
+        result = `\\dot{\\rho}=k${publication.level >= 1 ? "m" : ""}${unlock.level >= 1 ? "E^{-0.9}" : ""}c_1^{B(c_2)${unlock.level >= 2 ? "x_1" : ""}}${unlock.level >= 3 ? "x_2" : ""}\\sqrt{t}\\\\` + theory.latexSymbol + "=\\max\\rho"
     } else if (page == 2) {
         theory.primaryEquationHeight = 40
         result = `E=\\prod_{i}{e_i}`
@@ -413,6 +426,12 @@ var getQuaternaryEntries = () => {
         "\\dot\\rho",
         drho.toString(5)
     ))
+    if (page == 1) {
+        result.push(formatQuaternaryEntry(
+            "t",
+            t.toString(2)
+        ))
+    }
     if (page == 1 && publication.level >= 1) {
         result.push(formatQuaternaryEntry(
             "m",
@@ -455,6 +474,7 @@ var getB = level => BigNumber.ONE + Utils.getStepwisePowerSum(level, 2, 10, 0)
 var getX1 = level => BigNumber.ONE + 0.01 * level
 var getX2Exponent = level => BigNumber.ONE + 0.1 * level
 var getX2 = level => BigNumber.E.pow(getX2Exponent(level))
+var getDT = level => 0.1 * level
 
 var getE1 = n => {
     if (n <= 100) return 1 / (BigNumber.E - (BigNumber.ONE + 1 / n).pow(n))
