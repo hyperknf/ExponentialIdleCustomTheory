@@ -344,7 +344,7 @@ var getQuaternaryEntries = () => {
         "\\dot\\rho",
         drho.toString(5)
     ))
-    if (page == 1) {
+    if (page == 1 && publication.level >= 1) {
         result.push(formatQuaternaryEntry(
             "m",
             BigNumber.from(theory.publicationMultiplier).toString(5)
