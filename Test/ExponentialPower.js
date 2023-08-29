@@ -107,7 +107,7 @@ var drho = BigNumber.ZERO
 var tph = BigNumber.ZERO
 
 var currency;
-var k, c1, c2, n, a, b, x1, x2, dt;
+var k, c1, c2, n, a, b, x1, x2, dtime;
 var unlock
 var publication, unlockE
 
@@ -228,10 +228,10 @@ var init = () => {
     // dt
     {
         let getDesc = (level) => "\\dot{t}=" + getDT(level).toString(0);
-        dt = theory.createUpgrade(999, currency, new FirstFreeCost(new ExponentialCost(1e3, Math.log2(1e3))));
-        dt.getDescription = (_) => Utils.getMath(getDesc(dt.level));
-        dt.getInfo = (amount) => Utils.getMathTo(getDesc(dt.level), getDesc(dt.level + amount));
-        dt.maxLevel = 10
+        dtime = theory.createUpgrade(999, currency, new FirstFreeCost(new ExponentialCost(1e3, Math.log2(1e3))));
+        dtime.getDescription = (_) => Utils.getMath(getDesc(dtime.level));
+        dtime.getInfo = (amount) => Utils.getMathTo(getDesc(dtime.level), getDesc(dtime.level + amount));
+        dtime.maxLevel = 10
     }
 
     /////////////////////
@@ -345,14 +345,14 @@ var tick = (elapsedTime, multiplier) => {
     E = E1
     if (unlockE.level >= 2) E *= E2
 
-    time += dt * getDT(dt.level)
+    time += dt * getDT(dtime.level)
     drho = dt * bonus * getK(k.level) * (
         unlock.level >= 1 && unlockE.level >= 1 ? E.pow(0.9) : 1
     ) * (tertiary_display[0] = getC1(c1.level).pow(getC2Balance(getC2(c2.level)) * (
         unlock.level >= 2 ? getX1(x1.level) : 1
     ))) * (
         unlock.level >= 3 ? getX2(x2.level) : 1
-    )
+    ) * time.sqrt()
     tph = (log(10, 1 + currency.value + 36000 * drho) - log(10, 1 + currency.value))
     currency.value += drho
 
