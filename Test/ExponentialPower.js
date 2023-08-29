@@ -449,9 +449,9 @@ var getC2Balance = c2 => {
     return c2 / BigNumber.from(log(e20, currency.value.max(e20))).sqrt()
 }
 var getC2 = level => BigNumber.ONE + 0.25 * Math.min(level, 30) + (level > 30 ? (0.25 * (1 - 0.99 ** (level - 30)) / (1 - 0.99)) : 0)
-var getN = level => BigNumber.ONE + Utils.getStepwisePowerSum(level, 2, 15, 0)
+var getN = level => BigNumber.ONE + Utils.getStepwisePowerSum(level, 2, 10, 0)
 var getA = level => BigNumber.TWO.pow(-0.05).pow(level)
-var getB = level => BigNumber.ONE + Utils.getStepwisePowerSum(level, 2, 15, 0)
+var getB = level => BigNumber.ONE + Utils.getStepwisePowerSum(level, 2, 10, 0)
 var getX1 = level => BigNumber.ONE + 0.01 * level
 var getX2Exponent = level => BigNumber.ONE + 0.1 * level
 var getX2 = level => BigNumber.E.pow(getX2Exponent(level))
