@@ -352,7 +352,7 @@ var tick = (elapsedTime, multiplier) => {
         unlock.level >= 2 ? getX1(x1.level) : 1
     ))) * (
         unlock.level >= 3 ? getX2(x2.level) : 1
-    ) * time.sqrt()
+    ) * time.pow(0.5)
     tph = (log(10, 1 + currency.value + 36000 * drho) - log(10, 1 + currency.value))
     currency.value += drho
 
