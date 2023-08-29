@@ -4,6 +4,46 @@ import { theory, QuaternaryEntry } from "./api/Theory";
 import { Utils } from "./api/Utils";
 
 const TextResource = {
+    "Achievements": {
+        "Progress": {
+            "e10": {
+                "Name": {
+                    "en": "Beginner",
+                    "zh-Hant": "初階",
+                    "zh-Hans": "初阶"
+                },
+                "Description": {
+                    "en": "Reach e10ρ",
+                    "zh-Hant": "達到e10ρ",
+                    "zh-Hans": "达到e10ρ"
+                }
+            },
+            "e25": {
+                "Name": {
+                    "en": "Novice",
+                    "zh-Hant": "新手",
+                    "zh-Hans": "新手"
+                },
+                "Description": {
+                    "en": "Reach e25ρ",
+                    "zh-Hant": "達到e25ρ",
+                    "zh-Hans": "达到e25ρ"
+                }
+            },
+            "e50": {
+                "Name": {
+                    "en": "Learner",
+                    "zh-Hant": "學者",
+                    "zh-Hans": "学者"
+                },
+                "Description": {
+                    "en": "Reach e50ρ",
+                    "zh-Hant": "達到e50ρ",
+                    "zh-Hans": "达到e50ρ"
+                }
+            }
+        }
+    },
     "PublicationMultiplier": {
         "en": "Publication Multiplier",
         "zh-Hant": "出版物倍率",
@@ -70,6 +110,12 @@ var currency;
 var k, c1, c2, n, a, b, x1, x2;
 var unlock
 var publication, unlockE
+
+var achievements = [
+    false,
+    false,
+    false
+]
 
 var achievement1, achievement2;
 var chapter1, chapter2;
@@ -227,8 +273,9 @@ var init = () => {
     
     /////////////////
     //// Achievements
-    achievement1 = theory.createAchievement(0, "Achievement 1", "Description 1", () => c1.level > 1);
-    achievement2 = theory.createSecretAchievement(1, "Achievement 2", "Description 2", "Maybe you should buy two levels of c2?", () => c2.level > 1);
+    achievement1 = theory.createAchievement(0, "Starter", "Reach e10 rho", () => achievements[0])
+    achievement2 = theory.createAchievement(1, "Novice", "Reach e25 rho", () => achievements[1]);
+    achievement3 = theory.createAchievement(2, "Learner", "Reach e50 rho", () => achievements[2]);
 
     ///////////////////
     //// Story chapters
@@ -282,6 +329,10 @@ var tick = (elapsedTime, multiplier) => {
     )
     tph = (log(10, 1 + currency.value + 36000 * drho) - log(10, 1 + currency.value))
     currency.value += drho
+
+    if (currency.value >= BigNumber.TEN.pow(10)) achievements[0] = true
+    if (currency.value >= BigNumber.TEN.pow(25)) achievements[1] = true
+    if (currency.value >= BigNumber.TEN.pow(50)) achievements[2] = true
 
     theory.invalidatePrimaryEquation()
     theory.invalidateSecondaryEquation()
