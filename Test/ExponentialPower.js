@@ -228,7 +228,7 @@ var init = () => {
     // dt
     {
         let getDesc = (level) => "\\dot{t}=" + getDT(level).toString(0);
-        dtime = theory.createUpgrade(999, currency, new FirstFreeCost(new ExponentialCost(1e3, Math.log2(1e3))));
+        dtime = theory.createUpgrade(999, currency, new FirstFreeCost(new ExponentialCost(1e5, Math.log2(1e5))));
         dtime.getDescription = (_) => Utils.getMath(getDesc(dtime.level));
         dtime.getInfo = (amount) => Utils.getMathTo(getDesc(dtime.level), getDesc(dtime.level + amount));
         dtime.maxLevel = 10
