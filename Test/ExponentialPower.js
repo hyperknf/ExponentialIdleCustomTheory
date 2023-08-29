@@ -271,7 +271,7 @@ var tick = (elapsedTime, multiplier) => {
     if (unlockE.level >= 2) E *= E2
 
     drho = dt * bonus * getK(k.level) * (
-        unlock.level >= 1 && unlockE.level >= 1 ? E.pow(-0.9) : 1
+        unlock.level >= 1 && unlockE.level >= 1 ? E.pow(0.9) : 1
     ) * (tertiary_display[0] = getC1(c1.level).pow(getC2Balance(getC2(c2.level)) * (
         unlock.level >= 2 ? getX1(x1.level) : 1
     ))) * (
@@ -352,16 +352,16 @@ var getQuaternaryEntries = () => {
     }
     result.push(formatQuaternaryEntry(
         "E",
-        unlock.level >= 1 ? getEDisplay(E) : null
+        unlock.level >= 1 ? getInverseEDisplay(E) : null
     ))
     if (page == 2) {
         result.push(formatQuaternaryEntry(
             "e_1",
-            unlock.level >= 1 ? getEDisplay(EDisplay[0]) : null
+            unlock.level >= 1 ? getInverseEDisplay(EDisplay[0]) : null
         ))
         result.push(formatQuaternaryEntry(
             "e_2",
-            unlockE.level >= 2 ? getEDisplay(EDisplay[1]) : null
+            unlockE.level >= 2 ? getInverseEDisplay(EDisplay[1]) : null
         ))
     }
     return result
@@ -399,6 +399,11 @@ var getEDisplay = E => {
     const base = BigNumber.from(E / BigNumber.TEN.pow(exponent))
     return `${base.toString(2)}e${exponent.toString(0)}`
 }
+var getInverseEDisplay = E => {
+    const exponent = E.log10().floor()
+    const base = BigNumber.from(E / BigNumber.TEN.pow(exponent))
+    return `${(10 / base).toString(2)}e${(1 - exponent).toString(0)}`
+}
 
 var getEquationOverlay = _ => {
     const grid = ui.createGrid({
@@ -425,8 +430,8 @@ var getEquationOverlay = _ => {
 }
 
 var canGoToPreviousStage = () => page == 2
-var goToPreviousStage = () => page--
+var goToPreviousStage = () => page = 1
 var canGoToNextStage = () => page == 1 && unlock.level >= 1
-var goToNextStage = () => page++
+var goToNextStage = () => page = 2
 
 init();
