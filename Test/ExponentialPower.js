@@ -68,7 +68,7 @@ var tph = BigNumber.ZERO
 var currency;
 var k, c1, c2, n, a, b, x1, x2;
 var unlock
-var unlockE
+var publication, unlockE
 
 var achievement1, achievement2;
 var chapter1, chapter2;
@@ -179,7 +179,7 @@ var init = () => {
 
     /////////////////////
     // Permanent Upgrades
-    theory.createPublicationUpgrade(0, currency, 1e10);
+    publication = theory.createPublicationUpgrade(0, currency, 1e10);
     theory.createBuyAllUpgrade(1, currency, 1e13);
     theory.createAutoBuyerUpgrade(2, currency, 1e30);
 
@@ -312,7 +312,7 @@ var getPrimaryEquation = () => {
     let result
     if (page == 1) {
         theory.primaryEquationHeight = 55
-        result = `\\dot{\\rho}=km${unlock.level >= 1 ? "E^{-0.9}" : ""}c_1^{B(c_2)${unlock.level >= 2 ? "x_1" : ""}}${unlock.level >= 3 ? "x_2" : ""}\\\\` + theory.latexSymbol + "=\\max\\rho"
+        result = `\\dot{\\rho}=k${publication.level >= 1 ? "m" : ""}${unlock.level >= 1 ? "E^{-0.9}" : ""}c_1^{B(c_2)${unlock.level >= 2 ? "x_1" : ""}}${unlock.level >= 3 ? "x_2" : ""}\\\\` + theory.latexSymbol + "=\\max\\rho"
     } else if (page == 2) {
         theory.primaryEquationHeight = 40
         result = `E=\\prod_{i}{e_i}`
@@ -322,8 +322,8 @@ var getPrimaryEquation = () => {
 var getSecondaryEquation = () => {
     let result
     if (page == 1) {
-        theory.secondaryEquationHeight = 57
-        result = `B(x)=\\frac{x}{\\sqrt{\\log_{e20}{\\max{(1+\\rho, e20)}}}}\\\\m=\\text{${getTextResource(TextResource.PublicationMultiplier)}}`
+        theory.secondaryEquationHeight = publication.level >= 1 ? 57 : 37
+        result = `B(x)=\\frac{x}{\\sqrt{\\log_{e20}{\\max{(1+\\rho, e20)}}}}${publication.level >= 1 ? `\\\\m=\\text{${getTextResource(TextResource.PublicationMultiplier)}}` : ""}`
     } else if (page == 2) {
         theory.secondaryEquationHeight = 37 * unlockE.level
         result = "e_1=e-(1+\\frac{1}{n})^n"
