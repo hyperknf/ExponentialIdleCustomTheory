@@ -20,7 +20,8 @@ const TextResource = {
         "en": "hour",
         "zh-Hant": "小時",
         "zh-Hans": "小时",
-        "fi": "tunti"
+        "fi": "tunti",
+        "de": "stunde"
     }
 }
 
@@ -240,14 +241,16 @@ var updatePage = () => {
 }
 
 var updateMilestoneUpgradeInfo = () => {
-    unlock.description =
-        unlock.level == 0 ? "$\\text{Unlock convergents}$" :
-        unlock.level == 1 ? "$\\text{Unlock }x_1$" :
-        "$\\text{Unlock }x_2$"
-    unlock.info =
-        unlock.level == 0 ? "$\\text{Unlocks convergents}$" :
-        unlock.level == 1 ? "$\\text{Unlocks }x_1$" :
-        "$\\text{Unlocks }x_2$"
+    unlock.description = Localization.getUpgradeUnlockDesc(
+        unlock.level == 0 ? "E" :
+        unlock.level == 1 ? "x_1" :
+        "x_2"
+    )
+    unlock.info = Localization.getUpgradeUnlockInfo(
+        unlock.level == 0 ? "E" :
+        unlock.level == 1 ? "x_1" :
+        "x_2"
+    )
 }
 
 var updateAvailability = () => {
