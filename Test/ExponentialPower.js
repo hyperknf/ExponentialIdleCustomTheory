@@ -273,10 +273,25 @@ var init = () => {
     
     /////////////////
     //// Achievements
-    achievement1 = theory.createAchievement(0, "Starter", "Reach e10 rho", () => achievements[0])
-    achievement2 = theory.createAchievement(1, "Novice", "Reach e25 rho", () => achievements[1]);
-    achievement3 = theory.createAchievement(2, "Learner", "Reach e50 rho", () => achievements[2]);
-
+    achievement1 = theory.createAchievement(
+        0,
+        getTextResource(TextResource.Achievements.Progress.e10.Name),
+        getTextResource(TextResource.Achievements.Progress.e10.Description),
+        () => achievements[0]
+    )
+    achievement2 = theory.createAchievement(
+        1,
+        getTextResource(TextResource.Achievements.Progress.e25.Name),
+        getTextResource(TextResource.Achievements.Progress.e25.Description),
+        () => achievements[1]
+    )
+    achievement3 = theory.createAchievement(
+        2,
+        getTextResource(TextResource.Achievements.Progress.e50.Name),
+        getTextResource(TextResource.Achievements.Progress.e50.Description),
+        () => achievements[2]
+    )
+    
     ///////////////////
     //// Story chapters
     chapter1 = theory.createStoryChapter(0, "My First Chapter", "This is line 1,\nand this is line 2.\n\nNice.", () => c1.level > 0);
