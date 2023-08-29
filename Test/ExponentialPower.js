@@ -471,7 +471,7 @@ var getEDisplay = E => {
 var getInverseEDisplay = E => {
     const exponent = E.log10().floor()
     const base = BigNumber.from(E / BigNumber.TEN.pow(exponent))
-    return `${(10 / base).toString(2)}e-${(exponent - 1).toString(0)}`
+    return `${(10 / base).toString(2)}e-${(exponent + 1).toString(0)}`
 }
 
 var getEquationOverlay = _ => {
