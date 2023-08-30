@@ -305,6 +305,10 @@ var init = () => {
         0,
         getTextResource(TextResource.Achievements.Progress.Name)
     )
+    secret_achievements = theory.createAchievementCategory(
+        999,
+        getTextResource(TextResource.Achievements.Secret.Name)
+    )
     
     achievement1 = theory.createAchievement(
         0,
