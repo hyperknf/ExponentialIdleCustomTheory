@@ -6,6 +6,11 @@ import { Utils } from "./api/Utils";
 const TextResource = {
     "Achievements": {
         "Progress": {
+            "Name": {
+                "en": "Progress",
+                "zh-Hant": "進度",
+                "zh-Hans": "进度"
+            },
             "e10": {
                 "Name": {
                     "en": "Beginner",
@@ -41,6 +46,13 @@ const TextResource = {
                     "zh-Hant": "達到e50ρ",
                     "zh-Hans": "达到e50ρ"
                 }
+            }
+        },
+        "Secret": {
+            "Name": {
+                "en": "Secret",
+                "zh-Hant": "秘密",
+                "zh-Hans": "秘密"
             }
         }
     },
@@ -111,12 +123,18 @@ var k, c1, c2, n, a, b, x1, x2, dtime;
 var unlock
 var publication, unlockE
 
-var achievements = [
-    false,
-    false,
-    false
-]
+var achievements = {
+    regular: [
+        false,
+        false,
+        false
+    ],
+    secret: [
+        false
+    ]
+}
 
+var regular_achievements, secret_achievements
 var achievement1, achievement2;
 var chapter1, chapter2;
 
@@ -283,23 +301,31 @@ var init = () => {
     
     /////////////////
     //// Achievements
+    progress_achievements = theory.createAchievementCategory(
+        0,
+        getTextResource(TextResource.Achievements.Progress.Name)
+    )
+    
     achievement1 = theory.createAchievement(
         0,
+        progress_achievements,
         getTextResource(TextResource.Achievements.Progress.e10.Name),
         getTextResource(TextResource.Achievements.Progress.e10.Description),
-        () => achievements[0]
+        () => achievements.regular[0]
     )
     achievement2 = theory.createAchievement(
         1,
+        progress_achievements,
         getTextResource(TextResource.Achievements.Progress.e25.Name),
         getTextResource(TextResource.Achievements.Progress.e25.Description),
-        () => achievements[1]
+        () => achievements.regular[1]
     )
     achievement3 = theory.createAchievement(
         2,
+        progress_achievements,
         getTextResource(TextResource.Achievements.Progress.e50.Name),
         getTextResource(TextResource.Achievements.Progress.e50.Description),
-        () => achievements[2]
+        () => achievements.regular[2]
     )
     
     ///////////////////
@@ -356,9 +382,9 @@ var tick = (elapsedTime, multiplier) => {
     tph = (log(10, 1 + currency.value + 36000 * drho) - log(10, 1 + currency.value))
     currency.value += drho
 
-    if (currency.value >= BigNumber.TEN.pow(10)) achievements[0] = true
-    if (currency.value >= BigNumber.TEN.pow(25)) achievements[1] = true
-    if (currency.value >= BigNumber.TEN.pow(50)) achievements[2] = true
+    if (currency.value >= BigNumber.TEN.pow(10)) achievements.regular[0] = true
+    if (currency.value >= BigNumber.TEN.pow(25)) achievements.regular[1] = true
+    if (currency.value >= BigNumber.TEN.pow(50)) achievements.regular[2] = true
 
     theory.invalidatePrimaryEquation()
     theory.invalidateSecondaryEquation()
