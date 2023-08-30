@@ -501,7 +501,7 @@ var getInverseEDisplay = E => {
 var getEquationOverlay = _ => {
     const grid = ui.createGrid({
         inputTransparent: true,
-        cascadeInputTransparent: true,
+        cascadeInputTransparent: false,
         children: [
             ui.createLatexLabel({
                 text: version,
