@@ -451,6 +451,10 @@ var getQuaternaryEntries = () => {
             "e_2",
             unlockE.level >= 2 ? getInverseEDisplay(EDisplay[1]) : null
         ))
+        result.push(formatQuaternaryEntry(
+            "e_3",
+            null
+        ))
     }
     return result
 }
