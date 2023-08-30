@@ -53,6 +53,24 @@ const TextResource = {
                 "en": "Secret",
                 "zh-Hant": "秘密",
                 "zh-Hans": "秘密"
+            },
+            "Luck": {
+                "Name": {
+                    "en": "Luck",
+                    "zh-Hant": "幸運",
+                    "zh-Hans": "幸运"
+                },
+                "Description": {
+                    "en": "You have a 1 in 1 million chance of getting this achievement per tick",
+                    "zh-Hant": "在每一刻有一百萬分之一的機會獲得此成就",
+                    "zh-Hans": "在每一刻有一百万分之一的机会获得此成就"
+                },
+                "Hint": {
+                    "en": "Hope you're lucky",
+                    "zh-Hant": "祝你好運",
+                    "zh-Hans": "祝你好运",
+                    "fi": "Onnea"
+                }
             }
         }
     },
@@ -136,6 +154,7 @@ var achievements = {
 
 var regular_achievements, secret_achievements
 var achievement1, achievement2;
+var secret_achievement1
 var chapter1, chapter2;
 
 var page = 1
@@ -143,6 +162,8 @@ var E = BigNumber.E
 var E1 = BigNumber.ZERO, E2 = BigNumber.ZERO, E3 = BigNumber.ZERO, E4 = BigNumber.ZERO
 var EDisplay = [BigNumber.ZERO, BigNumber.ZERO, BigNumber.ZERO, BigNumber.ZERO]
 var time = BigNumber.ZERO
+
+var secret_achievement_chance = 1e6
 
 var tertiary_display = Array.from({
     length: 2
@@ -331,6 +352,15 @@ var init = () => {
         getTextResource(TextResource.Achievements.Progress.e50.Description),
         () => achievements.regular[2]
     )
+
+    secret_achievement1 = theory.createSecretAchievement(
+        99900,
+        secret_achievements,
+        getTextResource(TextResource.Achievements.Secret.Luck.Name),
+        getTextResource(TextResource.Achievements.Secret.Luck.Description),
+        getTextResource(TextResource.Achievements.Secret.Luck.Hint),
+        () => achievements.secret[0]
+    )
     
     ///////////////////
     //// Story chapters
@@ -389,6 +419,8 @@ var tick = (elapsedTime, multiplier) => {
     if (currency.value >= BigNumber.TEN.pow(10)) achievements.regular[0] = true
     if (currency.value >= BigNumber.TEN.pow(25)) achievements.regular[1] = true
     if (currency.value >= BigNumber.TEN.pow(50)) achievements.regular[2] = true
+
+    if (Math.round(Math.random() * (secret_achievement_chance - 1) + 1) == 1) achievements.secret[0] = true
 
     theory.invalidatePrimaryEquation()
     theory.invalidateSecondaryEquation()
