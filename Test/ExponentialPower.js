@@ -435,7 +435,7 @@ var tick = (elapsedTime, multiplier) => {
         const values = [
             ["rho", currency.value],
             ["k", getK(k.level)],
-            ["E^-1", getEDisplay(E.pow(-1))],
+            ["E^-1", getInverseEDisplay(E)],
             ["c_1", getC1(c1.level)],
             ["B(c_2)", getC2Balance(getC2(c2.level))],
             ["x_1", getX1(x1.level)],
