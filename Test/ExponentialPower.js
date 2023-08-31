@@ -249,7 +249,7 @@ var init = () => {
 
     // a
     {
-        let getInfo = (level) => "a=" + getEDisplay(getA(level));
+        let getInfo = (level) => "a=" + getInverseEDisplay(getA(level));
         let getDesc = level => "a=e^{" + (BigNumber.from(-0.05) * level).toString(2) + "}"
         a = theory.createUpgrade(6, currency, new ExponentialCost(1e30, Math.log2(2.3)));
         a.getDescription = (_) => Utils.getMath(getDesc(a.level));
