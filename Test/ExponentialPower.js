@@ -137,7 +137,7 @@ var drho = BigNumber.ZERO
 var tph = BigNumber.ZERO
 
 var currency;
-var k, c1, c2, n, a, b, x1, x2, dtime;
+var k, c1, c2, n, a, b, x, x1, x2, dtime;
 var unlock
 var publication, unlockE
 
@@ -242,7 +242,7 @@ var init = () => {
     // n
     {
         let getDesc = (level) => "n=" + getN(level).toString(0);
-        n = theory.createUpgrade(5, currency, new ExponentialCost(1e20, Math.log2(1.75)));
+        n = theory.createUpgrade(100, currency, new ExponentialCost(1e20, Math.log2(1.75)));
         n.getDescription = (_) => Utils.getMath(getDesc(n.level));
         n.getInfo = (amount) => Utils.getMathTo(getDesc(n.level), getDesc(n.level + amount));
     }
@@ -251,7 +251,7 @@ var init = () => {
     {
         let getInfo = (level) => "a=" + getInverseEDisplay(getInverseA(level));
         let getDesc = level => "a=e^{" + (BigNumber.from(-0.05) * level).toString(2) + "}"
-        a = theory.createUpgrade(6, currency, new ExponentialCost(1e30, Math.log2(2.3)));
+        a = theory.createUpgrade(101, currency, new ExponentialCost(1e30, Math.log2(2.3)));
         a.getDescription = (_) => Utils.getMath(getDesc(a.level));
         a.getInfo = (amount) => Utils.getMathTo(getInfo(a.level), getInfo(a.level + amount));
     }
@@ -259,9 +259,17 @@ var init = () => {
     // b
     {
         let getDesc = (level) => "b=" + getB(level).toString(0);
-        b = theory.createUpgrade(7, currency, new ExponentialCost(1e30, Math.log2(2.85)));
+        b = theory.createUpgrade(102, currency, new ExponentialCost(1e30, Math.log2(2.85)));
         b.getDescription = (_) => Utils.getMath(getDesc(b.level));
         b.getInfo = (amount) => Utils.getMathTo(getDesc(b.level), getDesc(b.level + amount));
+    }
+
+    // x
+    {
+        let getDesc = (level) => "x=" + getX(level).toString(0);
+        x = theory.createUpgrade(103, currency, new ExponentialCost(1e40, Math.log2(1.9375)));
+        x.getDescription = (_) => Utils.getMath(getDesc(x.level));
+        x.getInfo = (amount) => Utils.getMathTo(getDesc(x.level), getDesc(x.level + amount));
     }
 
     // dt
@@ -402,8 +410,10 @@ var tick = (elapsedTime, multiplier) => {
 
     E1 = EDisplay[0] = getE1(getN(n.level))
     E2 = EDisplay[1] = getE2(getA(a.level), getB(b.level))
+    E3 = EDisplay[2] = getE3(getX(x.level))
     E = E1
     if (unlockE.level >= 2) E *= E2
+    if (unlockE.level >= 3) E *= E3
 
     time += dt * getDT(dtime.level)
     drho = dt * getK(k.level) * bonus * time.pow(0.6) * (
@@ -472,6 +482,7 @@ var getSecondaryEquation = () => {
         theory.secondaryEquationHeight = 37 * unlockE.level
         result = "e_1=e-(1+\\frac{1}{n})^n"
         if (unlockE.level >= 2) result += "\\\\e_2=e-(1+\\frac{a}{b})^{\\frac{b}{a}}"
+        if (unlockE.level >= 3) result += "\\\\e_3=e-(\\frac{x}{x+1})^{-x}"
     } else result = "\\text{Invalid Page}"
     return "\\begin{array}{c}" + result + "\\end{array}"
 }
@@ -515,7 +526,7 @@ var getQuaternaryEntries = () => {
         ))
         result.push(formatQuaternaryEntry(
             "e_3",
-            null
+            unlockE.level >= 3 ? getInverseEDisplay(EDisplay[2]) : null
         ))
     }
     return result
@@ -539,6 +550,7 @@ var getN = level => BigNumber.ONE + Utils.getStepwisePowerSum(level, 2, 10, 0)
 var getInverseA = level => BigNumber.E.pow(0.05 * level)
 var getA = level => getInverseA(level).pow(-1)
 var getB = level => BigNumber.ONE + Utils.getStepwisePowerSum(level, 2, 10, 0)
+var getX = level => BigNumber.ONE + Utils.getStepwisePowerSum(level, 2, 10, 0)
 var getX1 = level => BigNumber.ONE + 0.01 * level
 var getX2Exponent = level => BigNumber.ONE + 0.1 * level
 var getX2 = level => BigNumber.E.pow(getX2Exponent(level))
@@ -550,6 +562,11 @@ var getE1 = n => {
     return 2 * n / BigNumber.E + 11 * n / (6 * BigNumber.E) - 5 / (72 * BigNumber.E * n) + 17 / (540 * BigNumber.E * BigNumber.from(n).pow(2))
 }
 var getE2 = (a, b) => getE1(b / a)
+var getE3 = x => {
+    if (x <= 100) return (x / (x + 1)).pow(-x)
+    // Laurent series
+    return 2 * x / BigNumber.E + 11 / (6 * BigNumber.E) - 5 / (72 * BigNumber.E * x) + 17 / (540 * BigNumber.E * x.pow(2)) - 913 / (51840 * BigNumber.E * x.pow(3))
+}
 
 var getEDisplay = E => {
     const exponent = E.log10().floor()
