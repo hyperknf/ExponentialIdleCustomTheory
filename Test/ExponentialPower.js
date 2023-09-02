@@ -521,7 +521,7 @@ var getQuaternaryEntries = () => {
     return result
 }
 
-var getCurrencyFromTau = (tau) => [tau.max(BigNumber.ONE).pow(1), currency.symbol];
+var getCurrencyFromTau = (tau) => [tau.max(BigNumber.ONE), currency.symbol];
 var getPublicationMultiplier = tau => 100 * tau.pow(0.115) / (10 + tau).log10()
 var getPublicationMultiplierFormula = symbol => `\\frac{100{${symbol}}^{0.115}}{\\log_{10}(10+${symbol})}`;
 var getTau = () => currency.value;
