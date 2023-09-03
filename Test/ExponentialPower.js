@@ -251,7 +251,7 @@ var init = () => {
     {
         let getInfo = (level) => "a=" + getInverseEDisplay(getInverseA(level));
         let getDesc = level => "a=e^{" + (BigNumber.from(-0.05) * level).toString(2) + "}"
-        a = theory.createUpgrade(101, currency, new ExponentialCost(1e30, Math.log2(2.5)));
+        a = theory.createUpgrade(101, currency, new ExponentialCost(1e30, Math.log2(2.375)));
         a.getDescription = (_) => Utils.getMath(getDesc(a.level));
         a.getInfo = (amount) => Utils.getMathTo(getInfo(a.level), getInfo(a.level + amount));
     }
@@ -259,7 +259,7 @@ var init = () => {
     // b
     {
         let getDesc = (level) => "b=" + getB(level).toString(0);
-        b = theory.createUpgrade(102, currency, new ExponentialCost(1e30, Math.log2(3.05)));
+        b = theory.createUpgrade(102, currency, new ExponentialCost(1e30, Math.log2(2.925)));
         b.getDescription = (_) => Utils.getMath(getDesc(b.level));
         b.getInfo = (amount) => Utils.getMathTo(getDesc(b.level), getDesc(b.level + amount));
     }
@@ -267,7 +267,7 @@ var init = () => {
     // x
     {
         let getDesc = (level) => "x=" + getX(level).toString(0);
-        x = theory.createUpgrade(103, currency, new ExponentialCost(1e40, Math.log2(1.9375)));
+        x = theory.createUpgrade(103, currency, new ExponentialCost(1e40, Math.log2(1.925)));
         x.getDescription = (_) => Utils.getMath(getDesc(x.level));
         x.getInfo = (amount) => Utils.getMathTo(getDesc(x.level), getDesc(x.level + amount));
     }
@@ -551,7 +551,7 @@ var getN = level => BigNumber.ONE + Utils.getStepwisePowerSum(level, 2, 10, 0)
 var getInverseA = level => BigNumber.E.pow(0.05 * level)
 var getA = level => getInverseA(level).pow(-1)
 var getB = level => BigNumber.ONE + Utils.getStepwisePowerSum(level, 2, 10, 0)
-var getX = level => BigNumber.ONE + Utils.getStepwisePowerSum(level, 2, 11, 0)
+var getX = level => BigNumber.ONE + Utils.getStepwisePowerSum(level, 2, 10, 0)
 var getX1 = level => BigNumber.ONE + 0.01 * level
 var getX2Exponent = level => BigNumber.ONE + 0.1 * level
 var getX2 = level => BigNumber.E.pow(getX2Exponent(level))
