@@ -251,7 +251,7 @@ var init = () => {
     {
         let getInfo = (level) => "a=" + getInverseEDisplay(getInverseA(level));
         let getDesc = level => "a=e^{" + (BigNumber.from(-0.05) * level).toString(2) + "}"
-        a = theory.createUpgrade(101, currency, new ExponentialCost(1e30, Math.log2(2.3)));
+        a = theory.createUpgrade(101, currency, new ExponentialCost(1e30, Math.log2(2.5)));
         a.getDescription = (_) => Utils.getMath(getDesc(a.level));
         a.getInfo = (amount) => Utils.getMathTo(getInfo(a.level), getInfo(a.level + amount));
     }
@@ -259,7 +259,7 @@ var init = () => {
     // b
     {
         let getDesc = (level) => "b=" + getB(level).toString(0);
-        b = theory.createUpgrade(102, currency, new ExponentialCost(1e30, Math.log2(2.85)));
+        b = theory.createUpgrade(102, currency, new ExponentialCost(1e30, Math.log2(3.05)));
         b.getDescription = (_) => Utils.getMath(getDesc(b.level));
         b.getInfo = (amount) => Utils.getMathTo(getDesc(b.level), getDesc(b.level + amount));
     }
@@ -551,7 +551,7 @@ var getN = level => BigNumber.ONE + Utils.getStepwisePowerSum(level, 2, 10, 0)
 var getInverseA = level => BigNumber.E.pow(0.05 * level)
 var getA = level => getInverseA(level).pow(-1)
 var getB = level => BigNumber.ONE + Utils.getStepwisePowerSum(level, 2, 10, 0)
-var getX = level => BigNumber.ONE + Utils.getStepwisePowerSum(level, 2, 9, 0)
+var getX = level => BigNumber.ONE + Utils.getStepwisePowerSum(level, 2, 11, 0)
 var getX1 = level => BigNumber.ONE + 0.01 * level
 var getX2Exponent = level => BigNumber.ONE + 0.1 * level
 var getX2 = level => BigNumber.E.pow(getX2Exponent(level))
@@ -566,7 +566,7 @@ var getE2 = (a, b) => getE1(b / a)
 var getE3 = x => {
     if (x <= 100) return (x / (x + 1)).pow(-x)
     // Laurent series
-    return 2 * x / BigNumber.E + 11 / (6 * BigNumber.E) - 5 / (72 * BigNumber.E * x) + 17 / (540 * BigNumber.E * x.pow(2)) - 913 / (51840 * BigNumber.E * x.pow(3))
+    return 2 * x / BigNumber.E + 11 * n / (6 * BigNumber.E) - 5 / (72 * BigNumber.E * x) + 17 / (540 * BigNumber.E * x.pow(2)) - 913 / (51840 * BigNumber.E * x.pow(3))
 }
 
 var getEDisplay = E => {
