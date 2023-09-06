@@ -512,10 +512,12 @@ var getQuaternaryEntries = () => {
             BigNumber.from(theory.publicationMultiplier).toString(5)
         ))
     }
+    /*
     result.push(formatQuaternaryEntry(
         "E",
         unlock.level >= 1 ? getInverseEDisplay(E) : null
     ))
+    */
     if (page == 2) {
         result.push(formatQuaternaryEntry(
             "e_1",
@@ -570,13 +572,11 @@ var getE3 = x => {
 }
 
 var getEDisplay = E => {
-    E = BigNumber.from(E)
     const exponent = E.log10().floor()
     const base = BigNumber.from(E / BigNumber.TEN.pow(exponent))
     return `${base.toString(3)}e${exponent.toString(0)}`
 }
 var getInverseEDisplay = E => {
-    E = BigNumber.from(E)
     const exponent = E.log10().floor()
     const base = BigNumber.from(E / BigNumber.TEN.pow(exponent))
     return `${(10 / base).toString(3)}e${(-(exponent + 1)).toString(0)}`
