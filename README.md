@@ -1,1 +1,1 @@
-# ExponentialIdleCustomTheory
+# Custom theories for Exponential Idle
