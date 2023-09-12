@@ -590,7 +590,7 @@ var getE3 = x => {
 }
 var getE4 = y => {
     y = BigNumber.from(y)
-    if (y < 10) return (BigNumber.E - factorial(y) / derangement(y)).pow(-1).abs()
+    if (y < 10) return BigNumber.from(BigNumber.E - factorial(y) / derangement(y)).pow(-1).abs()
     return ((
         y.pow(y) * (
             (2 * BigNumber.PI * y).sqrt()
