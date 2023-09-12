@@ -95,6 +95,9 @@ const TextResource = {
         "fi": "tunti",
         "de": "stunde"
     }
+    "TickRate": {
+        "en": "Tick Rate"
+    }
 }
 
 var id = "ExponentialPowerTest"
