@@ -94,7 +94,7 @@ const TextResource = {
         "zh-Hans": "小时",
         "fi": "tunti",
         "de": "stunde"
-    }
+    },
     "TickRate": {
         "en": "Tick Rate"
     }
