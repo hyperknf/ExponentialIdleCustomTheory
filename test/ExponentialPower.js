@@ -636,7 +636,7 @@ var factorial = number => {
 }
 var derangement = number => {
     let sum = 0
-    for (let i = 0; i <= number; i++) sum += (-BigNumber.ONE).pow(i) / factorial(i)
+    for (let i = 0; i <= number; i++) sum += (i % 2 == 0 ? 1 : -1) / factorial(i)
     return factorial(number) * sum
 }
 var harmonic = number => {
