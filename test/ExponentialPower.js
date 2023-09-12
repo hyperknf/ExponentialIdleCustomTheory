@@ -514,12 +514,10 @@ var getQuaternaryEntries = () => {
             BigNumber.from(theory.publicationMultiplier).toString(5)
         ))
     }
-    /*
     result.push(formatQuaternaryEntry(
         "E",
         unlock.level >= 1 ? getInverseEDisplay(E) : null
     ))
-    */
     if (page == 2) {
         result.push(formatQuaternaryEntry(
             "e_1",
@@ -571,6 +569,56 @@ var getE3 = x => {
     if (x <= 100) return (x / (x + 1)).pow(-x)
     // Laurent series
     return 2 * x / BigNumber.E + 11 * n / (6 * BigNumber.E) - 5 / (72 * BigNumber.E * x) + 17 / (540 * BigNumber.E * x.pow(2)) - 913 / (51840 * BigNumber.E * x.pow(3))
+}
+var getE4 = y => {
+    y = BigNumber.from(y)
+    if (y < 10) {
+        let sum = 0
+        for (let i = 0; i <= y; i++) sum += (-BigNumber.ONE).pow(i) / factorial(i)
+        return factorial(y) * sum
+    }
+    return (
+        y.pow(y) * (
+            (2 * BigNumber.PI * y).sqrt()
+            +
+            1 / 6 * (BigNumber.PI / 2 / y).sqrt()
+            +
+            1 / 144 * (BigNumber.PI / 2 / y.pow(3)).sqrt()
+            -
+            139 * (BigNumber.PI / 2 / y.pow(5)).sqrt() / 25920
+            -
+            571 * (BigNumber.PI / 2 / y.pow(7)).sqrt() / 1244160
+            +
+            163879 * (BigNumber.PI / 2 / y.pow(9)).sqrt() / 104509440
+            +
+            5246819 * (BigNumber.PI / 2 / y.pow(11)).sqrt() / 37623398400
+        ) + (-BigNumber.E).pow(y + 1) * (
+            - 1 / y
+            + 2 / y.pow(2)
+            - 5 / y.pow(3)
+            + 15 / y.pow(4)
+            - 52 / y.pow(5)
+            + 203 / y.pow(6)
+        )
+    ) / (
+        BigNumber.E * (-BigNumber.E).pow(y + 1) * (
+            - 1 / y
+            + 2 / y.pow(2)
+            - 5 / y.pow(3)
+            + 15 / y.pow(4)
+            - 52 / y.pow(5)
+            + 203 / y.pow(6)
+        )
+    )
+}
+
+var factorial = number => {
+    if (number <= 5) {
+        let result = 1;
+        for (let i = 1; i <= number; i++) result *= i
+        return result
+    }
+    return (2 * number * BigNumber.PI).sqrt() * (number / BigNumber.E).pow(number)
 }
 
 var getEDisplay = E => {
