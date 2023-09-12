@@ -3,6 +3,7 @@ import { BigNumber } from "./api/BigNumber"
 import { theory, QuaternaryEntry } from "./api/Theory"
 import { Utils } from "./api/Utils"
 import { UI } from "./api/ui/UI"
+import { Localization } from "./api/Localization"
 
 const TextResource = {
     "Achievements": {
