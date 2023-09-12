@@ -496,7 +496,7 @@ var getSecondaryEquation = () => {
         result = "e_1=e-(1+\\frac{1}{n})^n"
         if (unlockE.level >= 2) result += "\\\\e_2=e-(1+\\frac{a}{b})^{\\frac{b}{a}}"
         if (unlockE.level >= 3) result += "\\\\e_3=e-(\\frac{x}{x+1})^{-x}"
-        if (unlockE.level >= 4) result += "\\\\e_4=e-\\frac{y!}{!y}"
+        if (unlockE.level >= 4) result += "\\\\e_4=|e-\\frac{y!}{!y}|"
     } else result = "\\text{Invalid Page}"
     return "\\begin{array}{c}" + result + "\\end{array}"
 }
@@ -646,6 +646,7 @@ var harmonic = number => {
         for (let i = 1; i <= number; i++) sum += 1 / i
         return sum
     }
+    // Puiseux series
     return number.log() + 0.5772156649015328606065120900824024310421 + 1 / (2 * number) - 1 / (12 * number.pow(2)) + 1 / (120 * number.pow(4))
 }
 
