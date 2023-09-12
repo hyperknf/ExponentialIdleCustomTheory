@@ -141,7 +141,9 @@ var tph = BigNumber.ZERO
 var currency
 var k, c1, c2, n, a, b, x, y, x1, x2, dtime
 var unlock
-var publication, unlockE
+var publication, tickrate, unlockE
+
+var dt = BigNumber.ONE / 10
 
 var achievements = {
     regular: [
@@ -299,9 +301,17 @@ var init = () => {
     theory.createAutoBuyerUpgrade(2, currency, 1e30)
 
     {
+        let getDesc = level => Localization.getUpgradeMultCustomDesc(getTextResource(TextResource.TickRate), 1.2)
+        let getInfo = level => Localization.getUpgradeMultCustomInfo(getTextResource(TextResource.TickRate), 1.2)
+        tickrate = theory.createPermanentUpgrade(100, currency, new ExponentialCost(1e60, Math.log2(1e30)))
+        tickrate.getDescription = _ => Utils.getMath(getDesc(unlockE.level))
+        tickrate.getInfo = _ => Utils.getMath(getInfo(unlockE.level))
+    }
+
+    {
         let getDesc = level => `\\text{Unlock }e_{${level + 1}}`
         let getInfo = level => `\\text{Unlocks }e_{${level + 1}}`
-        unlockE = theory.createPermanentUpgrade(3, currency, new CustomCost(
+        unlockE = theory.createPermanentUpgrade(200, currency, new CustomCost(
             level => {
                 switch (level) {
                     case 0:
@@ -419,9 +429,7 @@ var updateAvailability = () => {
 }
 
 var tick = (elapsedTime, multiplier) => {
-    try {
-    
-    let dt = BigNumber.from(elapsedTime * multiplier)
+    dt = BigNumber.from(elapsedTime * multiplier * getTickRate(tickrate.level))
     let bonus = theory.publicationMultiplier
 
     E1 = EDisplay[0] = getE1(getN(n.level))
@@ -458,22 +466,6 @@ var tick = (elapsedTime, multiplier) => {
     updatePage()
     updateMilestoneUpgradeInfo()
     updateAvailability()
-
-    } catch (exception) {
-        const values = [
-            ["rho", currency.value],
-            ["k", getK(k.level)],
-            ["E^-1", getInverseEDisplay(E)],
-            ["c_1", getC1(c1.level)],
-            ["B(c_2)", getC2Balance(getC2(c2.level))],
-            ["x_1", getX1(x1.level)],
-            ["x_2", getX2(x2.level)],
-            ["e_1", E1],
-            ["e_2", E2]
-        ]
-        let total = values.reduce((acc, val) => acc + "\n" + val.join("="), "")
-        throw new Error(`\nException caught:\n${exception}\n${total}`)
-    }
 }
 
 var postPublish = () => time = BigNumber.ZERO
@@ -508,7 +500,7 @@ var getSecondaryEquation = () => {
 var getTertiaryEquation = () => {
     let result
     if (page == 1) {
-        result = `c_1^{B(c_2)${unlock.level >= 2 ? "x_1" : ""}}=${tertiary_display[0].toString(3)},\\quad\\sqrt{\\log_{e20}{(1+\\rho)}}=${tertiary_display[1].toString(3)}`
+        result = `${getTextResource(TextResource.TickRate)}:\\quad ${dt.toString(5)}\\\\c_1^{B(c_2)${unlock.level >= 2 ? "x_1" : ""}}=${tertiary_display[0].toString(3)},\\quad\\sqrt{\\log_{e20}{(1+\\rho)}}=${tertiary_display[1].toString(3)}`
     } else result = ""
     return result
 }
@@ -580,6 +572,8 @@ var getX2Exponent = level => BigNumber.ONE + 0.1 * level
 var getX2 = level => BigNumber.E.pow(getX2Exponent(level))
 var getDT = level => BigNumber.ONE / 10 * level
 
+var getTickRate = level => BigNumber.from(1.2).pow(level)
+
 var getE1 = n => {
     if (n <= 100) return 1 / (BigNumber.E - (BigNumber.ONE + 1 / n).pow(n))
     // Laurent Series
@@ -593,8 +587,8 @@ var getE3 = x => {
 }
 var getE4 = y => {
     y = BigNumber.from(y)
-    if (y < 10) return (BigNumber.E - factorial(y) / derangement(y)).pow(-1)
-    return (
+    if (y < 10) return (BigNumber.E - factorial(y) / derangement(y)).pow(-1).abs()
+    return ((
         y.pow(y) * (
             (2 * BigNumber.PI * y).sqrt()
             +
@@ -626,7 +620,7 @@ var getE4 = y => {
             - 52 / y.pow(5)
             + 203 / y.pow(6)
         )
-    )
+    )).abs()
 }
 
 var factorial = number => {
