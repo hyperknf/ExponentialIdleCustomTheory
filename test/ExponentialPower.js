@@ -139,7 +139,7 @@ var drho = BigNumber.ZERO
 var tph = BigNumber.ZERO
 
 var currency
-var k, c1, c2, n, a, b, x, x1, x2, dtime
+var k, c1, c2, n, a, b, x, y, x1, x2, dtime
 var unlock
 var publication, unlockE
 
@@ -274,6 +274,15 @@ var init = () => {
         x.getInfo = (amount) => Utils.getMathTo(getDesc(x.level), getDesc(x.level + amount))
     }
 
+    // y
+    {
+        let getDesc = (level) => "y=" + getY(level).toString(10)
+        let getInfo = (level) => "y=1+H_{" + level + "}"
+        y = theory.createUpgrade(104, currency, new ExponentialCost(1e50, Math.log2(2)))
+        y.getDescription = (_) => Utils.getMath(getDesc(y.level))
+        y.getInfo = (amount) => Utils.getMathTo(getInfo(y.level), getInfo(y.level + amount))
+    }
+
     // dt
     {
         let getDesc = (level) => "\\dot{t}=" + getDT(level).toString(1)
@@ -303,6 +312,10 @@ var init = () => {
                         return BigNumber.from(5e40)
                     case 3:
                         return BigNumber.from(5e50)
+                    case 4:
+                        return BigNumber.from(5e60)
+                    default:
+                        return BigNumber.from("5e69420")
                 }
             }
         ))
@@ -414,9 +427,11 @@ var tick = (elapsedTime, multiplier) => {
     E1 = EDisplay[0] = getE1(getN(n.level))
     E2 = EDisplay[1] = getE2(getA(a.level), getB(b.level))
     E3 = EDisplay[2] = getE3(getX(x.level))
+    E4 = EDisplay[3] = getE4(getY(y.level))
     E = E1
     if (unlockE.level >= 2) E *= E2
     if (unlockE.level >= 3) E *= E3
+    if (unlockE.level >= 4) E *= 4
 
     time += dt * getDT(dtime.level)
     drho = dt * getK(k.level) * bonus * time.pow(0.6) * (
@@ -486,6 +501,7 @@ var getSecondaryEquation = () => {
         result = "e_1=e-(1+\\frac{1}{n})^n"
         if (unlockE.level >= 2) result += "\\\\e_2=e-(1+\\frac{a}{b})^{\\frac{b}{a}}"
         if (unlockE.level >= 3) result += "\\\\e_3=e-(\\frac{x}{x+1})^{-x}"
+        if (unlockE.level >= 4) result += "\\\\e_4=e-\\frac{y!}{!y}"
     } else result = "\\text{Invalid Page}"
     return "\\begin{array}{c}" + result + "\\end{array}"
 }
@@ -531,6 +547,10 @@ var getQuaternaryEntries = () => {
             "e_3",
             unlockE.level >= 3 ? getInverseEDisplay(EDisplay[2]) : null
         ))
+        result.push(formatQuaternaryEntry(
+            "e_4",
+            unlockE.level >= 4 ? getInverseEDisplay(EDisplay[3]) : null
+        ))
     }
     return result
 }
@@ -554,6 +574,7 @@ var getInverseA = level => BigNumber.E.pow(0.05 * level)
 var getA = level => getInverseA(level).pow(-1)
 var getB = level => BigNumber.ONE + Utils.getStepwisePowerSum(level, 2, 10, 0)
 var getX = level => BigNumber.ONE + Utils.getStepwisePowerSum(level, 2, 10, 0)
+var getY = level => BigNumber.ONE + harmonic(level)
 var getX1 = level => BigNumber.ONE + 0.01 * level
 var getX2Exponent = level => BigNumber.ONE + 0.1 * level
 var getX2 = level => BigNumber.E.pow(getX2Exponent(level))
@@ -572,11 +593,7 @@ var getE3 = x => {
 }
 var getE4 = y => {
     y = BigNumber.from(y)
-    if (y < 10) {
-        let sum = 0
-        for (let i = 0; i <= y; i++) sum += (-BigNumber.ONE).pow(i) / factorial(i)
-        return factorial(y) * sum
-    }
+    if (y < 10) return (BigNumber.E - factorial(y) / derangement(y)).pow(-1)
     return (
         y.pow(y) * (
             (2 * BigNumber.PI * y).sqrt()
@@ -619,6 +636,20 @@ var factorial = number => {
         return result
     }
     return (2 * number * BigNumber.PI).sqrt() * (number / BigNumber.E).pow(number)
+}
+var derangement = number => {
+    let sum = 0
+    for (let i = 0; i <= number; i++) sum += (-BigNumber.ONE).pow(i) / factorial(i)
+    return factorial(number) * sum
+}
+var harmonic = number => {
+    number = BigNumber.from(number)
+    if (number <= 10) {
+        let sum = 0;
+        for (let i = 1; i <= number; i++) sum += 1 / i
+        return sum
+    }
+    return number.log() + 0.5772156649015328606065120900824024310421 + 1 / (2 * number) - 1 / (12 * number.pow(2)) + 1 / (120 * number.pow(4))
 }
 
 var getEDisplay = E => {
