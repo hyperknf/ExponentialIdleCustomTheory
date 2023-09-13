@@ -460,6 +460,17 @@ var postPublish = () => time = BigNumber.ZERO
 
 var formatQuaternaryEntry = (...args) => new QuaternaryEntry(...args)
 
+var isCurrencyVisible = index => {
+    switch (index) {
+        case 0:
+            return true
+        case 1:
+            return false // Coming in the next update
+        default:
+            return true
+    }
+}
+
 var getPrimaryEquation = () => {
     let result
     if (page == 1) {
