@@ -626,15 +626,17 @@ var factorial = number => {
 var derangement = number => {
     number = BigNumber.from(number)
     if (number <= 2) return factorial(number)
-    return (-BigNumber.E).pow(number) * number.pow(-number) * (
-        1 / (2 * BigNumber.PI * number.pow(3)).sqrt()
-        -
-        25 / (12 * (2 * BigNumber.PI * number.pow(5)))
-        +
-        1489 / (288 * (2 * BigNumber.PI * number.pow(7)))
-        -
-        799421 / (51840 * (2 * BigNumber.PI * number.pow(9)))
-    ) + 1 / BigNumber.E
+    return (
+        (-BigNumber.E).pow(number) * number.pow(-number) * (
+            1 / (2 * BigNumber.PI * number.pow(3)).sqrt()
+            -
+            25 / (12 * (2 * BigNumber.PI * number.pow(5)))
+            +
+            1489 / (288 * (2 * BigNumber.PI * number.pow(7)))
+            -
+            799421 / (51840 * (2 * BigNumber.PI * number.pow(9)))
+        ) + 1 / BigNumber.E
+    ) * factorial(number)
 }
 var harmonic = number => {
     number = BigNumber.from(number)
