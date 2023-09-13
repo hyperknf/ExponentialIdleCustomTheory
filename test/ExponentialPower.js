@@ -430,7 +430,6 @@ var tick = (elapsedTime, multiplier) => {
     if (unlockE.level >= 4) E *= E4
 
     time += dt * getDT(dtime.level)
-    
     drho = dt * getK(k.level) * bonus * time.pow(0.6) * (
         unlock.level >= 1 && unlockE.level >= 1 ? E.pow(0.9) : 1
     ) * (tertiary_display[0] = getC1(c1.level).pow(getC2Balance(getC2(c2.level)) * (
@@ -570,11 +569,7 @@ var getE1 = n => {
     return 2 * n / BigNumber.E + 11 * n / (6 * BigNumber.E) - 5 / (72 * BigNumber.E * n) + 17 / (540 * BigNumber.E * BigNumber.from(n).pow(2))
 }
 var getE2 = (a, b) => getE1(b / a)
-var getE3 = x => {
-    if (x <= 100) return (x / (x + 1)).pow(-x)
-    // Laurent series
-    return 2 * x / BigNumber.E + 11 * n / (6 * BigNumber.E) - 5 / (72 * BigNumber.E * x) + 17 / (540 * BigNumber.E * x.pow(2)) - 913 / (51840 * BigNumber.E * x.pow(3))
-}
+var getE3 = x => getE1(x)
 var getE4 = y => {
     y = BigNumber.from(y)
     if (y < 5) return BigNumber.from(BigNumber.E - factorial(y) / derangement(y)).abs().pow(-1)
