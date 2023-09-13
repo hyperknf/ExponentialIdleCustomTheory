@@ -283,7 +283,7 @@ var init = () => {
     {
         let getDesc = (level) => "y=" + getY(level).toString(10)
         let getInfo = (level) => "y=2+H_{" + getYIndex(level) + "}"
-        y = theory.createUpgrade(104, currency, new ExponentialCost(1e50, Math.log2(1.4)))
+        y = theory.createUpgrade(104, currency, new ExponentialCost(1e50, Math.log2(1.575)))
         y.getDescription = (_) => Utils.getMath(getDesc(y.level))
         y.getInfo = (amount) => Utils.getMathTo(getInfo(y.level), getInfo(y.level + amount))
     }
@@ -304,11 +304,11 @@ var init = () => {
     theory.createAutoBuyerUpgrade(2, currency, 1e30)
 
     {
-        let getDesc = level => Localization.getUpgradeMultCustomDesc(getTextResource(TextResource.TickRate), 1.2)
-        let getInfo = level => Localization.getUpgradeMultCustomInfo(getTextResource(TextResource.TickRate), 1.2)
+        let getDesc = level => Localization.getUpgradeMultCustomDesc("\\text{" + getTextResource(TextResource.TickRate) + "}", 1.2)
+        let getInfo = level => Localization.getUpgradeMultCustomInfo("\\text{" + getTextResource(TextResource.TickRate) + "}", 1.2)
         tickrate = theory.createPermanentUpgrade(100, currency, new ExponentialCost(1e60, Math.log2(1e30)))
-        tickrate.getDescription = _ => Utils.getMath(getDesc(unlockE.level))
-        tickrate.getInfo = _ => Utils.getMath(getInfo(unlockE.level))
+        tickrate.getDescription = _ => getDesc(unlockE.level)
+        tickrate.getInfo = _ => getInfo(unlockE.level)
     }
 
     {
@@ -503,9 +503,9 @@ var getSecondaryEquation = () => {
 var getTertiaryEquation = () => {
     let result
     if (page == 1) {
-        result = `${getTextResource(TextResource.TickRate)}:\\quad ${dt.toString(5)}\\\\c_1^{B(c_2)${unlock.level >= 2 ? "x_1" : ""}}=${tertiary_display[0].toString(3)},\\quad\\sqrt{\\log_{e20}{(1+\\rho)}}=${tertiary_display[1].toString(3)}`
+        result = `\\text{${getTextResource(TextResource.TickRate)}:}\\quad ${dt.toString(5)}\\\\c_1^{B(c_2)${unlock.level >= 2 ? "x_1" : ""}}=${tertiary_display[0].toString(3)},\\quad\\sqrt{\\log_{e20}{(1+\\rho)}}=${tertiary_display[1].toString(3)}`
     } else result = ""
-    return result
+    return "\\begin{array}{c}" + result + "\\end{array}"
 }
 var getQuaternaryEntries = () => {
     const result = []
