@@ -620,17 +620,21 @@ var getE4 = y => {
 }
 
 var factorial = number => {
-    if (number <= 5) {
-        let result = 1;
-        for (let i = 1; i <= number; i++) result *= i
-        return result
-    }
+    if (number <= 1) return 0
     return (2 * number * BigNumber.PI).sqrt() * (number / BigNumber.E).pow(number)
 }
 var derangement = number => {
-    let sum = 0
-    for (let i = 0; i <= number; i++) sum += (i % 2 == 0 ? 1 : -1) / factorial(i)
-    return factorial(number) * sum
+    number = BigNumber.from(number)
+    if (number <= 2) return factorial(number)
+    return (-BigNumber.E).pow(number) * number.pow(-number) * (
+        1 / (2 * BigNumber.PI * number.pow(3)).sqrt()
+        -
+        25 / (12 * (2 * BigNumber.PI * number.pow(5)))
+        +
+        1489 / (288 * (2 * BigNumber.PI * number.pow(7)))
+        -
+        799421 / (51840 * (2 * BigNumber.PI * number.pow(9)))
+    ) + 1 / BigNumber.E
 }
 var harmonic = number => {
     number = BigNumber.from(number)
