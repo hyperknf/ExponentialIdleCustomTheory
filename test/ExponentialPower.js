@@ -282,7 +282,7 @@ var init = () => {
     // y
     {
         let getDesc = (level) => "y=" + getY(level).toString(10)
-        let getInfo = (level) => "y=2+H_{" + getYIndex(level) + "}"
+        let getInfo = (level) => "y=2+H_{" + getYIndex(level).toString(0) + "}"
         y = theory.createUpgrade(104, currency, new ExponentialCost(1e50, Math.log2(1.575)))
         y.getDescription = (_) => Utils.getMath(getDesc(y.level))
         y.getInfo = (amount) => Utils.getMathTo(getInfo(y.level), getInfo(y.level + amount))
