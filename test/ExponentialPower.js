@@ -314,24 +314,7 @@ var init = () => {
     {
         let getDesc = level => `\\text{Unlock }e_{${level + 1}}`
         let getInfo = level => `\\text{Unlocks }e_{${level + 1}}`
-        unlockE = theory.createPermanentUpgrade(200, currency, new CustomCost(
-            level => {
-                switch (level) {
-                    case 0:
-                        return BigNumber.ZERO
-                    case 1:
-                        return BigNumber.from(5e30)
-                    case 2:
-                        return BigNumber.from(5e40)
-                    case 3:
-                        return BigNumber.from(5e50)
-                    case 4:
-                        return BigNumber.from(5e60)
-                    default:
-                        return BigNumber.from("5e69420")
-                }
-            }
-        ))
+        unlockE = theory.createPermanentUpgrade(200, currency, new FirstFreeCost(new ExponentialCost(5e30, Math.log2(1e10))))
         unlockE.getDescription = _ => Utils.getMath(getDesc(unlockE.level))
         unlockE.getInfo = _ => Utils.getMath(getInfo(unlockE.level))
         unlockE.maxLevel = 3
