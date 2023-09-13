@@ -141,7 +141,7 @@ var version = "v1.2.test"
 var drho = BigNumber.ZERO
 var tph = BigNumber.ZERO
 
-var currency
+var currency, currency2
 var k, c1, c2, n, a, b, x, y, x1, x2, dtime
 var unlock
 var publication, tickrate, unlockE
@@ -198,7 +198,7 @@ var getStepwisePowerProduct = (level, base, step_length, offset) => {
 
 var init = () => {
     currency = theory.createCurrency()
-    currency2 = theory.createCurrency("ξ", "\\xi")
+    currency2 = theory.createCurrency("δ", "\\delta")
 
     ///////////////////
     // Regular Upgrades
@@ -465,7 +465,7 @@ var isCurrencyVisible = index => {
         case 0:
             return true
         case 1:
-            return false // Coming in the next update
+            return false // Delta is coming in the next update
         default:
             return true
     }
