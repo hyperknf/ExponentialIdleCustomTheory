@@ -177,7 +177,7 @@ var tertiary_display = Array.from({
 }, () => BigNumber.from(0))
 
 var log = (base, value) => BigNumber.from(value).log() / BigNumber.from(base).log()
-var getTextResource = resource => resource[Localization.language] ?? resource.en
+var getTextResource = resource => resource[Localization.language] ?? resource.en ?? "???"
 
 var getStepwisePowerProduct = (level, base, step_length, offset) => {
     if (offset != 0) throw new Error("I don't know how to implement non-zero offset :)")
