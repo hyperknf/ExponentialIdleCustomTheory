@@ -425,6 +425,7 @@ var updateAvailability = () => {
     n.isAvailable = unlock.level >= 1 && unlockE.level >= 1
     a.isAvailable = b.isAvailable = unlock.level >= 1 && unlockE.level >= 2
     x.isAvailable = unlock.level >= 1 && unlockE.level >= 3
+    y.isAvailable = unlock.level >= 1 && unlockE.level >= 4
     x1.isAvailable = unlock.level >= 2
     x2.isAvailable = unlock.level >= 3
 
