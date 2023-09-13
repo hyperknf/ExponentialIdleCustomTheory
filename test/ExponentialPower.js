@@ -313,11 +313,11 @@ var init = () => {
     }
 
     {
-        let getDesc = level => `\\text{Unlock }e_{${level + 1}}`
-        let getInfo = level => `\\text{Unlocks }e_{${level + 1}}`
+        let getDesc = level => Localization.getUpgradeUnlockDesc(`e_{${level + 1}}`)
+        let getInfo = level => Localization.getUpgradeUnlockInfo(`e_{${level + 1}}`)
         unlockE = theory.createPermanentUpgrade(200, currency, new FirstFreeCost(new ExponentialCost(5e30, Math.log2(1e10))))
-        unlockE.getDescription = _ => Utils.getMath(getDesc(unlockE.level))
-        unlockE.getInfo = _ => Utils.getMath(getInfo(unlockE.level))
+        unlockE.getDescription = _ => getDesc(unlockE.level)
+        unlockE.getInfo = _ => getInfo(unlockE.level)
         unlockE.maxLevel = 3
     }
 
