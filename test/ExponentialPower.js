@@ -318,7 +318,7 @@ var init = () => {
         unlockE = theory.createPermanentUpgrade(200, currency, new FirstFreeCost(new ExponentialCost(5e30, Math.log2(1e10))))
         unlockE.getDescription = _ => getDesc(unlockE.level)
         unlockE.getInfo = _ => getInfo(unlockE.level)
-        unlockE.maxLevel = 3
+        unlockE.maxLevel = 4
     }
 
     //////////////////
