@@ -282,8 +282,8 @@ var init = () => {
     // y
     {
         let getDesc = (level) => "y=" + getY(level).toString(10)
-        let getInfo = (level) => "y=1+H_{" + level + "}"
-        y = theory.createUpgrade(104, currency, new ExponentialCost(1e50, Math.log2(2)))
+        let getInfo = (level) => "y=2+H_{" + getYIndex(level) + "}"
+        y = theory.createUpgrade(104, currency, new ExponentialCost(1e50, Math.log2(1.4)))
         y.getDescription = (_) => Utils.getMath(getDesc(y.level))
         y.getInfo = (amount) => Utils.getMathTo(getInfo(y.level), getInfo(y.level + amount))
     }
@@ -569,7 +569,8 @@ var getInverseA = level => BigNumber.E.pow(0.05 * level)
 var getA = level => getInverseA(level).pow(-1)
 var getB = level => BigNumber.ONE + Utils.getStepwisePowerSum(level, 2, 10, 0)
 var getX = level => BigNumber.ONE + Utils.getStepwisePowerSum(level, 2, 10, 0)
-var getY = level => BigNumber.ONE + harmonic(level)
+var getYIndex = level => Utils.getStepwisePowerSum(level, 2, 1000, 0)
+var getY = level => BigNumber.TWO + harmonic(getYIndex(level))
 var getX1 = level => BigNumber.ONE + 0.01 * level
 var getX2Exponent = level => BigNumber.ONE + 0.1 * level
 var getX2 = level => BigNumber.E.pow(getX2Exponent(level))
