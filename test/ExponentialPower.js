@@ -436,13 +436,13 @@ var tick = (elapsedTime, multiplier) => {
     let bonus = theory.publicationMultiplier
 
     E1 = EDisplay[0] = getE1(getN(n.level))
-    E2 = EDisplay[1] = getE2(getA(a.level), getB(b.level))
-    E3 = EDisplay[2] = getE3(getX(x.level))
-    E4 = EDisplay[3] = getE4(getY(y.level))
+    if (unlockE.level >= 2) E2 = EDisplay[1] = getE2(getA(a.level), getB(b.level))
+    if (unlockE.level >= 3) E3 = EDisplay[2] = getE3(getX(x.level))
+    if (unlockE.level >= 4) E4 = EDisplay[3] = getE4(getY(y.level))
     E = E1
     if (unlockE.level >= 2) E *= E2
     if (unlockE.level >= 3) E *= E3
-    if (unlockE.level >= 4) E *= 4
+    if (unlockE.level >= 4) E *= E4
 
     time += dt * getDT(dtime.level)
     drho = dt * getK(k.level) * bonus * time.pow(0.6) * (
@@ -591,7 +591,7 @@ var getE3 = x => {
 }
 var getE4 = y => {
     y = BigNumber.from(y)
-    if (y < 10) return BigNumber.from(BigNumber.E - factorial(y) / derangement(y)).pow(-1).abs()
+    if (y < 5) return BigNumber.from(BigNumber.E - factorial(y) / derangement(y)).abs().pow(-1)
     return ((
         y.pow(y) * (
             (2 * BigNumber.PI * y).sqrt()
