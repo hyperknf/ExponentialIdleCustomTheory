@@ -336,8 +336,8 @@ var init = () => {
 
     { 
         unlock = theory.createMilestoneUpgrade(0, 3)
-        unlock.description = "$\\text{Unlock }E$" 
-        unlock.info = "$\\text{Unlocks }E$"
+        unlock.getDescription = _ => Localization.getUpgradeUnlockDesc("E")
+        unlock.getInfo = _ => Localization.getUpgradeUnlocsInfo("E")
     }
     
     /////////////////
