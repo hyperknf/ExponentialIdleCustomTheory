@@ -355,13 +355,13 @@ var init = () => {
     //// Milestone Upgrades
     theory.setMilestoneCost(new CustomCost(level => {
         switch (level) {
-            case 1:
+            case 0:
                 return BigNumber.from(20)
-            case 2:
+            case 1:
                 return BigNumber.from(50)
-            case 3:
+            case 2:
                 return BigNumber.from(90)
-            case 4:
+            default:
                 return BigNumber.from(120)
         }
     }))
