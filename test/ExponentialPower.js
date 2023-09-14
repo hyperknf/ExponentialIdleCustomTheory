@@ -467,7 +467,7 @@ var isCurrencyVisible = index => {
         case 1:
             return false // Delta is coming in the next update
         default:
-            return true
+            return false // Invalid index
     }
 }
 
@@ -625,7 +625,7 @@ var factorial = number => {
 }
 var derangement = number => {
     number = BigNumber.from(number)
-    if (number <= 2) return factorial(number)
+    if (number < 2) return factorial(number)
     return (
         (-BigNumber.E).pow(number) * number.pow(-number) * (
             1 / (2 * BigNumber.PI * number.pow(3)).sqrt()
