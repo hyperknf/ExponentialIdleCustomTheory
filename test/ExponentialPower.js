@@ -323,7 +323,20 @@ var init = () => {
     {
         let getDesc = level => Localization.getUpgradeUnlockDesc(`e_{${level + 1}}`)
         let getInfo = level => Localization.getUpgradeUnlockInfo(`e_{${level + 1}}`)
-        unlockE = theory.createPermanentUpgrade(200, currency, new FirstFreeCost(new ExponentialCost(5e30, Math.log2(1e10))))
+        unlockE = theory.createPermanentUpgrade(200, currency, new CustomCost(
+            level => {
+                switch (level) {
+                    case 0:
+                        return BigNumber.ZERO
+                    case 1:
+                        return BigNumber.TEN.pow(30)
+                    case 2:
+                        return BigNumber.TEN.pow(45)
+                    case 3:
+                        return BigNumber.TEN.pow(60)
+                }
+            }
+        ))
         unlockE.getDescription = _ => getDesc(unlockE.level)
         unlockE.getInfo = _ => getInfo(unlockE.level)
         unlockE.maxLevel = 4
@@ -340,7 +353,18 @@ var init = () => {
 
     ///////////////////////
     //// Milestone Upgrades
-    theory.setMilestoneCost(new LinearCost(20, 20))
+    theory.setMilestoneCost(new CustomCost(level => {
+        switch (level) {
+            case 1:
+                return BigNumber.from(20)
+            case 2:
+                return BigNumber.from(50)
+            case 3:
+                return BigNumber.from(90)
+            case 4:
+                return BigNumber.from(120)
+        }
+    }))
 
     { 
         unlock = theory.createMilestoneUpgrade(0, 3)
