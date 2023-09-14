@@ -102,7 +102,9 @@ const TextResource = {
         "fi": "sekuntia"
     },
     "TickRate": {
-        "en": "Tick Rate"
+        "en": "Tick Rate",
+        "zh-Hant": "刻速",
+        "zh-Hans": "刻速"
     }
 }
 
