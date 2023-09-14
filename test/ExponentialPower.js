@@ -331,9 +331,9 @@ var init = () => {
                     case 1:
                         return BigNumber.TEN.pow(30)
                     case 2:
-                        return BigNumber.TEN.pow(45)
+                        return BigNumber.TEN.pow(42.5)
                     case 3:
-                        return BigNumber.TEN.pow(60)
+                        return BigNumber.TEN.pow(57.5)
                 }
             }
         ))
