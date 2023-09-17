@@ -151,7 +151,7 @@ var tph = BigNumber.ZERO
 
 var currency, currency2
 var k, c1, c2, n, a, b, x, y, x1, x2, dtime
-var unlock
+var unlock, time_exp
 var publication, tickrate, unlockE
 
 var dt = BigNumber.ONE / 10
@@ -370,6 +370,12 @@ var init = () => {
         unlock = theory.createMilestoneUpgrade(0, 3)
         unlock.getDescription = _ => Localization.getUpgradeUnlockDesc("E")
         unlock.getInfo = _ => Localization.getUpgradeUnlocsInfo("E")
+    }
+
+    { 
+        time_exp = theory.createMilestoneUpgrade(100, 2)
+        time_exp.getDescription = _ => Localization.getUpgradeUnlockDesc("t", 0.2)
+        time_exp.getInfo = _ => Localization.getUpgradeUnlocsInfo("t", 0.2)
     }
     
     /////////////////
