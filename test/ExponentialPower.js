@@ -520,7 +520,7 @@ var getPrimaryEquation = () => {
     let result
     if (page == 1) {
         theory.primaryEquationHeight = 55
-        result = `\\dot{\\rho}=k${publication.level >= 1 ? "m" : ""}t^{${getTExp(time_exp.level).toString(getTExp(time_exp.level) == 1 ? 0 : 1)}}${unlock.level >= 1 ? "E^{-0.9}" : ""}c_1^{B(c_2)${unlock.level >= 2 ? "x_1" : ""}}${unlock.level >= 3 ? "x_2" : ""}\\\\` + theory.latexSymbol + "=\\max\\rho"
+        result = `\\dot{\\rho}=k${publication.level >= 1 ? "m" : ""}t^{${getTExp(time_exp.level).toString(getTExp(time_exp.level) == 1 ? 0 : getTExp(time_exp.level) == 0.5 ? 1 : 2)}}${unlock.level >= 1 ? "E^{-0.9}" : ""}c_1^{B(c_2)${unlock.level >= 2 ? "x_1" : ""}}${unlock.level >= 3 ? "x_2" : ""}\\\\` + theory.latexSymbol + "=\\max\\rho"
     } else if (page == 2) {
         theory.primaryEquationHeight = 40
         result = `E=\\prod_{i}{e_i}`
@@ -597,7 +597,7 @@ var getPublicationMultiplierFormula = symbol => `\\frac{25{${symbol}}^{0.115}}{\
 var getTau = () => currency.value
 var get2DGraphValue = () => currency.value.sign * (BigNumber.ONE + currency.value.abs()).log10().toNumber()
 
-var getK = level => BigNumber.ZERO + Utils.getStepwisePowerSum(level, 2, 4, 0)
+var getK = level => BigNumber.ZERO + Utils.getStepwisePowerSum(level, 2, 5, 0)
 var getC1 = level => BigNumber.ONE + 0.5 * level
 var getC2Balance = c2 => {
     const e20 = BigNumber.TEN.pow(20)
@@ -619,7 +619,7 @@ var getDT = level => BigNumber.ONE / 10 * level
 
 var getTickRate = level => BigNumber.from(1.2).pow(level)
 
-var getTExp = level => BigNumber.ONE / 5 * (3 + (time_exp.isAvailable ? level : 0))
+var getTExp = level => BigNumber.ONE / 4 * (2 + (time_exp.isAvailable ? level : 0))
 
 var getE1 = n => {
     if (n <= 100) return 1 / (BigNumber.E - (BigNumber.ONE + 1 / n).pow(n))
