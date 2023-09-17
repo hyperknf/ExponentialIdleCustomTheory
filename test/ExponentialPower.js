@@ -358,13 +358,13 @@ var init = () => {
             case 0:
                 return BigNumber.from(20)
             case 1:
-                return BigNumber.from(50)
+                return BigNumber.from(45)
             case 2:
-                return BigNumber.from(90)
+                return BigNumber.from(75)
             case 3:
-                return BigNumber.from(120)
+                return BigNumber.from(110)
             case 4:
-                return BigNumber.from(150)
+                return BigNumber.from(145)
             default:
                 return BigNumber.from(200)
         }
