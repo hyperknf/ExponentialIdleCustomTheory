@@ -369,14 +369,14 @@ var init = () => {
     { 
         unlock = theory.createMilestoneUpgrade(0, 3)
         unlock.getDescription = _ => Localization.getUpgradeUnlockDesc("E")
-        unlock.getInfo = _ => Localization.getUpgradeUnlocsInfo("E")
+        unlock.getInfo = _ => Localization.getUpgradeUnlockInfo("E")
         unlock.canBeRefunded = _ => time_exp.level == 0
     }
 
     { 
         time_exp = theory.createMilestoneUpgrade(100, 2)
-        time_exp.getDescription = _ => Localization.getUpgradeUnlockDesc("t", 0.2)
-        time_exp.getInfo = _ => Localization.getUpgradeUnlocsInfo("t", 0.2)
+        time_exp.getDescription = _ => Localization.getUpgradeIncCustomExpDesc("t", 0.2)
+        time_exp.getInfo = _ => Localization.getUpgradeIncCustomExpInfo("t", 0.2)
     }
     
     /////////////////
