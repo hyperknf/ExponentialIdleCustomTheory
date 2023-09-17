@@ -250,7 +250,7 @@ var init = () => {
     {
         let getInfo = level => "x_2=" + getX2(level).toString(3)
         let getDesc = level => "x_2=e^{" + getX2Exponent(level) + "}"
-        x2 = theory.createUpgrade(4, currency, new ExponentialCost(1e60, Math.log2(10 ** 2.5)))
+        x2 = theory.createUpgrade(4, currency, new ExponentialCost(1e50, Math.log2(100)))
         x2.getDescription = _ => Utils.getMath(getDesc(x2.level))
         x2.getInfo = amount => Utils.getMathTo(getInfo(x2.level), getInfo(x2.level + amount))
     }
@@ -292,7 +292,7 @@ var init = () => {
     {
         let getDesc = (level) => "y=" + getY(level).toString(10)
         let getInfo = (level) => "y=2+H_{" + getYIndex(level).toString(0) + "}"
-        y = theory.createUpgrade(104, currency, new ExponentialCost(1e50, Math.log2(1.575)))
+        y = theory.createUpgrade(104, currency, new ExponentialCost(1e55, Math.log2(1.575)))
         y.getDescription = (_) => Utils.getMath(getDesc(y.level))
         y.getInfo = (amount) => Utils.getMathTo(getInfo(y.level), getInfo(y.level + amount))
     }
@@ -361,8 +361,12 @@ var init = () => {
                 return BigNumber.from(50)
             case 2:
                 return BigNumber.from(90)
-            default:
+            case 3:
                 return BigNumber.from(120)
+            case 4:
+                return BigNumber.from(150)
+            default:
+                return BigNumber.from(200)
         }
     }))
 
