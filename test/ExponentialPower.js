@@ -308,8 +308,8 @@ var init = () => {
 
     /////////////////////
     // Permanent Upgrades
-    publication = theory.createPublicationUpgrade(0, currency, 1e10)
-    theory.createBuyAllUpgrade(1, currency, 1e13)
+    publication = theory.createPublicationUpgrade(0, currency, 1e11)
+    theory.createBuyAllUpgrade(1, currency, 1e15)
     theory.createAutoBuyerUpgrade(2, currency, 1e30)
 
     {
