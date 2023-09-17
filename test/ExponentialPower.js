@@ -605,10 +605,10 @@ var getC2Balance = c2 => {
     return c2 / BigNumber.from(log(e20, currency.value.max(e20))).sqrt()
 }
 var getC2 = level => BigNumber.ONE + 0.25 * Math.min(level, 30) + (level > 30 ? (0.25 * (1 - 0.99 ** (level - 30)) / (1 - 0.99)) : 0)
-var getN = level => BigNumber.ONE + Utils.getStepwisePowerSum(level, 2, 8, 0)
+var getN = level => BigNumber.ONE + Utils.getStepwisePowerSum(level, 2, 10, 0)
 var getInverseA = level => BigNumber.E.pow(0.05 * level)
 var getA = level => getInverseA(level).pow(-1)
-var getB = level => BigNumber.ONE + Utils.getStepwisePowerSum(level, 2, 9, 0)
+var getB = level => BigNumber.ONE + Utils.getStepwisePowerSum(level, 2, 10, 0)
 var getX = level => BigNumber.ONE + Utils.getStepwisePowerSum(level, 2, 10, 0)
 var getYIndex = level => Utils.getStepwisePowerSum(level, 2, 1000, 0)
 var getY = level => BigNumber.TWO + harmonic(getYIndex(level))
