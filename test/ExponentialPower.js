@@ -370,7 +370,7 @@ var init = () => {
         unlock = theory.createMilestoneUpgrade(0, 3)
         unlock.getDescription = _ => Localization.getUpgradeUnlockDesc("E")
         unlock.getInfo = _ => Localization.getUpgradeUnlockInfo("E")
-        unlock.canBeRefunded = _ => time_exp.level == 0
+        unlock.canBeRefunded = _ => time_exp.level == 0 || unlock.level >= 2
     }
 
     { 
