@@ -470,7 +470,7 @@ var tick = (elapsedTime, multiplier) => {
     if (unlockE.level >= 4) E *= E4
 
     time += dt * getDT(dtime.level)
-    drho = dt * getK(k.level) * bonus * time.pow(0.6) * (
+    drho = dt * getK(k.level) * bonus * time.pow(getTExp(time_exp.level)) * (
         unlock.level >= 1 && unlockE.level >= 1 ? E.pow(0.9) : 1
     ) * (tertiary_display[0] = getC1(c1.level).pow(getC2Balance(getC2(c2.level)) * (
         unlock.level >= 2 ? getX1(x1.level) : 1
@@ -515,7 +515,7 @@ var getPrimaryEquation = () => {
     let result
     if (page == 1) {
         theory.primaryEquationHeight = 55
-        result = `\\dot{\\rho}=k${publication.level >= 1 ? "m" : ""}t^{0.6}${unlock.level >= 1 ? "E^{-0.9}" : ""}c_1^{B(c_2)${unlock.level >= 2 ? "x_1" : ""}}${unlock.level >= 3 ? "x_2" : ""}\\\\` + theory.latexSymbol + "=\\max\\rho"
+        result = `\\dot{\\rho}=k${publication.level >= 1 ? "m" : ""}t^{${getTExp(time_exp.level).toString(getTExp(time_exp.level) == 1 ? 0 : 1)}}${unlock.level >= 1 ? "E^{-0.9}" : ""}c_1^{B(c_2)${unlock.level >= 2 ? "x_1" : ""}}${unlock.level >= 3 ? "x_2" : ""}\\\\` + theory.latexSymbol + "=\\max\\rho"
     } else if (page == 2) {
         theory.primaryEquationHeight = 40
         result = `E=\\prod_{i}{e_i}`
