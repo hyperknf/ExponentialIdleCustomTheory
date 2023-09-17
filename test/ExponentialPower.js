@@ -619,7 +619,7 @@ var getDT = level => BigNumber.ONE / 10 * level
 
 var getTickRate = level => BigNumber.from(1.2).pow(level)
 
-var getTExp = level => unlock.level >= 1 ? BigNumber.ONE / 5 * (3 + level) : 0
+var getTExp = level => BigNumber.ONE / 5 * (3 + tick_exp.isAvailable ? level : 0)
 
 var getE1 = n => {
     if (n <= 100) return 1 / (BigNumber.E - (BigNumber.ONE + 1 / n).pow(n))
