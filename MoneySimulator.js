@@ -16,7 +16,7 @@ var energy_generator
 var time = 0
 
 var init = () => {
-    currency = theory.createCurrency()
+    currency = theory.createCurrency("\$", "\$")
 
     ///////////////////
     // Regular Upgrades
@@ -25,7 +25,7 @@ var init = () => {
     {
         let getDesc = (level) => "\\text{Energy generator(s)}:\\quad " + getEnergyGenerators(level).toString(0)
         energy_generator = theory.createUpgrade(0, currency, new FirstFreeCost(new ExponentialCost(10, Math.log2(2))))
-        energy_generator.getDescription = (_) => Utils.getMath(getDesc(c1.level))
+        energy_generator.getDescription = (_) => Utils.getMath(getDesc(energy_generator.level))
         energy_generator.getInfo = (amount) => `Get ${amount} energy generators`
     }
 
