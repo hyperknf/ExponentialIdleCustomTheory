@@ -26,7 +26,7 @@ var init = () => {
         let getDesc = (level) => "\\text{Energy generator(s)}:\\quad " + getEnergyGenerators(level).toString(0)
         energy_generator = theory.createUpgrade(0, currency, new FirstFreeCost(new ExponentialCost(10, Math.log2(2))))
         energy_generator.getDescription = (_) => Utils.getMath(getDesc(energy_generator.level))
-        energy_generator.getInfo = (amount) => `Get ${amount} energy generators`
+        energy_generator.getInfo = (amount) => `Gives ${amount} energy generators`
     }
 
     /////////////////////
