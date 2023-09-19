@@ -68,7 +68,7 @@ const TextResource = {
                     "zh-Hans": "在每一刻有一百万分之一的机会获得此成就"
                 },
                 "Hint": {
-                    "en": "Hope you're lucky",
+                    "en": "Good luck",
                     "zh-Hant": "祝你好運",
                     "zh-Hans": "祝你好运",
                     "fi": "Onnea"
