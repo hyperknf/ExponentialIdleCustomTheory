@@ -16,7 +16,7 @@ var energy_generator
 var time = 0
 
 var init = () => {
-    currency = theory.createCurrency("$", "\\$")
+    currency = theory.createCurrency("\$", "\\$")
 
     ///////////////////
     // Regular Upgrades
