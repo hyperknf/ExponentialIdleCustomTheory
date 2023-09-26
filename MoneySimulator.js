@@ -24,16 +24,16 @@ var init = () => {
     // Energy Generators
     {
         let getDesc = (level) => "\\text{Energy generator(s)}:\\quad " + getEnergyGenerators(level).toString(0)
-        energy_generator = theory.createUpgrade(0, currency, new FirstFreeCost(new ExponentialCost(1, Math.log2(2))))
+        energy_generator = theory.createUpgrade(0, currency, new FirstFreeCost(new LinearCost(5, 5)))
         energy_generator.getDescription = (_) => Utils.getMath(getDesc(energy_generator.level))
         energy_generator.getInfo = (amount) => `Gives ${amount} energy generators`
     }
 
     /////////////////////
     // Permanent Upgrades
-    theory.createPublicationUpgrade(0, currency, 1e10)
-    theory.createBuyAllUpgrade(1, currency, 1e13)
-    theory.createAutoBuyerUpgrade(2, currency, 1e30)
+    theory.createPublicationUpgrade(0, currency, 1e6)
+    theory.createBuyAllUpgrade(1, currency, 1e7)
+    theory.createAutoBuyerUpgrade(2, currency, 1e10)
 
     ///////////////////////
     //// Milestone Upgrades
@@ -83,6 +83,8 @@ var tick = (elapsedTime, multiplier) => {
     if (time % 10 == 0) {
         currency.value += getIncome(bonus)
     }
+
+    theory.invalidateTertiaryEquation()
 }
 
 var getPrimaryEquation = () => {
@@ -93,7 +95,7 @@ var getTertiaryEquation = () => {
 }
 
 var getPublicationMultiplier = (tau) => tau.pow(0.164) / BigNumber.THREE
-var getPublicationMultiplierFormula = (symbol) => "\\frac{{" + symbol + "}^{0.164}}{3}"
+var getPublicationMultiplierFormula = (symbol) => `2^{\\lfloor\\max(\\log_{10}{},5)-5\\rfloor}`
 var getTau = () => currency.value
 var get2DGraphValue = () => currency.value.sign * (1 + currency.value.abs()).log10().toNumber()
 
