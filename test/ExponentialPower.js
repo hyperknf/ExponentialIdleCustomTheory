@@ -742,6 +742,19 @@ var getEquationOverlay = _ => {
     return grid
 }
 
+var getInternalState = () => JSON.stringify({
+    version,
+    time,
+    max_rho
+})
+var setInternalState = string => {
+    if (!string) return
+
+    const state = JSON.parse(string)
+    time = time ?? BigNumber.ZERO
+    max_rho = max_rho ?? BigNumber.ZERO
+}
+
 var canGoToPreviousStage = () => page == 2
 var goToPreviousStage = () => page = 1
 var canGoToNextStage = () => page == 1 && unlock.level >= 1
