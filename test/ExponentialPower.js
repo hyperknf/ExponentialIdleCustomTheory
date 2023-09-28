@@ -180,6 +180,8 @@ var E1 = BigNumber.ZERO, E2 = BigNumber.ZERO, E3 = BigNumber.ZERO, E4 = BigNumbe
 var EDisplay = [BigNumber.ZERO, BigNumber.ZERO, BigNumber.ZERO, BigNumber.ZERO]
 var time = BigNumber.ZERO
 
+var max_rho = 0
+
 var secret_achievement_chance = 1e6
 
 var tertiary_display = Array.from({
@@ -484,8 +486,9 @@ var tick = (elapsedTime, multiplier) => {
     ))) * (
         unlock.level >= 3 ? getX2(x2.level) : 1
     )
-    tph = (log(10, 1 + currency.value + 36000 * drho) - log(10, 1 + currency.value))
     currency.value += drho
+
+    if (max_rho <= currency.value) max_rho = currency.value
 
     if (currency.value >= BigNumber.TEN.pow(10)) achievements.regular[0] = true
     if (currency.value >= BigNumber.TEN.pow(25)) achievements.regular[1] = true
@@ -512,7 +515,7 @@ var isCurrencyVisible = index => {
         case 0:
             return true
         case 1:
-            return false // Delta is coming in the next update
+            return false // This is coming in the next update
         default:
             return false // Invalid index
     }
@@ -721,10 +724,7 @@ var getEquationOverlay = _ => {
                 textColor: Color.TEXT_MEDIUM
             }),
             ui.createLatexLabel({
-                text: () => {
-                    const tph_display = `\\log\\rho/\\text{${getTextResource(TextResource.Hour)}}=${tph.toString(5)}`
-                    return Utils.getMath(tph_display)
-                },
+                text: () => max_rho.toString(5),
                 fontSize: 10,
                 margin: new Thickness(4, 4),
                 textColor: Color.TEXT_MEDIUM,
