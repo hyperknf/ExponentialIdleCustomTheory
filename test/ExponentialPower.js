@@ -146,6 +146,8 @@ var getDescription = language => {
 var authors = "HyperKNF"
 var version = "v1.2.test"
 
+const currency2text = ["δ", "\\delta"]
+
 var drho = BigNumber.ZERO
 var tph = BigNumber.ZERO
 
@@ -206,7 +208,7 @@ var getStepwisePowerProduct = (level, base, step_length, offset) => {
 
 var init = () => {
     currency = theory.createCurrency()
-    currency2 = theory.createCurrency("δ", "\\delta")
+    currency2 = theory.createCurrency(...currency2text)
 
     ///////////////////
     // Regular Upgrades
