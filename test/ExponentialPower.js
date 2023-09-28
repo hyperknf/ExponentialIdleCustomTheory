@@ -312,7 +312,7 @@ var init = () => {
 
     /////////////////////
     // Permanent Upgrades
-    publication = theory.createPublicationUpgrade(0, currency, 1e11)
+    publication = theory.createPublicationUpgrade(0, currency, 1e12)
     theory.createBuyAllUpgrade(1, currency, 1e15)
     theory.createAutoBuyerUpgrade(2, currency, 1e30)
 
@@ -599,9 +599,9 @@ var getQuaternaryEntries = () => {
 }
 
 var getCurrencyFromTau = (tau) => [tau.max(BigNumber.ONE).pow(1 / 0.2), currency.symbol]
-var getPublicationMultiplier = tau => 25 * tau.pow(0.6) / (10 + tau.pow(5)).log10()
+var getPublicationMultiplier = tau => 25 * getTau().pow(0.6) / (10 + getTau().pow(5)).log10()
 var getPublicationMultiplierFormula = symbol => `\\frac{25{${symbol}}^{0.6}}{\\log_{10}(10+${symbol}^{5})}`
-var getTau = () => currency.value.max(BigNumber.ZERO).pow(1)
+var getTau = () => currency.value.max(BigNumber.ZERO).pow(0.2)
 var get2DGraphValue = () => currency.value.sign * (BigNumber.ONE + currency.value.abs()).log10().toNumber()
 
 var getK = level => BigNumber.ZERO + Utils.getStepwisePowerSum(level, 2, 5, 0)
