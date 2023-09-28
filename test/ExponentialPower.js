@@ -304,10 +304,15 @@ var init = () => {
     // dt
     {
         let getDesc = (level) => "\\dot{t}=" + getDT(level).toString(1)
-        dtime = theory.createUpgrade(999, currency, new FirstFreeCost(new ExponentialCost(1e5, Math.log2(1e5))))
+        dtime = theory.createUpgrade(999, currency, new CustomCost(
+            level => {
+                if (level == 0) return BigNumber.ZERO
+                return 1e5 * getStepwisePowerProduct(level, 1e5, 10, 0)
+            }
+        ))
         dtime.getDescription = (_) => Utils.getMath(getDesc(dtime.level))
         dtime.getInfo = (amount) => Utils.getMathTo(getDesc(dtime.level), getDesc(dtime.level + amount))
-        dtime.maxLevel = 1000
+        dtime.maxLevel = 10
     }
 
     /////////////////////
