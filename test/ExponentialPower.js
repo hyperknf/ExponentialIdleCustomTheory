@@ -601,7 +601,7 @@ var getQuaternaryEntries = () => {
 var getCurrencyFromTau = (tau) => [tau.max(BigNumber.ONE).pow(1 / 0.2), currency.symbol]
 var getPublicationMultiplier = tau => 25 * tau.pow(0.6) / (10 + tau.pow(5)).log10()
 var getPublicationMultiplierFormula = symbol => `\\frac{25{${symbol}}^{0.6}}{\\log_{10}(10+${symbol}^{5})}`
-var getTau = () => currency.value.pow(0.2)
+var getTau = () => currency.value.max(BigNumber.ZERO).pow(1)
 var get2DGraphValue = () => currency.value.sign * (BigNumber.ONE + currency.value.abs()).log10().toNumber()
 
 var getK = level => BigNumber.ZERO + Utils.getStepwisePowerSum(level, 2, 5, 0)
@@ -726,7 +726,7 @@ var getEquationOverlay = _ => {
                 textColor: Color.TEXT_MEDIUM
             }),
             ui.createLatexLabel({
-                text: () => max_rho.toString(5),
+                text: () => `${max_rho.toString(5)}`,
                 fontSize: 10,
                 margin: new Thickness(4, 4),
                 textColor: Color.TEXT_MEDIUM,
