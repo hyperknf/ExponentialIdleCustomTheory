@@ -527,7 +527,7 @@ var getPrimaryEquation = () => {
         theory.primaryEquationHeight = 55
         result = `\\dot{\\rho}=k${publication.level >= 1 ? "m" : ""}t^{${getTExp(time_exp.level) == 1 ? "" : getTExp(time_exp.level).toString(getTExp(time_exp.level) == 1 ? 0 : getTExp(time_exp.level) == 0.5 ? 1 : 2)}}${unlock.level >= 1 ? "E^{-0.9}" : ""}c_1^{B(c_2${unlock.level >= 2 ? "x_1" : ""})}${unlock.level >= 3 ? "x_2" : ""}\
         \\\\`
-        + theory.latexSymbol + "=\\max\\rho^{0.2}"
+        + theory.latexSymbol + "=\\max\\rho"
     } else if (page == 2) {
         theory.primaryEquationHeight = 40
         result = `E=\\prod_{i}{e_i}`
@@ -598,10 +598,10 @@ var getQuaternaryEntries = () => {
     return result
 }
 
-var getCurrencyFromTau = (tau) => [tau.max(BigNumber.ONE).pow(1 / 0.2), currency.symbol]
-var getPublicationMultiplier = tau => 10 * getTau().pow(0.6) / (10 + getTau().pow(5)).log10()
-var getPublicationMultiplierFormula = symbol => `\\frac{10{${symbol}}^{0.6}}{\\log_{10}(10+${symbol}^{5})}`
-var getTau = () => currency.value.max(BigNumber.ZERO).pow(0.2)
+var getCurrencyFromTau = (tau) => [tau.max(BigNumber.ONE), currency.symbol]
+var getPublicationMultiplier = tau => 10 * tau.pow(0.12) / (10 + tau.pow(5)).log10()
+var getPublicationMultiplierFormula = symbol => `\\frac{10{${symbol}}^{0.12}}{\\log_{10}(10+${symbol}^{5})}`
+var getTau = () => currency.value.max(BigNumber.ZERO)
 var get2DGraphValue = () => currency.value.sign * (BigNumber.ONE + currency.value.abs()).log10().toNumber()
 
 var getK = level => BigNumber.ZERO + Utils.getStepwisePowerSum(level, 2, 5, 0)
@@ -726,7 +726,7 @@ var getEquationOverlay = _ => {
                 textColor: Color.TEXT_MEDIUM
             }),
             ui.createLatexLabel({
-                text: () => Utils.getMath(`\\max\\rho=\\text{${max_rho.toString(5)}}`),
+                text: () => Utils.getMath(`\\max \\rho = \\text{${max_rho.toString(5)}}`),
                 fontSize: 10,
                 margin: new Thickness(4, 4),
                 textColor: Color.TEXT_MEDIUM,
