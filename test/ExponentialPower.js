@@ -627,7 +627,7 @@ var getY = level => BigNumber.TWO + harmonic(getYIndex(level))
 var getX1 = level => BigNumber.ONE + 0.01 * level
 var getX2Exponent = level => BigNumber.ONE + 0.1 * level
 var getX2 = level => BigNumber.E.pow(getX2Exponent(level))
-var getDT = level => BigNumber.ONE / 10 * level
+var getDT = level => Utils.getStepwisePowerSum(level, 1.2, 10, 0) / 10
 
 var getTickRate = level => BigNumber.from(1.2).pow(level)
 
