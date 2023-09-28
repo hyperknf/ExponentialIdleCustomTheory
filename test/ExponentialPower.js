@@ -1,9 +1,8 @@
-import { ExponentialCost, FreeCost, LinearCost } from "../api/Costs"
-import { BigNumber } from "../api/BigNumber"
-import { theory, QuaternaryEntry } from "../api/Theory"
-import { Utils } from "../api/Utils"
-import { UI } from "../api/ui/UI"
-import { Localization } from "../api/Localization"
+import { ConstantCost, ExponentialCost, FreeCost, LinearCost } from "./api/Costs"
+import { BigNumber } from "./api/BigNumber"
+import { theory, QuaternaryEntry } from "./api/Theory"
+import { Utils } from "./api/Utils"
+import { Localization } from "./api/Localization"
 
 const TextResource = {
     "Achievements": {
@@ -149,12 +148,11 @@ var version = "v1.2.test"
 const currency2text = ["δ", "\\delta"]
 
 var drho = BigNumber.ZERO
-var tph = BigNumber.ZERO
 
 var currency, currency2
 var k, c1, c2, n, a, b, x, y, x1, x2, dtime
 var unlock, time_exp
-var publication, tickrate, unlockE
+var publication, tickrate, unlockE, unlockCurrency2
 
 var dt = BigNumber.ONE / 10
 
@@ -170,9 +168,6 @@ var achievements = {
 }
 
 var regular_achievements, secret_achievements
-var achievement1, achievement2
-var secret_achievement1
-var chapter1, chapter2
 
 var page = 1
 var E = BigNumber.E
@@ -351,6 +346,15 @@ var init = () => {
         unlockE.maxLevel = 4
     }
 
+    {
+        let getDesc = _ => Localization.getUpgradeUnlockDesc(currency2text[1])
+        let getInfo = _ => Localization.getUpgradeUnlockInfo(currency2text[1])
+        unlockCurrency2 = theory.createPermanentUpgrade(500, currency, new ConstantCost(BigNumber.TEN.pow(1000)))
+        unlockCurrency2.description = "?????"
+        unlockCurrency2.info = "?????"
+        unlockCurrency2.maxLevel = 1
+    }
+
     //////////////////
     //// Test Upgrades
 
@@ -472,7 +476,7 @@ var updateAvailability = () => {
 
 var tick = (elapsedTime, multiplier) => {
     dt = BigNumber.from(elapsedTime * multiplier) * getTickRate(tickrate.level)
-    let bonus = theory.publicationMultiplier
+    const bonus = theory.publicationMultiplier
 
     E1 = EDisplay[0] = getE1(getN(n.level))
     if (unlockE.level >= 2) E2 = EDisplay[1] = getE2(getA(a.level), getB(b.level))
@@ -731,7 +735,7 @@ var getEquationOverlay = _ => {
                 textColor: Color.TEXT_MEDIUM
             }),
             ui.createLatexLabel({
-                text: () => Utils.getMath(`\\max \\rho = \\text{${max_rho.toString(5)}}`),
+                text: () => Utils.getMath(`\\max\\rho =\\text{${max_rho.toString(5)}}`),
                 fontSize: 10,
                 margin: new Thickness(4, 4),
                 textColor: Color.TEXT_MEDIUM,
@@ -751,8 +755,8 @@ var setInternalState = string => {
     if (!string) return
 
     const state = JSON.parse(string)
-    time = time ?? BigNumber.ZERO
-    max_rho = max_rho ?? BigNumber.ZERO
+    time = state.time ?? BigNumber.ZERO
+    max_rho = state.max_rho ?? BigNumber.ZERO
 }
 
 var canGoToPreviousStage = () => page == 2
