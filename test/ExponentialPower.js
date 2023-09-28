@@ -726,7 +726,7 @@ var getEquationOverlay = _ => {
                 textColor: Color.TEXT_MEDIUM
             }),
             ui.createLatexLabel({
-                text: () => `${max_rho.toString(5)}`,
+                text: () => Utils.getMath(`\\max\\rho=\\text{${max_rho.toString(5)}}`),
                 fontSize: 10,
                 margin: new Thickness(4, 4),
                 textColor: Color.TEXT_MEDIUM,
