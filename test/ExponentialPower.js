@@ -180,7 +180,7 @@ var E1 = BigNumber.ZERO, E2 = BigNumber.ZERO, E3 = BigNumber.ZERO, E4 = BigNumbe
 var EDisplay = [BigNumber.ZERO, BigNumber.ZERO, BigNumber.ZERO, BigNumber.ZERO]
 var time = BigNumber.ZERO
 
-var max_rho = 0
+var max_rho = BigNumber.ZERO
 
 var secret_achievement_chance = 1e6
 
@@ -596,10 +596,10 @@ var getQuaternaryEntries = () => {
     return result
 }
 
-var getCurrencyFromTau = (tau) => [tau.max(BigNumber.ONE), currency.symbol]
-var getPublicationMultiplier = tau => 25 * tau.pow(0.115) / (10 + tau).log10()
-var getPublicationMultiplierFormula = symbol => `\\frac{25{${symbol}}^{0.115}}{\\log_{10}(10+${symbol})}`
-var getTau = () => currency.value
+var getCurrencyFromTau = (tau) => [tau.max(BigNumber.ONE).pow(1 / 0.2), currency.symbol]
+var getPublicationMultiplier = tau => 25 * tau.pow(0.6) / (10 + tau.pow(5)).log10()
+var getPublicationMultiplierFormula = symbol => `\\frac{25{${symbol}}^{0.6}}{\\log_{10}(10+${symbol}^{5})}`
+var getTau = () => currency.value.pow(0.2)
 var get2DGraphValue = () => currency.value.sign * (BigNumber.ONE + currency.value.abs()).log10().toNumber()
 
 var getK = level => BigNumber.ZERO + Utils.getStepwisePowerSum(level, 2, 5, 0)
