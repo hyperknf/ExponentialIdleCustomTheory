@@ -748,15 +748,15 @@ var getEquationOverlay = _ => {
 
 var getInternalState = () => JSON.stringify({
     version,
-    time,
-    max_rho
+    time.toBase64String(),
+    max_rho.toBase64String()
 })
 var setInternalState = string => {
     if (!string) return
 
     const state = JSON.parse(string)
-    time = state.time ?? BigNumber.ZERO
-    max_rho = state.max_rho ?? BigNumber.ZERO
+    time = BigNumber.fromBase64String(state.time ?? BigNumber.ZERO.toBase64String())
+    max_rho = BigNumber.fromBase64String(state.max_rho ?? BigNumber.ZERO.toBase64String())
 }
 
 var canGoToPreviousStage = () => page == 2
