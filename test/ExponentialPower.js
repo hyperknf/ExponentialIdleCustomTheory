@@ -748,8 +748,8 @@ var getEquationOverlay = _ => {
 
 var getInternalState = () => JSON.stringify({
     version,
-    time.toBase64String(),
-    max_rho.toBase64String()
+    time: time.toBase64String(),
+    max_rho: max_rho.toBase64String()
 })
 var setInternalState = string => {
     if (!string) return
