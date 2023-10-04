@@ -377,7 +377,7 @@ var init = () => {
 
     {
         domain_switch = theory.createSingularUpgrade(100, currency, new FreeCost())
-        domain_switch.getDescription = unlockCurrency2.level >= 1 ? getTextResource(TextResource.DomainSwitch.Unlocked.Description) : getTextResource(TextResource.DomainSwitch.Locked)
+        domain_switch.getDescription = _ => unlockCurrency2.level >= 1 ? getTextResource(TextResource.DomainSwitch.Unlocked.Description) : getTextResource(TextResource.DomainSwitch.Locked)
         domain_switch.getInfo = unlockCurrency2 >= 1 ? getTextResource(TextResource.DomainSwitch.Unlocked.Info) : getTextResource(TextResource.DomainSwitch.Locked)
         domain_switch.bought = _ => {
             domain_switch.level = 0
