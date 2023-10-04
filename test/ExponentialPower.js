@@ -574,6 +574,7 @@ var getSecondaryEquation = () => {
     let result
     if (page == 1) {
         theory.secondaryEquationHeight = publication.level >= 1 ? 57 : 37
+        theory.secondaryEquationScale = 1
         result = `B(x)=\\frac{x}{\\sqrt{\\log_{e20}{\\max{(\\rho,e20)}}}}${publication.level >= 1 ? `\\\\m=\\text{${getTextResource(TextResource.PublicationMultiplier)}}` : ""}`
     } else if (page == 2) {
         theory.secondaryEquationHeight = (
@@ -588,6 +589,7 @@ var getSecondaryEquation = () => {
                 }
             }
         )(unlockE.level)
+        theory.secondaryEquationScale = 0.85
         result = "e_1=e-(1+\\frac{1}{n})^n"
         if (unlockE.level >= 2) result += "\\\\e_2=e-(1+\\frac{a}{b})^{\\frac{b}{a}}"
         if (unlockE.level >= 3) result += "\\\\e_3=|1-\\int^e_1\\frac{\\sqrt[x]{e}}{t}dt|"
@@ -751,7 +753,7 @@ var getEquationOverlay = _ => {
             ui.createLatexLabel({
                 text: () => Utils.getMath(`\\max\\dot{\\rho}=\\text{${max_drho.toString(5)}}`),
                 fontSize: 10,
-                margin: new Thickness(4, 1),
+                margin: new Thickness(4, 2),
                 textColor: Color.TEXT_MEDIUM,
                 horizontalOptions: LayoutOptions.END
             })
