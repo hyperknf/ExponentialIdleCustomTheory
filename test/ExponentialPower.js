@@ -101,9 +101,20 @@ const TextResource = {
         "fi": "sekuntia"
     },
     "TickRate": {
-        "en": "Tick Rate",
+        "en": "Tick rate",
         "zh-Hant": "刻速",
         "zh-Hans": "刻速"
+    },
+    "DomainSwitch": {
+        "Unlocked": {
+            "Description": {
+                "en": "Coming soon"
+            },
+            "Info": {
+                "en": "Coming soon"
+            }
+        },
+        "Locked": "?????"
     }
 }
 
@@ -151,6 +162,7 @@ var drho = BigNumber.ZERO
 
 var currency, currency2
 var k, c1, c2, n, a, b, x, y, x1, x2, dtime
+var test_upgrade, domain_switch
 var unlock, time_exp
 var publication, tickrate, unlockE, unlockCurrency2
 
@@ -167,13 +179,17 @@ var achievements = {
     ]
 }
 
-var regular_achievements, secret_achievements
+var progress_achievements, secret_achievements
+var achievement1, achievement2, achievement3
+var secret_achievement1
 
 var page = 1
 var E = BigNumber.E
 var E1 = BigNumber.ZERO, E2 = BigNumber.ZERO, E3 = BigNumber.ZERO, E4 = BigNumber.ZERO
 var EDisplay = [BigNumber.ZERO, BigNumber.ZERO, BigNumber.ZERO, BigNumber.ZERO]
 var time = BigNumber.ZERO
+
+var domain_switched = false
 
 var max_rho = BigNumber.ZERO
 
@@ -317,17 +333,9 @@ var init = () => {
     theory.createAutoBuyerUpgrade(2, currency, 1e30)
 
     {
-        let getDesc = level => Localization.getUpgradeMultCustomDesc("\\text{" + getTextResource(TextResource.TickRate) + "}", 1.2)
-        let getInfo = level => Localization.getUpgradeMultCustomInfo("\\text{" + getTextResource(TextResource.TickRate) + "}", 1.2)
-        tickrate = theory.createPermanentUpgrade(100, currency, new ExponentialCost(1e60, Math.log2(1e30)))
-        tickrate.getDescription = _ => getDesc(unlockE.level)
-        tickrate.getInfo = _ => getInfo(unlockE.level)
-    }
-
-    {
         let getDesc = level => Localization.getUpgradeUnlockDesc(`e_{${level + 1}}`)
         let getInfo = level => Localization.getUpgradeUnlockInfo(`e_{${level + 1}}`)
-        unlockE = theory.createPermanentUpgrade(200, currency, new CustomCost(
+        unlockE = theory.createPermanentUpgrade(100, currency, new CustomCost(
             level => {
                 switch (level) {
                     case 0:
@@ -349,17 +357,36 @@ var init = () => {
     {
         let getDesc = _ => Localization.getUpgradeUnlockDesc(currency2text[1])
         let getInfo = _ => Localization.getUpgradeUnlockInfo(currency2text[1])
-        unlockCurrency2 = theory.createPermanentUpgrade(500, currency, new ConstantCost(BigNumber.TEN.pow(1000)))
+        unlockCurrency2 = theory.createPermanentUpgrade(1000, currency, new ConstantCost(BigNumber.TEN.pow(1000)))
         unlockCurrency2.description = "?????"
         unlockCurrency2.info = "?????"
         unlockCurrency2.maxLevel = 1
     }
 
-    //////////////////
-    //// Test Upgrades
+    {
+        let getDesc = level => Localization.getUpgradeMultCustomDesc("\\text{" + getTextResource(TextResource.TickRate) + "}", 1.2)
+        let getInfo = level => Localization.getUpgradeMultCustomInfo("\\text{" + getTextResource(TextResource.TickRate) + "}", 1.2)
+        tickrate = theory.createPermanentUpgrade(1100, currency2, new ExponentialCost(1e20, Math.log2(1e20)))
+        tickrate.getDescription = level => getDesc(level)
+        tickrate.getInfo = level => getInfo(level)
+        tickrate.isAvailable = false
+    }
+
+    //////////////////////
+    //// Singular Upgrades
 
     {
-        const test_upgrade = theory.createSingularUpgrade(0, currency, new FreeCost())
+        domain_switch = theory.createSingularUpgrade(100, currency, new FreeCost())
+        domain_switch.getDescription = unlockCurrency2.level >= 1 ? getTextResource(TextResource.DomainSwitch.Unlocked.Description) : getTextResource(TextResource.DomainSwitch.Locked)
+        domain_switch.getInfo = unlockCurrency2 >= 1 ? getTextResource(TextResource.DomainSwitch.Unlocked.Info) : getTextResource(TextResource.DomainSwitch.Locked)
+        domain_switch.bought = _ => {
+            domain_switch.level = 0
+            domain_switched = true
+        }
+    }
+
+    {
+        test_upgrade = theory.createSingularUpgrade(1000, currency, new FreeCost())
         test_upgrade.getDescription = test_upgrade.getInfo = _ => Utils.getMath(`\\text{${getTextResource(TextResource.TestUpgrade)}}`)
         test_upgrade.bought = _ => currency.value *= 1000
     }
@@ -385,8 +412,16 @@ var init = () => {
 
     { 
         unlock = theory.createMilestoneUpgrade(0, 3)
-        unlock.getDescription = _ => Localization.getUpgradeUnlockDesc("E")
-        unlock.getInfo = _ => Localization.getUpgradeUnlockInfo("E")
+        unlock.getDescription = _ => Localization.getUpgradeUnlockDesc(
+            unlock.level == 0 ? "E" :
+            unlock.level == 1 ? "x_1" :
+            "x_2"
+        )
+        unlock.getInfo = _ => Localization.getUpgradeUnlockInfo(
+            unlock.level == 0 ? "E" :
+            unlock.level == 1 ? "x_1" :
+            "x_2"
+        )
         unlock.canBeRefunded = _ => time_exp.level == 0 || unlock.level >= 2
     }
 
@@ -448,19 +483,6 @@ var updatePage = () => {
     if (unlock.level < 1 && page == 2) page = 1
 }
 
-var updateMilestoneUpgradeInfo = () => {
-    unlock.description = Localization.getUpgradeUnlockDesc(
-        unlock.level == 0 ? "E" :
-        unlock.level == 1 ? "x_1" :
-        "x_2"
-    )
-    unlock.info = Localization.getUpgradeUnlockInfo(
-        unlock.level == 0 ? "E" :
-        unlock.level == 1 ? "x_1" :
-        "x_2"
-    )
-}
-
 var updateAvailability = () => {
     n.isAvailable = unlock.level >= 1 && unlockE.level >= 1
     a.isAvailable = b.isAvailable = unlock.level >= 1 && unlockE.level >= 2
@@ -511,7 +533,6 @@ var tick = (elapsedTime, multiplier) => {
     theory.invalidateQuaternaryValues()
 
     updatePage()
-    updateMilestoneUpgradeInfo()
     updateAvailability()
 }
 
