@@ -154,7 +154,7 @@ var getDescription = language => {
     return (descriptions[language] ?? descriptions.en).join("\n")
 }
 var authors = "HyperKNF"
-var version = "v1.2.test.31"
+var version = "v1.2.test.27"
 
 const currency2text = ["δ", "\\delta"]
 
@@ -511,11 +511,13 @@ var tick = (elapsedTime, multiplier) => {
     if (unlockE.level >= 4) E *= E4
 
     time += dt * getDT(dtime.level)
+    const main_exponent = getC1(c1.level).pow(getC2Balance(getC2(c2.level)) * (
+        unlock.level >= 2 ? getX1(x1.level) : 1
+    ))
+    tertiary_display[0] = main_exponent.toString(3)
     drho = dt * getK(k.level) * bonus * time.pow(getTExp(time_exp.level)) * (
         unlock.level >= 1 && unlockE.level >= 1 ? E.pow(0.9) : 1
-    ) * (tertiary_display[0] = getC1(c1.level).pow(getC2Balance(getC2(c2.level)) * (
-        unlock.level >= 2 ? getX1(x1.level) : 1
-    ))) * (
+    ) * main_exponent * (
         unlock.level >= 3 ? getX2(x2.level) : 1
     )
     currency.value += drho
@@ -569,7 +571,7 @@ var getSecondaryEquation = () => {
     let result
     if (page == 1) {
         theory.secondaryEquationHeight = publication.level >= 1 ? 57 : 37
-        result = `B(x)=\\frac{x}{\\sqrt{\\log_{e20}{\\max{(1+\\rho, e20)}}}}${publication.level >= 1 ? `\\\\m=\\text{${getTextResource(TextResource.PublicationMultiplier)}}` : ""}`
+        result = `B(x)=\\frac{x}{\\sqrt{\\log_{e20}{\\max{(\\rho,e20)}}}}${publication.level >= 1 ? `\\\\m=\\text{${getTextResource(TextResource.PublicationMultiplier)}}` : ""}`
     } else if (page == 2) {
         theory.secondaryEquationHeight = (
             level => {
@@ -593,7 +595,7 @@ var getSecondaryEquation = () => {
 var getTertiaryEquation = () => {
     let result
     if (page == 1) {
-        result = `\\text{${getTextResource(TextResource.TickRate)}:}\\quad ${(dt * 100).toString(5)}/\\text{${getTextResource(TextResource.Second)}}\\\\c_1^{B(c_2${unlock.level >= 2 ? "x_1" : ""})}=${tertiary_display[0].toString(3)},\\quad\\sqrt{\\log_{e20}{(1+\\rho)}}=${tertiary_display[1].toString(3)}`
+        result = `\\text{${getTextResource(TextResource.TickRate)}:}\\quad ${(dt * 100).toString(5)}/\\text{${getTextResource(TextResource.Second)}}\\\\c_1^{B(c_2${unlock.level >= 2 ? "x_1" : ""})}=${tertiary_display[0]},\\quad\\sqrt{\\log_{e20}{(\\rho)}}=${tertiary_display[1]}`
     } else result = ""
     return "\\begin{array}{c}" + result + "\\end{array}"
 }
@@ -650,8 +652,13 @@ var getK = level => BigNumber.ZERO + Utils.getStepwisePowerSum(level, 2, 5, 0)
 var getC1 = level => BigNumber.ONE + 0.5 * level
 var getC2Balance = c2 => {
     const e20 = BigNumber.TEN.pow(20)
-    tertiary_display[1] = log(e20, 1 + currency.value).sqrt()
-    return c2 / BigNumber.from(log(e20, currency.value.max(e20))).sqrt()
+    if (currency.value == 0) {
+        tertiary_display[1] = "-\\infty"
+        return c2
+    }
+    const denominator = log(e20, currency.value.max(e20)).sqrt()
+    tertiary_display[1] = denominator.toString(3)
+    return c2 / denominator
 }
 var getC2 = level => BigNumber.ONE + 0.25 * Math.min(level, 30) + (level > 30 ? (0.25 * (1 - 0.99 ** (level - 30)) / (1 - 0.99)) : 0)
 var getN = level => BigNumber.ONE + Utils.getStepwisePowerSum(level, 2, 10, 0)
@@ -741,7 +748,7 @@ var getEquationOverlay = _ => {
             ui.createLatexLabel({
                 text: () => Utils.getMath(`\\max\\dot{\\rho}=\\text{${max_drho.toString(5)}}`),
                 fontSize: 10,
-                margin: new Thickness(4, 1),
+                margin: new Thickness(1, 4),
                 textColor: Color.TEXT_MEDIUM,
                 horizontalOptions: LayoutOptions.END
             })
