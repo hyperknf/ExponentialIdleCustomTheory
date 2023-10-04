@@ -190,6 +190,7 @@ var EDisplay = [BigNumber.ZERO, BigNumber.ZERO, BigNumber.ZERO, BigNumber.ZERO]
 var time = BigNumber.ZERO
 
 var domain_switched = false
+var domain = 1
 
 var max_drho = BigNumber.ZERO
 
@@ -661,9 +662,8 @@ var getC2Balance = c2 => {
         tertiary_display[1] = "-\\infty"
         return c2
     }
-    const denominator = log(e20, currency.value.max(e20)).sqrt()
-    tertiary_display[1] = denominator.toString(3)
-    return c2 / denominator
+    tertiary_display[1] = log(e20, currency.value).sqrt().toString(3)
+    return c2 / log(e20, currency.value.max(e20)).sqrt()
 }
 var getC2 = level => BigNumber.ONE + 0.25 * Math.min(level, 30) + (level > 30 ? (0.25 * (1 - 0.99 ** (level - 30)) / (1 - 0.99)) : 0)
 var getN = level => BigNumber.ONE + Utils.getStepwisePowerSum(level, 2, 10, 0)
