@@ -318,7 +318,8 @@ var init = () => {
         dtime = theory.createUpgrade(999, currency, new CustomCost(
             level => {
                 if (level == 0) return BigNumber.ZERO
-                return 1e5 * getStepwisePowerProduct(level, 1e5, 10, 0)
+                if (level <= 10) return BigNumber.TEN.pow(5).pow(level)
+                if (level >= 10) return BigNumber.TEN.pow(1000) * BigNumber.TEN.pow(5).pow(level - 10)
             }
         ))
         dtime.getDescription = (_) => Utils.getMath(getDesc(dtime.level))
@@ -351,7 +352,7 @@ var init = () => {
         ))
         unlockE.getDescription = _ => getDesc(unlockE.level)
         unlockE.getInfo = _ => getInfo(unlockE.level)
-        unlockE.maxLevel = 3
+        unlockE.maxLevel = 4
     }
 
     {
@@ -377,8 +378,8 @@ var init = () => {
 
     {
         domain_switch = theory.createSingularUpgrade(100, currency, new FreeCost())
-        domain_switch.getDescription = _ => unlockCurrency2.level >= 1 ? getTextResource(TextResource.DomainSwitch.Unlocked.Description) : getTextResource(TextResource.DomainSwitch.Locked)
-        domain_switch.getInfo = _ => unlockCurrency2 >= 1 ? getTextResource(TextResource.DomainSwitch.Unlocked.Info) : getTextResource(TextResource.DomainSwitch.Locked)
+        domain_switch.getDescription = unlockCurrency2.level >= 1 ? getTextResource(TextResource.DomainSwitch.Unlocked.Description) : getTextResource(TextResource.DomainSwitch.Locked)
+        domain_switch.getInfo = unlockCurrency2 >= 1 ? getTextResource(TextResource.DomainSwitch.Unlocked.Info) : getTextResource(TextResource.DomainSwitch.Locked)
         domain_switch.bought = _ => {
             domain_switch.level = 0
             domain_switched = true
@@ -573,6 +574,7 @@ var getSecondaryEquation = () => {
         theory.secondaryEquationHeight = (
             level => {
                 switch (level) {
+                    case 0: return 0
                     case 1: return 37
                     case 2: return 73
                     case 3: return 130
@@ -656,12 +658,12 @@ var getN = level => BigNumber.ONE + Utils.getStepwisePowerSum(level, 2, 10, 0)
 var getInverseA = level => BigNumber.E.pow(0.05 * level)
 var getA = level => getInverseA(level).pow(-1)
 var getB = level => BigNumber.ONE + Utils.getStepwisePowerSum(level, 2, 10, 0)
-var getX = level => BigNumber.TWO + Utils.getStepwisePowerSum(level, 2, 5, 0)
-var getY = level => (BigNumber.ONE + Utils.getStepwisePowerSum(level, 2, 5, 0)) / 4
+var getX = level => BigNumber.TWO + Utils.getStepwisePowerSum(level, 2, 8, 0)
+var getY = level => (BigNumber.ONE + Utils.getStepwisePowerSum(level, 2, 7, 0)) / 4
 var getX1 = level => BigNumber.ONE + 0.01 * level
 var getX2Exponent = level => BigNumber.ONE + 0.1 * level
 var getX2 = level => BigNumber.E.pow(getX2Exponent(level))
-var getDT = level => Utils.getStepwisePowerSum(level, 1.5, 10, 0) / 10
+var getDT = level => Utils.getStepwisePowerSum(level, 2, 10, 0) / 10
 
 var getTickRate = level => BigNumber.from(1.2).pow(level)
 
@@ -739,7 +741,7 @@ var getEquationOverlay = _ => {
             ui.createLatexLabel({
                 text: () => Utils.getMath(`\\max\\dot{\\rho}=\\text{${max_drho.toString(5)}}`),
                 fontSize: 10,
-                margin: new Thickness(4, 4),
+                margin: new Thickness(1, 4),
                 textColor: Color.TEXT_MEDIUM,
                 horizontalOptions: LayoutOptions.END
             })
