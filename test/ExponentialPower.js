@@ -154,7 +154,7 @@ var getDescription = language => {
     return (descriptions[language] ?? descriptions.en).join("\n")
 }
 var authors = "HyperKNF"
-var version = "v1.2.test.36"
+var version = "v1.2.test.37"
 
 const currency2text = ["δ", "\\delta"]
 
@@ -663,7 +663,7 @@ var getC2Balance = c2 => {
         tertiary_display[1] = "-\\infty"
         return c2
     }
-    tertiary_display[1] = log(e20, currency.value).sqrt().toString(3)
+    tertiary_display[1] = log(e20, currency.value.max(1)).sqrt().toString(3)
     return c2 / log(e20, currency.value.max(e20)).sqrt()
 }
 var getC2 = level => BigNumber.ONE + 0.25 * Math.min(level, 30) + (level > 30 ? (0.25 * (1 - 0.99 ** (level - 30)) / (1 - 0.99)) : 0)
