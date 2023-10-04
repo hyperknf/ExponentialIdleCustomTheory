@@ -595,7 +595,7 @@ var getSecondaryEquation = () => {
 var getTertiaryEquation = () => {
     let result
     if (page == 1) {
-        result = `\\text{${getTextResource(TextResource.TickRate)}:}\\quad ${(dt * 100).toString(5)}/\\text{${getTextResource(TextResource.Second)}}\\\\c_1^{B(c_2${unlock.level >= 2 ? "x_1" : ""})}=${tertiary_display[0]},\\quad\\sqrt{\\log_{e20}{(\\rho)}}=${tertiary_display[1]}`
+        result = `\\text{${getTextResource(TextResource.TickRate)}:}\\quad ${(dt * 100).toString(5)}/\\text{${getTextResource(TextResource.Second)}}\\\\c_1^{B(c_2${unlock.level >= 2 ? "x_1" : ""})}=${tertiary_display[0]},\\quad\\sqrt{\\log_{e20}{\\rho}}=${tertiary_display[1]}`
     } else result = ""
     return "\\begin{array}{c}" + result + "\\end{array}"
 }
@@ -748,7 +748,7 @@ var getEquationOverlay = _ => {
             ui.createLatexLabel({
                 text: () => Utils.getMath(`\\max\\dot{\\rho}=\\text{${max_drho.toString(5)}}`),
                 fontSize: 10,
-                margin: new Thickness(1, 4),
+                margin: new Thickness(4, 1),
                 textColor: Color.TEXT_MEDIUM,
                 horizontalOptions: LayoutOptions.END
             })
