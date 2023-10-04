@@ -154,7 +154,7 @@ var getDescription = language => {
     return (descriptions[language] ?? descriptions.en).join("\n")
 }
 var authors = "HyperKNF"
-var version = "v1.2.test"
+var version = "v1.2.test.27"
 
 const currency2text = ["δ", "\\delta"]
 
