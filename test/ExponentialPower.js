@@ -154,7 +154,7 @@ var getDescription = language => {
     return (descriptions[language] ?? descriptions.en).join("\n")
 }
 var authors = "HyperKNF"
-var version = "v1.2.test.27"
+var version = "v1.2.test.34"
 
 const currency2text = ["δ", "\\delta"]
 
@@ -539,7 +539,10 @@ var tick = (elapsedTime, multiplier) => {
     updateAvailability()
 }
 
-var postPublish = () => time = BigNumber.ZERO
+var postPublish = () => {
+    time = BigNumber.ZERO
+    page = 1
+}
 
 var formatQuaternaryEntry = (...args) => new QuaternaryEntry(...args)
 
