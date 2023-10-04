@@ -191,7 +191,7 @@ var time = BigNumber.ZERO
 
 var domain_switched = false
 
-var max_rho = BigNumber.ZERO
+var max_drho = BigNumber.ZERO
 
 var secret_achievement_chance = 1e6
 
@@ -305,8 +305,8 @@ var init = () => {
 
     // y
     {
-        let getDesc = (level) => "y=" + getY(level).toString(10)
-        let getInfo = (level) => "y=2+H_{" + getYIndex(level).toString(0) + "}"
+        let getDesc = (level) => "y=" + getY(level).toString(2)
+        let getInfo = (level) => "y=" + getY(level).toString(2) + ""
         y = theory.createUpgrade(104, currency, new ExponentialCost(1e55, Math.log2(1.575)))
         y.getDescription = (_) => Utils.getMath(getDesc(y.level))
         y.getInfo = (amount) => Utils.getMathTo(getInfo(y.level), getInfo(y.level + amount))
@@ -351,7 +351,7 @@ var init = () => {
         ))
         unlockE.getDescription = _ => getDesc(unlockE.level)
         unlockE.getInfo = _ => getInfo(unlockE.level)
-        unlockE.maxLevel = 4
+        unlockE.maxLevel = 3
     }
 
     {
@@ -519,7 +519,7 @@ var tick = (elapsedTime, multiplier) => {
     )
     currency.value += drho
 
-    if (max_rho <= currency.value) max_rho = currency.value
+    if (max_drho <= drho) max_drho = drho
 
     if (currency.value >= BigNumber.TEN.pow(10)) achievements.regular[0] = true
     if (currency.value >= BigNumber.TEN.pow(25)) achievements.regular[1] = true
@@ -570,11 +570,21 @@ var getSecondaryEquation = () => {
         theory.secondaryEquationHeight = publication.level >= 1 ? 57 : 37
         result = `B(x)=\\frac{x}{\\sqrt{\\log_{e20}{\\max{(1+\\rho, e20)}}}}${publication.level >= 1 ? `\\\\m=\\text{${getTextResource(TextResource.PublicationMultiplier)}}` : ""}`
     } else if (page == 2) {
-        theory.secondaryEquationHeight = 37 * unlockE.level
+        theory.secondaryEquationHeight = (
+            level => {
+                switch (level) {
+                    case 1: return 37
+                    case 2: return 73
+                    case 3: return 130
+                    case 4: return 186
+                    default: return 186
+                }
+            }
+        )(unlockE.level)
         result = "e_1=e-(1+\\frac{1}{n})^n"
         if (unlockE.level >= 2) result += "\\\\e_2=e-(1+\\frac{a}{b})^{\\frac{b}{a}}"
-        if (unlockE.level >= 3) result += "\\\\e_3=e-(\\frac{x}{x+1})^{-x}"
-        if (unlockE.level >= 4) result += "\\\\e_4=|e-\\frac{y!}{!y}|"
+        if (unlockE.level >= 3) result += "\\\\e_3=|1-\\int^e_1\\frac{\\sqrt[x]{e}}{t}dt|"
+        if (unlockE.level >= 4) result += "\\\\e_4=1-\\int^{(1+\\frac{1}{y})^y}_{1}\\frac{1}{t}dt"
     } else result = "\\text{Invalid Page}"
     return "\\begin{array}{c}" + result + "\\end{array}"
 }
@@ -646,9 +656,8 @@ var getN = level => BigNumber.ONE + Utils.getStepwisePowerSum(level, 2, 10, 0)
 var getInverseA = level => BigNumber.E.pow(0.05 * level)
 var getA = level => getInverseA(level).pow(-1)
 var getB = level => BigNumber.ONE + Utils.getStepwisePowerSum(level, 2, 10, 0)
-var getX = level => BigNumber.ONE + Utils.getStepwisePowerSum(level, 2, 10, 0)
-var getYIndex = level => Utils.getStepwisePowerSum(level, 2, 1000, 0)
-var getY = level => BigNumber.TWO + harmonic(getYIndex(level))
+var getX = level => BigNumber.TWO + Utils.getStepwisePowerSum(level, 2, 5, 0)
+var getY = level => (BigNumber.ONE + Utils.getStepwisePowerSum(level, 2, 5, 0)) / 4
 var getX1 = level => BigNumber.ONE + 0.01 * level
 var getX2Exponent = level => BigNumber.ONE + 0.1 * level
 var getX2 = level => BigNumber.E.pow(getX2Exponent(level))
@@ -664,43 +673,15 @@ var getE1 = n => {
     return 2 * n / BigNumber.E + 11 * n / (6 * BigNumber.E) - 5 / (72 * BigNumber.E * n) + 17 / (540 * BigNumber.E * BigNumber.from(n).pow(2))
 }
 var getE2 = (a, b) => getE1(b / a)
-var getE3 = x => getE1(x)
+var getE3 = x => {
+    if (x <= 20) return 1 / (BigNumber.E.pow(1 / x) - 1)
+    // Laurent Series
+    return x - 1 / 2 + 1 / (12 * x)
+}
 var getE4 = y => {
-    y = BigNumber.from(y)
-    if (y < 5) return BigNumber.from(BigNumber.E - factorial(y) / derangement(y)).abs().pow(-1)
-    return ((
-        y.pow(y) * (
-            (2 * BigNumber.PI * y).sqrt()
-            +
-            1 / 6 * (BigNumber.PI / 2 / y).sqrt()
-            +
-            1 / 144 * (BigNumber.PI / 2 / y.pow(3)).sqrt()
-            -
-            139 * (BigNumber.PI / 2 / y.pow(5)).sqrt() / 25920
-            -
-            571 * (BigNumber.PI / 2 / y.pow(7)).sqrt() / 1244160
-            +
-            163879 * (BigNumber.PI / 2 / y.pow(9)).sqrt() / 104509440
-            +
-            5246819 * (BigNumber.PI / 2 / y.pow(11)).sqrt() / 37623398400
-        ) + (-BigNumber.E).pow(y + 1) * (
-            - 1 / y
-            + 2 / y.pow(2)
-            - 5 / y.pow(3)
-            + 15 / y.pow(4)
-            - 52 / y.pow(5)
-            + 203 / y.pow(6)
-        )
-    ) / (
-        BigNumber.E * (-BigNumber.E).pow(y + 1) * (
-            - 1 / y
-            + 2 / y.pow(2)
-            - 5 / y.pow(3)
-            + 15 / y.pow(4)
-            - 52 / y.pow(5)
-            + 203 / y.pow(6)
-        )
-    )).abs()
+    if (y <= 10) return 1 / (1 - (BigNumber.ONE + 1 / y).pow(y).log())
+    // Laurent Series
+    return 2 * y + 4 / 3 - 1 / (9 * y) + 8 / (135 * y.pow(2)) - 31 / (810 * y.pow(3))
 }
 
 var factorial = number => {
@@ -756,7 +737,7 @@ var getEquationOverlay = _ => {
                 textColor: Color.TEXT_MEDIUM
             }),
             ui.createLatexLabel({
-                text: () => Utils.getMath(`\\max\\rho =\\text{${max_rho.toString(5)}}`),
+                text: () => Utils.getMath(`\\max\\dot{\\rho}=\\text{${max_drho.toString(5)}}`),
                 fontSize: 10,
                 margin: new Thickness(4, 4),
                 textColor: Color.TEXT_MEDIUM,
@@ -770,14 +751,14 @@ var getEquationOverlay = _ => {
 var getInternalState = () => JSON.stringify({
     version,
     time: time.toBase64String(),
-    max_rho: max_rho.toBase64String()
+    max_drho: max_drho.toBase64String()
 })
 var setInternalState = string => {
     if (!string) return
 
     const state = JSON.parse(string)
     time = BigNumber.fromBase64String(state.time ?? BigNumber.ZERO.toBase64String())
-    max_rho = BigNumber.fromBase64String(state.max_rho ?? BigNumber.ZERO.toBase64String())
+    max_drho = BigNumber.fromBase64String(state.max_drho ?? BigNumber.ZERO.toBase64String())
 }
 
 var canGoToPreviousStage = () => page == 2
