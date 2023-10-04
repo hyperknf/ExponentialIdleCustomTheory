@@ -516,12 +516,12 @@ var tick = (elapsedTime, multiplier) => {
         unlock.level >= 2 ? getX1(x1.level) : 1
     ))
     tertiary_display[0] = main_exponent.toString(3)
-    drho = dt * getK(k.level) * bonus * time.pow(getTExp(time_exp.level)) * (
+    drho = getK(k.level) * bonus * time.pow(getTExp(time_exp.level)) * (
         unlock.level >= 1 && unlockE.level >= 1 ? E.pow(0.9) : 1
     ) * main_exponent * (
         unlock.level >= 3 ? getX2(x2.level) : 1
     )
-    currency.value += drho
+    currency.value += drho * dt
 
     if (max_drho <= drho) max_drho = drho
 
