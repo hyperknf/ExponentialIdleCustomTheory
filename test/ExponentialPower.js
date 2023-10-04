@@ -219,7 +219,7 @@ var getStepwisePowerProduct = (level, base, step_length, offset) => {
     return product
 }
 
-var init = () => {
+var initialize = () => {
     currency = theory.createCurrency()
     currency2 = theory.createCurrency(...currency2text)
 
@@ -768,4 +768,4 @@ var goToPreviousStage = () => page = 1
 var canGoToNextStage = () => page == 1 && unlock.level >= 1
 var goToNextStage = () => page = 2
 
-init()
+initialize()
