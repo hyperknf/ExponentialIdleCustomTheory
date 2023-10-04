@@ -577,8 +577,8 @@ var getSecondaryEquation = () => {
                     case 0: return 0
                     case 1: return 37
                     case 2: return 73
-                    case 3: return 130
-                    case 4: return 186
+                    case 3: return 119
+                    case 4: return 165
                     default: return 186
                 }
             }
@@ -658,8 +658,8 @@ var getN = level => BigNumber.ONE + Utils.getStepwisePowerSum(level, 2, 10, 0)
 var getInverseA = level => BigNumber.E.pow(0.05 * level)
 var getA = level => getInverseA(level).pow(-1)
 var getB = level => BigNumber.ONE + Utils.getStepwisePowerSum(level, 2, 10, 0)
-var getX = level => BigNumber.TWO + Utils.getStepwisePowerSum(level, 2, 8, 0)
-var getY = level => (BigNumber.ONE + Utils.getStepwisePowerSum(level, 2, 7, 0)) / 4
+var getX = level => BigNumber.TWO + Utils.getStepwisePowerSum(level, 2, 10, 0)
+var getY = level => (BigNumber.ONE + Utils.getStepwisePowerSum(level, 2, 10, 0)) / 4
 var getX1 = level => BigNumber.ONE + 0.01 * level
 var getX2Exponent = level => BigNumber.ONE + 0.1 * level
 var getX2 = level => BigNumber.E.pow(getX2Exponent(level))
