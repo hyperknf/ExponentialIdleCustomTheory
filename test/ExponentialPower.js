@@ -154,7 +154,7 @@ var getDescription = language => {
     return (descriptions[language] ?? descriptions.en).join("\n")
 }
 var authors = "HyperKNF"
-var version = "v1.2.test.41"
+var version = "v1.2.test.42"
 
 const currency2text = ["δ", "\\delta"]
 
@@ -757,7 +757,7 @@ var getEquationOverlay = _ => {
                 textColor: Color.TEXT_MEDIUM
             }),
             ui.createLatexLabel({
-                text: () => Utils.getMath(`\\max\\dot{\\rho}=${max_drho.toString(3)}\\text{ }(${publication_max_drho.toString(3)})`),
+                text: () => Utils.getMath(`\\max\\dot{\\rho}=${max_drho.toString(3)}\\quad(${publication_max_drho.toString(3)})`),
                 fontSize: 10,
                 margin: new Thickness(4, 3),
                 textColor: Color.TEXT_MEDIUM,
