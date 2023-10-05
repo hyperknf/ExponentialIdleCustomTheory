@@ -154,7 +154,7 @@ var getDescription = language => {
     return (descriptions[language] ?? descriptions.en).join("\n")
 }
 var authors = "HyperKNF"
-var version = "v1.2.test.38"
+var version = "v1.2.test.39"
 
 const currency2text = ["δ", "\\delta"]
 
@@ -195,6 +195,7 @@ var domain = 1
 var max_drho = BigNumber.ZERO
 
 var secret_achievement_chance = 1e6
+var page2_equation_scale = 0.925
 
 var tertiary_display = Array.from({
     length: 2
@@ -523,7 +524,7 @@ var tick = (elapsedTime, multiplier) => {
     )
     currency.value += drho * dt
 
-    if (max_drho <= drho) max_drho = drho
+    if (max_drho <= drho) max_drho = drho * (dt / 0.1)
 
     if (currency.value >= BigNumber.TEN.pow(10)) achievements.regular[0] = true
     if (currency.value >= BigNumber.TEN.pow(25)) achievements.regular[1] = true
@@ -542,6 +543,7 @@ var tick = (elapsedTime, multiplier) => {
 
 var postPublish = () => {
     time = BigNumber.ZERO
+    domain = 1
     page = 1
 }
 
@@ -550,9 +552,9 @@ var formatQuaternaryEntry = (...args) => new QuaternaryEntry(...args)
 var isCurrencyVisible = index => {
     switch (index) {
         case 0:
-            return true
+            return domain == 1
         case 1:
-            return false // This is coming in the next update
+            return domain == 2 // This is coming in the next update
         default:
             return false // Invalid index
     }
@@ -566,7 +568,8 @@ var getPrimaryEquation = () => {
         \\\\`
         + theory.latexSymbol + "=\\max\\rho"
     } else if (page == 2) {
-        theory.primaryEquationHeight = 40
+        theory.primaryEquationHeight = page2_equation_scale * 40
+        theory.primaryEquationScale = page2_equation_scale
         result = `E=\\prod_{i}{e_i}`
     } else result = "\\text{Invalid Page}"
     return "\\begin{array}{c}" + result + "\\end{array}"
@@ -578,8 +581,7 @@ var getSecondaryEquation = () => {
         theory.secondaryEquationScale = 1
         result = `B(x)=\\frac{x}{\\sqrt{\\log_{e20}{\\max{(\\rho,e20)}}}}${publication.level >= 1 ? `\\\\m=\\text{${getTextResource(TextResource.PublicationMultiplier)}}` : ""}`
     } else if (page == 2) {
-        const scale = 0.925
-        theory.secondaryEquationHeight = scale * (
+        theory.secondaryEquationHeight = page2_equation_scale * (
             level => {
                 switch (level) {
                     case 0: return 0
@@ -591,7 +593,7 @@ var getSecondaryEquation = () => {
                 }
             }
         )(unlockE.level)
-        theory.secondaryEquationScale = scale
+        theory.secondaryEquationScale = page2_equation_scale
         result = "e_1=e-(1+\\frac{1}{n})^n"
         if (unlockE.level >= 2) result += "\\\\e_2=e-(1+\\frac{a}{b})^{\\frac{b}{a}}"
         if (unlockE.level >= 3) result += "\\\\e_3=|1-\\int^e_1\\frac{\\sqrt[x]{e}}{t}dt|"
@@ -621,12 +623,12 @@ var getQuaternaryEntries = () => {
     if (page == 1 && publication.level >= 1) {
         result.push(formatQuaternaryEntry(
             "m",
-            BigNumber.from(theory.publicationMultiplier).toString(5)
+            BigNumber.from(theory.publicationMultiplier).toString(2)
         ))
     }
     result.push(formatQuaternaryEntry(
         "E",
-        unlock.level >= 1 ? getInverseEDisplay(E) : null
+        unlockE.level >= 1 ? getInverseEDisplay(E) : null
     ))
     if (page == 2) {
         result.push(formatQuaternaryEntry(
@@ -754,7 +756,7 @@ var getEquationOverlay = _ => {
             ui.createLatexLabel({
                 text: () => Utils.getMath(`\\max\\dot{\\rho}=\\text{${max_drho.toString(5)}}`),
                 fontSize: 10,
-                margin: new Thickness(4, 2),
+                margin: new Thickness(4, 3),
                 textColor: Color.TEXT_MEDIUM,
                 horizontalOptions: LayoutOptions.END
             })
