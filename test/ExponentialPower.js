@@ -154,7 +154,7 @@ var getDescription = language => {
     return (descriptions[language] ?? descriptions.en).join("\n")
 }
 var authors = "HyperKNF"
-var version = "v1.2.test.39"
+var version = "v1.2.test.40"
 
 const currency2text = ["δ", "\\delta"]
 
@@ -192,6 +192,7 @@ var time = BigNumber.ZERO
 var domain_switched = false
 var domain = 1
 
+var publication_max_drho = BigNumber.ZERO
 var max_drho = BigNumber.ZERO
 
 var secret_achievement_chance = 1e6
@@ -525,6 +526,7 @@ var tick = (elapsedTime, multiplier) => {
     currency.value += drho * dt
 
     if (max_drho <= drho * (dt / 0.1)) max_drho = drho * (dt / 0.1)
+    if (publication_max_drho <= drho * (dt / 0.1)) publication_max_drho = drho * (dt / 0.1)
 
     if (currency.value >= BigNumber.TEN.pow(10)) achievements.regular[0] = true
     if (currency.value >= BigNumber.TEN.pow(25)) achievements.regular[1] = true
@@ -542,6 +544,7 @@ var tick = (elapsedTime, multiplier) => {
 }
 
 var postPublish = () => {
+    publication_max_drho = BigNumber.ZERO
     time = BigNumber.ZERO
     domain = 1
     page = 1
@@ -754,7 +757,7 @@ var getEquationOverlay = _ => {
                 textColor: Color.TEXT_MEDIUM
             }),
             ui.createLatexLabel({
-                text: () => Utils.getMath(`\\max\\dot{\\rho}=\\text{${max_drho.toString(5)}}`),
+                text: () => Utils.getMath(`\\max\\dot{\\rho}=\\text{${max_drho.toString(3)} (${publication_max_drho.toString(3)})}`),
                 fontSize: 10,
                 margin: new Thickness(4, 3),
                 textColor: Color.TEXT_MEDIUM,
