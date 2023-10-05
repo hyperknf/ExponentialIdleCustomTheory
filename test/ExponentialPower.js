@@ -759,7 +759,7 @@ var getEquationOverlay = _ => {
             ui.createLatexLabel({
                 text: () => Utils.getMath(`\\max\\dot{\\rho}=${max_drho.toString(3)}\\quad(${publication_max_drho.toString(3)})`),
                 fontSize: 10,
-                margin: new Thickness(4, 3),
+                margin: new Thickness(4, 4),
                 textColor: Color.TEXT_MEDIUM,
                 horizontalOptions: LayoutOptions.END
             })
