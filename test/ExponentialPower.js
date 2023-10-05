@@ -579,7 +579,7 @@ var getSecondaryEquation = () => {
     if (page == 1) {
         theory.secondaryEquationHeight = publication.level >= 1 ? 57 : 37
         theory.secondaryEquationScale = 1
-        result = `B(x)=\\frac{x}{\\sqrt[2.5]{\\log_{e20}{\\max{(\\rho,e20)}}}}${publication.level >= 1 ? `\\\\m=\\text{${getTextResource(TextResource.PublicationMultiplier)}}` : ""}`
+        result = `B(x)=\\frac{x}{\\sqrt{\\log_{e20}{\\max{(\\rho,e20)}}}}${publication.level >= 1 ? `\\\\m=\\text{${getTextResource(TextResource.PublicationMultiplier)}}` : ""}`
     } else if (page == 2) {
         theory.secondaryEquationHeight = page2_equation_scale * (
             level => {
@@ -604,7 +604,7 @@ var getSecondaryEquation = () => {
 var getTertiaryEquation = () => {
     let result
     if (page == 1) {
-        result = `\\text{${getTextResource(TextResource.TickRate)}:}\\quad ${(dt * 100).toString(5)}/\\text{${getTextResource(TextResource.Second)}}\\\\c_1^{B(c_2${unlock.level >= 2 ? "x_1" : ""})}=${tertiary_display[0]},\\quad\\sqrt[2.5]{\\log_{e20}{\\rho}}=${tertiary_display[1]}`
+        result = `\\text{${getTextResource(TextResource.TickRate)}:}\\quad ${(dt * 100).toString(5)}/\\text{${getTextResource(TextResource.Second)}}\\\\c_1^{B(c_2${unlock.level >= 2 ? "x_1" : ""})}=${tertiary_display[0]},\\quad\\sqrt{\\log_{e20}{\\rho}}=${tertiary_display[1]}`
     } else result = ""
     return "\\begin{array}{c}" + result + "\\end{array}"
 }
@@ -665,8 +665,8 @@ var getC2Balance = c2 => {
         tertiary_display[1] = "-\\infty"
         return c2
     }
-    tertiary_display[1] = log(e20, currency.value.max(1.1)).pow(1 / 2.5).toString(3)
-    return c2 / log(e20, currency.value.max(e20)).pow(1 / 2.5)
+    tertiary_display[1] = log(e20, currency.value.max(1.1)).sqrt().toString(3)
+    return c2 / log(e20, currency.value.max(e20)).sqrt()
 }
 var getC2 = level => BigNumber.ONE + 0.25 * Math.min(level, 30) + (level > 30 ? (0.25 * (1 - 0.99 ** (level - 30)) / (1 - 0.99)) : 0)
 var getN = level => BigNumber.ONE + Utils.getStepwisePowerSum(level, 2, 10, 0)
