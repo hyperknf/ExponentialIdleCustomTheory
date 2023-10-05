@@ -652,8 +652,8 @@ var getQuaternaryEntries = () => {
 }
 
 var getCurrencyFromTau = (tau) => [tau.max(BigNumber.ONE), currency.symbol]
-var getPublicationMultiplier = tau => 10 * tau.pow(0.125) / (10 + tau).log10()
-var getPublicationMultiplierFormula = symbol => `\\frac{10\\sqrt[8]{${symbol}}}{\\log_{10}(10+${symbol})}`
+var getPublicationMultiplier = tau => 10 * tau.pow(0.13) / (10 + tau).log10()
+var getPublicationMultiplierFormula = symbol => `\\frac{10{${symbol}}^{0.13}}{\\log_{10}(10+${symbol})}`
 var getTau = () => currency.value.max(BigNumber.ZERO)
 var get2DGraphValue = () => currency.value.sign * (BigNumber.ONE + currency.value.abs()).log10().toNumber()
 
