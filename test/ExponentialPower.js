@@ -524,7 +524,7 @@ var tick = (elapsedTime, multiplier) => {
     )
     currency.value += drho * dt
 
-    if (max_drho <= drho) max_drho = drho * (dt / 0.1)
+    if (max_drho <= drho * (dt / 0.1)) max_drho = drho * (dt / 0.1)
 
     if (currency.value >= BigNumber.TEN.pow(10)) achievements.regular[0] = true
     if (currency.value >= BigNumber.TEN.pow(25)) achievements.regular[1] = true
@@ -612,7 +612,7 @@ var getQuaternaryEntries = () => {
     const result = []
     result.push(formatQuaternaryEntry(
         "\\dot\\rho",
-        drho.toString(5)
+        (drho * (dt / 0.1)).toString(5)
     ))
     if (page == 1) {
         result.push(formatQuaternaryEntry(
