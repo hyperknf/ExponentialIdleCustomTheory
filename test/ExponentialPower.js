@@ -160,7 +160,7 @@ var getDescription = language => {
     return (descriptions[language] ?? descriptions.en).join("\n")
 }
 var authors = "HyperKNF"
-var version = "v1.2.f2"
+var version = "pre.v1.3.b3"
 
 const currency2text = ["δ", "\\delta"]
 
@@ -411,13 +411,13 @@ var initialize = () => {
             case 1:
                 return BigNumber.from(50)
             case 2:
-                return BigNumber.from(85)
+                return BigNumber.from(95)
             case 3:
-                return BigNumber.from(120)
+                return BigNumber.from(130)
             case 4:
-                return BigNumber.from(150)
+                return BigNumber.from(170)
             default:
-                return BigNumber.from(200)
+                return BigNumber.from(1000)
         }
     }))
 
