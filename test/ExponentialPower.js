@@ -154,7 +154,7 @@ var getDescription = language => {
     return (descriptions[language] ?? descriptions.en).join("\n")
 }
 var authors = "HyperKNF"
-var version = "v1.2.test.42"
+var version = "v1.2.test.43"
 
 const currency2text = ["δ", "\\delta"]
 
@@ -567,6 +567,7 @@ var getPrimaryEquation = () => {
     let result
     if (page == 1) {
         theory.primaryEquationHeight = 55
+        theory.primaryEquationScale = 1
         result = `\\dot{\\rho}=k${publication.level >= 1 ? "m" : ""}t^{${getTExp(time_exp.level) == 1 ? "" : getTExp(time_exp.level).toString(getTExp(time_exp.level) == 1 ? 0 : getTExp(time_exp.level) == 0.5 ? 1 : 2)}}${unlock.level >= 1 ? "E^{-0.9}" : ""}c_1^{B(c_2${unlock.level >= 2 ? "x_1" : ""})}${unlock.level >= 3 ? "x_2" : ""}\
         \\\\`
         + theory.latexSymbol + "=\\max\\rho"
