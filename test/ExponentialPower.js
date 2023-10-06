@@ -301,7 +301,7 @@ var initialize = () => {
     // x
     {
         let getDesc = (level) => "x=" + getX(level).toString(0)
-        x = theory.createUpgrade(103, currency, new ExponentialCost(1e40, Math.log2(1.925)))
+        x = theory.createUpgrade(103, currency, new ExponentialCost(1e44, Math.log2(1.925)))
         x.getDescription = (_) => Utils.getMath(getDesc(x.level))
         x.getInfo = (amount) => Utils.getMathTo(getDesc(x.level), getDesc(x.level + amount))
     }
@@ -310,7 +310,7 @@ var initialize = () => {
     {
         let getDesc = (level) => "y=" + getY(level).toString(2)
         let getInfo = (level) => "y=" + getY(level).toString(2) + ""
-        y = theory.createUpgrade(104, currency, new ExponentialCost(1e55, Math.log2(2)))
+        y = theory.createUpgrade(104, currency, new ExponentialCost(1e59, Math.log2(2.025)))
         y.getDescription = (_) => Utils.getMath(getDesc(y.level))
         y.getInfo = (amount) => Utils.getMathTo(getInfo(y.level), getInfo(y.level + amount))
     }
@@ -347,9 +347,9 @@ var initialize = () => {
                     case 1:
                         return BigNumber.TEN.pow(30)
                     case 2:
-                        return BigNumber.TEN.pow(42.5)
+                        return BigNumber.TEN.pow(45)
                     case 3:
-                        return BigNumber.TEN.pow(57.5)
+                        return BigNumber.TEN.pow(60)
                 }
             }
         ))
@@ -402,13 +402,13 @@ var initialize = () => {
             case 0:
                 return BigNumber.from(20)
             case 1:
-                return BigNumber.from(45)
+                return BigNumber.from(50)
             case 2:
-                return BigNumber.from(75)
+                return BigNumber.from(85)
             case 3:
-                return BigNumber.from(110)
+                return BigNumber.from(120)
             case 4:
-                return BigNumber.from(145)
+                return BigNumber.from(150)
             default:
                 return BigNumber.from(200)
         }
