@@ -448,7 +448,7 @@ var initialize = () => {
         )
         unlock.canBeRefunded = _ => time_exp.level == 0 || unlock.level >= 2
         unlock.bought = _ => unlock_bought = true
-        unlock.refund = _ => unlock_refund = true
+        unlock.refunded = _ => unlock_refund = true
     }
 
     { 
