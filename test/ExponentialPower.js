@@ -310,7 +310,7 @@ var initialize = () => {
     {
         let getDesc = (level) => "y=" + getY(level).toString(2)
         let getInfo = (level) => "y=" + getY(level).toString(2) + ""
-        y = theory.createUpgrade(104, currency, new ExponentialCost(1e59, Math.log2(2.025)))
+        y = theory.createUpgrade(104, currency, new ExponentialCost(1e64, Math.log2(2.025)))
         y.getDescription = (_) => Utils.getMath(getDesc(y.level))
         y.getInfo = (amount) => Utils.getMathTo(getInfo(y.level), getInfo(y.level + amount))
     }
@@ -349,7 +349,7 @@ var initialize = () => {
                     case 2:
                         return BigNumber.TEN.pow(45)
                     case 3:
-                        return BigNumber.TEN.pow(60)
+                        return BigNumber.TEN.pow(65)
                 }
             }
         ))
