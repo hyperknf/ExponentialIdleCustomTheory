@@ -154,7 +154,7 @@ var getDescription = language => {
     return (descriptions[language] ?? descriptions.en).join("\n")
 }
 var authors = "HyperKNF"
-var version = "v1.2.test.47"
+var version = "v1.2.f1"
 
 const currency2text = ["δ", "\\delta"]
 
@@ -302,7 +302,7 @@ var initialize = () => {
     // x
     {
         let getDesc = (level) => "x=" + getX(level).toString(0)
-        x = theory.createUpgrade(103, currency, new ExponentialCost(1e44, Math.log2(1.925)))
+        x = theory.createUpgrade(103, currency, new ExponentialCost(1e45, Math.log2(1.925)))
         x.getDescription = (_) => Utils.getMath(getDesc(x.level))
         x.getInfo = (amount) => Utils.getMathTo(getDesc(x.level), getDesc(x.level + amount))
     }
@@ -311,7 +311,7 @@ var initialize = () => {
     {
         let getDesc = (level) => "y=" + getY(level).toString(2)
         let getInfo = (level) => "y=" + getY(level).toString(2) + ""
-        y = theory.createUpgrade(104, currency, new ExponentialCost(1e64, Math.log2(2.025)))
+        y = theory.createUpgrade(104, currency, new ExponentialCost(2e66, Math.log2(2.025)))
         y.getDescription = (_) => Utils.getMath(getDesc(y.level))
         y.getInfo = (amount) => Utils.getMathTo(getInfo(y.level), getInfo(y.level + amount))
     }
@@ -346,11 +346,11 @@ var initialize = () => {
                     case 0:
                         return BigNumber.ZERO
                     case 1:
-                        return BigNumber.TEN.pow(30)
+                        return BigNumber.TEN.pow(31)
                     case 2:
-                        return BigNumber.TEN.pow(45)
+                        return BigNumber.TEN.pow(46)
                     case 3:
-                        return BigNumber.TEN.pow(65)
+                        return BigNumber.TEN.pow(67.5)
                 }
             }
         ))
