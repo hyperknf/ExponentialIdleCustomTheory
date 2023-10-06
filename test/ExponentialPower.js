@@ -108,10 +108,16 @@ const TextResource = {
     "DomainSwitch": {
         "Unlocked": {
             "Description": {
-                "en": "Coming soon"
+                "en": "Coming soon",
+                "zh-Hant": "敬請期待",
+                "zh-Hans": "敬请期待",
+                "fi": "Tulossa pian"
             },
             "Info": {
-                "en": "Coming soon"
+                "en": "Coming soon",
+                "zh-Hant": "敬請期待",
+                "zh-Hans": "敬请期待",
+                "fi": "tulossa pian"
             }
         },
         "Locked": "?????"
@@ -154,7 +160,7 @@ var getDescription = language => {
     return (descriptions[language] ?? descriptions.en).join("\n")
 }
 var authors = "HyperKNF"
-var version = "v1.2.f1"
+var version = "v1.2.f2"
 
 const currency2text = ["δ", "\\delta"]
 
@@ -269,7 +275,7 @@ var initialize = () => {
     {
         let getInfo = level => "x_2=" + getX2(level).toString(3)
         let getDesc = level => "x_2=e^{" + getX2Exponent(level) + "}"
-        x2 = theory.createUpgrade(4, currency, new ExponentialCost(1e50, Math.log2(100)))
+        x2 = theory.createUpgrade(4, currency, new ExponentialCost(1e80, Math.log2(10 ** 2.5)))
         x2.getDescription = _ => Utils.getMath(getDesc(x2.level))
         x2.getInfo = amount => Utils.getMathTo(getInfo(x2.level), getInfo(x2.level + amount))
     }
