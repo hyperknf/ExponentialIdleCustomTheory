@@ -72,6 +72,17 @@ const TextResource = {
                     "zh-Hans": "祝你好运",
                     "fi": "Onnea"
                 }
+            },
+            "MilestoneUnlock": {
+                "Name": {
+                    "en": "Serious Hesitation"
+                },
+                "Description": {
+                    "en": "Reallocate Add Term milestone upgrade 10 times"
+                },
+                "Hint": {
+                    "en": "Why would you do this?"
+                }
             }
         }
     },
@@ -160,7 +171,7 @@ var getDescription = language => {
     return (descriptions[language] ?? descriptions.en).join("\n")
 }
 var authors = "HyperKNF"
-var version = "pre.v1.3.b3"
+var version = "pre.v1.3.b5"
 
 const currency2text = ["δ", "\\delta"]
 
@@ -181,13 +192,14 @@ var achievements = {
         false
     ],
     secret: [
+        false,
         false
     ]
 }
 
 var progress_achievements, secret_achievements
 var achievement1, achievement2, achievement3
-var secret_achievement1
+var secret_achievement1, secret_achievement2
 
 var page = 1
 var E = BigNumber.E
@@ -201,6 +213,7 @@ var domain = 1
 var publication_max_drho = BigNumber.ZERO
 var max_drho = BigNumber.ZERO
 
+var unlock_bought = false, unlock_refund = false, unlock_times = 0
 var secret_achievement_chance = 1e6
 var page2_equation_scale = 0.925
 
@@ -434,6 +447,8 @@ var initialize = () => {
             "x_2"
         )
         unlock.canBeRefunded = _ => time_exp.level == 0 || unlock.level >= 2
+        unlock.bought = _ => unlock_bought = true
+        unlock.refund = _ => unlock_refund = true
     }
 
     { 
@@ -476,12 +491,20 @@ var initialize = () => {
     )
 
     secret_achievement1 = theory.createSecretAchievement(
+        5000,
+        secret_achievements,
+        getTextResource(TextResource.Achievements.Secret.MilestoneUnlock.Name),
+        getTextResource(TextResource.Achievements.Secret.MilestoneUnlock.Description),
+        getTextResource(TextResource.Achievements.Secret.MilestoneUnlock.Hint),
+        () => achievements.secret[0]
+    )
+    secret_achievement2 = theory.createSecretAchievement(
         99900,
         secret_achievements,
         getTextResource(TextResource.Achievements.Secret.Luck.Name),
         getTextResource(TextResource.Achievements.Secret.Luck.Description),
         getTextResource(TextResource.Achievements.Secret.Luck.Hint),
-        () => achievements.secret[0]
+        () => achievements.secret[1]
     )
     
     ///////////////////
@@ -539,7 +562,12 @@ var tick = (elapsedTime, multiplier) => {
     if (currency.value >= BigNumber.TEN.pow(25)) achievements.regular[1] = true
     if (currency.value >= BigNumber.TEN.pow(50)) achievements.regular[2] = true
 
-    if (Math.round(Math.random() * (secret_achievement_chance - 1) + 1) == 1) achievements.secret[0] = true
+    if (unlock_bought && unlock_refund) {
+        unlock_bought = unlock_refund = false
+        unlock_times++
+        if (unlock_times >= 10) achievements.secret[0] = true
+    }
+    if (Math.round(Math.random() * (secret_achievement_chance - 1) + 1) == 1) achievements.secret[1] = true
 
     theory.invalidatePrimaryEquation()
     theory.invalidateSecondaryEquation()
