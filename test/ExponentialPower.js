@@ -154,7 +154,7 @@ var getDescription = language => {
     return (descriptions[language] ?? descriptions.en).join("\n")
 }
 var authors = "HyperKNF"
-var version = "v1.2.test.44"
+var version = "v1.2.test.45"
 
 const currency2text = ["δ", "\\delta"]
 
@@ -245,6 +245,7 @@ var initialize = () => {
         ))
         c1.getDescription = (_) => Utils.getMath(getDesc(c1.level))
         c1.getInfo = (amount) => Utils.getMathTo(getDesc(c1.level), getDesc(c1.level + amount))
+        c1.maxLevel = 9999
     }
 
     // c2
