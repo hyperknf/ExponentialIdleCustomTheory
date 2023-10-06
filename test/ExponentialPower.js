@@ -154,7 +154,7 @@ var getDescription = language => {
     return (descriptions[language] ?? descriptions.en).join("\n")
 }
 var authors = "HyperKNF"
-var version = "v1.2.test.45"
+var version = "v1.2.test.46"
 
 const currency2text = ["δ", "\\delta"]
 
@@ -417,12 +417,12 @@ var initialize = () => {
 
     { 
         unlock = theory.createMilestoneUpgrade(0, 3)
-        unlock.getDescription = _ => Localization.getUpgradeUnlockDesc(
+        unlock.getDescription = _ => Localization.getUpgradeAddTermDesc(
             unlock.level == 0 ? "E" :
             unlock.level == 1 ? "x_1" :
             "x_2"
         )
-        unlock.getInfo = _ => Localization.getUpgradeUnlockInfo(
+        unlock.getInfo = _ => Localization.getUpgradeAddTermInfo(
             unlock.level == 0 ? "E" :
             unlock.level == 1 ? "x_1" :
             "x_2"
