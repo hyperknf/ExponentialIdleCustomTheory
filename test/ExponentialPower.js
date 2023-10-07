@@ -171,7 +171,7 @@ var getDescription = language => {
     return (descriptions[language] ?? descriptions.en).join("\n")
 }
 var authors = "HyperKNF"
-var version = "pre.v1.3.b13"
+var version = "pre.v1.3.b14"
 
 const currency2text = ["δ", "\\delta"]
 
@@ -618,7 +618,7 @@ var getSecondaryEquation = () => {
     if (page == 1) {
         theory.secondaryEquationHeight = publication.level >= 1 ? 57 : 37
         theory.secondaryEquationScale = 1
-        result = `B(x)=\\frac{x}{\\sqrt{\\log_{e20}{\\max{(\\rho,e20)}}}}${publication.level >= 1 ? `\\\\m=\\text{${getTextResource(TextResource.PublicationMultiplier)}}` : ""}`
+        result = `B(x)=\\frac{x}{\\sqrt{\\log_{10^{20}}{\\max{(\\rho,e20)}}}}${publication.level >= 1 ? `\\\\m=\\text{${getTextResource(TextResource.PublicationMultiplier)}}` : ""}`
     } else if (page == 2) {
         theory.secondaryEquationHeight = page2_equation_scale * (
             level => {
@@ -643,7 +643,7 @@ var getSecondaryEquation = () => {
 var getTertiaryEquation = () => {
     let result
     if (page == 1) {
-        result = `\\text{${getTextResource(TextResource.TickRate)}:}\\quad ${(dt * 100).toString(5)}/\\text{${getTextResource(TextResource.Second)}}\\\\c_1^{B(c_2${unlock.level >= 2 ? "x_1" : ""})}=${tertiary_display[0]},\\quad\\sqrt{\\log_{e20}{\\rho}}=${tertiary_display[1]}`
+        result = `\\text{${getTextResource(TextResource.TickRate)}:}\\quad ${(dt * 100).toString(5)}/\\text{${getTextResource(TextResource.Second)}}\\\\c_1^{B(c_2${unlock.level >= 2 ? "x_1" : ""})}=${tertiary_display[0]},\\quad\\sqrt{\\log_{10^{20}}{\\rho}}=${tertiary_display[1]}`
     } else result = ""
     return "\\begin{array}{c}" + result + "\\end{array}"
 }
@@ -691,8 +691,8 @@ var getQuaternaryEntries = () => {
 }
 
 var getCurrencyFromTau = tau => [tau.max(BigNumber.ONE), currency.symbol]
-var getPublicationMultiplier = tau => 15 * tau.pow(0.127) / (10 + tau).log10().pow(0.9)
-var getPublicationMultiplierFormula = symbol => `m=\\frac{15{${symbol}}^{0.127}}{\\log^{0.9}_{10}(10+${symbol})}`
+var getPublicationMultiplier = tau => 15 * tau.pow(0.126) / (10 + tau).log10().pow(0.9)
+var getPublicationMultiplierFormula = symbol => `m=\\frac{15{${symbol}}^{0.126}}{\\log^{0.9}_{10}(10+${symbol})}`
 var getTau = () => currency.value.max(BigNumber.ZERO)
 var get2DGraphValue = () => currency.value.sign * (BigNumber.ONE + currency.value.abs()).log10().toNumber()
 
