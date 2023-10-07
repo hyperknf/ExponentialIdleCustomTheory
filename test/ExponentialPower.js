@@ -171,7 +171,7 @@ var getDescription = language => {
     return (descriptions[language] ?? descriptions.en).join("\n")
 }
 var authors = "HyperKNF"
-var version = "pre.v1.3.b12"
+var version = "pre.v1.3.b13"
 
 const currency2text = ["δ", "\\delta"]
 
@@ -691,8 +691,8 @@ var getQuaternaryEntries = () => {
 }
 
 var getCurrencyFromTau = tau => [tau.max(BigNumber.ONE), currency.symbol]
-var getPublicationMultiplier = tau => 15 * tau.pow(0.127) / (10 + tau).log10()
-var getPublicationMultiplierFormula = symbol => `m=\\frac{15{${symbol}}^{0.127}}{\\log_{10}(10+${symbol})}`
+var getPublicationMultiplier = tau => 15 * tau.pow(0.127) / (10 + tau).log10().pow(0.8)
+var getPublicationMultiplierFormula = symbol => `m=\\frac{15{${symbol}}^{0.127}}{\\log^{0.8}_{10}(10+${symbol})}`
 var getTau = () => currency.value.max(BigNumber.ZERO)
 var get2DGraphValue = () => currency.value.sign * (BigNumber.ONE + currency.value.abs()).log10().toNumber()
 
