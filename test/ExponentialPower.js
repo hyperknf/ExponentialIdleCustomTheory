@@ -618,7 +618,7 @@ var getSecondaryEquation = () => {
     if (page == 1) {
         theory.secondaryEquationHeight = publication.level >= 1 ? 57 : 37
         theory.secondaryEquationScale = 1
-        result = `B(x)=\\frac{x}{\\sqrt{\\log_{10^{20}}{\\max{(\\rho,e20)}}}}${publication.level >= 1 ? `\\\\m=\\text{${getTextResource(TextResource.PublicationMultiplier)}}` : ""}`
+        result = `B(x)=\\frac{x}{\\sqrt{\\log_{10^{20}}{\\max{(\\rho,10^{20})}}}}${publication.level >= 1 ? `\\\\m=\\text{${getTextResource(TextResource.PublicationMultiplier)}}` : ""}`
     } else if (page == 2) {
         theory.secondaryEquationHeight = page2_equation_scale * (
             level => {
