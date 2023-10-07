@@ -171,7 +171,7 @@ var getDescription = language => {
     return (descriptions[language] ?? descriptions.en).join("\n")
 }
 var authors = "HyperKNF"
-var version = "pre.v1.3.b5"
+var version = "pre.v1.3.b6"
 
 const currency2text = ["δ", "\\delta"]
 
@@ -305,7 +305,7 @@ var initialize = () => {
     {
         let getInfo = (level) => "a=" + getInverseEDisplay(getInverseA(level))
         let getDesc = level => "a=e^{" + (BigNumber.from(-0.05) * level).toString(2) + "}"
-        a = theory.createUpgrade(101, currency, new ExponentialCost(1e30, Math.log2(2.375)))
+        a = theory.createUpgrade(101, currency, new ExponentialCost(1e31, Math.log2(2.38)))
         a.getDescription = (_) => Utils.getMath(getDesc(a.level))
         a.getInfo = (amount) => Utils.getMathTo(getInfo(a.level), getInfo(a.level + amount))
     }
@@ -313,7 +313,7 @@ var initialize = () => {
     // b
     {
         let getDesc = (level) => "b=" + getB(level).toString(0)
-        b = theory.createUpgrade(102, currency, new ExponentialCost(1e30, Math.log2(2.925)))
+        b = theory.createUpgrade(102, currency, new ExponentialCost(1e31, Math.log2(2.93125)))
         b.getDescription = (_) => Utils.getMath(getDesc(b.level))
         b.getInfo = (amount) => Utils.getMathTo(getDesc(b.level), getDesc(b.level + amount))
     }
@@ -321,7 +321,7 @@ var initialize = () => {
     // x
     {
         let getDesc = (level) => "x=" + getX(level).toString(0)
-        x = theory.createUpgrade(103, currency, new ExponentialCost(1e45, Math.log2(1.925)))
+        x = theory.createUpgrade(103, currency, new ExponentialCost(1e46, Math.log2(1.92625)))
         x.getDescription = (_) => Utils.getMath(getDesc(x.level))
         x.getInfo = (amount) => Utils.getMathTo(getDesc(x.level), getDesc(x.level + amount))
     }
@@ -330,7 +330,7 @@ var initialize = () => {
     {
         let getDesc = (level) => "y=" + getY(level).toString(2)
         let getInfo = (level) => "y=" + getY(level).toString(2) + ""
-        y = theory.createUpgrade(104, currency, new ExponentialCost(2e66, Math.log2(2.025)))
+        y = theory.createUpgrade(104, currency, new ExponentialCost(2e69, Math.log2(2.02625)))
         y.getDescription = (_) => Utils.getMath(getDesc(y.level))
         y.getInfo = (amount) => Utils.getMathTo(getInfo(y.level), getInfo(y.level + amount))
     }
@@ -365,11 +365,11 @@ var initialize = () => {
                     case 0:
                         return BigNumber.ZERO
                     case 1:
-                        return BigNumber.TEN.pow(31)
+                        return BigNumber.TEN.pow(32)
                     case 2:
-                        return BigNumber.TEN.pow(46)
+                        return BigNumber.TEN.pow(47.5)
                     case 3:
-                        return BigNumber.TEN.pow(67.5)
+                        return BigNumber.TEN.pow(70)
                 }
             }
         ))
@@ -424,11 +424,11 @@ var initialize = () => {
             case 1:
                 return BigNumber.from(50)
             case 2:
-                return BigNumber.from(95)
+                return BigNumber.from(100)
             case 3:
-                return BigNumber.from(130)
+                return BigNumber.from(175)
             case 4:
-                return BigNumber.from(170)
+                return BigNumber.from(255)
             default:
                 return BigNumber.from(1000)
         }
