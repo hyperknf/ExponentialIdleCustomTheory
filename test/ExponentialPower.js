@@ -171,7 +171,7 @@ var getDescription = language => {
     return (descriptions[language] ?? descriptions.en).join("\n")
 }
 var authors = "HyperKNF"
-var version = "pre.v1.3.b8"
+var version = "pre.v1.3.b9"
 
 const currency2text = ["δ", "\\delta"]
 
@@ -305,7 +305,7 @@ var initialize = () => {
     {
         let getInfo = (level) => "a=" + getInverseEDisplay(getInverseA(level))
         let getDesc = level => "a=e^{" + (BigNumber.from(-0.05) * level).toString(2) + "}"
-        a = theory.createUpgrade(101, currency, new ExponentialCost(1e31, Math.log2(2.38)))
+        a = theory.createUpgrade(101, currency, new ExponentialCost(1e31, Math.log2(2.37)))
         a.getDescription = (_) => Utils.getMath(getDesc(a.level))
         a.getInfo = (amount) => Utils.getMathTo(getInfo(a.level), getInfo(a.level + amount))
     }
@@ -691,8 +691,8 @@ var getQuaternaryEntries = () => {
 }
 
 var getCurrencyFromTau = tau => [tau.max(BigNumber.ONE), currency.symbol]
-var getPublicationMultiplier = tau => 15 * tau.pow(0.12) / (10 + tau).log10()
-var getPublicationMultiplierFormula = symbol => `m=\\frac{15{${symbol}}^{0.12}}{\\log_{10}(10+${symbol})}`
+var getPublicationMultiplier = tau => 15 * tau.pow(0.1225) / (10 + tau).log10()
+var getPublicationMultiplierFormula = symbol => `m=\\frac{15{${symbol}}^{0.1225}}{\\log_{10}(10+${symbol})}`
 var getTau = () => currency.value.max(BigNumber.ZERO)
 var get2DGraphValue = () => currency.value.sign * (BigNumber.ONE + currency.value.abs()).log10().toNumber()
 
