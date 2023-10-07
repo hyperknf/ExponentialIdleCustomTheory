@@ -171,7 +171,7 @@ var getDescription = language => {
     return (descriptions[language] ?? descriptions.en).join("\n")
 }
 var authors = "HyperKNF"
-var version = "pre.v1.3.b9"
+var version = "pre.v1.3.b10"
 
 const currency2text = ["δ", "\\delta"]
 
@@ -321,7 +321,7 @@ var initialize = () => {
     // x
     {
         let getDesc = (level) => "x=" + getX(level).toString(0)
-        x = theory.createUpgrade(103, currency, new ExponentialCost(1e46, Math.log2(1.93)))
+        x = theory.createUpgrade(103, currency, new ExponentialCost(5e46, Math.log2(1.93)))
         x.getDescription = (_) => Utils.getMath(getDesc(x.level))
         x.getInfo = (amount) => Utils.getMathTo(getDesc(x.level), getDesc(x.level + amount))
     }
@@ -330,7 +330,7 @@ var initialize = () => {
     {
         let getDesc = (level) => "y=" + getY(level).toString(2)
         let getInfo = (level) => "y=" + getY(level).toString(2) + ""
-        y = theory.createUpgrade(104, currency, new ExponentialCost(2e69, Math.log2(2.03625)))
+        y = theory.createUpgrade(104, currency, new ExponentialCost(5e68, Math.log2(2.03625)))
         y.getDescription = (_) => Utils.getMath(getDesc(y.level))
         y.getInfo = (amount) => Utils.getMathTo(getInfo(y.level), getInfo(y.level + amount))
     }
