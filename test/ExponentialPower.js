@@ -171,7 +171,7 @@ var getDescription = language => {
     return (descriptions[language] ?? descriptions.en).join("\n")
 }
 var authors = "HyperKNF"
-var version = "pre.v1.3.b16"
+var version = "pre.v1.3.b17"
 
 const currency2text = ["δ", "\\delta"]
 
@@ -367,9 +367,9 @@ var initialize = () => {
                     case 1:
                         return BigNumber.TEN.pow(32)
                     case 2:
-                        return BigNumber.TEN.pow(47)
+                        return BigNumber.TEN.pow(50)
                     case 3:
-                        return BigNumber.TEN.pow(76)
+                        return BigNumber.TEN.pow(80)
                 }
             }
         ))
