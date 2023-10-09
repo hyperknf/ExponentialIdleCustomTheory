@@ -268,9 +268,9 @@ var formatTime = time => {
     let remaining_time = BigNumber.from(time).toNumber()
     const days = Math.floor(remaining_time / (60 * 60 * 24))
     remaining_time = remaining_time % (60 * 60 * 24)
-    const hours = Math.floor(remaining_time / (60 * 60)).floor()
+    const hours = Math.floor(remaining_time / (60 * 60))
     remaining_time = remaining_time % (60 * 60)
-    const minutes = Math.floor(remaining_time / 60).floor()
+    const minutes = Math.floor(remaining_time / 60)
     remaining_time = remaining_time % 60
     const seconds = remaining_time
     let result = `${days.toString(0)}:${formatNumber(hours, 0)}:${formatNumber(minutes, 0)}:${formatNumber(seconds, 1)}`
