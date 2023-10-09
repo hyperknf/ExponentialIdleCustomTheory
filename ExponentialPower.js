@@ -153,7 +153,7 @@ const TextResource = {
     }
 }
 
-var id = "ExponentialPowerTest"
+var id = "ExponentialPower"
 var getName = language => {
     const names = {
         "en": "Exponential Power (Test)",
@@ -189,7 +189,7 @@ var getDescription = language => {
     return (descriptions[language] ?? descriptions.en).join("\n")
 }
 var authors = "HyperKNF"
-var version = "pre.v1.3.b21"
+var version = "v1.3"
 
 const currency2text = ["δ", "\\delta"]
 
@@ -816,4 +816,51 @@ var getEquationOverlay = _ => {
             ui.createLatexLabel({
                 text: version,
                 fontSize: 10, 
-                margin: new Thickne
+                margin: new Thickness(4, 4),
+                textColor: Color.TEXT_MEDIUM
+            }),
+            ui.createLatexLabel({
+                text: () => Utils.getMath(`\\max\\dot{\\rho}=${max_drho.toString(3)}\\quad(${publication_max_drho.toString(3)})`),
+                fontSize: 10,
+                margin: new Thickness(4, 4),
+                textColor: Color.TEXT_MEDIUM,
+                horizontalOptions: LayoutOptions.END
+            })
+        ]
+    })
+    return grid
+}
+
+var getInternalState = () => JSON.stringify({
+    version,
+    time: time.toBase64String(),
+    max_drho: max_drho.toBase64String()
+})
+var setInternalState = string => {
+    if (!string) return
+
+    const state = JSON.parse(string)
+    time = BigNumber.fromBase64String(state.time ?? BigNumber.ZERO.toBase64String())
+    max_drho = BigNumber.fromBase64String(state.max_drho ?? BigNumber.ZERO.toBase64String())
+}
+
+var canResetStage = () => true
+var getResetStageMessage = () => getTextResource(TextResource.ResetStage)
+var resetStage = () => {
+    if (theory.canPublish) {
+        theory.publish()
+        return
+    }
+    for (const upgrade of theory.upgrades) upgrade.level = 0
+    currency.value = 0
+    currency2.value = 0
+    postPublish()
+    theory.clearGraph()
+}
+
+var canGoToPreviousStage = () => page == 2
+var goToPreviousStage = () => page = 1
+var canGoToNextStage = () => page == 1 && unlock.level >= 1
+var goToNextStage = () => page = 2
+
+initialize()
