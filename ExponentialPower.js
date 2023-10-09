@@ -262,10 +262,8 @@ var getStepwisePowerProduct = (level, base, step_length, offset) => {
     return product
 }
 
-var formatNumber = (digits, number, digits_after_dot) => {
-    number = BigNumber.from(number)
-    const number_digits = number.max(BigNumber.ZERO).log10().floor() + 1
-    return "0".repeat((digits - number_digits).max(BigNumber.ZERO)) + number.toString(digits_after_dot ?? 1)
+var formatNumber = number => {
+    return number < 10 ? `0${number.toString(1)}` : number.toString(1)
 }
 
 var formatTime = time => {
