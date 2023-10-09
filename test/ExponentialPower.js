@@ -824,6 +824,7 @@ var setInternalState = string => {
 }
 
 var canResetStage = () => true
+var getResetStageMessage = () => getTextResource(TextResource.ResetStage)
 var resetStage = () => {
     if (theory.canPublish) {
         theory.publish()
