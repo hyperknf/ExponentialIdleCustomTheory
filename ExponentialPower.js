@@ -428,11 +428,13 @@ var initialize = () => {
         }
     }
 
+    /*
     {
         test_upgrade = theory.createSingularUpgrade(1000, currency, new FreeCost())
         test_upgrade.getDescription = test_upgrade.getInfo = _ => Utils.getMath(`\\text{${getTextResource(TextResource.TestUpgrade)}}`)
         test_upgrade.bought = _ => currency.value *= 1000
     }
+    */
 
     ///////////////////////
     //// Milestone Upgrades
