@@ -262,20 +262,17 @@ var getStepwisePowerProduct = (level, base, step_length, offset) => {
     return product
 }
 
-var formatNumber = number => {
-    return number < 10 ? `0${number.toString(1)}` : number.toString(1)
-}
-
 var formatTime = time => {
     let remaining_time = time
     const days = (remaining_time / (60 * 60 * 24)).floor()
-    remaining_time = remaining_time % days
+    remaining_time = remaining_time % (60 * 60 * 24)
     const hours = (remaining_time / (60 * 60)).floor()
-    remaining_time = remaining_time % hours
+    remaining_time = remaining_time % (60 * 60)
     const minutes = (remaining_time / 60).floor()
-    remaining_time = remaining_time % minutes
+    remaining_time = remaining_time % 60
     const seconds = remaining_time
-    let result = `${days.toString(0)}:${formatNumber(2, hours, 0)}:${formatNumber(2, minutes, 0)}:${formatNumber(2, seconds, 1)}`
+    let result = `${days.toString(0)}:${hours.toString(0)}:${minutes.toString(0)}:${formatNumber(seconds.toString(1)}`
+    return result
 }
 
 var initialize = () => {
