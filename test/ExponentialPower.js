@@ -134,10 +134,10 @@ const TextResource = {
         "Locked": "?????"
     },
     "ResetStage": {
-        "en": "You're about to reset your progress since the last publication. This will perform a publication if a publication is available. Are you sure you want to continue?",
-        "zh-Hant": "你將要重設你在此出版的進度，如果你能夠出版，此將會出版。你確定你要繼續嗎？",
-        "zh-Hans": "你将要重设你在此出版的进度，如果你能够出版，此将会出版。你确定你要继续吗？",
-        "fi": "Olet nollaamassa edistymistäsi edellisen julkaisun jälkeen. Tämä suorittaa julkaisun, jos julkaisu on saatavilla. Oletko varma, että haluat jatkaa?"
+        "en": "You're about to reset your progress since the last publication. This will perform a publication if a publication is available.",
+        "zh-Hant": "你將要重設你在此出版的進度，如果你能夠出版，此將會出版。",
+        "zh-Hans": "你将要重设你在此出版的进度，如果你能够出版，此将会出版。",
+        "fi": "Olet nollaamassa edistymistäsi edellisen julkaisun jälkeen. Tämä suorittaa julkaisun, jos julkaisu on saatavilla."
     }
 }
 
