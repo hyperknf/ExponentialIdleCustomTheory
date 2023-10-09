@@ -262,6 +262,8 @@ var getStepwisePowerProduct = (level, base, step_length, offset) => {
     return product
 }
 
+var formatNumber = (number, digits) => (number < 10 ? "0" : "") + number.toString(digits)
+
 var formatTime = time => {
     let remaining_time = BigNumber.from(time)
     const days = (remaining_time / (60 * 60 * 24)).floor()
@@ -271,7 +273,7 @@ var formatTime = time => {
     const minutes = (remaining_time / 60).floor()
     remaining_time = remaining_time % 60
     const seconds = remaining_time
-    let result = `${days.toString(0)}:${hours.toString(0)}:${minutes.toString(0)}:${seconds.toString(1)}`
+    let result = `${days.toString(0)}:${formatNumber(hours, 0)}:${formatNumber(minutes, 0)}:${formatNumber(seconds, 1)}`
     return result
 }
 
@@ -846,7 +848,7 @@ var getEquationOverlay = _ => {
                 horizontalOptions: LayoutOptions.END
             }),
             ui.createLatexLabel({
-                text: () => `Time: ${formatTime(time)}`,
+                text: () => `Time: ${formatTime(total_time)}`,
                 fontSize: 10,
                 margin: new Thickness(4, 4),
                 textColor: Color.TEXT_MEDIUM,
