@@ -232,7 +232,7 @@ var domain = 1
 var publication_max_drho = BigNumber.ZERO
 var max_drho = BigNumber.ZERO
 
-var total_time = [BigNumber.ZERO, BigNumber.ZERO]
+var total_time = BigNumber.ZERO
 
 var unlock_bought = false, unlock_refund = false, unlock_times = 0
 var secret_achievement_chance = 1e6
@@ -576,8 +576,7 @@ var updateAvailability = () => {
 }
 
 var tick = (elapsedTime, multiplier) => {
-    total_time[0] = total_time[0] + 0.1
-    total_time[1] = total_time[1] + 0.1
+    total_time = total_time + 0.1
     
     dt = BigNumber.from(elapsedTime * multiplier) * getTickRate(tickrate.level)
     const bonus = theory.publicationMultiplier
@@ -630,6 +629,7 @@ var tick = (elapsedTime, multiplier) => {
 var postPublish = () => {
     publication_max_drho = BigNumber.ZERO
     time = BigNumber.ZERO
+    total_time = BigNumber.ZERO
     domain = 1
     page = 1
 }
@@ -849,7 +849,7 @@ var getEquationOverlay = _ => {
                 horizontalOptions: LayoutOptions.END
             }),
             ui.createLatexLabel({
-                text: () => Utils.getMath(`\\text{Time:}\\quad\\text{${formatTime(total_time[0])}}\\quad\\text{(${formatTime(total_time[1])})}`),
+                text: () => Utils.getMath(`\\text{Time:}\\quad${formatTime(total_time)}}`),
                 fontSize: 10,
                 margin: new Thickness(4, 4),
                 textColor: Color.TEXT_MEDIUM,
@@ -884,7 +884,6 @@ var resetStage = () => {
     for (const upgrade of theory.upgrades) upgrade.level = 0
     currency.value = 0
     currency2.value = 0
-    total_time[1] = BigNumber.ZERO
     postPublish()
     theory.clearGraph()
 }
