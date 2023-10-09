@@ -651,11 +651,11 @@ var getSecondaryEquation = () => {
             level => {
                 switch (level) {
                     case 0: return 0
-                    case 1: return 37
-                    case 2: return 74
-                    case 3: return 117
-                    case 4: return 160
-                    default: return 165
+                    case 1: return 35
+                    case 2: return 70
+                    case 3: return 110
+                    case 4: return 150
+                    default: return 150
                 }
             }
         )(unlockE.level)
