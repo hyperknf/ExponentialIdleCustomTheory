@@ -156,10 +156,10 @@ const TextResource = {
 var id = "ExponentialPower"
 var getName = language => {
     const names = {
-        "en": "Exponential Power (Test)",
-        "zh-Hant": "指數力量 (測試)",
+        "en": "Exponential Power",
+        "zh-Hant": "指數力量",
         "zh-Hans": "指数力量 (测试)",
-        "fi": "Eksponentiaalinen Teho (Testi)"
+        "fi": "Eksponentiaalinen Teho"
     }
     return names[language] ?? names.en
 }
