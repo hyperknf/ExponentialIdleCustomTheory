@@ -849,7 +849,7 @@ var getEquationOverlay = _ => {
                 horizontalOptions: LayoutOptions.END
             }),
             ui.createLatexLabel({
-                text: () => Utils.getMath(`\\text{Time:}\\quad\\text{${formatTime(total_time)}}`),
+                text: () => Utils.getMath(`\\text{Time:}\\quad ${formatTime(total_time).replaceAll(":", "{:}")}`),
                 fontSize: 10,
                 margin: new Thickness(4, 4),
                 textColor: Color.TEXT_MEDIUM,
