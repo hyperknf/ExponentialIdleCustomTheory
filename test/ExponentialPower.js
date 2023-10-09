@@ -47,6 +47,18 @@ const TextResource = {
                     "zh-Hant": "達到e50ρ",
                     "zh-Hans": "达到e50ρ"
                 }
+            },
+            "e100": {
+                "Name": {
+                    "en": "Amateur",
+                    "zh-Hant": "業餘",
+                    "zh-Hans": "业余"
+                },
+                "Description": {
+                    "en": "Reach e100ρ",
+                    "zh-Hant": "達到e100ρ",
+                    "zh-Hans": "达到e100ρ"
+                }
             }
         },
         "Secret": {
@@ -195,6 +207,7 @@ var achievements = {
     regular: [
         false,
         false,
+        false,
         false
     ],
     secret: [
@@ -204,7 +217,7 @@ var achievements = {
 }
 
 var progress_achievements, secret_achievements
-var achievement1, achievement2, achievement3
+var achievement1, achievement2, achievement3, achievement4
 var secret_achievement1, secret_achievement2
 
 var page = 1
@@ -495,6 +508,13 @@ var initialize = () => {
         getTextResource(TextResource.Achievements.Progress.e50.Description),
         () => achievements.regular[2]
     )
+    achievement3 = theory.createAchievement(
+        3,
+        progress_achievements,
+        getTextResource(TextResource.Achievements.Progress.e100.Name),
+        getTextResource(TextResource.Achievements.Progress.e100.Description),
+        () => achievements.regular[3]
+    )
 
     secret_achievement1 = theory.createSecretAchievement(
         5000,
@@ -567,6 +587,7 @@ var tick = (elapsedTime, multiplier) => {
     if (currency.value >= BigNumber.TEN.pow(10)) achievements.regular[0] = true
     if (currency.value >= BigNumber.TEN.pow(25)) achievements.regular[1] = true
     if (currency.value >= BigNumber.TEN.pow(50)) achievements.regular[2] = true
+    if (currency.value >= BigNumber.TEN.pow(100)) achievements.regular[3] = true
 
     if (unlock_bought && unlock_refund) {
         unlock_bought = unlock_refund = false
