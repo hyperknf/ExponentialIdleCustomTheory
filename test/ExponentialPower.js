@@ -817,6 +817,15 @@ var setInternalState = string => {
     max_drho = BigNumber.fromBase64String(state.max_drho ?? BigNumber.ZERO.toBase64String())
 }
 
+var canResetStage = () => true
+var resetStage = () => {
+    theory.upgrades.forEach(upgrade => upgrade.level = 0)
+    currency.value = 0
+    currency2.value = 0
+    postPublish()
+    theory.clearGraph()
+}
+
 var canGoToPreviousStage = () => page == 2
 var goToPreviousStage = () => page = 1
 var canGoToNextStage = () => page == 1 && unlock.level >= 1
