@@ -171,7 +171,7 @@ var getDescription = language => {
     return (descriptions[language] ?? descriptions.en).join("\n")
 }
 var authors = "HyperKNF"
-var version = "pre.v1.3.b20"
+var version = "pre.v1.3.b21"
 
 const currency2text = ["δ", "\\delta"]
 
@@ -819,6 +819,10 @@ var setInternalState = string => {
 
 var canResetStage = () => true
 var resetStage = () => {
+    if (theory.canPublish) {
+        theory.publish()
+        return
+    }
     theory.upgrades.forEach(upgrade => upgrade.level = 0)
     currency.value = 0
     currency2.value = 0
