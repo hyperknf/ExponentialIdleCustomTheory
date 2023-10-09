@@ -263,7 +263,7 @@ var getStepwisePowerProduct = (level, base, step_length, offset) => {
 }
 
 var formatTime = time => {
-    let remaining_time = time
+    let remaining_time = BigNumber.from(time)
     const days = (remaining_time / (60 * 60 * 24)).floor()
     remaining_time = remaining_time % (60 * 60 * 24)
     const hours = (remaining_time / (60 * 60)).floor()
