@@ -271,7 +271,7 @@ var formatTime = time => {
     const minutes = (remaining_time / 60).floor()
     remaining_time = remaining_time % 60
     const seconds = remaining_time
-    let result = `${days.toString(0)}:${hours.toString(0)}:${minutes.toString(0)}:${formatNumber(seconds.toString(1)}`
+    let result = `${days.toString(0)}:${hours.toString(0)}:${minutes.toString(0)}:${seconds.toString(1)}`
     return result
 }
 
