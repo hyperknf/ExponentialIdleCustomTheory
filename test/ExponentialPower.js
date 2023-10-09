@@ -692,7 +692,7 @@ var getQuaternaryEntries = () => {
             BigNumber.from(theory.publicationMultiplier).toString(2)
         ))
     }
-    result.push(formatQuaternaryEntry(
+    if (unlock.level >= 1) result.push(formatQuaternaryEntry(
         "E",
         unlockE.level >= 1 ? getInverseEDisplay(E) : null
     ))
