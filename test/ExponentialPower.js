@@ -307,7 +307,7 @@ var initialize = () => {
     {
         let getInfo = level => "x_2=" + getX2(level).toString(3)
         let getDesc = level => "x_2=e^{" + getX2Exponent(level).toString(1) + "}"
-        x2 = theory.createUpgrade(4, currency, new ExponentialCost(1e80, Math.log2(10 ** 2.5)))
+        x2 = theory.createUpgrade(4, currency, new ExponentialCost(1e95, Math.log2(10 ** 2.5)))
         x2.getDescription = _ => Utils.getMath(getDesc(x2.level))
         x2.getInfo = amount => Utils.getMathTo(getInfo(x2.level), getInfo(x2.level + amount))
     }
