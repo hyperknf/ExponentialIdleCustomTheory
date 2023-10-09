@@ -830,7 +830,7 @@ var resetStage = () => {
         theory.publish()
         return
     }
-    theory.upgrades.forEach(upgrade => upgrade.level = 0)
+    for (const upgrade of theory.upgrades) upgrade.level = 0
     currency.value = 0
     currency2.value = 0
     postPublish()
