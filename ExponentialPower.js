@@ -232,6 +232,8 @@ var domain = 1
 var publication_max_drho = BigNumber.ZERO
 var max_drho = BigNumber.ZERO
 
+var total_time = BigNumber.ZERO
+
 var unlock_bought = false, unlock_refund = false, unlock_times = 0
 var secret_achievement_chance = 1e6
 var page2_equation_scale = 0.925
@@ -258,6 +260,24 @@ var getStepwisePowerProduct = (level, base, step_length, offset) => {
         }, 1
     )
     return product
+}
+
+var formatNumber = (digits, number, digits_after_dot) => {
+    number = BigNumber.from(number)
+    const number_digits = number.log10().floor() + 1
+    return "0".repeat((digits - number_digits).max(BigNumber.ZERO)) + number.toString(digits_after_dot ?? 1)
+}
+
+var formatTime = time => {
+    let remaining_time = time
+    const days = (remaining_time / (60 * 60 * 24)).floor()
+    remaining_time = remaining_time % days
+    const hours = (remaining_time / (60 * 60)).floor()
+    remaining_time = remaining_time % hours
+    const minutes = (remaining_time / 60).floor()
+    remaining_time = remaining_time % minutes
+    const seconds = remaining_time
+    let result = `${days.toString(0)}:${formatNumber(2, hours)}:${formatNumber(2, minutes)}:${seconds.toString(1)}`
 }
 
 var initialize = () => {
@@ -559,6 +579,8 @@ var updateAvailability = () => {
 }
 
 var tick = (elapsedTime, multiplier) => {
+    total_time = total_time + 0.1
+    
     dt = BigNumber.from(elapsedTime * multiplier) * getTickRate(tickrate.level)
     const bonus = theory.publicationMultiplier
 
@@ -826,6 +848,14 @@ var getEquationOverlay = _ => {
                 fontSize: 10,
                 margin: new Thickness(4, 4),
                 textColor: Color.TEXT_MEDIUM,
+                horizontalOptions: LayoutOptions.END
+            }),
+            ui.createLatexLabel({
+                text: () => `Time: ${formatTime(time)}`,
+                fontSize: 10,
+                margin: new Thickness(4, 4),
+                textColor: Color.TEXT_MEDIUM,
+                verticalOptions: LayoutOptions.END,
                 horizontalOptions: LayoutOptions.END
             })
         ]
