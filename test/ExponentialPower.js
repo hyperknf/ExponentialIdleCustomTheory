@@ -166,7 +166,7 @@ const TextResource = {
         "en": "Time since started"
     },
     "RecoveryTime": {
-        "en": "Recovery time"
+        "en": "Last recovery time"
     },
     "Enable": {
         "en": "Enable"
@@ -237,7 +237,7 @@ var getDescription = language => {
     return (descriptions[language] ?? descriptions.en).join("\n")
 }
 var authors = "HyperKNF"
-var version = "v1.3.2.test14"
+var version = "v1.3.2.test15"
 
 const currency2text = ["δ", "\\delta"]
 
@@ -1082,7 +1082,8 @@ class Popups {
                                 Utils.getMath(`\\text{${getTextResource(TextResource.TimeSincePublication)}}:\\quad${first}`) + ":" + formatted_time[1].join(":"),
                                 Utils.getMath(`\\text{${getTextResource(TextResource.RecoveryTime)}}:\\quad${rfirst}`) + ":" + formatted_recovery_time.join(":"),
                                 "Lifetime" + Utils.getMath(`\\quad\\max\\dot{\\rho}=${max_drho.toString(5)}`),
-                                "Publication" + Utils.getMath(`\\quad\\max\\dot{\\rho}=${publication_max_drho.toString(5)}`)
+                                "Publication" + Utils.getMath(`\\quad\\max\\dot{\\rho}=${publication_max_drho.toString(5)}`),
+                                Utils.getMath(`\\text{Total }\\rho =${total_rho}`)
                             ].join("\\\\")
                         }
                     })
