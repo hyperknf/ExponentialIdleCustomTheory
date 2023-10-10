@@ -159,6 +159,15 @@ const TextResource = {
         "zh-Hans": "时间",
         "fi": "Aika"
     },
+    "TimeSincePublication": {
+        "en": "Time since last publication"
+    },
+    "TimeSinceStarted": {
+        "en": "Time since started"
+    },
+    "RecoveryTime": {
+        "en": "Recovery time"
+    },
     "Enable": {
         "en": "Enable"
     },
@@ -185,6 +194,9 @@ const TextResource = {
     "Statistics": {
         "Title": {
             "en": "Statistics"
+        },
+        "Show": {
+            "en": "Show statistics"
         }
     }
 }
@@ -270,7 +282,9 @@ var domain = 1
 var publication_max_drho = BigNumber.ZERO
 var max_drho = BigNumber.ZERO
 
-var total_time = BigNumber.ZERO
+var total_time = [BigNumber.ZERO, BigNumber.ZERO]
+var recovering = false
+var recovery_time = BigNumber.ZERO
 
 var unlock_bought = false, unlock_refund = false, unlock_times = 0
 var secret_achievement_chance = 1e6
@@ -533,9 +547,7 @@ var initialize = () => {
     }
 
     {
-        let getDesc = level => `${
-            getTextResource(settings.lock_settings ? TextResource.Disable : TextResource.Enable)
-        } ${getTextResource(TextResource.Settings.Name)}: ${getTextResource(TextResource.Settings.LockSettings)}`
+        let getDesc = level => getTextResource(TextResource.Statistics.Show)
         let getInfo = getDesc
         show_stats = theory.createPermanentUpgrade(20000, currency2, new FreeCost())
         show_stats.getDescription = level => getDesc(level)
@@ -559,13 +571,11 @@ var initialize = () => {
         }
     }
 
-    /*
     {
         test_upgrade = theory.createSingularUpgrade(1000, currency, new FreeCost())
         test_upgrade.getDescription = test_upgrade.getInfo = _ => Utils.getMath(`\\text{${getTextResource(TextResource.TestUpgrade)}}`)
         test_upgrade.bought = _ => currency.value *= 1000
     }
-    */
 
     ///////////////////////
     //// Milestone Upgrades
@@ -697,7 +707,8 @@ var updateAvailability = () => {
 }
 
 var tick = (elapsedTime, multiplier) => {
-    total_time = total_time + elapsedTime
+    total_time[0] = total_time[0] + elapsedTime
+    total_time[1] = total_time[1] + elapsedTime
     
     dt = BigNumber.from(elapsedTime * multiplier) * getTickRate(tickrate.level)
     if (multiplier == 1.5) ad_bonus = true
@@ -739,6 +750,12 @@ var tick = (elapsedTime, multiplier) => {
     }
     if (Math.round(Math.random() * (secret_achievement_chance - 1) + 1) == 1) achievements.secret[1] = true
 
+    const publication_rho = getCurrencyFromTau(theory.tau)[0]
+    if (publication_rho <= currency.value && recovering) {
+        recovering = false
+        recovery_time = total_time[1]
+    }
+
     theory.invalidatePrimaryEquation()
     theory.invalidateSecondaryEquation()
     theory.invalidateTertiaryEquation()
@@ -751,7 +768,8 @@ var tick = (elapsedTime, multiplier) => {
 var postPublish = () => {
     publication_max_drho = BigNumber.ZERO
     time = BigNumber.ZERO
-    total_time = BigNumber.ZERO
+    total_time[1] = BigNumber.ZERO
+    recovering = true
     domain = 1
     page = 1
 }
@@ -971,7 +989,7 @@ var getEquationOverlay = _ => {
         ui.createLatexLabel({
             isVisible: () => settings.display_overlay.time,
             text: () => {
-                const formatted = formatTime(total_time)
+                const formatted = formatTime(total_time[1])
                 const first = formatted[0]
                 formatted.splice(0, 1)
                 return Utils.getMath(`\\text{${getTextResource(TextResource.Time)}}:\\quad${first}`) + ":" + formatted.join(":")
@@ -994,7 +1012,10 @@ var getEquationOverlay = _ => {
 var getInternalState = () => JSON.stringify({
     version,
     settings,
-    total_time: total_time.toBase64String(),
+    total_time: [
+        total_time[0].toBase64String(),
+        total_time[1].toBase64String()
+    ],
     time: time.toBase64String(),
     max_drho: max_drho.toBase64String()
 })
@@ -1003,7 +1024,8 @@ var setInternalState = string => {
 
     const state = JSON.parse(string)
     settings = state.settings ?? settings
-    total_time = BigNumber.fromBase64String(state.total_time ?? BigNumber.ZERO.toBase64String())
+    total_time[0] = BigNumber.fromBase64String((state.total_time ?? [BigNumber.ZERO, BigNumber.ZERO])[0] ?? BigNumber.ZERO.toBase64String())
+    total_time[0] = BigNumber.fromBase64String(state.total_time ?? [BigNumber.ZERO, BigNumber.ZERO])[1] ?? BigNumber.ZERO.toBase64String()
     time = BigNumber.fromBase64String(state.time ?? BigNumber.ZERO.toBase64String())
     max_drho = BigNumber.fromBase64String(state.max_drho ?? BigNumber.ZERO.toBase64String())
 }
@@ -1029,13 +1051,27 @@ var goToNextStage = () => page = 2
 
 class Popups {
     static get statistics() {
+        const formatted_time = [formatTime(total_time[0]), formatTime(total_time[1])]
+        const formatted_recovery_time = formatTime(recovery_time)
+        const sfirst = formatted_time[0][0]
+        formatted_time[0].splice(0, 1)
+        const first = formatted_time[1][0]
+        formatted_time[1].splice(0, 1)
+        const rfirst = recovery_time[0]
+        formatted_recovery_time.splice(0, 1)
         const popup = ui.createPopup({
             isPeekable: false,
             title: getTextResource(TextResource.Statistics.Title),
             content: ui.createGrid({
                 children: [
-                    ui.createLabel({
-                        text: "Coming soon"
+                    ui.createLatexLabel({
+                        text: [
+                            Utils.getMath(`\\text{${getTextResource(TextResource.TimeSinceStarted)}}:\\quad${sfirst}`) + ":" + formatted_time[0].join(":"),
+                            Utils.getMath(`\\text{${getTextResource(TextResource.TimeSincePublication)}}:\\quad${first}`) + ":" + formatted_time[1].join(":"),
+                            Utils.getMath(`\\text{${getTextResource(TextResource.RecoveryTime)}}:\\quad${rfirst}`) + ":" + formatted_recovery_time.join(":"),
+                            "Lifetime" + Utils.getMath(`\\quad\\max\\dot{\\rho}=${max_drho.toString(5)}`),
+                            "Publication" + Utils.getMath(`\\quad\\max\\dot{\\rho}=${publication_max_drho.toString(5)}`)
+                        ].join("\\\\")
                     })
                 ]
             })
