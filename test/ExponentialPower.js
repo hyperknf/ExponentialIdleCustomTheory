@@ -288,7 +288,7 @@ var settings_upgrades = {
 
 var tertiary_display = Array.from({
     length: 2
-}, () => BigNumber.from(0))
+}, () => BigNumber.ZERO)
 
 var log = (base, value) => BigNumber.from(value).log() / BigNumber.from(base).log()
 var getTextResource = resource => resource[Localization.language] ?? resource.en ?? "???"
@@ -512,7 +512,7 @@ var initialize = () => {
 
     {
         let getDesc = level => `${
-            getTextResource(settings.display_overlay.max_drho ? TextResource.Disable : TextResource.Enable)
+            getTextResource(settings.lock_settings ? TextResource.Disable : TextResource.Enable)
         } ${getTextResource(TextResource.Settings.Name)}: ${getTextResource(TextResource.Settings.LockSettings)}`
         let getInfo = getDesc
         settings_upgrades.lock_settings = theory.createPermanentUpgrade(11000, currency2, new FreeCost())
