@@ -150,6 +150,12 @@ const TextResource = {
         "zh-Hant": "你將要重設你在此出版的進度，如果你能夠出版，此將會出版。",
         "zh-Hans": "你将要重设你在此出版的进度，如果你能够出版，此将会出版。",
         "fi": "Olet nollaamassa edistymistäsi edellisen julkaisun jälkeen. Tämä suorittaa julkaisun, jos julkaisu on saatavilla."
+    },
+    "Time": {
+        "en": "Time",
+        "zh-Hant": "時間",
+        "zh-Hans": "时间",
+        "fi": "Aika"
     }
 }
 
@@ -852,7 +858,7 @@ var getEquationOverlay = _ => {
                 horizontalOptions: LayoutOptions.END
             }),
             ui.createLatexLabel({
-                text: () => Utils.getMath(`\\text{Time:}\\quad ${formatTime(total_time)}`),
+                text: () => Utils.getMath(`\\text{${getTextResource(TextResource.Time)}:}\\quad ${formatTime(total_time)}`),
                 fontSize: 10,
                 margin: new Thickness(4, 4),
                 textColor: Color.TEXT_MEDIUM,
