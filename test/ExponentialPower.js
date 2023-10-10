@@ -184,13 +184,13 @@ const TextResource = {
     }
 }
 
-var id = "ExponentialPowerTest"
+var id = "ExponentialPower"
 var getName = language => {
     const names = {
-        "en": "Exponential Power t",
-        "zh-Hant": "指數力量t",
-        "zh-Hans": "指数力量t",
-        "fi": "Eksponentiaalinen Teho t"
+        "en": "Exponential Power",
+        "zh-Hant": "指數力量",
+        "zh-Hans": "指数力量 (测试)",
+        "fi": "Eksponentiaalinen Teho"
     }
     return names[language] ?? names.en
 }
@@ -671,7 +671,7 @@ var updateAvailability = () => {
 
     // Permanent upgrades
 
-    settings_upgrades.display_overlay.max_drho.isAvailable =
+    settings_upgrades.display_overlay.max_drho.isAvailable = !settings.lock_settings
     settings_upgrades.display_overlay.time.isAvailable = !settings.lock_settings
 }
 
