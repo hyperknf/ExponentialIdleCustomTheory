@@ -220,7 +220,7 @@ var getDescription = language => {
     return (descriptions[language] ?? descriptions.en).join("\n")
 }
 var authors = "HyperKNF"
-var version = "v1.3.2.test5"
+var version = "v1.3.2.test6"
 
 const currency2text = ["δ", "\\delta"]
 
@@ -938,19 +938,17 @@ var getEquationOverlay = _ => {
             fontSize: 10, 
             margin: new Thickness(4, 4),
             textColor: Color.TEXT_MEDIUM
-        })
-    ]
-    if (settings.display_overlay.max_drho) children.push(
+        }),
         ui.createLatexLabel({
+            isVisible: () => settings.display_overlay.max_drho,
             text: () => Utils.getMath(`\\max\\dot{\\rho}=${max_drho.toString(3)}\\quad(${publication_max_drho.toString(3)})`),
             fontSize: 10,
             margin: new Thickness(4, 4),
             textColor: Color.TEXT_MEDIUM,
             horizontalOptions: LayoutOptions.END
-        })
-    )
-    if (settings.display_overlay.time) children.push(
+        }),
         ui.createLatexLabel({
+            isVisible: () => settings.display_overlay.time,
             text: () => {
                 const formatted = formatTime(total_time)
                 const first = formatted[0]
@@ -963,7 +961,7 @@ var getEquationOverlay = _ => {
             verticalOptions: LayoutOptions.END,
             horizontalOptions: LayoutOptions.END
         })
-    )
+    ]
     const grid = ui.createGrid({
         inputTransparent: true,
         cascadeInputTransparent: false,
