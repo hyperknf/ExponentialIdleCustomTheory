@@ -3,7 +3,7 @@ import { BigNumber } from "./api/BigNumber"
 import { theory, QuaternaryEntry } from "./api/Theory"
 import { Utils } from "./api/Utils"
 import { Localization } from "./api/Localization"
-import { UI } from "./api/ui/UI"
+import { ui } from "./api/ui/UI"
 
 const TextResource = {
     "Achievements": {
@@ -184,13 +184,13 @@ const TextResource = {
     }
 }
 
-var id = "ExponentialPower"
+var id = "ExponentialPowerTest"
 var getName = language => {
     const names = {
-        "en": "Exponential Power",
-        "zh-Hant": "指數力量",
-        "zh-Hans": "指数力量 (测试)",
-        "fi": "Eksponentiaalinen Teho"
+        "en": "Exponential Power t",
+        "zh-Hant": "指數力量t",
+        "zh-Hans": "指数力量t",
+        "fi": "Eksponentiaalinen Teho t"
     }
     return names[language] ?? names.en
 }
@@ -933,7 +933,7 @@ var getInverseEDisplay = E => {
 
 var getEquationOverlay = _ => {
     const children = [
-        UI.createLatexLabel({
+        ui.createLatexLabel({
             text: version,
             fontSize: 10, 
             margin: new Thickness(4, 4),
@@ -941,7 +941,7 @@ var getEquationOverlay = _ => {
         })
     ]
     if (settings.display_overlay.max_drho) children.push(
-        UI.createLatexLabel({
+        ui.createLatexLabel({
             text: () => Utils.getMath(`\\max\\dot{\\rho}=${max_drho.toString(3)}\\quad(${publication_max_drho.toString(3)})`),
             fontSize: 10,
             margin: new Thickness(4, 4),
@@ -950,7 +950,7 @@ var getEquationOverlay = _ => {
         })
     )
     if (settings.display_overlay.time) children.push(
-        UI.createLatexLabel({
+        ui.createLatexLabel({
             text: () => {
                 const formatted = formatTime(total_time)
                 const first = formatted[0]
@@ -964,7 +964,7 @@ var getEquationOverlay = _ => {
             horizontalOptions: LayoutOptions.END
         })
     )
-    const grid = UI.createGrid({
+    const grid = ui.createGrid({
         inputTransparent: true,
         cascadeInputTransparent: false,
         children
