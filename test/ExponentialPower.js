@@ -1024,8 +1024,9 @@ var setInternalState = string => {
 
     const state = JSON.parse(string)
     settings = state.settings ?? settings
-    total_time[0] = BigNumber.fromBase64String((state.total_time ?? [BigNumber.ZERO, BigNumber.ZERO])[0] ?? BigNumber.ZERO.toBase64String())
-    total_time[0] = BigNumber.fromBase64String(state.total_time ?? [BigNumber.ZERO, BigNumber.ZERO])[1] ?? BigNumber.ZERO.toBase64String()
+    const state_total_time = state.total_time
+    if (typeof state_total_time != "object") total_time = [BigNumber.ZERO, state_total_time ?? BigNumber.ZERO]
+    else total_time = state_total_time
     time = BigNumber.fromBase64String(state.time ?? BigNumber.ZERO.toBase64String())
     max_drho = BigNumber.fromBase64String(state.max_drho ?? BigNumber.ZERO.toBase64String())
 }
