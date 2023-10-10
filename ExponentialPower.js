@@ -189,7 +189,7 @@ var getDescription = language => {
     return (descriptions[language] ?? descriptions.en).join("\n")
 }
 var authors = "HyperKNF"
-var version = "v1.3"
+var version = "v1.3.1"
 
 const currency2text = ["δ", "\\delta"]
 
@@ -863,6 +863,7 @@ var getEquationOverlay = _ => {
 
 var getInternalState = () => JSON.stringify({
     version,
+    total_time: total_time.toBase64String(),
     time: time.toBase64String(),
     max_drho: max_drho.toBase64String()
 })
@@ -870,6 +871,7 @@ var setInternalState = string => {
     if (!string) return
 
     const state = JSON.parse(string)
+    total_time = BigNumber.fromBase64String(state.total_time ?? BigNumber.ZERO.toBase64String())
     time = BigNumber.fromBase64String(state.time ?? BigNumber.ZERO.toBase64String())
     max_drho = BigNumber.fromBase64String(state.max_drho ?? BigNumber.ZERO.toBase64String())
 }
