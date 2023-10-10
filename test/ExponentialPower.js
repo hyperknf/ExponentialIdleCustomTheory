@@ -3,6 +3,7 @@ import { BigNumber } from "./api/BigNumber"
 import { theory, QuaternaryEntry } from "./api/Theory"
 import { Utils } from "./api/Utils"
 import { Localization } from "./api/Localization"
+import { UI } from "./api/ui/UI"
 
 const TextResource = {
     "Achievements": {
@@ -157,6 +158,29 @@ const TextResource = {
         "zh-Hant": "時間",
         "zh-Hans": "时间",
         "fi": "Aika"
+    },
+    "Enable": {
+        "en": "Enable"
+    },
+    "Disable": {
+        "en": "Disable"
+    },
+    "Settings": {
+        "Name": {
+            "en": "Settings",
+            "zh-Hant": "設置",
+            "zh-Hans": "设置",
+            "fi": "Asetukset"
+        },
+        "MaxDrhoDisplay": {
+            "en": Utils.getMath(`\\max\\dot{\\rho}\\text{ display}`)
+        },
+        "TimeDisplay": {
+            "en": "Time display"
+        },
+        "LockSettings": {
+            "en": "Lock settings"
+        }
     }
 }
 
@@ -246,6 +270,21 @@ var total_time = BigNumber.ZERO
 var unlock_bought = false, unlock_refund = false, unlock_times = 0
 var secret_achievement_chance = 1e6
 var page2_equation_scale = 0.925
+
+var settings = {
+    display_overlay: {
+        time: true,
+        max_drho: true
+    },
+    lock_settings: false
+}
+var settings_upgrades = {
+    display_overlay: {
+        max_drho: null,
+        time: null
+    },
+    lock_settings: null
+}
 
 var tertiary_display = Array.from({
     length: 2
@@ -441,6 +480,51 @@ var initialize = () => {
         tickrate.isAvailable = false
     }
 
+    {
+        let getDesc = level => `${
+            getTextResource(settings.display_overlay.max_drho ? TextResource.Disable : TextResource.Enable)
+        } ${getTextResource(TextResource.Settings.Name)}: ${getTextResource(TextResource.Settings.MaxDrhoDisplay)}`
+        let getInfo = getDesc
+        settings_upgrades.display_overlay.max_drho = theory.createPermanentUpgrade(10000, currency2, new FreeCost())
+        settings_upgrades.display_overlay.max_drho.getDescription = level => getDesc(level)
+        settings_upgrades.display_overlay.max_drho.getInfo = level => getInfo(level)
+        settings_upgrades.display_overlay.max_drho.isAvailable = true
+        settings_upgrades.display_overlay.max_drho.bought = _ => {
+            settings_upgrades.display_overlay.max_drho.level = 0
+            settings.display_overlay.max_drho = !settings.display_overlay.max_drho
+        }
+    }
+
+    {
+        let getDesc = level => `${
+            getTextResource(settings.display_overlay.time ? TextResource.Disable : TextResource.Enable)
+        } ${getTextResource(TextResource.Settings.Name)}: ${getTextResource(TextResource.Settings.TimeDisplay)}`
+        let getInfo = getDesc
+        settings_upgrades.display_overlay.time = theory.createPermanentUpgrade(10100, currency2, new FreeCost())
+        settings_upgrades.display_overlay.time.getDescription = level => getDesc(level)
+        settings_upgrades.display_overlay.time.getInfo = level => getInfo(level)
+        settings_upgrades.display_overlay.time.isAvailable = true
+        settings_upgrades.display_overlay.time.bought = _ => {
+            settings_upgrades.display_overlay.time.level = 0
+            settings.display_overlay.time = !settings.display_overlay.time
+        }
+    }
+
+    {
+        let getDesc = level => `${
+            getTextResource(settings.display_overlay.max_drho ? TextResource.Disable : TextResource.Enable)
+        } ${getTextResource(TextResource.Settings.Name)}: ${getTextResource(TextResource.Settings.LockSettings)}`
+        let getInfo = getDesc
+        settings_upgrades.lock_settings = theory.createPermanentUpgrade(11000, currency2, new FreeCost())
+        settings_upgrades.lock_settings.getDescription = level => getDesc(level)
+        settings_upgrades.lock_settings.getInfo = level => getInfo(level)
+        settings_upgrades.lock_settings.isAvailable = true
+        settings_upgrades.lock_settings.bought = _ => {
+            settings_upgrades.lock_settings.level = 0
+            settings.lock_settings = !settings.lock_settings
+        }
+    }
+
     //////////////////////
     //// Singular Upgrades
 
@@ -572,6 +656,8 @@ var updatePage = () => {
 }
 
 var updateAvailability = () => {
+    // Upgrades
+
     n.isAvailable = unlock.level >= 1 && unlockE.level >= 1
     a.isAvailable = b.isAvailable = unlock.level >= 1 && unlockE.level >= 2
     x.isAvailable = unlock.level >= 1 && unlockE.level >= 3
@@ -582,6 +668,11 @@ var updateAvailability = () => {
     unlockE.isAvailable = unlock.level >= 1
 
     time_exp.isAvailable = unlock.level >= 1
+
+    // Permanent upgrades
+
+    settings_upgrades.display_overlay.max_drho.isAvailable =
+    settings_upgrades.display_overlay.time.isAvailable = !settings.lock_settings
 }
 
 var tick = (elapsedTime, multiplier) => {
@@ -841,43 +932,49 @@ var getInverseEDisplay = E => {
 }
 
 var getEquationOverlay = _ => {
-    const grid = ui.createGrid({
+    const children = [
+        UI.createLatexLabel({
+            text: version,
+            fontSize: 10, 
+            margin: new Thickness(4, 4),
+            textColor: Color.TEXT_MEDIUM
+        })
+    ]
+    if (settings.display_overlay.max_drho) children.push(
+        UI.createLatexLabel({
+            text: () => Utils.getMath(`\\max\\dot{\\rho}=${max_drho.toString(3)}\\quad(${publication_max_drho.toString(3)})`),
+            fontSize: 10,
+            margin: new Thickness(4, 4),
+            textColor: Color.TEXT_MEDIUM,
+            horizontalOptions: LayoutOptions.END
+        })
+    )
+    if (settings.display_overlay.time) children.push(
+        UI.createLatexLabel({
+            text: () => {
+                const formatted = formatTime(total_time)
+                const first = formatted[0]
+                formatted.splice(0, 1)
+                return Utils.getMath(`\\text{${getTextResource(TextResource.Time)}}:\\quad${first}`) + ":" + formatted.join(":")
+            },
+            fontSize: 10,
+            margin: new Thickness(4, 4),
+            textColor: Color.TEXT_MEDIUM,
+            verticalOptions: LayoutOptions.END,
+            horizontalOptions: LayoutOptions.END
+        })
+    )
+    const grid = UI.createGrid({
         inputTransparent: true,
         cascadeInputTransparent: false,
-        children: [
-            ui.createLatexLabel({
-                text: version,
-                fontSize: 10, 
-                margin: new Thickness(4, 4),
-                textColor: Color.TEXT_MEDIUM
-            }),
-            ui.createLatexLabel({
-                text: () => Utils.getMath(`\\max\\dot{\\rho}=${max_drho.toString(3)}\\quad(${publication_max_drho.toString(3)})`),
-                fontSize: 10,
-                margin: new Thickness(4, 4),
-                textColor: Color.TEXT_MEDIUM,
-                horizontalOptions: LayoutOptions.END
-            }),
-            ui.createLatexLabel({
-                text: () => {
-                    const formatted = formatTime(total_time)
-                    const first = formatted[0]
-                    formatted.splice(0, 1)
-                    return Utils.getMath(`\\text{${getTextResource(TextResource.Time)}}:\\quad${first}`) + ":" + formatted.join(":")
-                },
-                fontSize: 10,
-                margin: new Thickness(4, 4),
-                textColor: Color.TEXT_MEDIUM,
-                verticalOptions: LayoutOptions.END,
-                horizontalOptions: LayoutOptions.END
-            })
-        ]
+        children
     })
     return grid
 }
 
 var getInternalState = () => JSON.stringify({
     version,
+    settings,
     total_time: total_time.toBase64String(),
     time: time.toBase64String(),
     max_drho: max_drho.toBase64String()
@@ -886,6 +983,7 @@ var setInternalState = string => {
     if (!string) return
 
     const state = JSON.parse(string)
+    settings = state.settings ?? settings
     total_time = BigNumber.fromBase64String(state.total_time ?? BigNumber.ZERO.toBase64String())
     time = BigNumber.fromBase64String(state.time ?? BigNumber.ZERO.toBase64String())
     max_drho = BigNumber.fromBase64String(state.max_drho ?? BigNumber.ZERO.toBase64String())
