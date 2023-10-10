@@ -291,6 +291,8 @@ var settings_upgrades = {
     lock_settings: null
 }
 
+var show_stats
+
 var tertiary_display = Array.from({
     length: 2
 }, () => BigNumber.ZERO)
@@ -527,6 +529,20 @@ var initialize = () => {
         settings_upgrades.lock_settings.bought = _ => {
             settings_upgrades.lock_settings.level = 0
             settings.lock_settings = !settings.lock_settings
+        }
+    }
+
+    {
+        let getDesc = level => `${
+            getTextResource(settings.lock_settings ? TextResource.Disable : TextResource.Enable)
+        } ${getTextResource(TextResource.Settings.Name)}: ${getTextResource(TextResource.Settings.LockSettings)}`
+        let getInfo = getDesc
+        show_stats = theory.createPermanentUpgrade(11000, currency2, new FreeCost())
+        show_stats.getDescription = level => getDesc(level)
+        show_stats.getInfo = level => getInfo(level)
+        show_stats.bought = _ => {
+            show_stats.level = 0
+            Popups.statistics().show()
         }
     }
 
@@ -1011,19 +1027,25 @@ var goToPreviousStage = () => page = 1
 var canGoToNextStage = () => page == 1 && unlock.level >= 1
 var goToNextStage = () => page = 2
 
-var showStatistics = () => {
-    const popup = ui.createPopup({
-        isPeekable: false,
-        title: getTextResource(TextResource.Statistics.Title),
-        content: ui.createGrid({
-            children: [
-                ui.createLatexLabel({
-                    text: "Coming soon"
-                })
-            ]
+class Popups {
+    static statistics() {
+        const popup = ui.createPopup({
+            isPeekable: false,
+            title: getTextResource(TextResource.Statistics.Title),
+            content: ui.createGrid({
+                children: [
+                    ui.createLabel({
+                        text: "Coming soon"
+                    })
+                ]
+            })
         })
-    })
-    return popup
+        return popup
+    }
+
+    static settings() {
+        throw new Error("Work in progress")
+    }
 }
 
 initialize()
