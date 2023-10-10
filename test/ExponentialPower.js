@@ -542,7 +542,7 @@ var initialize = () => {
         show_stats.getInfo = level => getInfo(level)
         show_stats.bought = _ => {
             show_stats.level = 0
-            Popups.statistics().show()
+            Popups.statistics.show()
         }
     }
 
@@ -1028,7 +1028,7 @@ var canGoToNextStage = () => page == 1 && unlock.level >= 1
 var goToNextStage = () => page = 2
 
 class Popups {
-    static statistics() {
+    static get statistics() {
         const popup = ui.createPopup({
             isPeekable: false,
             title: getTextResource(TextResource.Statistics.Title),
@@ -1043,7 +1043,7 @@ class Popups {
         return popup
     }
 
-    static settings() {
+    static get settings() {
         throw new Error("Work in progress")
     }
 }
