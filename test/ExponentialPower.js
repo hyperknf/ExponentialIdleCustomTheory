@@ -237,7 +237,7 @@ var getDescription = language => {
     return (descriptions[language] ?? descriptions.en).join("\n")
 }
 var authors = "HyperKNF"
-var version = "v1.3.2.test9"
+var version = "v1.3.2.test10"
 
 const currency2text = ["δ", "\\delta"]
 
@@ -1058,7 +1058,7 @@ class Popups {
         formatted_time[0].splice(0, 1)
         const first = formatted_time[1][0]
         formatted_time[1].splice(0, 1)
-        const rfirst = recovery_time[0]
+        const rfirst = formatted_recovery_time[0]
         formatted_recovery_time.splice(0, 1)
         const popup = ui.createPopup({
             isPeekable: false,
