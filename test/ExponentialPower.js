@@ -537,7 +537,7 @@ var initialize = () => {
             getTextResource(settings.lock_settings ? TextResource.Disable : TextResource.Enable)
         } ${getTextResource(TextResource.Settings.Name)}: ${getTextResource(TextResource.Settings.LockSettings)}`
         let getInfo = getDesc
-        show_stats = theory.createPermanentUpgrade(11000, currency2, new FreeCost())
+        show_stats = theory.createPermanentUpgrade(20000, currency2, new FreeCost())
         show_stats.getDescription = level => getDesc(level)
         show_stats.getInfo = level => getInfo(level)
         show_stats.bought = _ => {
