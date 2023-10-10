@@ -282,7 +282,7 @@ var formatTime = time => {
     const minutes = Math.floor(remaining_time / 60)
     remaining_time = remaining_time % 60
     const seconds = remaining_time
-    let result = `${formatNumber(days, 0, true)}:${formatNumber(hours, 0)}:${formatNumber(minutes, 0)}:${formatNumber(seconds, 1)}`
+    let result = [formatNumber(days, 0, true), formatNumber(hours, 0), formatNumber(minutes, 0), formatNumber(seconds, 1)]
     return result
 }
 
@@ -859,7 +859,12 @@ var getEquationOverlay = _ => {
                 horizontalOptions: LayoutOptions.END
             }),
             ui.createLatexLabel({
-                text: () => Utils.getMath(`\\text{${getTextResource(TextResource.Time)}}:\\quad`) + formatTime(total_time),
+                text: () => {
+                    const formatted = formatTime(total_time)
+                    const first = formatted[0]
+                    formatted.splice(0, 1)
+                    return Utils.getMath(`\\text{${getTextResource(TextResource.Time)}}:\\quad${first}`) + formatted.join(":")
+                },
                 fontSize: 10,
                 margin: new Thickness(4, 4),
                 textColor: Color.TEXT_MEDIUM,
