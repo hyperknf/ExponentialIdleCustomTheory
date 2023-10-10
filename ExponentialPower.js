@@ -863,7 +863,7 @@ var getEquationOverlay = _ => {
                     const formatted = formatTime(total_time)
                     const first = formatted[0]
                     formatted.splice(0, 1)
-                    return Utils.getMath(`\\text{${getTextResource(TextResource.Time)}}:\\quad${first}`) + formatted.join(":")
+                    return Utils.getMath(`\\text{${getTextResource(TextResource.Time)}}:\\quad${first}`) + ":" + formatted.join(":")
                 },
                 fontSize: 10,
                 margin: new Thickness(4, 4),
