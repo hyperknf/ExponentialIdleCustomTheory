@@ -237,7 +237,7 @@ var getDescription = language => {
     return (descriptions[language] ?? descriptions.en).join("\n")
 }
 var authors = "HyperKNF"
-var version = "v1.3.2.test13"
+var version = "v1.3.2.test14"
 
 const currency2text = ["δ", "\\delta"]
 
@@ -281,6 +281,7 @@ var domain = 1
 
 var publication_max_drho = BigNumber.ZERO
 var max_drho = BigNumber.ZERO
+var total_rho = BigNumber.ZERO
 
 var total_time = [BigNumber.ZERO, BigNumber.ZERO]
 var recovering = false
@@ -504,7 +505,7 @@ var initialize = () => {
     {
         let getDesc = level => `${
             getTextResource(settings.display_overlay.max_drho ? TextResource.Disable : TextResource.Enable)
-        } ${getTextResource(TextResource.Settings.Name)}: ${getTextResource(TextResource.Settings.MaxDrhoDisplay)}`
+        } ${getTextResource(TextResource.Settings.MaxDrhoDisplay)}`
         let getInfo = getDesc
         settings_upgrades.display_overlay.max_drho = theory.createPermanentUpgrade(10000, currency2, new FreeCost())
         settings_upgrades.display_overlay.max_drho.getDescription = level => getDesc(level)
@@ -519,7 +520,7 @@ var initialize = () => {
     {
         let getDesc = level => `${
             getTextResource(settings.display_overlay.time ? TextResource.Disable : TextResource.Enable)
-        } ${getTextResource(TextResource.Settings.Name)}: ${getTextResource(TextResource.Settings.TimeDisplay)}`
+        } ${getTextResource(TextResource.Settings.TimeDisplay)}`
         let getInfo = getDesc
         settings_upgrades.display_overlay.time = theory.createPermanentUpgrade(10100, currency2, new FreeCost())
         settings_upgrades.display_overlay.time.getDescription = level => getDesc(level)
@@ -534,7 +535,7 @@ var initialize = () => {
     {
         let getDesc = level => `${
             getTextResource(settings.lock_settings ? TextResource.Disable : TextResource.Enable)
-        } ${getTextResource(TextResource.Settings.Name)}: ${getTextResource(TextResource.Settings.LockSettings)}`
+        } ${getTextResource(TextResource.Settings.LockSettings)}`
         let getInfo = getDesc
         settings_upgrades.lock_settings = theory.createPermanentUpgrade(11000, currency2, new FreeCost())
         settings_upgrades.lock_settings.getDescription = level => getDesc(level)
@@ -734,6 +735,8 @@ var tick = (elapsedTime, multiplier) => {
         unlock.level >= 3 ? getX2(x2.level) : 1
     )
     currency.value += drho * dt
+    total_rho += drho * dt
+    total_rho = total_rho.max(currency.value)
 
     if (max_drho <= drho * (dt / 0.1)) max_drho = drho * (dt / 0.1)
     if (publication_max_drho <= drho * (dt / 0.1)) publication_max_drho = drho * (dt / 0.1)
@@ -1015,7 +1018,11 @@ var getInternalState = () => JSON.stringify({
     lifetime_total_time: total_time[0].toBase64String(),
     publication_total_time: total_time[1].toBase64String(),
     time: time.toBase64String(),
-    max_drho: max_drho.toBase64String()
+    max_drho: max_drho.toBase64String(),
+    total_rho: total_rho.toBase64String(),
+
+    recovering,
+    recovery_time: recovery_time.toBase64String()
 })
 var setInternalState = string => {
     if (!string) return
@@ -1029,6 +1036,9 @@ var setInternalState = string => {
     ]
     time = BigNumber.fromBase64String(state.time ?? BigNumber.ZERO.toBase64String())
     max_drho = BigNumber.fromBase64String(state.max_drho ?? BigNumber.ZERO.toBase64String())
+
+    recovering = state.recovering ?? false
+    recovery_time = BigNumber.fromBase64String(state.recovery_time ?? BigNumber.ZERO.toBase64String())
 }
 
 var canResetStage = () => true
