@@ -1022,7 +1022,8 @@ var setInternalState = string => {
 
     const state = JSON.parse(string)
     settings = state.settings ?? settings
-    total_time = [
+    if (typeof state.total_time == "object") total_time = [BigNumber.ZERO, state.total_time]
+    else total_time = [
         BigNumber.fromBase64String(state.lifetime_total_time ?? BigNumber.ZERO.toBase64String()),
         BigNumber.fromBase64String(state.publication_total_time ?? BigNumber.ZERO.toBase64String())
     ]
@@ -1051,27 +1052,29 @@ var goToNextStage = () => page = 2
 
 class Popups {
     static get statistics() {
-        const formatted_time = [formatTime(total_time[0]), formatTime(total_time[1])]
-        const formatted_recovery_time = formatTime(recovery_time)
-        const sfirst = formatted_time[0][0]
-        formatted_time[0].splice(0, 1)
-        const first = formatted_time[1][0]
-        formatted_time[1].splice(0, 1)
-        const rfirst = formatted_recovery_time[0]
-        formatted_recovery_time.splice(0, 1)
         const popup = ui.createPopup({
             isPeekable: false,
             title: getTextResource(TextResource.Statistics.Title),
             content: ui.createGrid({
                 children: [
                     ui.createLatexLabel({
-                        text: () => [
-                            Utils.getMath(`\\text{${getTextResource(TextResource.TimeSinceStarted)}}:\\quad${sfirst}`) + ":" + formatted_time[0].join(":"),
-                            Utils.getMath(`\\text{${getTextResource(TextResource.TimeSincePublication)}}:\\quad${first}`) + ":" + formatted_time[1].join(":"),
-                            Utils.getMath(`\\text{${getTextResource(TextResource.RecoveryTime)}}:\\quad${rfirst}`) + ":" + formatted_recovery_time.join(":"),
-                            "Lifetime" + Utils.getMath(`\\quad\\max\\dot{\\rho}=${max_drho.toString(5)}`),
-                            "Publication" + Utils.getMath(`\\quad\\max\\dot{\\rho}=${publication_max_drho.toString(5)}`)
-                        ].join("\\\\")
+                        text: () => {
+                            const formatted_time = [formatTime(total_time[0]), formatTime(total_time[1])]
+                            const formatted_recovery_time = formatTime(recovery_time)
+                            const sfirst = formatted_time[0][0]
+                            formatted_time[0].splice(0, 1)
+                            const first = formatted_time[1][0]
+                            formatted_time[1].splice(0, 1)
+                            const rfirst = formatted_recovery_time[0]
+                            formatted_recovery_time.splice(0, 1)
+                            return [
+                                Utils.getMath(`\\text{${getTextResource(TextResource.TimeSinceStarted)}}:\\quad${sfirst}`) + ":" + formatted_time[0].join(":"),
+                                Utils.getMath(`\\text{${getTextResource(TextResource.TimeSincePublication)}}:\\quad${first}`) + ":" + formatted_time[1].join(":"),
+                                Utils.getMath(`\\text{${getTextResource(TextResource.RecoveryTime)}}:\\quad${rfirst}`) + ":" + formatted_recovery_time.join(":"),
+                                "Lifetime" + Utils.getMath(`\\quad\\max\\dot{\\rho}=${max_drho.toString(5)}`),
+                                "Publication" + Utils.getMath(`\\quad\\max\\dot{\\rho}=${publication_max_drho.toString(5)}`)
+                            ].join("\\\\")
+                        }
                     })
                 ]
             })
