@@ -201,6 +201,8 @@ var test_upgrade, domain_switch
 var unlock, time_exp
 var publication, tickrate, unlockE, unlockCurrency2
 
+var ad_bonus = false
+
 var dt = BigNumber.ONE / 10
 
 var achievements = {
@@ -273,7 +275,7 @@ var formatTime = time => {
     const minutes = Math.floor(remaining_time / 60)
     remaining_time = remaining_time % 60
     const seconds = remaining_time
-    let result = `${formatNumber(days, 0, true)}\\colon\\!${formatNumber(hours, 0)}\\colon\\!${formatNumber(minutes, 0)}\\colon\\!${formatNumber(seconds, 1)}`
+    let result = `${formatNumber(days, 0, true)}\\colon${formatNumber(hours, 0)}\\colon${formatNumber(minutes, 0)}\\colon${formatNumber(seconds, 1)}`
     return result
 }
 
@@ -576,9 +578,10 @@ var updateAvailability = () => {
 }
 
 var tick = (elapsedTime, multiplier) => {
-    total_time = total_time + 0.1
+    total_time = total_time + 0.1 * elapsedTime
     
     dt = BigNumber.from(elapsedTime * multiplier) * getTickRate(tickrate.level)
+    if (multiplier == 0.15) ad_bonus = true
     const bonus = theory.publicationMultiplier
 
     E1 = EDisplay[0] = getE1(getN(n.level))
