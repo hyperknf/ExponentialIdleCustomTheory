@@ -181,6 +181,11 @@ const TextResource = {
         "LockSettings": {
             "en": "Lock settings"
         }
+    },
+    "Statistics": {
+        "Title": {
+            "en": "Statistics"
+        }
     }
 }
 
@@ -1005,5 +1010,20 @@ var canGoToPreviousStage = () => page == 2
 var goToPreviousStage = () => page = 1
 var canGoToNextStage = () => page == 1 && unlock.level >= 1
 var goToNextStage = () => page = 2
+
+var showStatistics = () => {
+    const popup = ui.createPopup({
+        isPeekable: false,
+        title: getTextResource(TextResource.Statistics.Title),
+        content: ui.createGrid({
+            children: [
+                ui.createLatexLabel({
+                    text: "Coming soon"
+                })
+            ]
+        })
+    })
+    return popup
+}
 
 initialize()
