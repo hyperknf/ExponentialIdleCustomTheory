@@ -126,7 +126,8 @@ const TextResource = {
     "TickRate": {
         "en": "Tick rate",
         "zh-Hant": "刻速",
-        "zh-Hans": "刻速"
+        "zh-Hans": "刻速",
+        "fi": "Tikkien korko"
     },
     "DomainSwitch": {
         "Unlocked": {
