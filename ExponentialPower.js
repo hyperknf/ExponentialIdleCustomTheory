@@ -578,10 +578,10 @@ var updateAvailability = () => {
 }
 
 var tick = (elapsedTime, multiplier) => {
-    total_time = total_time + 0.1 * elapsedTime
+    total_time = total_time + elapsedTime
     
     dt = BigNumber.from(elapsedTime * multiplier) * getTickRate(tickrate.level)
-    if (multiplier == 0.15) ad_bonus = true
+    if (multiplier == 1.5) ad_bonus = true
     const bonus = theory.publicationMultiplier
 
     E1 = EDisplay[0] = getE1(getN(n.level))
