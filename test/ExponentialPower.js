@@ -126,7 +126,8 @@ const TextResource = {
     "TickRate": {
         "en": "Tick rate",
         "zh-Hant": "刻速",
-        "zh-Hans": "刻速"
+        "zh-Hans": "刻速",
+        "fi": "Tikkien korko"
     },
     "DomainSwitch": {
         "Unlocked": {
@@ -150,16 +151,22 @@ const TextResource = {
         "zh-Hant": "你將要重設你在此出版的進度，如果你能夠出版，此將會出版。",
         "zh-Hans": "你将要重设你在此出版的进度，如果你能够出版，此将会出版。",
         "fi": "Olet nollaamassa edistymistäsi edellisen julkaisun jälkeen. Tämä suorittaa julkaisun, jos julkaisu on saatavilla."
+    },
+    "Time": {
+        "en": "Time",
+        "zh-Hant": "時間",
+        "zh-Hans": "时间",
+        "fi": "Aika"
     }
 }
 
-var id = "ExponentialPowerTest"
+var id = "ExponentialPower"
 var getName = language => {
     const names = {
-        "en": "Exponential Power (Test)",
-        "zh-Hant": "指數力量 (測試)",
+        "en": "Exponential Power",
+        "zh-Hant": "指數力量",
         "zh-Hans": "指数力量 (测试)",
-        "fi": "Eksponentiaalinen Teho (Testi)"
+        "fi": "Eksponentiaalinen Teho"
     }
     return names[language] ?? names.en
 }
@@ -189,7 +196,7 @@ var getDescription = language => {
     return (descriptions[language] ?? descriptions.en).join("\n")
 }
 var authors = "HyperKNF"
-var version = "pre.v1.3.b21"
+var version = "v1.3.1"
 
 const currency2text = ["δ", "\\delta"]
 
@@ -200,6 +207,8 @@ var k, c1, c2, n, a, b, x, y, x1, x2, dtime
 var test_upgrade, domain_switch
 var unlock, time_exp
 var publication, tickrate, unlockE, unlockCurrency2
+
+var ad_bonus = false
 
 var dt = BigNumber.ONE / 10
 
@@ -232,6 +241,8 @@ var domain = 1
 var publication_max_drho = BigNumber.ZERO
 var max_drho = BigNumber.ZERO
 
+var total_time = BigNumber.ZERO
+
 var unlock_bought = false, unlock_refund = false, unlock_times = 0
 var secret_achievement_chance = 1e6
 var page2_equation_scale = 0.925
@@ -258,6 +269,21 @@ var getStepwisePowerProduct = (level, base, step_length, offset) => {
         }, 1
     )
     return product
+}
+
+var formatNumber = (number, digits, idklol) => (!idklol ? (number < 10 ? "0" : "") : "") + BigNumber.from(number).toString(digits)
+
+var formatTime = time => {
+    let remaining_time = BigNumber.from(time).toNumber()
+    const days = Math.floor(remaining_time / (60 * 60 * 24))
+    remaining_time = remaining_time % (60 * 60 * 24)
+    const hours = Math.floor(remaining_time / (60 * 60))
+    remaining_time = remaining_time % (60 * 60)
+    const minutes = Math.floor(remaining_time / 60)
+    remaining_time = remaining_time % 60
+    const seconds = remaining_time
+    let result = [formatNumber(days, 0, true), formatNumber(hours, 0), formatNumber(minutes, 0), formatNumber(seconds, 1)]
+    return result
 }
 
 var initialize = () => {
@@ -428,11 +454,13 @@ var initialize = () => {
         }
     }
 
+    /*
     {
         test_upgrade = theory.createSingularUpgrade(1000, currency, new FreeCost())
         test_upgrade.getDescription = test_upgrade.getInfo = _ => Utils.getMath(`\\text{${getTextResource(TextResource.TestUpgrade)}}`)
         test_upgrade.bought = _ => currency.value *= 1000
     }
+    */
 
     ///////////////////////
     //// Milestone Upgrades
@@ -557,7 +585,10 @@ var updateAvailability = () => {
 }
 
 var tick = (elapsedTime, multiplier) => {
+    total_time = total_time + elapsedTime
+    
     dt = BigNumber.from(elapsedTime * multiplier) * getTickRate(tickrate.level)
+    if (multiplier == 1.5) ad_bonus = true
     const bonus = theory.publicationMultiplier
 
     E1 = EDisplay[0] = getE1(getN(n.level))
@@ -608,6 +639,7 @@ var tick = (elapsedTime, multiplier) => {
 var postPublish = () => {
     publication_max_drho = BigNumber.ZERO
     time = BigNumber.ZERO
+    total_time = BigNumber.ZERO
     domain = 1
     page = 1
 }
@@ -825,6 +857,19 @@ var getEquationOverlay = _ => {
                 margin: new Thickness(4, 4),
                 textColor: Color.TEXT_MEDIUM,
                 horizontalOptions: LayoutOptions.END
+            }),
+            ui.createLatexLabel({
+                text: () => {
+                    const formatted = formatTime(total_time)
+                    const first = formatted[0]
+                    formatted.splice(0, 1)
+                    return Utils.getMath(`\\text{${getTextResource(TextResource.Time)}}:\\quad${first}`) + ":" + formatted.join(":")
+                },
+                fontSize: 10,
+                margin: new Thickness(4, 4),
+                textColor: Color.TEXT_MEDIUM,
+                verticalOptions: LayoutOptions.END,
+                horizontalOptions: LayoutOptions.END
             })
         ]
     })
@@ -833,6 +878,7 @@ var getEquationOverlay = _ => {
 
 var getInternalState = () => JSON.stringify({
     version,
+    total_time: total_time.toBase64String(),
     time: time.toBase64String(),
     max_drho: max_drho.toBase64String()
 })
@@ -840,6 +886,7 @@ var setInternalState = string => {
     if (!string) return
 
     const state = JSON.parse(string)
+    total_time = BigNumber.fromBase64String(state.total_time ?? BigNumber.ZERO.toBase64String())
     time = BigNumber.fromBase64String(state.time ?? BigNumber.ZERO.toBase64String())
     max_drho = BigNumber.fromBase64String(state.max_drho ?? BigNumber.ZERO.toBase64String())
 }
