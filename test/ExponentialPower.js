@@ -736,7 +736,7 @@ var tick = (elapsedTime, multiplier) => {
     )
     currency.value += drho * dt
     total_rho += drho * dt
-    total_rho = total_rho.max(currency.value)
+    total_rho = total_rho.max(getCurrencyFromTau(theory.tau)[0])
 
     if (max_drho <= drho * (dt / 0.1)) max_drho = drho * (dt / 0.1)
     if (publication_max_drho <= drho * (dt / 0.1)) publication_max_drho = drho * (dt / 0.1)
