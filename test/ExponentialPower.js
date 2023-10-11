@@ -1029,7 +1029,7 @@ var setInternalState = string => {
 
     const state = JSON.parse(string)
     settings = state.settings ?? settings
-    if (typeof state.total_time == "object") total_time = [BigNumber.ZERO, state.total_time]
+    if (typeof state.total_time == "object") total_time = [state.total_time, state.total_time]
     else total_time = [
         BigNumber.fromBase64String(state.lifetime_total_time ?? BigNumber.ZERO.toBase64String()),
         BigNumber.fromBase64String(state.publication_total_time ?? BigNumber.ZERO.toBase64String())
