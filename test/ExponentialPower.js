@@ -237,7 +237,7 @@ var getDescription = language => {
     return (descriptions[language] ?? descriptions.en).join("\n")
 }
 var authors = "HyperKNF"
-var version = "v1.3.2.test16"
+var version = "v1.3.2.test18"
 
 const currency2text = ["δ", "\\delta"]
 
@@ -711,7 +711,7 @@ var updateAvailability = () => {
 var tick = (elapsedTime, multiplier) => {
     total_time[0] = total_time[0] + elapsedTime
     total_time[1] = total_time[1] + elapsedTime
-    ticks++
+    ticks += BigNumber.ONE
     
     dt = BigNumber.from(elapsedTime * multiplier) * getTickRate(tickrate.level)
     if (multiplier == 1.5) ad_bonus = true
