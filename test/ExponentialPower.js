@@ -284,6 +284,7 @@ var max_drho = BigNumber.ZERO
 var total_rho = BigNumber.ZERO
 
 var total_time = [BigNumber.ZERO, BigNumber.ZERO]
+var ticks = BigNumber.ZERO
 var recovering = false
 var recovery_time = BigNumber.ZERO
 
@@ -710,6 +711,7 @@ var updateAvailability = () => {
 var tick = (elapsedTime, multiplier) => {
     total_time[0] = total_time[0] + elapsedTime
     total_time[1] = total_time[1] + elapsedTime
+    ticks++
     
     dt = BigNumber.from(elapsedTime * multiplier) * getTickRate(tickrate.level)
     if (multiplier == 1.5) ad_bonus = true
@@ -1020,6 +1022,7 @@ var getInternalState = () => JSON.stringify({
     time: time.toBase64String(),
     max_drho: max_drho.toBase64String(),
     total_rho: total_rho.toBase64String(),
+    ticks: ticks.toBase64String(),
 
     recovering,
     recovery_time: recovery_time.toBase64String()
@@ -1037,6 +1040,7 @@ var setInternalState = string => {
     time = BigNumber.fromBase64String(state.time ?? BigNumber.ZERO.toBase64String())
     max_drho = BigNumber.fromBase64String(state.max_drho ?? BigNumber.ZERO.toBase64String())
     total_rho = BigNumber.fromBase64String(state.total_rho ?? BigNumber.ZERO.toBase64String())
+    ticks = BigNumber.fromBase64String(state.ticks ?? BigNumber.ZERO.toBase64String())
 
     recovering = state.recovering ?? false
     recovery_time = BigNumber.fromBase64String(state.recovery_time ?? BigNumber.ZERO.toBase64String())
@@ -1079,6 +1083,7 @@ class Popups {
                             const rfirst = formatted_recovery_time[0]
                             formatted_recovery_time.splice(0, 1)
                             return [
+                                Utils.getMath(`\\text{Ticks:}\\quad ${ticks.toString(0)}`),
                                 Utils.getMath(`\\text{${getTextResource(TextResource.TimeSinceStarted)}}:\\quad${sfirst}`) + ":" + formatted_time[0].join(":"),
                                 Utils.getMath(`\\text{${getTextResource(TextResource.TimeSincePublication)}}:\\quad${first}`) + ":" + formatted_time[1].join(":"),
                                 Utils.getMath(`\\text{${getTextResource(TextResource.RecoveryTime)}}:\\quad${rfirst}`) + ":" + formatted_recovery_time.join(":"),
