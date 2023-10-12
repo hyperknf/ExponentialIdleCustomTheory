@@ -142,7 +142,7 @@ const TextResource = {
                 "en": "Coming soon",
                 "zh-Hant": "敬請期待",
                 "zh-Hans": "敬请期待",
-                "fi": "tulossa pian"
+                "fi": "Tulossa pian"
             }
         },
         "Locked": "?????"
@@ -160,19 +160,34 @@ const TextResource = {
         "fi": "Aika"
     },
     "TimeSincePublication": {
-        "en": "Time since last publication"
+        "en": "Time since last publication",
+        "zh-Hant": "自上次出版以來的時間",
+        "zh-Hans": "自上次出版以外的时间",
+        "fi": "Aika edellisestä julkaisusta"
     },
     "TimeSinceStarted": {
-        "en": "Time since started"
+        "en": "Time since started",
+        "zh-Hant": "自開始以來的時間",
+        "zh-Hans": "自开始以来的时间",
+        "fi": "Aika alkamisesta"
     },
     "RecoveryTime": {
-        "en": "Last recovery time"
+        "en": "Last recovery time",
+        "zh-Hant": "上次恢復所需的時間",
+        "zh-Hans": "上次恢復所需的时间",
+        "fi": "Viimeiseen palautukseen käytetty aika"
     },
     "Enable": {
-        "en": "Enable"
+        "en": "Enable",
+        "zh-Hant": "啟動",
+        "zh-Hans": "启动",
+        "fi": "Käynnistä"
     },
     "Disable": {
-        "en": "Disable"
+        "en": "Disable",
+        "zh-Hant": "關閉",
+        "zh-Hans": "关闭",
+        "fi": "Sammuta"
     },
     "Settings": {
         "Name": {
@@ -182,21 +197,36 @@ const TextResource = {
             "fi": "Asetukset"
         },
         "MaxDrhoDisplay": {
-            "en": Utils.getMath(`\\max\\dot{\\rho}\\text{ display}`)
+            "en": Utils.getMath(`\\max\\dot{\\rho}\\text{ display}`),
+            "zh-Hant": Utils.getMath(`\\max\\dot{\\rho}\\text{顯示}`),
+            "zh-Hans": Utils.getMath(`\\max\\dot{\\rho}\\text{显示}`),
+            "fi": Utils.getMath(`\\max\\dot{\\rho}\\text{ näyttö}`)
         },
         "TimeDisplay": {
-            "en": "Time display"
+            "en": "Time display",
+            "zh-Hant": "時間顯示",
+            "zh-Hans": "时间显示",
+            "fi": "Aikanäyttö"
         },
         "LockSettings": {
-            "en": "Lock settings"
+            "en": "Lock settings",
+            "zh-Hant": "鎖定設置",
+            "zh-Hans": "锁定设置",
+            "fi": "Lukitse asetukset"
         }
     },
     "Statistics": {
         "Title": {
-            "en": "Statistics"
+            "en": "Statistics",
+            "zh-Hant": "數據",
+            "zh-Hans": "数据",
+            "fi": "Tilastot"
         },
         "Show": {
-            "en": "Show statistics"
+            "en": "Show statistics",
+            "zh-Hant": "顯示數據",
+            "zh-Hans": "显示数据",
+            "fi": "Näyttää tilastoja"
         }
     }
 }
