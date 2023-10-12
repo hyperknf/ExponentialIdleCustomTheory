@@ -794,7 +794,11 @@ var isCurrencyVisible = index => {
 
 var getPrimaryEquation = () => {
     let result
-    if (page == 1) {
+    if (page == 0) {
+        theory.primaryEquationHeight = 70
+        theory.primaryEquationScale = 1
+        result = "B(x)\\frac{x}{\\prod_{i=1}^{3}\\sqrt[i+1]{b_i}}"
+    } else if (page == 1) {
         theory.primaryEquationHeight = 55
         theory.primaryEquationScale = 1
         result = `\\dot{\\rho}=k${publication.level >= 1 ? "m" : ""}t^{${getTExp(time_exp.level) == 1 ? "" : getTExp(time_exp.level).toString(getTExp(time_exp.level) == 1 ? 0 : getTExp(time_exp.level) == 0.5 ? 1 : 2)}}${unlock.level >= 1 ? "E^{-0.9}" : ""}c_1^{B(c_2${unlock.level >= 2 ? "x_1" : ""})}${unlock.level >= 3 ? "x_2" : ""}\
@@ -809,7 +813,15 @@ var getPrimaryEquation = () => {
 }
 var getSecondaryEquation = () => {
     let result
-    if (page == 1) {
+    if (page == 0) {
+        theory.secondaryEquationHeight = 60
+        theory.secondaryEquationScale = 1
+        result = [
+            "b_1=\\log_{10^{20}}{\\max{(\\rho,10^{20})}}",
+            "b_2=\\log_{10^{100}}{\\max{(\\rho,10^{100})}}}",
+            "b_3=\\log_{10^{500}}{\\max{(\\rho,10^{500})}}"
+        ].join("\\\\")
+    } else if (page == 1) {
         theory.secondaryEquationHeight = publication.level >= 1 ? 57 : 37
         theory.secondaryEquationScale = 1
         result = `B(x)=\\frac{x}{\\sqrt{\\log_{10^{20}}{\\max{(\\rho,10^{20})}}}}${publication.level >= 1 ? `\\\\m=\\text{${getTextResource(TextResource.PublicationMultiplier)}}` : ""}`
@@ -892,14 +904,26 @@ var get2DGraphValue = () => currency.value.sign * (BigNumber.ONE + currency.valu
 
 var getK = level => BigNumber.ZERO + Utils.getStepwisePowerSum(level, 2, 5, 0)
 var getC1 = level => BigNumber.ONE + 0.5 * level
+var getC2BalanceDenominator = rho => {
+    const milestones = [BigNumber.TEN.pow(20), BigNumber.TEN.pow(100), BigNumber.TEN.pow(500)]
+    let result = log(milestones[0], rho.max(1.00001)).sqrt()
+    let max = 1
+    for (let i = 1; i <= milestones.length - 1; i++) {
+        if (rho >= milestones[i]) {
+            result *= log(milestones[i], rho).pow(1 / (2 + i))
+            max = i + 1
+        }
+    }
+    return [result, max]
+}
 var getC2Balance = c2 => {
-    const e20 = BigNumber.TEN.pow(20)
     if (currency.value == 0) {
         tertiary_display[1] = "-\\infty"
         return c2
     }
-    tertiary_display[1] = log(e20, currency.value.max(1.1)).sqrt().toString(3)
-    return c2 / log(e20, currency.value.max(e20)).sqrt()
+    const denominator = getC2BalanceDenominator(currency.value)
+    tertiary_display[1] = denominator.toString(3)
+    return c2 / denominator
 }
 var getC2 = level => BigNumber.ONE + 0.25 * Math.min(level, 30) + (level > 30 ? (0.25 * (1 - 0.99 ** (level - 30)) / (1 - 0.99)) : 0)
 var getN = level => BigNumber.ONE + Utils.getStepwisePowerSum(level, 2, 10, 0)
@@ -1060,10 +1084,10 @@ var resetStage = () => {
     theory.clearGraph()
 }
 
-var canGoToPreviousStage = () => page == 2
-var goToPreviousStage = () => page = 1
-var canGoToNextStage = () => page == 1 && unlock.level >= 1
-var goToNextStage = () => page = 2
+var canGoToPreviousStage = () => page == 2 || page == 1
+var goToPreviousStage = () => page--
+var canGoToNextStage = () => (page == 1 && unlock.level >= 1) || page == 0
+var goToNextStage = () => page++
 
 class Popups {
     static get statistics() {
