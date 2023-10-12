@@ -868,15 +868,15 @@ var getQuaternaryEntries = () => {
         ))
         result.push(formatQuaternaryEntry(
             "b_1",
-            balance_values[0]
+            balance_values[0].toString(3)
         ))
         result.push(formatQuaternaryEntry(
             "b_2",
-            balance_values[1]
+            balance_values[1].toString(3)
         ))
         result.push(formatQuaternaryEntry(
             "b_3",
-            balance_values[2]
+            balance_values[2].toString(3)
         ))
     }
     if (page == 1) {
