@@ -932,7 +932,7 @@ var getC2BalanceDenominator = value => {
         if (rho >= milestones[i]) {
             result *= log(milestones[i], rho).pow(1 / (2 + i))
         }
-        balance_values[i] = log(milestones[i], rho).pow(1 / (2 + i))
+        balance_values[i] = log(milestones[i], rho)
     }
     return result
 }
