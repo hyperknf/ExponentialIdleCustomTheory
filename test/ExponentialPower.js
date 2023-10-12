@@ -237,7 +237,7 @@ var getDescription = language => {
     return (descriptions[language] ?? descriptions.en).join("\n")
 }
 var authors = "HyperKNF"
-var version = "v1.3.2.test23"
+var version = "v1.3.2.test24"
 
 const currency2text = ["δ", "\\delta"]
 
@@ -799,7 +799,7 @@ var getPrimaryEquation = () => {
     if (page == 0) {
         theory.primaryEquationHeight = 100
         theory.primaryEquationScale = 1
-        result = "B(x)=\\frac{x}{b_0}\\\\b_0=\\prod_{i=1}^{3}{\\sqrt[i+1]{\\max{(1,b_i)}}}"
+        result = "B(x)=\\frac{x}{\\max{1,b_0}}\\\\b_0=\\prod_{i=1}^{3}{\\sqrt[i+1]{b_i}}"
     } else if (page == 1) {
         theory.primaryEquationHeight = 55
         theory.primaryEquationScale = 1
