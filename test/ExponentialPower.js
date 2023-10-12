@@ -925,7 +925,7 @@ var getC2Balance = c2 => {
         return c2
     }
     const denominator = getC2BalanceDenominator(currency.value)
-    if (currency.value < BigNumber.TEN.pow(20)) tertiary_display[1] = log(BigNumber.TEN.pow(20), curency.value.max(1.01)).toString(3)
+    if (currency.value < BigNumber.TEN.pow(20)) tertiary_display[1] = log(BigNumber.TEN.pow(20), currency.value.max(1.01)).toString(3)
     else tertiary_display[1] = denominator.toString(3)
     return c2 / denominator
 }
