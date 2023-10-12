@@ -283,6 +283,8 @@ var publication_max_drho = BigNumber.ZERO
 var max_drho = BigNumber.ZERO
 var total_rho = BigNumber.ZERO
 
+var balance_values = [BigNumber.ZERO, BigNumber.ZERO, BigNumber.ZERO]
+
 var total_time = [BigNumber.ZERO, BigNumber.ZERO]
 var ticks = BigNumber.ZERO
 var recovering = false
@@ -855,14 +857,28 @@ var getTertiaryEquation = () => {
 }
 var getQuaternaryEntries = () => {
     const result = []
-    if (page != 0) result.push(formatQuaternaryEntry(
+    result.push(formatQuaternaryEntry(
         "\\dot\\rho",
         (drho * (dt / 0.1)).toString(5)
     ))
-    if (page == 0) result.push(formatQuaternaryEntry(
-        "b_0",
-        tertiary_display[1]
-    ))
+    if (page == 0) {
+        result.push(formatQuaternaryEntry(
+            "b_0",
+            tertiary_display[1]
+        ))
+        result.push(formatQuaternaryEntry(
+            "b_1",
+            balance_values[0]
+        ))
+        result.push(formatQuaternaryEntry(
+            "b_2",
+            balance_values[1]
+        ))
+        result.push(formatQuaternaryEntry(
+            "b_3",
+            balance_values[2]
+        ))
+    }
     if (page == 1) {
         result.push(formatQuaternaryEntry(
             "t",
@@ -914,7 +930,7 @@ var getC2BalanceDenominator = value => {
     let result = 1
     for (let i = 0; i <= milestones.length - 1; i++) {
         if (rho >= milestones[i]) {
-            result *= log(milestones[i], rho).pow(1 / (2 + i))
+            result *= (balance_values[i] = log(milestones[i], rho).pow(1 / (2 + i)))
         }
     }
     return result
