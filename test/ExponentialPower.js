@@ -799,7 +799,7 @@ var getPrimaryEquation = () => {
     if (page == 0) {
         theory.primaryEquationHeight = 100
         theory.primaryEquationScale = 1
-        result = "B(x)=\\frac{x}{\\max{(1,b_0)}}\\\\b_0=\\prod_{i=1}^{3}{\\sqrt[i+1]{b_i}}"
+        result = "B(x)=\\frac{x}{b_0}\\\\b_0=\\prod_{i=1}^{3}{\\sqrt[i+1]{\\max(1,b_i)}}"
     } else if (page == 1) {
         theory.primaryEquationHeight = 55
         theory.primaryEquationScale = 1
@@ -819,9 +819,9 @@ var getSecondaryEquation = () => {
         theory.secondaryEquationHeight = 60
         theory.secondaryEquationScale = 1
         result = [
-            "b_1=\\log_{10^{20}}{(\\rho,10^{20})}",
-            "b_2=\\log_{10^{100}}{(\\rho,10^{100})}",
-            "b_3=\\log_{10^{500}}{(\\rho,10^{500})}"
+            "b_1=\\log_{10^{20}}{\\rho}",
+            "b_2=\\log_{10^{100}}{\\rho}",
+            "b_3=\\log_{10^{500}}{\\rho}"
         ].join("\\\\")
     } else if (page == 1) {
         theory.secondaryEquationHeight = publication.level >= 1 ? 17 : 0
@@ -930,8 +930,9 @@ var getC2BalanceDenominator = value => {
     let result = 1
     for (let i = 0; i <= milestones.length - 1; i++) {
         if (rho >= milestones[i]) {
-            result *= (balance_values[i] = log(milestones[i], rho).pow(1 / (2 + i)))
+            result *= log(milestones[i], rho).pow(1 / (2 + i))
         }
+        balance_values[i] = log(milestones[i], rho).pow(1 / (2 + i))
     }
     return result
 }
