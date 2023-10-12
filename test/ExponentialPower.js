@@ -799,7 +799,7 @@ var getPrimaryEquation = () => {
     if (page == 0) {
         theory.primaryEquationHeight = 100
         theory.primaryEquationScale = 1
-        result = "B(x)=\\frac{x}{b_0}\\\\b_0=\\prod_{i=1}^{3}{\\sqrt[i+1]{b_i}}"
+        result = "B(x)=\\frac{x}{b_0}\\\\b_0=\\prod_{i=1}^{3}{\\sqrt[i+1]{\\max{(1,b_i)}}}"
     } else if (page == 1) {
         theory.primaryEquationHeight = 55
         theory.primaryEquationScale = 1
@@ -819,9 +819,9 @@ var getSecondaryEquation = () => {
         theory.secondaryEquationHeight = 60
         theory.secondaryEquationScale = 1
         result = [
-            "b_1=\\log_{10^{20}}{\\max{(\\rho,10^{20})}}",
-            "b_2=\\log_{10^{100}}{\\max{(\\rho,10^{100})}}",
-            "b_3=\\log_{10^{500}}{\\max{(\\rho,10^{500})}}"
+            "b_1=\\log_{10^{20}}{(\\rho,10^{20})}",
+            "b_2=\\log_{10^{100}}{(\\rho,10^{100})}",
+            "b_3=\\log_{10^{500}}{(\\rho,10^{500})}"
         ].join("\\\\")
     } else if (page == 1) {
         theory.secondaryEquationHeight = publication.level >= 1 ? 17 : 0
