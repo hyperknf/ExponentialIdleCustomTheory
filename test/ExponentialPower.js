@@ -938,6 +938,7 @@ var getC2BalanceDenominator = value => {
 }
 var getC2Balance = c2 => {
     if (currency.value < BigNumber.TEN.pow(20)) {
+        if (currency.value >= BigNumber.ONE) getC2BalanceDenominator(currency.value)
         tertiary_display[1] = BigNumber.ONE.toString(3)
         return c2
     }
