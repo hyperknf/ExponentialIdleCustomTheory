@@ -237,7 +237,7 @@ var getDescription = language => {
     return (descriptions[language] ?? descriptions.en).join("\n")
 }
 var authors = "HyperKNF"
-var version = "v1.3.2.test22"
+var version = "v1.3.2.test23"
 
 const currency2text = ["δ", "\\delta"]
 
@@ -855,7 +855,7 @@ var getTertiaryEquation = () => {
 }
 var getQuaternaryEntries = () => {
     const result = []
-    result.push(formatQuaternaryEntry(
+    if (page != 0) result.push(formatQuaternaryEntry(
         "\\dot\\rho",
         (drho * (dt / 0.1)).toString(5)
     ))
@@ -875,7 +875,7 @@ var getQuaternaryEntries = () => {
             BigNumber.from(theory.publicationMultiplier).toString(2)
         ))
     }
-    if (unlock.level >= 1) result.push(formatQuaternaryEntry(
+    if (unlock.level >= 1 && page != 0) result.push(formatQuaternaryEntry(
         "E",
         unlockE.level >= 1 ? getInverseEDisplay(E) : null
     ))
@@ -908,12 +908,13 @@ var get2DGraphValue = () => currency.value.sign * (BigNumber.ONE + currency.valu
 
 var getK = level => BigNumber.ZERO + Utils.getStepwisePowerSum(level, 2, 5, 0)
 var getC1 = level => BigNumber.ONE + 0.5 * level
-var getC2BalanceDenominator = rho => {
+var getC2BalanceDenominator = value => {
+    const rho = value.max(1.01)
     const milestones = [BigNumber.TEN.pow(20), BigNumber.TEN.pow(100), BigNumber.TEN.pow(500)]
-    let result = log(milestones[0], rho.max(1.001)).sqrt()
+    let result = 1
     for (let i = 1; i <= milestones.length - 1; i++) {
         if (rho >= milestones[i]) {
-            result *= log(milestones[i], rho.max(1.001)).pow(1 / (2 + i))
+            result *= log(milestones[i], rho).pow(1 / (2 + i))
         }
     }
     return result
@@ -924,7 +925,8 @@ var getC2Balance = c2 => {
         return c2
     }
     const denominator = getC2BalanceDenominator(currency.value)
-    tertiary_display[1] = denominator.toString(3)
+    if (currency.value < BigNumber.TEN.pow(20)) tertiary_display[1] = log(BigNumber.TEN.pow(20), curency.value.max(1.01)).toString(3)
+    else tertiary_display[1] = denominator.toString(3)
     return c2 / denominator
 }
 var getC2 = level => BigNumber.ONE + 0.25 * Math.min(level, 30) + (level > 30 ? (0.25 * (1 - 0.99 ** (level - 30)) / (1 - 0.99)) : 0)
