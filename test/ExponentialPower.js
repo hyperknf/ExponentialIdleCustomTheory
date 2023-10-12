@@ -818,7 +818,7 @@ var getSecondaryEquation = () => {
         theory.secondaryEquationScale = 1
         result = [
             "b_1=\\log_{10^{20}}{\\max{(\\rho,10^{20})}}",
-            "b_2=\\log_{10^{100}}{\\max{(\\rho,10^{100})}}}",
+            "b_2=\\log_{10^{100}}{\\max{(\\rho,10^{100})}}",
             "b_3=\\log_{10^{500}}{\\max{(\\rho,10^{500})}}"
         ].join("\\\\")
     } else if (page == 1) {
