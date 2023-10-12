@@ -937,13 +937,12 @@ var getC2BalanceDenominator = value => {
     return result
 }
 var getC2Balance = c2 => {
-    if (currency.value <= 0) {
-        tertiary_display[1] = "-∞"
+    if (currency.value < BigNumber.TEN.pow(20)) {
+        tertiary_display[1] = BigNumber.ONE.toString(3)
         return c2
     }
     const denominator = getC2BalanceDenominator(currency.value)
-    if (currency.value < BigNumber.TEN.pow(20)) tertiary_display[1] = log(BigNumber.TEN.pow(20), currency.value.max(1.01)).toString(3)
-    else tertiary_display[1] = denominator.toString(3)
+    tertiary_display[1] = denominator.toString(3)
     return c2 / denominator
 }
 var getC2 = level => BigNumber.ONE + 0.25 * Math.min(level, 30) + (level > 30 ? (0.25 * (1 - 0.99 ** (level - 30)) / (1 - 0.99)) : 0)
