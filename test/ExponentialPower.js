@@ -795,9 +795,9 @@ var isCurrencyVisible = index => {
 var getPrimaryEquation = () => {
     let result
     if (page == 0) {
-        theory.primaryEquationHeight = 70
+        theory.primaryEquationHeight = 100
         theory.primaryEquationScale = 1
-        result = "B(x)\\frac{x}{\\prod_{i=1}^{3}\\sqrt[i+1]{b_i}}"
+        result = "B(x)=\\frac{x}{b_0}\\\\b_0=\\prod_{i=1}^{3}{\\sqrt[i+1]{b_i}}"
     } else if (page == 1) {
         theory.primaryEquationHeight = 55
         theory.primaryEquationScale = 1
@@ -822,7 +822,7 @@ var getSecondaryEquation = () => {
             "b_3=\\log_{10^{500}}{\\max{(\\rho,10^{500})}}"
         ].join("\\\\")
     } else if (page == 1) {
-        theory.secondaryEquationHeight = publication.level >= 1 ? 20 : 0
+        theory.secondaryEquationHeight = publication.level >= 1 ? 17 : 0
         theory.secondaryEquationScale = 1
         result = publication.level >= 1 ? `\\\\m=\\text{${getTextResource(TextResource.PublicationMultiplier)}}` : ""
     } else if (page == 2) {
@@ -849,7 +849,7 @@ var getSecondaryEquation = () => {
 var getTertiaryEquation = () => {
     let result
     if (page == 1) {
-        result = `\\text{${getTextResource(TextResource.TickRate)}:}\\quad ${(dt * 100).toString(5)}/\\text{${getTextResource(TextResource.Second)}}\\\\c_1^{B(c_2${unlock.level >= 2 ? "x_1" : ""})}=${tertiary_display[0]},\\quad\\sqrt{\\log_{10^{20}}{\\rho}}=${tertiary_display[1]}`
+        result = `\\text{${getTextResource(TextResource.TickRate)}:}\\quad ${(dt * 100).toString(5)}/\\text{${getTextResource(TextResource.Second)}}\\\\c_1^{B(c_2${unlock.level >= 2 ? "x_1" : ""})}=${tertiary_display[0]},\\quad b_0=${tertiary_display[1]}`
     } else result = ""
     return "\\begin{array}{c}" + result + "\\end{array}"
 }
@@ -858,6 +858,10 @@ var getQuaternaryEntries = () => {
     result.push(formatQuaternaryEntry(
         "\\dot\\rho",
         (drho * (dt / 0.1)).toString(5)
+    ))
+    if (page == 0) result.push(formatQuaternaryEntry(
+        "b_0",
+        tertiary_display[1]
     ))
     if (page == 1) {
         result.push(formatQuaternaryEntry(
@@ -871,7 +875,7 @@ var getQuaternaryEntries = () => {
             BigNumber.from(theory.publicationMultiplier).toString(2)
         ))
     }
-    if (unlock.level >= 1) result.push(formatQuaternaryEntry(
+    if (unlock.level >= 1 && page != 0) result.push(formatQuaternaryEntry(
         "E",
         unlockE.level >= 1 ? getInverseEDisplay(E) : null
     ))
