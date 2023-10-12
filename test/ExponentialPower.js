@@ -929,10 +929,11 @@ var getC2BalanceDenominator = value => {
     const milestones = [BigNumber.TEN.pow(20), BigNumber.TEN.pow(100), BigNumber.TEN.pow(500)]
     let result = 1
     for (let i = 0; i <= milestones.length - 1; i++) {
-        if (rho >= milestones[i]) {
-            result *= log(milestones[i], rho).pow(1 / (2 + i))
+        const balance_value = log(milestones[i], rho)
+        if (balance_value > 1) {
+            result *= balance_value.pow(1 / (2 + i))
         }
-        balance_values[i] = log(milestones[i], rho)
+        balance_values[i] = balance_value
     }
     return result
 }
