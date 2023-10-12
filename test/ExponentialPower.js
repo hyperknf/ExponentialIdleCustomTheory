@@ -917,11 +917,11 @@ var getC2BalanceDenominator = rho => {
     return [result, max]
 }
 var getC2Balance = c2 => {
-    if (currency.value == 0) {
+    if (currency.value <= 0) {
         tertiary_display[1] = "-\\infty"
         return c2
     }
-    const denominator = getC2BalanceDenominator(currency.value)
+    const denominator = getC2BalanceDenominator(currency.value)[0]
     tertiary_display[1] = denominator.toString(3)
     return c2 / denominator
 }
