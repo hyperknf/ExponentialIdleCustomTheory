@@ -237,7 +237,7 @@ var getDescription = language => {
     return (descriptions[language] ?? descriptions.en).join("\n")
 }
 var authors = "HyperKNF"
-var version = "v1.3.2.test18"
+var version = "v1.3.2.test22"
 
 const currency2text = ["δ", "\\delta"]
 
@@ -875,7 +875,7 @@ var getQuaternaryEntries = () => {
             BigNumber.from(theory.publicationMultiplier).toString(2)
         ))
     }
-    if (unlock.level >= 1 && page != 0) result.push(formatQuaternaryEntry(
+    if (unlock.level >= 1) result.push(formatQuaternaryEntry(
         "E",
         unlockE.level >= 1 ? getInverseEDisplay(E) : null
     ))
@@ -910,22 +910,20 @@ var getK = level => BigNumber.ZERO + Utils.getStepwisePowerSum(level, 2, 5, 0)
 var getC1 = level => BigNumber.ONE + 0.5 * level
 var getC2BalanceDenominator = rho => {
     const milestones = [BigNumber.TEN.pow(20), BigNumber.TEN.pow(100), BigNumber.TEN.pow(500)]
-    let result = log(milestones[0], rho.max(1.00001)).sqrt()
-    let max = 1
+    let result = log(milestones[0], rho.max(1.001)).sqrt()
     for (let i = 1; i <= milestones.length - 1; i++) {
         if (rho >= milestones[i]) {
-            result *= log(milestones[i], rho).pow(1 / (2 + i))
-            max = i + 1
+            result *= log(milestones[i], rho.max(1.001)).pow(1 / (2 + i))
         }
     }
-    return [result, max]
+    return result
 }
 var getC2Balance = c2 => {
     if (currency.value <= 0) {
-        tertiary_display[1] = "-\\infty"
+        tertiary_display[1] = "-∞"
         return c2
     }
-    const denominator = getC2BalanceDenominator(currency.value)[0]
+    const denominator = getC2BalanceDenominator(currency.value)
     tertiary_display[1] = denominator.toString(3)
     return c2 / denominator
 }
