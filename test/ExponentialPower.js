@@ -822,9 +822,9 @@ var getSecondaryEquation = () => {
             "b_3=\\log_{10^{500}}{\\max{(\\rho,10^{500})}}"
         ].join("\\\\")
     } else if (page == 1) {
-        theory.secondaryEquationHeight = publication.level >= 1 ? 57 : 37
+        theory.secondaryEquationHeight = publication.level >= 1 ? 20 : 0
         theory.secondaryEquationScale = 1
-        result = `B(x)=\\frac{x}{\\sqrt{\\log_{10^{20}}{\\max{(\\rho,10^{20})}}}}${publication.level >= 1 ? `\\\\m=\\text{${getTextResource(TextResource.PublicationMultiplier)}}` : ""}`
+        result = publication.level >= 1 ? `\\\\m=\\text{${getTextResource(TextResource.PublicationMultiplier)}}` : ""
     } else if (page == 2) {
         theory.secondaryEquationHeight = page2_equation_scale * (
             level => {
