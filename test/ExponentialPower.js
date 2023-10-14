@@ -1186,13 +1186,13 @@ class Popups {
                             const rfirst = formatted_recovery_time[0]
                             formatted_recovery_time.splice(0, 1)
                             return [
-                                Utils.getMath(`\\text{Ticks:}\\quad ${ticks.toString(0)}`),
+                                Utils.getMath(`\\text{${getTextResource(TextResource.Ticks)}:}\\quad ${ticks.toString(0)}`),
                                 Utils.getMath(`\\text{${getTextResource(TextResource.TimeSinceStarted)}}:\\quad${sfirst}`) + ":" + formatted_time[0].join(":"),
                                 Utils.getMath(`\\text{${getTextResource(TextResource.TimeSincePublication)}}:\\quad${first}`) + ":" + formatted_time[1].join(":"),
                                 Utils.getMath(`\\text{${getTextResource(TextResource.RecoveryTime)}}:\\quad${rfirst}`) + ":" + formatted_recovery_time.join(":"),
                                 getTextResource(TextResource.Lifetime) + Utils.getMath(`\\quad\\max\\dot{\\rho}=${max_drho.toString(5)}`),
                                 getTextResource(TextResource.Publication) + Utils.getMath(`\\quad\\max\\dot{\\rho}=${publication_max_drho.toString(5)}`),
-                                Utils.getMath(`\\text{Total }\\rho =${total_rho}`)
+                                Utils.getMath(`\\text{${getTextResource(TextResource.Total)} }\\rho =${total_rho}`)
                             ].join("\\\\")
                         }
                     })
