@@ -1142,6 +1142,7 @@ var setInternalState = string => {
     ]
     time = BigNumber.fromBase64String(state.time ?? BigNumber.ZERO.toBase64String())
     max_drho = BigNumber.fromBase64String(state.max_drho ?? BigNumber.ZERO.toBase64String())
+    publication_max_drho = BigNumber.fromBase64String(state.publication_max_drho ?? BigNumber.ZERO.toBase64String())
     total_rho = BigNumber.fromBase64String(state.total_rho ?? BigNumber.ZERO.toBase64String())
     ticks = BigNumber.fromBase64String(state.ticks ?? BigNumber.ZERO.toBase64String())
 
