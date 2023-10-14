@@ -88,10 +88,15 @@ const TextResource = {
             },
             "MilestoneUnlock": {
                 "Name": {
-                    "en": "Serious Hesitation"
+                    "en": "Serious Hesitation",
+                    "zh-Hant": "嚴重猶豫",
+                    "zh-Hans": "严重犹豫",
+                    "fi": "Vakava Epäröinti"
                 },
                 "Description": {
-                    "en": "Reallocate Add Term milestone upgrade 10 times"
+                    "en": "Reallocate Add Term milestone upgrade 10 times",
+                    "zh-Hant": "重新分配第一個里程碑升級十次",
+                    "zh-Hans": "重新分配第一个里程碑升级十次"
                 },
                 "Hint": {
                     "en": "Why would you do this?"
@@ -228,6 +233,16 @@ const TextResource = {
             "zh-Hans": "显示数据",
             "fi": "Näyttää tilastoja"
         }
+    },
+    "Lifetime": {
+        "en": "Lifetime",
+        "zh-Hant": "一直以來",
+        "zh-Hans": "一直以来"
+    },
+    "Publication": {
+        "en": "Publication",
+        "zh-Hant": "此次出版",
+        "zh-Hans": "此次出版"
     }
 }
 
@@ -267,7 +282,7 @@ var getDescription = language => {
     return (descriptions[language] ?? descriptions.en).join("\n")
 }
 var authors = "HyperKNF"
-var version = "v1.3.2.test24"
+var version = "v1.3.2.test25"
 
 const currency2text = ["δ", "\\delta"]
 
@@ -1163,8 +1178,8 @@ class Popups {
                                 Utils.getMath(`\\text{${getTextResource(TextResource.TimeSinceStarted)}}:\\quad${sfirst}`) + ":" + formatted_time[0].join(":"),
                                 Utils.getMath(`\\text{${getTextResource(TextResource.TimeSincePublication)}}:\\quad${first}`) + ":" + formatted_time[1].join(":"),
                                 Utils.getMath(`\\text{${getTextResource(TextResource.RecoveryTime)}}:\\quad${rfirst}`) + ":" + formatted_recovery_time.join(":"),
-                                "Lifetime" + Utils.getMath(`\\quad\\max\\dot{\\rho}=${max_drho.toString(5)}`),
-                                "Publication" + Utils.getMath(`\\quad\\max\\dot{\\rho}=${publication_max_drho.toString(5)}`),
+                                getTextResource(TextResource.Lifetime) + Utils.getMath(`\\quad\\max\\dot{\\rho}=${max_drho.toString(5)}`),
+                                getTextResource(TextResource.Publication) + Utils.getMath(`\\quad\\max\\dot{\\rho}=${publication_max_drho.toString(5)}`),
                                 Utils.getMath(`\\text{Total }\\rho =${total_rho}`)
                             ].join("\\\\")
                         }
