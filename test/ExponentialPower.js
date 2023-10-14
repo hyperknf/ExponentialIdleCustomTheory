@@ -243,6 +243,18 @@ const TextResource = {
         "en": "Publication",
         "zh-Hant": "此次出版",
         "zh-Hans": "此次出版"
+    },
+    "Ticks": {
+        "en": "Ticks",
+        "zh-Hant": "刻數",
+        "zh-Hans": "刻数",
+        "fi": "Tikki"
+    },
+    "Total": {
+        "en": "Total",
+        "zh-Hant": "總共",
+        "zh-Hans": "总共",
+        "fi": "Yhteensä"
     }
 }
 
