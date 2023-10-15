@@ -851,13 +851,121 @@ var isCurrencyVisible = index => {
     }
 }
 
-var getPrimaryEquation = () => {
-    let result
-    if (page == 0) {
-        theory.primaryEquationHeight = 100
-        theory.primaryEquationScale = 1
-        result = "B(x)=\\frac{x}{b_0}\\\\b_0=\\prod_{i=1}^{3}{\\sqrt[i+1]{\\max(1,b_i)}}"
-    } else if (page == 1) {
-        theory.primaryEquationHeight = 55
-        theory.primaryEquationScale = 1
-        result = `\\dot{\\rho}=k${publication.level >= 1 ? "m" : ""}t^
+            textColor: Color.TEXT_MEDIUM,
+            horizontalOptions: LayoutOptions.END
+        }),
+        ui.createLatexLabel({
+            isVisible: () => settings.display_overlay.time,
+            text: () => {
+                const formatted = formatTime(total_time[1])
+                const first = formatted[0]
+                formatted.splice(0, 1)
+                return Utils.getMath(`\\text{${getTextResource(TextResource.Time)}}:\\quad${first}`) + ":" + formatted.join(":")
+            },
+            fontSize: 10,
+            margin: new Thickness(4, 4),
+            textColor: Color.TEXT_MEDIUM,
+            verticalOptions: LayoutOptions.END,
+            horizontalOptions: LayoutOptions.END
+        })
+    ]
+    const grid = ui.createGrid({
+        inputTransparent: true,
+        cascadeInputTransparent: false,
+        children
+    })
+    return grid
+}
+
+var getInternalState = () => JSON.stringify({
+    version,
+    settings,
+    lifetime_total_time: total_time[0].toBase64String(),
+    publication_total_time: total_time[1].toBase64String(),
+    time: time.toBase64String(),
+    max_drho: max_drho.toBase64String(),
+    total_rho: total_rho.toBase64String(),
+    ticks: ticks.toBase64String(),
+
+    recovering,
+    recovery_time: recovery_time.toBase64String()
+})
+var setInternalState = string => {
+    if (!string) return
+
+    const state = JSON.parse(string)
+    settings = state.settings ?? settings
+    if (typeof state.total_time == "object") total_time = [state.total_time, state.total_time]
+    else total_time = [
+        BigNumber.fromBase64String(state.lifetime_total_time ?? BigNumber.ZERO.toBase64String()),
+        BigNumber.fromBase64String(state.publication_total_time ?? BigNumber.ZERO.toBase64String())
+    ]
+    time = BigNumber.fromBase64String(state.time ?? BigNumber.ZERO.toBase64String())
+    max_drho = BigNumber.fromBase64String(state.max_drho ?? BigNumber.ZERO.toBase64String())
+    publication_max_drho = BigNumber.fromBase64String(state.publication_max_drho ?? BigNumber.ZERO.toBase64String())
+    total_rho = BigNumber.fromBase64String(state.total_rho ?? BigNumber.ZERO.toBase64String())
+    ticks = BigNumber.fromBase64String(state.ticks ?? BigNumber.ZERO.toBase64String())
+
+    recovering = state.recovering ?? false
+    recovery_time = BigNumber.fromBase64String(state.recovery_time ?? BigNumber.ZERO.toBase64String())
+}
+
+var canResetStage = () => true
+var getResetStageMessage = () => getTextResource(TextResource.ResetStage)
+var resetStage = () => {
+    if (theory.canPublish) {
+        theory.publish()
+        return
+    }
+    for (const upgrade of theory.upgrades) upgrade.level = 0
+    currency.value = 0
+    currency2.value = 0
+    postPublish()
+    theory.clearGraph()
+}
+
+var canGoToPreviousStage = () => page == 2 || page == 1
+var goToPreviousStage = () => page--
+var canGoToNextStage = () => (page == 1 && unlock.level >= 1) || page == 0
+var goToNextStage = () => page++
+
+class Popups {
+    static get statistics() {
+        const popup = ui.createPopup({
+            isPeekable: false,
+            title: getTextResource(TextResource.Statistics.Title),
+            content: ui.createGrid({
+                children: [
+                    ui.createLatexLabel({
+                        text: () => {
+                            const formatted_time = [formatTime(total_time[0]), formatTime(total_time[1])]
+                            const formatted_recovery_time = formatTime(recovery_time)
+                            const sfirst = formatted_time[0][0]
+                            formatted_time[0].splice(0, 1)
+                            const first = formatted_time[1][0]
+                            formatted_time[1].splice(0, 1)
+                            const rfirst = formatted_recovery_time[0]
+                            formatted_recovery_time.splice(0, 1)
+                            return [
+                                Utils.getMath(`\\text{${getTextResource(TextResource.Ticks)}:}\\quad ${ticks.toString(0)}`),
+                                Utils.getMath(`\\text{${getTextResource(TextResource.TimeSinceStarted)}}:\\quad${sfirst}`) + ":" + formatted_time[0].join(":"),
+                                Utils.getMath(`\\text{${getTextResource(TextResource.TimeSincePublication)}}:\\quad${first}`) + ":" + formatted_time[1].join(":"),
+                                Utils.getMath(`\\text{${getTextResource(TextResource.RecoveryTime)}}:\\quad${rfirst}`) + ":" + formatted_recovery_time.join(":"),
+                                getTextResource(TextResource.Lifetime) + Utils.getMath(`\\quad\\max\\dot{\\rho}=${max_drho.toString(5)}`),
+                                getTextResource(TextResource.Publication) + Utils.getMath(`\\quad\\max\\dot{\\rho}=${publication_max_drho.toString(5)}`),
+                                Utils.getMath(`\\text{${getTextResource(TextResource.Total)} }\\rho =${total_rho}`)
+                            ].join("\\\\")
+                        }
+                    })
+                ]
+            })
+        })
+        return popup
+    }
+
+    static get settings() {
+        throw new Error("Work in progress")
+    }
+}
+
+initialize()
