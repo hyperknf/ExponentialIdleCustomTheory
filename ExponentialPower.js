@@ -294,7 +294,7 @@ var getDescription = language => {
     return (descriptions[language] ?? descriptions.en).join("\n")
 }
 var authors = "HyperKNF"
-var version = "v1.3.2.test25"
+var version = "v1.3.2"
 
 const currency2text = ["δ", "\\delta"]
 
@@ -632,11 +632,13 @@ var initialize = () => {
         }
     }
 
+    /*
     {
         test_upgrade = theory.createSingularUpgrade(1000, currency, new FreeCost())
         test_upgrade.getDescription = test_upgrade.getInfo = _ => Utils.getMath(`\\text{${getTextResource(TextResource.TestUpgrade)}}`)
         test_upgrade.bought = _ => currency.value *= 1000
     }
+    */
 
     ///////////////////////
     //// Milestone Upgrades
@@ -851,6 +853,246 @@ var isCurrencyVisible = index => {
     }
 }
 
+var getPrimaryEquation = () => {
+    let result
+    if (page == 0) {
+        theory.primaryEquationHeight = 100
+        theory.primaryEquationScale = 1
+        result = "B(x)=\\frac{x}{b_0}\\\\b_0=\\prod_{i=1}^{3}{\\sqrt[i+1]{\\max(1,b_i)}}"
+    } else if (page == 1) {
+        theory.primaryEquationHeight = 55
+        theory.primaryEquationScale = 1
+        result = `\\dot{\\rho}=k${publication.level >= 1 ? "m" : ""}t^{${getTExp(time_exp.level) == 1 ? "" : getTExp(time_exp.level).toString(getTExp(time_exp.level) == 1 ? 0 : getTExp(time_exp.level) == 0.5 ? 1 : 2)}}${unlock.level >= 1 ? "E^{-0.9}" : ""}c_1^{B(c_2${unlock.level >= 2 ? "x_1" : ""})}${unlock.level >= 3 ? "x_2" : ""}\
+        \\\\`
+        + theory.latexSymbol + "=\\max\\rho"
+    } else if (page == 2) {
+        theory.primaryEquationHeight = page2_equation_scale * 40
+        theory.primaryEquationScale = page2_equation_scale
+        result = `E=\\prod_{i}{e_i}`
+    } else result = "\\text{Invalid Page}"
+    return "\\begin{array}{c}" + result + "\\end{array}"
+}
+var getSecondaryEquation = () => {
+    let result
+    if (page == 0) {
+        theory.secondaryEquationHeight = 60
+        theory.secondaryEquationScale = 1
+        result = [
+            "b_1=\\log_{10^{20}}{\\rho}",
+            "b_2=\\log_{10^{100}}{\\rho}",
+            "b_3=\\log_{10^{500}}{\\rho}"
+        ].join("\\\\")
+    } else if (page == 1) {
+        theory.secondaryEquationHeight = publication.level >= 1 ? 17 : 0
+        theory.secondaryEquationScale = 1
+        result = publication.level >= 1 ? `\\\\m=\\text{${getTextResource(TextResource.PublicationMultiplier)}}` : ""
+    } else if (page == 2) {
+        theory.secondaryEquationHeight = page2_equation_scale * (
+            level => {
+                switch (level) {
+                    case 0: return 0
+                    case 1: return 35
+                    case 2: return 70
+                    case 3: return 110
+                    case 4: return 150
+                    default: return 150
+                }
+            }
+        )(unlockE.level)
+        theory.secondaryEquationScale = page2_equation_scale
+        result = "e_1=e-(1+\\frac{1}{n})^n"
+        if (unlockE.level >= 2) result += "\\\\e_2=e-(1+\\frac{a}{b})^{\\frac{b}{a}}"
+        if (unlockE.level >= 3) result += "\\\\e_3=|1-\\int^e_1\\frac{\\sqrt[x]{e}}{t}dt|"
+        if (unlockE.level >= 4) result += "\\\\e_4=1-\\int^{(1+\\frac{1}{y})^y}_{1}\\frac{1}{t}dt"
+    } else result = "\\text{Invalid Page}"
+    return "\\begin{array}{c}" + result + "\\end{array}"
+}
+var getTertiaryEquation = () => {
+    let result
+    if (page == 1) {
+        result = `\\text{${getTextResource(TextResource.TickRate)}:}\\quad ${(dt * 100).toString(5)}/\\text{${getTextResource(TextResource.Second)}}\\\\c_1^{B(c_2${unlock.level >= 2 ? "x_1" : ""})}=${tertiary_display[0]},\\quad b_0=${tertiary_display[1]}`
+    } else result = ""
+    return "\\begin{array}{c}" + result + "\\end{array}"
+}
+var getQuaternaryEntries = () => {
+    const result = []
+    result.push(formatQuaternaryEntry(
+        "\\dot\\rho",
+        (drho * (dt / 0.1)).toString(5)
+    ))
+    if (page == 0) {
+        result.push(formatQuaternaryEntry(
+            "b_0",
+            tertiary_display[1]
+        ))
+        result.push(formatQuaternaryEntry(
+            "b_1",
+            balance_values[0].toString(3)
+        ))
+        result.push(formatQuaternaryEntry(
+            "b_2",
+            balance_values[1].toString(3)
+        ))
+        result.push(formatQuaternaryEntry(
+            "b_3",
+            balance_values[2].toString(3)
+        ))
+    }
+    if (page == 1) {
+        result.push(formatQuaternaryEntry(
+            "t",
+            time.toString(2)
+        ))
+    }
+    if (page == 1 && publication.level >= 1) {
+        result.push(formatQuaternaryEntry(
+            "m",
+            BigNumber.from(theory.publicationMultiplier).toString(2)
+        ))
+    }
+    if (unlock.level >= 1 && page != 0) result.push(formatQuaternaryEntry(
+        "E",
+        unlockE.level >= 1 ? getInverseEDisplay(E) : null
+    ))
+    if (page == 2) {
+        result.push(formatQuaternaryEntry(
+            "e_1",
+            unlock.level >= 1 ? getInverseEDisplay(EDisplay[0]) : null
+        ))
+        result.push(formatQuaternaryEntry(
+            "e_2",
+            unlockE.level >= 2 ? getInverseEDisplay(EDisplay[1]) : null
+        ))
+        result.push(formatQuaternaryEntry(
+            "e_3",
+            unlockE.level >= 3 ? getInverseEDisplay(EDisplay[2]) : null
+        ))
+        result.push(formatQuaternaryEntry(
+            "e_4",
+            unlockE.level >= 4 ? getInverseEDisplay(EDisplay[3]) : null
+        ))
+    }
+    return result
+}
+
+var getCurrencyFromTau = tau => [tau.max(BigNumber.ONE), currency.symbol]
+var getPublicationMultiplier = tau => 15 * tau.pow(0.126) / (10 + tau).log10().pow(0.9)
+var getPublicationMultiplierFormula = symbol => `m=\\frac{15{${symbol}}^{0.126}}{\\log^{0.9}_{10}(10+${symbol})}`
+var getTau = () => currency.value.max(BigNumber.ZERO)
+var get2DGraphValue = () => currency.value.sign * (BigNumber.ONE + currency.value.abs()).log10().toNumber()
+
+var getK = level => BigNumber.ZERO + Utils.getStepwisePowerSum(level, 2, 5, 0)
+var getC1 = level => BigNumber.ONE + 0.5 * level
+var getC2BalanceDenominator = value => {
+    const rho = value.max(1.01)
+    const milestones = [BigNumber.TEN.pow(20), BigNumber.TEN.pow(100), BigNumber.TEN.pow(500)]
+    let result = 1
+    for (let i = 0; i <= milestones.length - 1; i++) {
+        const balance_value = log(milestones[i], rho)
+        if (balance_value > 1) {
+            result *= balance_value.pow(1 / (2 + i))
+        }
+        balance_values[i] = balance_value
+    }
+    return result
+}
+var getC2Balance = c2 => {
+    if (currency.value < BigNumber.TEN.pow(20)) {
+        if (currency.value >= BigNumber.ONE) getC2BalanceDenominator(currency.value)
+        tertiary_display[1] = BigNumber.ONE.toString(3)
+        return c2
+    }
+    const denominator = getC2BalanceDenominator(currency.value)
+    tertiary_display[1] = denominator.toString(3)
+    return c2 / denominator
+}
+var getC2 = level => BigNumber.ONE + 0.25 * Math.min(level, 30) + (level > 30 ? (0.25 * (1 - 0.99 ** (level - 30)) / (1 - 0.99)) : 0)
+var getN = level => BigNumber.ONE + Utils.getStepwisePowerSum(level, 2, 10, 0)
+var getInverseA = level => BigNumber.E.pow(0.05 * level)
+var getA = level => getInverseA(level).pow(-1)
+var getB = level => BigNumber.ONE + Utils.getStepwisePowerSum(level, 2, 10, 0)
+var getX = level => BigNumber.TWO + Utils.getStepwisePowerSum(level, 2, 10, 0)
+var getY = level => (BigNumber.TWO + Utils.getStepwisePowerSum(level, 2, 10, 0)) / 4
+var getX1 = level => BigNumber.ONE + 0.01 * level
+var getX2Exponent = level => BigNumber.ONE + 0.1 * level
+var getX2 = level => BigNumber.E.pow(getX2Exponent(level))
+var getDT = level => Utils.getStepwisePowerSum(level, 2, 10, 0) / 10
+
+var getTickRate = level => BigNumber.from(1.2).pow(level)
+
+var getTExp = level => BigNumber.ONE / 4 * (2 + (time_exp.isAvailable ? level : 0))
+
+var getE1 = n => {
+    if (n <= 100) return 1 / (BigNumber.E - (BigNumber.ONE + 1 / n).pow(n))
+    // Laurent Series
+    return 2 * n / BigNumber.E + 11 * n / (6 * BigNumber.E) - 5 / (72 * BigNumber.E * n) + 17 / (540 * BigNumber.E * BigNumber.from(n).pow(2))
+}
+var getE2 = (a, b) => getE1(b / a)
+var getE3 = x => {
+    if (x <= 20) return 1 / (BigNumber.E.pow(1 / x) - 1)
+    // Laurent Series
+    return x - 1 / 2 + 1 / (12 * x)
+}
+var getE4 = y => {
+    if (y <= 10) return 1 / (1 - (BigNumber.ONE + 1 / y).pow(y).log())
+    // Laurent Series
+    return 2 * y + 4 / 3 - 1 / (9 * y) + 8 / (135 * y.pow(2)) - 31 / (810 * y.pow(3))
+}
+
+var factorial = number => {
+    if (number <= 1) return 0
+    return (2 * number * BigNumber.PI).sqrt() * (number / BigNumber.E).pow(number)
+}
+var derangement = number => {
+    number = BigNumber.from(number)
+    if (number < 2) return factorial(number)
+    return (
+        (-BigNumber.E).pow(number) * number.pow(-number) * (
+            1 / (2 * BigNumber.PI * number.pow(3)).sqrt()
+            -
+            25 / (12 * (2 * BigNumber.PI * number.pow(5)))
+            +
+            1489 / (288 * (2 * BigNumber.PI * number.pow(7)))
+            -
+            799421 / (51840 * (2 * BigNumber.PI * number.pow(9)))
+        ) + 1 / BigNumber.E
+    ) * factorial(number)
+}
+var harmonic = number => {
+    number = BigNumber.from(number)
+    if (number <= 10) {
+        let sum = 0;
+        for (let i = 1; i <= number; i++) sum += 1 / i
+        return sum
+    }
+    // Puiseux series
+    return number.log() + 0.5772156649015328606065120900824024310421 + 1 / (2 * number) - 1 / (12 * number.pow(2)) + 1 / (120 * number.pow(4))
+}
+
+var getEDisplay = E => {
+    const exponent = E.log10().floor()
+    const base = BigNumber.from(E / BigNumber.TEN.pow(exponent))
+    return `${base.toString(3)}e${exponent.toString(0)}`
+}
+var getInverseEDisplay = E => {
+    const exponent = E.log10().floor()
+    const base = BigNumber.from(E / BigNumber.TEN.pow(exponent))
+    return `${(10 / base).toString(3)}e${(-(exponent + 1)).toString(0)}`
+}
+
+var getEquationOverlay = _ => {
+    const children = [
+        ui.createLatexLabel({
+            text: version,
+            fontSize: 10, 
+            margin: new Thickness(4, 4),
+            textColor: Color.TEXT_MEDIUM
+        }),
+        ui.createLatexLabel({
+            isVisible: () => settings.display_overlay.max_drho,
+            text: () => Utils.getMath(`\\max\\dot{\\rho}=${max_drho.toString(3)}\\quad(${publication_max_drho.toString(3)})`),
+            fontSize: 10,
+            margin: new Thickness(4, 4),
             textColor: Color.TEXT_MEDIUM,
             horizontalOptions: LayoutOptions.END
         }),
