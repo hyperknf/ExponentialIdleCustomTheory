@@ -258,13 +258,13 @@ const TextResource = {
     }
 }
 
-var id = "ExponentialPowerTest"
+var id = "ExponentialPower"
 var getName = language => {
     const names = {
-        "en": "Exponential Power t",
-        "zh-Hant": "指數力量t",
-        "zh-Hans": "指数力量t",
-        "fi": "Eksponentiaalinen Teho t"
+        "en": "Exponential Power",
+        "zh-Hant": "指數力量",
+        "zh-Hans": "指数力量",
+        "fi": "Eksponentiaalinen Teho"
     }
     return names[language] ?? names.en
 }
