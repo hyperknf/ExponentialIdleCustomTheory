@@ -3,6 +3,7 @@ import { BigNumber } from "./api/BigNumber"
 import { theory, QuaternaryEntry } from "./api/Theory"
 import { Utils } from "./api/Utils"
 import { Localization } from "./api/Localization"
+import { ui } from "./api/ui/UI"
 
 const TextResource = {
     "Achievements": {
@@ -87,10 +88,15 @@ const TextResource = {
             },
             "MilestoneUnlock": {
                 "Name": {
-                    "en": "Serious Hesitation"
+                    "en": "Serious Hesitation",
+                    "zh-Hant": "嚴重猶豫",
+                    "zh-Hans": "严重犹豫",
+                    "fi": "Vakava Epäröinti"
                 },
                 "Description": {
-                    "en": "Reallocate Add Term milestone upgrade 10 times"
+                    "en": "Reallocate Add Term milestone upgrade 10 times",
+                    "zh-Hant": "重新分配第一個里程碑升級十次",
+                    "zh-Hans": "重新分配第一个里程碑升级十次"
                 },
                 "Hint": {
                     "en": "Why would you do this?"
@@ -141,7 +147,7 @@ const TextResource = {
                 "en": "Coming soon",
                 "zh-Hant": "敬請期待",
                 "zh-Hans": "敬请期待",
-                "fi": "tulossa pian"
+                "fi": "Tulossa pian"
             }
         },
         "Locked": "?????"
@@ -157,16 +163,108 @@ const TextResource = {
         "zh-Hant": "時間",
         "zh-Hans": "时间",
         "fi": "Aika"
+    },
+    "TimeSincePublication": {
+        "en": "Time since last publication",
+        "zh-Hant": "自上次出版以來的時間",
+        "zh-Hans": "自上次出版以外的时间",
+        "fi": "Aika edellisestä julkaisusta"
+    },
+    "TimeSinceStarted": {
+        "en": "Time since started",
+        "zh-Hant": "自開始以來的時間",
+        "zh-Hans": "自开始以来的时间",
+        "fi": "Aika alkamisesta"
+    },
+    "RecoveryTime": {
+        "en": "Last recovery time",
+        "zh-Hant": "上次恢復所需的時間",
+        "zh-Hans": "上次恢復所需的时间",
+        "fi": "Viimeiseen palautukseen käytetty aika"
+    },
+    "Enable": {
+        "en": "Enable",
+        "zh-Hant": "啟動",
+        "zh-Hans": "启动",
+        "fi": "Käynnistä"
+    },
+    "Disable": {
+        "en": "Disable",
+        "zh-Hant": "關閉",
+        "zh-Hans": "关闭",
+        "fi": "Sammuta"
+    },
+    "Settings": {
+        "Name": {
+            "en": "Settings",
+            "zh-Hant": "設置",
+            "zh-Hans": "设置",
+            "fi": "Asetukset"
+        },
+        "MaxDrhoDisplay": {
+            "en": Utils.getMath(`\\max\\dot{\\rho}\\text{ display}`),
+            "zh-Hant": Utils.getMath(`\\max\\dot{\\rho}\\text{顯示}`),
+            "zh-Hans": Utils.getMath(`\\max\\dot{\\rho}\\text{显示}`),
+            "fi": Utils.getMath(`\\max\\dot{\\rho}\\text{ näyttö}`)
+        },
+        "TimeDisplay": {
+            "en": "Time display",
+            "zh-Hant": "時間顯示",
+            "zh-Hans": "时间显示",
+            "fi": "Aikanäyttö"
+        },
+        "LockSettings": {
+            "en": "Lock settings",
+            "zh-Hant": "鎖定設置",
+            "zh-Hans": "锁定设置",
+            "fi": "Lukitse asetukset"
+        }
+    },
+    "Statistics": {
+        "Title": {
+            "en": "Statistics",
+            "zh-Hant": "數據",
+            "zh-Hans": "数据",
+            "fi": "Tilastot"
+        },
+        "Show": {
+            "en": "Show statistics",
+            "zh-Hant": "顯示數據",
+            "zh-Hans": "显示数据",
+            "fi": "Näyttää tilastoja"
+        }
+    },
+    "Lifetime": {
+        "en": "Lifetime",
+        "zh-Hant": "一直以來",
+        "zh-Hans": "一直以来"
+    },
+    "Publication": {
+        "en": "Publication",
+        "zh-Hant": "此次出版",
+        "zh-Hans": "此次出版"
+    },
+    "Ticks": {
+        "en": "Ticks",
+        "zh-Hant": "刻數",
+        "zh-Hans": "刻数",
+        "fi": "Tikki"
+    },
+    "Total": {
+        "en": "Total",
+        "zh-Hant": "總共",
+        "zh-Hans": "总共",
+        "fi": "Yhteensä"
     }
 }
 
-var id = "ExponentialPower"
+var id = "ExponentialPowerTest"
 var getName = language => {
     const names = {
-        "en": "Exponential Power",
-        "zh-Hant": "指數力量",
-        "zh-Hans": "指数力量 (测试)",
-        "fi": "Eksponentiaalinen Teho"
+        "en": "Exponential Power t",
+        "zh-Hant": "指數力量t",
+        "zh-Hans": "指数力量t",
+        "fi": "Eksponentiaalinen Teho t"
     }
     return names[language] ?? names.en
 }
@@ -196,7 +294,7 @@ var getDescription = language => {
     return (descriptions[language] ?? descriptions.en).join("\n")
 }
 var authors = "HyperKNF"
-var version = "v1.3.1"
+var version = "v1.3.2.test25"
 
 const currency2text = ["δ", "\\delta"]
 
@@ -240,16 +338,39 @@ var domain = 1
 
 var publication_max_drho = BigNumber.ZERO
 var max_drho = BigNumber.ZERO
+var total_rho = BigNumber.ZERO
 
-var total_time = BigNumber.ZERO
+var balance_values = [BigNumber.ZERO, BigNumber.ZERO, BigNumber.ZERO]
+
+var total_time = [BigNumber.ZERO, BigNumber.ZERO]
+var ticks = BigNumber.ZERO
+var recovering = false
+var recovery_time = BigNumber.ZERO
 
 var unlock_bought = false, unlock_refund = false, unlock_times = 0
 var secret_achievement_chance = 1e6
 var page2_equation_scale = 0.925
 
+var settings = {
+    display_overlay: {
+        time: true,
+        max_drho: true
+    },
+    lock_settings: false
+}
+var settings_upgrades = {
+    display_overlay: {
+        max_drho: null,
+        time: null
+    },
+    lock_settings: null
+}
+
+var show_stats
+
 var tertiary_display = Array.from({
     length: 2
-}, () => BigNumber.from(0))
+}, () => BigNumber.ZERO)
 
 var log = (base, value) => BigNumber.from(value).log() / BigNumber.from(base).log()
 var getTextResource = resource => resource[Localization.language] ?? resource.en ?? "???"
@@ -441,6 +562,63 @@ var initialize = () => {
         tickrate.isAvailable = false
     }
 
+    {
+        let getDesc = level => `${
+            getTextResource(settings.display_overlay.max_drho ? TextResource.Disable : TextResource.Enable)
+        } ${getTextResource(TextResource.Settings.MaxDrhoDisplay)}`
+        let getInfo = getDesc
+        settings_upgrades.display_overlay.max_drho = theory.createPermanentUpgrade(10000, currency2, new FreeCost())
+        settings_upgrades.display_overlay.max_drho.getDescription = level => getDesc(level)
+        settings_upgrades.display_overlay.max_drho.getInfo = level => getInfo(level)
+        settings_upgrades.display_overlay.max_drho.isAvailable = true
+        settings_upgrades.display_overlay.max_drho.bought = _ => {
+            settings_upgrades.display_overlay.max_drho.level = 0
+            settings.display_overlay.max_drho = !settings.display_overlay.max_drho
+        }
+    }
+
+    {
+        let getDesc = level => `${
+            getTextResource(settings.display_overlay.time ? TextResource.Disable : TextResource.Enable)
+        } ${getTextResource(TextResource.Settings.TimeDisplay)}`
+        let getInfo = getDesc
+        settings_upgrades.display_overlay.time = theory.createPermanentUpgrade(10100, currency2, new FreeCost())
+        settings_upgrades.display_overlay.time.getDescription = level => getDesc(level)
+        settings_upgrades.display_overlay.time.getInfo = level => getInfo(level)
+        settings_upgrades.display_overlay.time.isAvailable = true
+        settings_upgrades.display_overlay.time.bought = _ => {
+            settings_upgrades.display_overlay.time.level = 0
+            settings.display_overlay.time = !settings.display_overlay.time
+        }
+    }
+
+    {
+        let getDesc = level => `${
+            getTextResource(settings.lock_settings ? TextResource.Disable : TextResource.Enable)
+        } ${getTextResource(TextResource.Settings.LockSettings)}`
+        let getInfo = getDesc
+        settings_upgrades.lock_settings = theory.createPermanentUpgrade(11000, currency2, new FreeCost())
+        settings_upgrades.lock_settings.getDescription = level => getDesc(level)
+        settings_upgrades.lock_settings.getInfo = level => getInfo(level)
+        settings_upgrades.lock_settings.isAvailable = true
+        settings_upgrades.lock_settings.bought = _ => {
+            settings_upgrades.lock_settings.level = 0
+            settings.lock_settings = !settings.lock_settings
+        }
+    }
+
+    {
+        let getDesc = level => getTextResource(TextResource.Statistics.Show)
+        let getInfo = getDesc
+        show_stats = theory.createPermanentUpgrade(20000, currency2, new FreeCost())
+        show_stats.getDescription = level => getDesc(level)
+        show_stats.getInfo = level => getInfo(level)
+        show_stats.bought = _ => {
+            show_stats.level = 0
+            Popups.statistics.show()
+        }
+    }
+
     //////////////////////
     //// Singular Upgrades
 
@@ -454,13 +632,11 @@ var initialize = () => {
         }
     }
 
-    /*
     {
         test_upgrade = theory.createSingularUpgrade(1000, currency, new FreeCost())
         test_upgrade.getDescription = test_upgrade.getInfo = _ => Utils.getMath(`\\text{${getTextResource(TextResource.TestUpgrade)}}`)
         test_upgrade.bought = _ => currency.value *= 1000
     }
-    */
 
     ///////////////////////
     //// Milestone Upgrades
@@ -572,6 +748,8 @@ var updatePage = () => {
 }
 
 var updateAvailability = () => {
+    // Upgrades
+
     n.isAvailable = unlock.level >= 1 && unlockE.level >= 1
     a.isAvailable = b.isAvailable = unlock.level >= 1 && unlockE.level >= 2
     x.isAvailable = unlock.level >= 1 && unlockE.level >= 3
@@ -582,10 +760,17 @@ var updateAvailability = () => {
     unlockE.isAvailable = unlock.level >= 1
 
     time_exp.isAvailable = unlock.level >= 1
+
+    // Permanent upgrades
+
+    settings_upgrades.display_overlay.max_drho.isAvailable = !settings.lock_settings
+    settings_upgrades.display_overlay.time.isAvailable = !settings.lock_settings
 }
 
 var tick = (elapsedTime, multiplier) => {
-    total_time = total_time + elapsedTime
+    total_time[0] = total_time[0] + elapsedTime
+    total_time[1] = total_time[1] + elapsedTime
+    ticks += BigNumber.ONE
     
     dt = BigNumber.from(elapsedTime * multiplier) * getTickRate(tickrate.level)
     if (multiplier == 1.5) ad_bonus = true
@@ -611,6 +796,8 @@ var tick = (elapsedTime, multiplier) => {
         unlock.level >= 3 ? getX2(x2.level) : 1
     )
     currency.value += drho * dt
+    total_rho += drho * dt
+    total_rho = total_rho.max(getCurrencyFromTau(theory.tau)[0])
 
     if (max_drho <= drho * (dt / 0.1)) max_drho = drho * (dt / 0.1)
     if (publication_max_drho <= drho * (dt / 0.1)) publication_max_drho = drho * (dt / 0.1)
@@ -627,6 +814,12 @@ var tick = (elapsedTime, multiplier) => {
     }
     if (Math.round(Math.random() * (secret_achievement_chance - 1) + 1) == 1) achievements.secret[1] = true
 
+    const publication_rho = getCurrencyFromTau(theory.tau)[0]
+    if (publication_rho <= currency.value && recovering) {
+        recovering = false
+        recovery_time = total_time[1]
+    }
+
     theory.invalidatePrimaryEquation()
     theory.invalidateSecondaryEquation()
     theory.invalidateTertiaryEquation()
@@ -639,7 +832,8 @@ var tick = (elapsedTime, multiplier) => {
 var postPublish = () => {
     publication_max_drho = BigNumber.ZERO
     time = BigNumber.ZERO
-    total_time = BigNumber.ZERO
+    total_time[1] = BigNumber.ZERO
+    recovering = true
     domain = 1
     page = 1
 }
@@ -659,255 +853,11 @@ var isCurrencyVisible = index => {
 
 var getPrimaryEquation = () => {
     let result
-    if (page == 1) {
+    if (page == 0) {
+        theory.primaryEquationHeight = 100
+        theory.primaryEquationScale = 1
+        result = "B(x)=\\frac{x}{b_0}\\\\b_0=\\prod_{i=1}^{3}{\\sqrt[i+1]{\\max(1,b_i)}}"
+    } else if (page == 1) {
         theory.primaryEquationHeight = 55
         theory.primaryEquationScale = 1
-        result = `\\dot{\\rho}=k${publication.level >= 1 ? "m" : ""}t^{${getTExp(time_exp.level) == 1 ? "" : getTExp(time_exp.level).toString(getTExp(time_exp.level) == 1 ? 0 : getTExp(time_exp.level) == 0.5 ? 1 : 2)}}${unlock.level >= 1 ? "E^{-0.9}" : ""}c_1^{B(c_2${unlock.level >= 2 ? "x_1" : ""})}${unlock.level >= 3 ? "x_2" : ""}\
-        \\\\`
-        + theory.latexSymbol + "=\\max\\rho"
-    } else if (page == 2) {
-        theory.primaryEquationHeight = page2_equation_scale * 40
-        theory.primaryEquationScale = page2_equation_scale
-        result = `E=\\prod_{i}{e_i}`
-    } else result = "\\text{Invalid Page}"
-    return "\\begin{array}{c}" + result + "\\end{array}"
-}
-var getSecondaryEquation = () => {
-    let result
-    if (page == 1) {
-        theory.secondaryEquationHeight = publication.level >= 1 ? 57 : 37
-        theory.secondaryEquationScale = 1
-        result = `B(x)=\\frac{x}{\\sqrt{\\log_{10^{20}}{\\max{(\\rho,10^{20})}}}}${publication.level >= 1 ? `\\\\m=\\text{${getTextResource(TextResource.PublicationMultiplier)}}` : ""}`
-    } else if (page == 2) {
-        theory.secondaryEquationHeight = page2_equation_scale * (
-            level => {
-                switch (level) {
-                    case 0: return 0
-                    case 1: return 35
-                    case 2: return 70
-                    case 3: return 110
-                    case 4: return 150
-                    default: return 150
-                }
-            }
-        )(unlockE.level)
-        theory.secondaryEquationScale = page2_equation_scale
-        result = "e_1=e-(1+\\frac{1}{n})^n"
-        if (unlockE.level >= 2) result += "\\\\e_2=e-(1+\\frac{a}{b})^{\\frac{b}{a}}"
-        if (unlockE.level >= 3) result += "\\\\e_3=|1-\\int^e_1\\frac{\\sqrt[x]{e}}{t}dt|"
-        if (unlockE.level >= 4) result += "\\\\e_4=1-\\int^{(1+\\frac{1}{y})^y}_{1}\\frac{1}{t}dt"
-    } else result = "\\text{Invalid Page}"
-    return "\\begin{array}{c}" + result + "\\end{array}"
-}
-var getTertiaryEquation = () => {
-    let result
-    if (page == 1) {
-        result = `\\text{${getTextResource(TextResource.TickRate)}:}\\quad ${(dt * 100).toString(5)}/\\text{${getTextResource(TextResource.Second)}}\\\\c_1^{B(c_2${unlock.level >= 2 ? "x_1" : ""})}=${tertiary_display[0]},\\quad\\sqrt{\\log_{10^{20}}{\\rho}}=${tertiary_display[1]}`
-    } else result = ""
-    return "\\begin{array}{c}" + result + "\\end{array}"
-}
-var getQuaternaryEntries = () => {
-    const result = []
-    result.push(formatQuaternaryEntry(
-        "\\dot\\rho",
-        (drho * (dt / 0.1)).toString(5)
-    ))
-    if (page == 1) {
-        result.push(formatQuaternaryEntry(
-            "t",
-            time.toString(2)
-        ))
-    }
-    if (page == 1 && publication.level >= 1) {
-        result.push(formatQuaternaryEntry(
-            "m",
-            BigNumber.from(theory.publicationMultiplier).toString(2)
-        ))
-    }
-    if (unlock.level >= 1) result.push(formatQuaternaryEntry(
-        "E",
-        unlockE.level >= 1 ? getInverseEDisplay(E) : null
-    ))
-    if (page == 2) {
-        result.push(formatQuaternaryEntry(
-            "e_1",
-            unlock.level >= 1 ? getInverseEDisplay(EDisplay[0]) : null
-        ))
-        result.push(formatQuaternaryEntry(
-            "e_2",
-            unlockE.level >= 2 ? getInverseEDisplay(EDisplay[1]) : null
-        ))
-        result.push(formatQuaternaryEntry(
-            "e_3",
-            unlockE.level >= 3 ? getInverseEDisplay(EDisplay[2]) : null
-        ))
-        result.push(formatQuaternaryEntry(
-            "e_4",
-            unlockE.level >= 4 ? getInverseEDisplay(EDisplay[3]) : null
-        ))
-    }
-    return result
-}
-
-var getCurrencyFromTau = tau => [tau.max(BigNumber.ONE), currency.symbol]
-var getPublicationMultiplier = tau => 15 * tau.pow(0.126) / (10 + tau).log10().pow(0.9)
-var getPublicationMultiplierFormula = symbol => `m=\\frac{15{${symbol}}^{0.126}}{\\log^{0.9}_{10}(10+${symbol})}`
-var getTau = () => currency.value.max(BigNumber.ZERO)
-var get2DGraphValue = () => currency.value.sign * (BigNumber.ONE + currency.value.abs()).log10().toNumber()
-
-var getK = level => BigNumber.ZERO + Utils.getStepwisePowerSum(level, 2, 5, 0)
-var getC1 = level => BigNumber.ONE + 0.5 * level
-var getC2Balance = c2 => {
-    const e20 = BigNumber.TEN.pow(20)
-    if (currency.value == 0) {
-        tertiary_display[1] = "-\\infty"
-        return c2
-    }
-    tertiary_display[1] = log(e20, currency.value.max(1.1)).sqrt().toString(3)
-    return c2 / log(e20, currency.value.max(e20)).sqrt()
-}
-var getC2 = level => BigNumber.ONE + 0.25 * Math.min(level, 30) + (level > 30 ? (0.25 * (1 - 0.99 ** (level - 30)) / (1 - 0.99)) : 0)
-var getN = level => BigNumber.ONE + Utils.getStepwisePowerSum(level, 2, 10, 0)
-var getInverseA = level => BigNumber.E.pow(0.05 * level)
-var getA = level => getInverseA(level).pow(-1)
-var getB = level => BigNumber.ONE + Utils.getStepwisePowerSum(level, 2, 10, 0)
-var getX = level => BigNumber.TWO + Utils.getStepwisePowerSum(level, 2, 10, 0)
-var getY = level => (BigNumber.TWO + Utils.getStepwisePowerSum(level, 2, 10, 0)) / 4
-var getX1 = level => BigNumber.ONE + 0.01 * level
-var getX2Exponent = level => BigNumber.ONE + 0.1 * level
-var getX2 = level => BigNumber.E.pow(getX2Exponent(level))
-var getDT = level => Utils.getStepwisePowerSum(level, 2, 10, 0) / 10
-
-var getTickRate = level => BigNumber.from(1.2).pow(level)
-
-var getTExp = level => BigNumber.ONE / 4 * (2 + (time_exp.isAvailable ? level : 0))
-
-var getE1 = n => {
-    if (n <= 100) return 1 / (BigNumber.E - (BigNumber.ONE + 1 / n).pow(n))
-    // Laurent Series
-    return 2 * n / BigNumber.E + 11 * n / (6 * BigNumber.E) - 5 / (72 * BigNumber.E * n) + 17 / (540 * BigNumber.E * BigNumber.from(n).pow(2))
-}
-var getE2 = (a, b) => getE1(b / a)
-var getE3 = x => {
-    if (x <= 20) return 1 / (BigNumber.E.pow(1 / x) - 1)
-    // Laurent Series
-    return x - 1 / 2 + 1 / (12 * x)
-}
-var getE4 = y => {
-    if (y <= 10) return 1 / (1 - (BigNumber.ONE + 1 / y).pow(y).log())
-    // Laurent Series
-    return 2 * y + 4 / 3 - 1 / (9 * y) + 8 / (135 * y.pow(2)) - 31 / (810 * y.pow(3))
-}
-
-var factorial = number => {
-    if (number <= 1) return 0
-    return (2 * number * BigNumber.PI).sqrt() * (number / BigNumber.E).pow(number)
-}
-var derangement = number => {
-    number = BigNumber.from(number)
-    if (number < 2) return factorial(number)
-    return (
-        (-BigNumber.E).pow(number) * number.pow(-number) * (
-            1 / (2 * BigNumber.PI * number.pow(3)).sqrt()
-            -
-            25 / (12 * (2 * BigNumber.PI * number.pow(5)))
-            +
-            1489 / (288 * (2 * BigNumber.PI * number.pow(7)))
-            -
-            799421 / (51840 * (2 * BigNumber.PI * number.pow(9)))
-        ) + 1 / BigNumber.E
-    ) * factorial(number)
-}
-var harmonic = number => {
-    number = BigNumber.from(number)
-    if (number <= 10) {
-        let sum = 0;
-        for (let i = 1; i <= number; i++) sum += 1 / i
-        return sum
-    }
-    // Puiseux series
-    return number.log() + 0.5772156649015328606065120900824024310421 + 1 / (2 * number) - 1 / (12 * number.pow(2)) + 1 / (120 * number.pow(4))
-}
-
-var getEDisplay = E => {
-    const exponent = E.log10().floor()
-    const base = BigNumber.from(E / BigNumber.TEN.pow(exponent))
-    return `${base.toString(3)}e${exponent.toString(0)}`
-}
-var getInverseEDisplay = E => {
-    const exponent = E.log10().floor()
-    const base = BigNumber.from(E / BigNumber.TEN.pow(exponent))
-    return `${(10 / base).toString(3)}e${(-(exponent + 1)).toString(0)}`
-}
-
-var getEquationOverlay = _ => {
-    const grid = ui.createGrid({
-        inputTransparent: true,
-        cascadeInputTransparent: false,
-        children: [
-            ui.createLatexLabel({
-                text: version,
-                fontSize: 10, 
-                margin: new Thickness(4, 4),
-                textColor: Color.TEXT_MEDIUM
-            }),
-            ui.createLatexLabel({
-                text: () => Utils.getMath(`\\max\\dot{\\rho}=${max_drho.toString(3)}\\quad(${publication_max_drho.toString(3)})`),
-                fontSize: 10,
-                margin: new Thickness(4, 4),
-                textColor: Color.TEXT_MEDIUM,
-                horizontalOptions: LayoutOptions.END
-            }),
-            ui.createLatexLabel({
-                text: () => {
-                    const formatted = formatTime(total_time)
-                    const first = formatted[0]
-                    formatted.splice(0, 1)
-                    return Utils.getMath(`\\text{${getTextResource(TextResource.Time)}}:\\quad${first}`) + ":" + formatted.join(":")
-                },
-                fontSize: 10,
-                margin: new Thickness(4, 4),
-                textColor: Color.TEXT_MEDIUM,
-                verticalOptions: LayoutOptions.END,
-                horizontalOptions: LayoutOptions.END
-            })
-        ]
-    })
-    return grid
-}
-
-var getInternalState = () => JSON.stringify({
-    version,
-    total_time: total_time.toBase64String(),
-    time: time.toBase64String(),
-    max_drho: max_drho.toBase64String()
-})
-var setInternalState = string => {
-    if (!string) return
-
-    const state = JSON.parse(string)
-    total_time = BigNumber.fromBase64String(state.total_time ?? BigNumber.ZERO.toBase64String())
-    time = BigNumber.fromBase64String(state.time ?? BigNumber.ZERO.toBase64String())
-    max_drho = BigNumber.fromBase64String(state.max_drho ?? BigNumber.ZERO.toBase64String())
-}
-
-var canResetStage = () => true
-var getResetStageMessage = () => getTextResource(TextResource.ResetStage)
-var resetStage = () => {
-    if (theory.canPublish) {
-        theory.publish()
-        return
-    }
-    for (const upgrade of theory.upgrades) upgrade.level = 0
-    currency.value = 0
-    currency2.value = 0
-    postPublish()
-    theory.clearGraph()
-}
-
-var canGoToPreviousStage = () => page == 2
-var goToPreviousStage = () => page = 1
-var canGoToNextStage = () => page == 1 && unlock.level >= 1
-var goToNextStage = () => page = 2
-
-initialize()
+        result = `\\dot{\\rho}=k${publication.level >= 1 ? "m" : ""}t^
