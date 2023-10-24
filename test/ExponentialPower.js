@@ -294,14 +294,14 @@ var getDescription = language => {
     return (descriptions[language] ?? descriptions.en).join("\n")
 }
 var authors = "HyperKNF"
-var version = "v1.3.2.test25"
+var version = "v1.3.3.test1"
 
 const currency2text = ["δ", "\\delta"]
 
 var drho = BigNumber.ZERO
 
 var currency, currency2
-var k, c1, c2, n, a, b, x, y, x1, x2, dtime
+var k, c1, c2, n, a, b, x, y, x1, y1, y2, dtime
 var test_upgrade, domain_switch
 var unlock, time_exp
 var publication, tickrate, unlockE, unlockCurrency2
@@ -450,13 +450,22 @@ var initialize = () => {
         x1.getInfo = amount => Utils.getMathTo(getDesc(x1.level), getDesc(x1.level + amount))
     }
     
-    // x2
+    // y1
     {
-        let getInfo = level => "x_2=" + getX2(level).toString(3)
-        let getDesc = level => "x_2=e^{" + getX2Exponent(level).toString(1) + "}"
-        x2 = theory.createUpgrade(4, currency, new ExponentialCost(1e100, Math.log2(10 ** 2.5)))
-        x2.getDescription = _ => Utils.getMath(getDesc(x2.level))
-        x2.getInfo = amount => Utils.getMathTo(getInfo(x2.level), getInfo(x2.level + amount))
+        let getInfo = level => "y_1=" + getY1(level).toString(3)
+        let getDesc = level => "y_1=e^{" + getY1Exponent(level).toString(1) + "}"
+        y1 = theory.createUpgrade(50, currency, new ExponentialCost(1e100, Math.log2(10)))
+        y1.getDescription = _ => Utils.getMath(getDesc(y1.level))
+        y1.getInfo = amount => Utils.getMathTo(getInfo(y1.level), getInfo(y1.level + amount))
+    }
+
+    // y2
+    {
+        let getInfo = level => "y_2=" + getY2(level).toString(3)
+        let getDesc = level => "y_2=\\pi^{" + getY2Exponent(level).toString(1) + "}"
+        y2 = theory.createUpgrade(51, currency, new ExponentialCost(1e175, Math.log2(100)))
+        y2.getDescription = _ => Utils.getMath(getDesc(y2.level))
+        y2.getInfo = amount => Utils.getMathTo(getInfo(y2.level), getInfo(y2.level + amount))
     }
 
     // n
@@ -632,11 +641,13 @@ var initialize = () => {
         }
     }
 
+    /*
     {
         test_upgrade = theory.createSingularUpgrade(1000, currency, new FreeCost())
         test_upgrade.getDescription = test_upgrade.getInfo = _ => Utils.getMath(`\\text{${getTextResource(TextResource.TestUpgrade)}}`)
         test_upgrade.bought = _ => currency.value *= 1000
     }
+    */
 
     ///////////////////////
     //// Milestone Upgrades
@@ -652,22 +663,26 @@ var initialize = () => {
                 return BigNumber.from(175)
             case 4:
                 return BigNumber.from(255)
+            case 5:
+                return BigNumber.from(340)
             default:
                 return BigNumber.from(1000)
         }
     }))
 
     { 
-        unlock = theory.createMilestoneUpgrade(0, 3)
+        unlock = theory.createMilestoneUpgrade(0, 4)
         unlock.getDescription = _ => Localization.getUpgradeAddTermDesc(
             unlock.level == 0 ? "E" :
             unlock.level == 1 ? "x_1" :
-            "x_2"
+            unlock.level == 2 ? "y_1" :
+            "y_2"
         )
         unlock.getInfo = _ => Localization.getUpgradeAddTermInfo(
             unlock.level == 0 ? "E" :
             unlock.level == 1 ? "x_1" :
-            "x_2"
+            unlock.level == 2 ? "y_1" :
+            "y_2"
         )
         unlock.canBeRefunded = _ => time_exp.level == 0 || unlock.level >= 2
         unlock.bought = _ => unlock_bought = true
@@ -755,7 +770,8 @@ var updateAvailability = () => {
     x.isAvailable = unlock.level >= 1 && unlockE.level >= 3
     y.isAvailable = unlock.level >= 1 && unlockE.level >= 4
     x1.isAvailable = unlock.level >= 2
-    x2.isAvailable = unlock.level >= 3
+    y1.isAvailable = unlock.level >= 3
+    y2.isAvailable = unlock.level >= 4
 
     unlockE.isAvailable = unlock.level >= 1
 
@@ -793,7 +809,9 @@ var tick = (elapsedTime, multiplier) => {
     drho = getK(k.level) * bonus * time.pow(getTExp(time_exp.level)) * (
         unlock.level >= 1 && unlockE.level >= 1 ? E.pow(0.9) : 1
     ) * main_exponent * (
-        unlock.level >= 3 ? getX2(x2.level) : 1
+        unlock.level >= 3 ? getY1(y1.level) : 1
+    ) * (
+        unlock.level >= 4 ? getY2(y2.level) : 1
     )
     currency.value += drho * dt
     total_rho += drho * dt
@@ -860,7 +878,7 @@ var getPrimaryEquation = () => {
     } else if (page == 1) {
         theory.primaryEquationHeight = 55
         theory.primaryEquationScale = 1
-        result = `\\dot{\\rho}=k${publication.level >= 1 ? "m" : ""}t^{${getTExp(time_exp.level) == 1 ? "" : getTExp(time_exp.level).toString(getTExp(time_exp.level) == 1 ? 0 : getTExp(time_exp.level) == 0.5 ? 1 : 2)}}${unlock.level >= 1 ? "E^{-0.9}" : ""}c_1^{B(c_2${unlock.level >= 2 ? "x_1" : ""})}${unlock.level >= 3 ? "x_2" : ""}\
+        result = `\\dot{\\rho}=k${publication.level >= 1 ? "m" : ""}t^{${getTExp(time_exp.level) == 1 ? "" : getTExp(time_exp.level).toString(getTExp(time_exp.level) == 1 ? 0 : getTExp(time_exp.level) == 0.5 ? 1 : 2)}}${unlock.level >= 1 ? "E^{-0.9}" : ""}c_1^{B(c_2${unlock.level >= 2 ? "x_1" : ""})}${unlock.level >= 3 ? "y_1" : ""}${unlock.level >= 4 ? "y_2" : ""}\
         \\\\`
         + theory.latexSymbol + "=\\max\\rho"
     } else if (page == 2) {
@@ -1012,8 +1030,10 @@ var getB = level => BigNumber.ONE + Utils.getStepwisePowerSum(level, 2, 10, 0)
 var getX = level => BigNumber.TWO + Utils.getStepwisePowerSum(level, 2, 10, 0)
 var getY = level => (BigNumber.TWO + Utils.getStepwisePowerSum(level, 2, 10, 0)) / 4
 var getX1 = level => BigNumber.ONE + 0.01 * level
-var getX2Exponent = level => BigNumber.ONE + 0.1 * level
-var getX2 = level => BigNumber.E.pow(getX2Exponent(level))
+var getY1Exponent = level => level / BigNumber.TEN
+var getY1 = level => BigNumber.E.pow(getY1Exponent(level))
+var getY2Exponent = level => level / BigNumber.TEN
+var getY2 = level => BigNumber.PI.pow(getY2Exponent(level))
 var getDT = level => Utils.getStepwisePowerSum(level, 2, 10, 0) / 10
 
 var getTickRate = level => BigNumber.from(1.2).pow(level)
