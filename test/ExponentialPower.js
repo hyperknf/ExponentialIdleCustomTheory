@@ -294,7 +294,7 @@ var getDescription = language => {
     return (descriptions[language] ?? descriptions.en).join("\n")
 }
 var authors = "HyperKNF"
-var version = "v1.3.3.test1"
+var version = "v1.3.3.test2"
 
 const currency2text = ["δ", "\\delta"]
 
@@ -641,13 +641,11 @@ var initialize = () => {
         }
     }
 
-    /*
     {
         test_upgrade = theory.createSingularUpgrade(1000, currency, new FreeCost())
         test_upgrade.getDescription = test_upgrade.getInfo = _ => Utils.getMath(`\\text{${getTextResource(TextResource.TestUpgrade)}}`)
         test_upgrade.bought = _ => currency.value *= 1000
     }
-    */
 
     ///////////////////////
     //// Milestone Upgrades
@@ -781,6 +779,10 @@ var updateAvailability = () => {
 
     settings_upgrades.display_overlay.max_drho.isAvailable = !settings.lock_settings
     settings_upgrades.display_overlay.time.isAvailable = !settings.lock_settings
+
+    // Singular upgrades
+
+    domain_switch.isAvailable = unlockCurrency2.level >= 1
 }
 
 var tick = (elapsedTime, multiplier) => {
