@@ -294,7 +294,7 @@ var getDescription = language => {
     return (descriptions[language] ?? descriptions.en).join("\n")
 }
 var authors = "HyperKNF"
-var version = "v1.3.3.test2"
+var version = "v1.3.3.test3"
 
 const currency2text = ["δ", "\\delta"]
 
@@ -454,7 +454,7 @@ var initialize = () => {
     {
         let getInfo = level => "y_1=" + getY1(level).toString(3)
         let getDesc = level => "y_1=e^{" + getY1Exponent(level).toString(1) + "}"
-        y1 = theory.createUpgrade(50, currency, new ExponentialCost(1e100, Math.log2(10)))
+        y1 = theory.createUpgrade(50, currency, new ExponentialCost(1e100, Math.log2(25)))
         y1.getDescription = _ => Utils.getMath(getDesc(y1.level))
         y1.getInfo = amount => Utils.getMathTo(getInfo(y1.level), getInfo(y1.level + amount))
     }
@@ -463,7 +463,7 @@ var initialize = () => {
     {
         let getInfo = level => "y_2=" + getY2(level).toString(3)
         let getDesc = level => "y_2=\\pi^{" + getY2Exponent(level).toString(1) + "}"
-        y2 = theory.createUpgrade(51, currency, new ExponentialCost(1e175, Math.log2(100)))
+        y2 = theory.createUpgrade(51, currency, new ExponentialCost(1e175, Math.log2(50)))
         y2.getDescription = _ => Utils.getMath(getDesc(y2.level))
         y2.getInfo = amount => Utils.getMathTo(getInfo(y2.level), getInfo(y2.level + amount))
     }
@@ -1032,9 +1032,9 @@ var getB = level => BigNumber.ONE + Utils.getStepwisePowerSum(level, 2, 10, 0)
 var getX = level => BigNumber.TWO + Utils.getStepwisePowerSum(level, 2, 10, 0)
 var getY = level => (BigNumber.TWO + Utils.getStepwisePowerSum(level, 2, 10, 0)) / 4
 var getX1 = level => BigNumber.ONE + 0.01 * level
-var getY1Exponent = level => level / BigNumber.TEN
+var getY1Exponent = level => level / BigNumber.FIVE
 var getY1 = level => BigNumber.E.pow(getY1Exponent(level))
-var getY2Exponent = level => level / BigNumber.TEN
+var getY2Exponent = level => level / BigNumber.FIVE
 var getY2 = level => BigNumber.PI.pow(getY2Exponent(level))
 var getDT = level => Utils.getStepwisePowerSum(level, 2, 10, 0) / 10
 
