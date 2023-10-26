@@ -294,7 +294,7 @@ var getDescription = language => {
     return (descriptions[language] ?? descriptions.en).join("\n")
 }
 var authors = "HyperKNF"
-var version = "v1.3.3.test3"
+var version = "v1.3.3.test4"
 
 const currency2text = ["δ", "\\delta"]
 
@@ -663,6 +663,8 @@ var initialize = () => {
                 return BigNumber.from(240)
             case 5:
                 return BigNumber.from(300)
+            case 6:
+                return BigNumber.from(500)
             default:
                 return BigNumber.from(1000)
         }
@@ -1034,7 +1036,7 @@ var getY = level => (BigNumber.TWO + Utils.getStepwisePowerSum(level, 2, 10, 0))
 var getX1 = level => BigNumber.ONE + 0.01 * level
 var getY1Exponent = level => level / BigNumber.FIVE
 var getY1 = level => BigNumber.E.pow(getY1Exponent(level))
-var getY2Exponent = level => level / BigNumber.FIVE
+var getY2Exponent = level => level / BigNumber.TEN
 var getY2 = level => BigNumber.PI.pow(getY2Exponent(level))
 var getDT = level => Utils.getStepwisePowerSum(level, 2, 10, 0) / 10
 
