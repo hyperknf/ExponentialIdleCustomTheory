@@ -294,7 +294,7 @@ var getDescription = language => {
     return (descriptions[language] ?? descriptions.en).join("\n")
 }
 var authors = "HyperKNF"
-var version = "v1.3.3.test4"
+var version = "v1.3.3.test5"
 
 const currency2text = ["δ", "\\delta"]
 
@@ -882,7 +882,7 @@ var getPrimaryEquation = () => {
     } else if (page == 1) {
         theory.primaryEquationHeight = 55
         theory.primaryEquationScale = 1
-        result = `\\dot{\\rho}=k${publication.level >= 1 ? "m" : ""}t^{${getTExp(time_exp.level) == 1 ? "" : getTExp(time_exp.level).toString(getTExp(time_exp.level) == 1 ? 0 : getTExp(time_exp.level) == 0.5 ? 1 : 2)}}${unlock.level >= 1 ? "E^{-0.9}" : ""}c_1^{B(c_2${unlock.level >= 2 ? "x_1" : ""})}${unlock.level >= 3 ? "y_1" : ""}${unlock.level >= 4 ? "y_2" : ""}\
+        result = `\\dot{\\rho}=k${publication.level >= 1 ? "m" : ""}t^{${getTExp(time_exp.level) == 1 ? "" : getTExp(time_exp.level).toString(getTExp(time_exp.level) == 1 ? 0 : getTExp(time_exp.level) == 0.5 ? 1 : 2)}}${unlock.level >= 1 ? "E^{-0.9}" : ""}c_1^{B(c_2${unlock.level >= 2 ? "X" : ""})}${unlock.level >= 3 ? "Y" : ""}\
         \\\\`
         + theory.latexSymbol + "=\\max\\rho"
     } else if (page == 2) {
@@ -903,9 +903,11 @@ var getSecondaryEquation = () => {
             "b_3=\\log_{10^{500}}{\\rho}"
         ].join("\\\\")
     } else if (page == 1) {
-        theory.secondaryEquationHeight = publication.level >= 1 ? 20 : 0
+        theory.secondaryEquationHeight = publication.level >= 1 ? unlock.level >= 2 ? unlock.level >= 3 ? 60 : 40 : 20 : 0
         theory.secondaryEquationScale = 1
         result = publication.level >= 1 ? `\\\\m=\\text{${getTextResource(TextResource.PublicationMultiplier)}}` : ""
+        if (unlock.level >= 2) result += `\\\\X=x_1`
+        if (unlock.level >= 3) result += `\\\\Y=y_1${unlock.level >= 4 ? "y_2" : ""}`
     } else if (page == 2) {
         theory.secondaryEquationHeight = page2_equation_scale * (
             level => {
