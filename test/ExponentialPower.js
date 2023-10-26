@@ -453,7 +453,7 @@ var initialize = () => {
     // y1
     {
         let getInfo = level => "y_1=" + getY1(level).toString(3)
-        let getDesc = level => "y_1=e^{" + getY1Exponent(level).toString(1) + "}"
+        let getDesc = level => "y_1=e^{" + getY1Exponent(level).toString(3) + "}"
         y1 = theory.createUpgrade(50, currency, new ExponentialCost(1e100, Math.log2(10)))
         y1.getDescription = _ => Utils.getMath(getDesc(y1.level))
         y1.getInfo = amount => Utils.getMathTo(getInfo(y1.level), getInfo(y1.level + amount))
@@ -1034,7 +1034,7 @@ var getB = level => BigNumber.ONE + Utils.getStepwisePowerSum(level, 2, 10, 0)
 var getX = level => BigNumber.TWO + Utils.getStepwisePowerSum(level, 2, 10, 0)
 var getY = level => (BigNumber.TWO + Utils.getStepwisePowerSum(level, 2, 10, 0)) / 4
 var getX1 = level => BigNumber.ONE + 0.01 * level
-var getY1Exponent = level => level / BigNumber.FIVE
+var getY1Exponent = level => level / BigNumber.EIGHT
 var getY1 = level => BigNumber.E.pow(getY1Exponent(level))
 var getY2Exponent = level => level / BigNumber.TEN
 var getY2 = level => BigNumber.PI.pow(getY2Exponent(level))
