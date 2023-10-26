@@ -1032,9 +1032,9 @@ var getB = level => BigNumber.ONE + Utils.getStepwisePowerSum(level, 2, 10, 0)
 var getX = level => BigNumber.TWO + Utils.getStepwisePowerSum(level, 2, 10, 0)
 var getY = level => (BigNumber.TWO + Utils.getStepwisePowerSum(level, 2, 10, 0)) / 4
 var getX1 = level => BigNumber.ONE + 0.01 * level
-var getY1Exponent = level => level / BigNumber.TEN
+var getY1Exponent = level => level / BigNumber.FIVE
 var getY1 = level => BigNumber.E.pow(getY1Exponent(level))
-var getY2Exponent = level => level / BigNumber.TEN
+var getY2Exponent = level => level / BigNumber.FIVE
 var getY2 = level => BigNumber.PI.pow(getY2Exponent(level))
 var getDT = level => Utils.getStepwisePowerSum(level, 2, 10, 0) / 10
 
