@@ -454,7 +454,7 @@ var initialize = () => {
     {
         let getInfo = level => "y_1=" + getY1(level).toString(3)
         let getDesc = level => "y_1=e^{" + getY1Exponent(level).toString(1) + "}"
-        y1 = theory.createUpgrade(50, currency, new ExponentialCost(1e100, Math.log2(25)))
+        y1 = theory.createUpgrade(50, currency, new ExponentialCost(1e100, Math.log2(10)))
         y1.getDescription = _ => Utils.getMath(getDesc(y1.level))
         y1.getInfo = amount => Utils.getMathTo(getInfo(y1.level), getInfo(y1.level + amount))
     }
@@ -463,7 +463,7 @@ var initialize = () => {
     {
         let getInfo = level => "y_2=" + getY2(level).toString(3)
         let getDesc = level => "y_2=\\pi^{" + getY2Exponent(level).toString(1) + "}"
-        y2 = theory.createUpgrade(51, currency, new ExponentialCost(1e175, Math.log2(50)))
+        y2 = theory.createUpgrade(51, currency, new ExponentialCost(1e170, Math.log2(100)))
         y2.getDescription = _ => Utils.getMath(getDesc(y2.level))
         y2.getInfo = amount => Utils.getMathTo(getInfo(y2.level), getInfo(y2.level + amount))
     }
@@ -658,11 +658,11 @@ var initialize = () => {
             case 2:
                 return BigNumber.from(100)
             case 3:
-                return BigNumber.from(175)
+                return BigNumber.from(170)
             case 4:
-                return BigNumber.from(255)
+                return BigNumber.from(240)
             case 5:
-                return BigNumber.from(340)
+                return BigNumber.from(300)
             default:
                 return BigNumber.from(1000)
         }
@@ -1032,9 +1032,9 @@ var getB = level => BigNumber.ONE + Utils.getStepwisePowerSum(level, 2, 10, 0)
 var getX = level => BigNumber.TWO + Utils.getStepwisePowerSum(level, 2, 10, 0)
 var getY = level => (BigNumber.TWO + Utils.getStepwisePowerSum(level, 2, 10, 0)) / 4
 var getX1 = level => BigNumber.ONE + 0.01 * level
-var getY1Exponent = level => level / BigNumber.FIVE
+var getY1Exponent = level => level / BigNumber.TEN
 var getY1 = level => BigNumber.E.pow(getY1Exponent(level))
-var getY2Exponent = level => level / BigNumber.FIVE
+var getY2Exponent = level => level / BigNumber.TEN
 var getY2 = level => BigNumber.PI.pow(getY2Exponent(level))
 var getDT = level => Utils.getStepwisePowerSum(level, 2, 10, 0) / 10
 
