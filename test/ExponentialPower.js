@@ -129,12 +129,6 @@ const TextResource = {
         "zh-Hans": "秒",
         "fi": "sekuntia"
     },
-    "TickRate": {
-        "en": "Tick rate",
-        "zh-Hant": "刻速",
-        "zh-Hans": "刻速",
-        "fi": "Tikkien korko"
-    },
     "DomainSwitch": {
         "Unlocked": {
             "Description": {
@@ -294,7 +288,7 @@ var getDescription = language => {
     return (descriptions[language] ?? descriptions.en).join("\n")
 }
 var authors = "HyperKNF"
-var version = "v1.3.3.test5"
+var version = "v1.3.3.test6"
 
 const currency2text = ["δ", "\\delta"]
 
@@ -304,7 +298,7 @@ var currency, currency2
 var k, c1, c2, n, a, b, x, y, x1, y1, y2, dtime
 var test_upgrade, domain_switch
 var unlock, time_exp
-var publication, tickrate, unlockE, unlockCurrency2
+var publication, unlockE, unlockCurrency2
 
 var ad_bonus = false
 
@@ -563,15 +557,6 @@ var initialize = () => {
     }
 
     {
-        let getDesc = level => Localization.getUpgradeMultCustomDesc("\\text{" + getTextResource(TextResource.TickRate) + "}", 1.2)
-        let getInfo = level => Localization.getUpgradeMultCustomInfo("\\text{" + getTextResource(TextResource.TickRate) + "}", 1.2)
-        tickrate = theory.createPermanentUpgrade(1100, currency2, new ExponentialCost(1e20, Math.log2(1e20)))
-        tickrate.getDescription = level => getDesc(level)
-        tickrate.getInfo = level => getInfo(level)
-        tickrate.isAvailable = false
-    }
-
-    {
         let getDesc = level => `${
             getTextResource(settings.display_overlay.max_drho ? TextResource.Disable : TextResource.Enable)
         } ${getTextResource(TextResource.Settings.MaxDrhoDisplay)}`
@@ -792,7 +777,7 @@ var tick = (elapsedTime, multiplier) => {
     total_time[1] = total_time[1] + elapsedTime
     ticks += BigNumber.ONE
     
-    dt = BigNumber.from(elapsedTime * multiplier) * getTickRate(tickrate.level)
+    dt = BigNumber.from(elapsedTime * multiplier)
     if (multiplier == 1.5) ad_bonus = true
     const bonus = theory.publicationMultiplier
 
@@ -932,7 +917,7 @@ var getSecondaryEquation = () => {
 var getTertiaryEquation = () => {
     let result
     if (page == 1) {
-        result = `\\text{${getTextResource(TextResource.TickRate)}:}\\quad ${(dt * 100).toString(5)}/\\text{${getTextResource(TextResource.Second)}}\\\\c_1^{B(c_2${unlock.level >= 2 ? "x_1" : ""})}=${tertiary_display[0]},\\quad b_0=${tertiary_display[1]}`
+        result = `c_1^{B(c_2${unlock.level >= 2 ? "x_1" : ""})}=${tertiary_display[0]},\\quad b_0=${tertiary_display[1]}`
     } else result = ""
     return "\\begin{array}{c}" + result + "\\end{array}"
 }
@@ -1041,8 +1026,6 @@ var getY1 = level => BigNumber.E.pow(getY1Exponent(level))
 var getY2Exponent = level => level / BigNumber.TEN
 var getY2 = level => BigNumber.PI.pow(getY2Exponent(level))
 var getDT = level => Utils.getStepwisePowerSum(level, 2, 10, 0) / 10
-
-var getTickRate = level => BigNumber.from(1.2).pow(level)
 
 var getTExp = level => BigNumber.ONE / 4 * (2 + (time_exp.isAvailable ? level : 0))
 
