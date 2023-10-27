@@ -288,7 +288,7 @@ var getDescription = language => {
     return (descriptions[language] ?? descriptions.en).join("\n")
 }
 var authors = "HyperKNF"
-var version = "v1.3.3"
+var version = "v1.3.3a"
 
 const currency2text = ["δ", "\\delta"]
 
@@ -771,7 +771,7 @@ var updateAvailability = () => {
 
     // Singular upgrades
 
-    domain_switch.isAvailable = unlockCurrency2.level >= 1
+    // domain_switch.isAvailable = unlockCurrency2.level >= 1
 }
 
 var tick = (elapsedTime, multiplier) => {
