@@ -252,13 +252,13 @@ const TextResource = {
     }
 }
 
-var id = "ExponentialPowerTest"
+var id = "ExponentialPower"
 var getName = language => {
     const names = {
-        "en": "Exponential Power t",
-        "zh-Hant": "指數力量t",
-        "zh-Hans": "指数力量t",
-        "fi": "Eksponentiaalinen Teho t"
+        "en": "Exponential Power",
+        "zh-Hant": "指數力量",
+        "zh-Hans": "指数力量",
+        "fi": "Eksponentiaalinen Teho"
     }
     return names[language] ?? names.en
 }
@@ -288,7 +288,7 @@ var getDescription = language => {
     return (descriptions[language] ?? descriptions.en).join("\n")
 }
 var authors = "HyperKNF"
-var version = "v1.3.3.test6"
+var version = "v1.3.3"
 
 const currency2text = ["δ", "\\delta"]
 
@@ -626,11 +626,13 @@ var initialize = () => {
         }
     }
 
+    /*
     {
         test_upgrade = theory.createSingularUpgrade(1000, currency, new FreeCost())
         test_upgrade.getDescription = test_upgrade.getInfo = _ => Utils.getMath(`\\text{${getTextResource(TextResource.TestUpgrade)}}`)
         test_upgrade.bought = _ => currency.value *= 1000
     }
+    */
 
     ///////////////////////
     //// Milestone Upgrades
