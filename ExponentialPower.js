@@ -647,9 +647,9 @@ var initialize = () => {
             case 3:
                 return BigNumber.from(170)
             case 4:
-                return BigNumber.from(240)
+                return BigNumber.from(290)
             case 5:
-                return BigNumber.from(300)
+                return BigNumber.from(350)
             case 6:
                 return BigNumber.from(500)
             default:
