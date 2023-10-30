@@ -10,7 +10,7 @@ var authors = "HyperKNF"
 var version = 1
 
 var currency
-var q1, q2
+var q1, q2, c
 var reset_time
 
 var drho = BigNumber.ZERO
@@ -23,7 +23,6 @@ var init = () => {
     ///////////////////
     // Regular Upgrades
 
-    // Energy Generators
     {
         const getDesc = level => `q_1=${getQ1(level).toString(0)}`
         q1 = theory.createUpgrade(100, currency, new FirstFreeCost(new ExponentialCost(10, Math.log2(2))))
@@ -37,6 +36,13 @@ var init = () => {
         q2 = theory.createUpgrade(200, currency, new ExponentialCost(15, Math.log2(10)))
         q2.getDescription = _ => Utils.getMath(getDesc(q2.level))
         q2.getInfo = amount => Utils.getMathTo(getInfo(q2.level), getInfo(q2.level + amount))
+    }
+
+    {
+        const getDesc = level => `c=${getC(level).toString(0)}`
+        c = theory.createUpgrade(1000, currency, new ExponentialCost(BigNumber.TEN.pow(10), Math.log2(BigNumber.TEN.pow(10))))
+        c.getDescription = _ => Utils.getMath(getDesc(c.level))
+        c.getInfo = amount => Utils.getMathTo(getDesc(c.level), getDesc(c.level + amount))
     }
 
     /////////////////////
@@ -79,7 +85,7 @@ var tick = (elapsedTime, multiplier) => {
     let dt = BigNumber.from(elapsedTime * multiplier)
     let bonus = theory.publicationMultiplier
 
-    time += time >= 60 ? 60 - time : dt
+    time += time >= getC(c.level) ? getC(c.level) - time : dt
     drho = bonus * getQ1(q1.level) * getQ2(q2.level) * getLogisticValue(time)
     currency.value += dt * drho
 
@@ -115,6 +121,7 @@ var get2DGraphValue = () => currency.value.sign * (1 + currency.value.abs()).log
 
 var getQ1 = level => Utils.getStepwisePowerSum(level, 2, 10, 0)
 var getQ2 = level => BigNumber.TWO.pow(level)
+var getC = level => 100 + 100 * Utils.getStepwisePowerSum(level, 10, 9, 0)
 
 var getLogisticValue = time => (BigNumber.SIX * BigNumber.TEN - time) / (BigNumber.SIX * BigNumber.TEN) * time.sqrt()
 
