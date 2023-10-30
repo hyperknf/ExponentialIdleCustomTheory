@@ -77,7 +77,7 @@ var tick = (elapsedTime, multiplier) => {
     let dt = BigNumber.from(elapsedTime * multiplier)
     let bonus = theory.publicationMultiplier
 
-    time += time >= 60 ? time - 60 : dt
+    time += time >= 60 ? 60 - time : dt
     currency.value += dt * bonus * getQ1(q1.level) * getQ2(q2.level) * getLogisticValue(time)
 
     theory.invalidatePrimaryEquation()
@@ -109,7 +109,7 @@ var get2DGraphValue = () => currency.value.sign * (1 + currency.value.abs()).log
 var getQ1 = level => Utils.getStepwisePowerSum(level, 2, 10, 0)
 var getQ2 = level => BigNumber.TWO.pow(level)
 
-var getLogisticValue = time => (BigNumber.SIX * BigNumber.TEN - time).max(BigNumber.ZERO) / (BigNumber.SIX * BigNumber.TEN) * time.sqrt()
+var getLogisticValue = time => (BigNumber.SIX * BigNumber.TEN - time) / (BigNumber.SIX * BigNumber.TEN) * time.sqrt()
 
 var getInternalState = () => {
     return JSON.stringify({
