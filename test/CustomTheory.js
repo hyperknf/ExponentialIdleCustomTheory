@@ -3,9 +3,9 @@ import { BigNumber } from "./api/BigNumber"
 import { theory } from "./api/Theory"
 import { Utils } from "./api/Utils"
 
-var id = "LogisticTime"
-var name = "Logistic Time"
-var description = "Logistic Time by HyperKNF"
+var id = "CustomTheory"
+var name = "Custom Theory"
+var description = "Custom Theory by HyperKNF"
 var authors = "HyperKNF"
 var version = 1
 
