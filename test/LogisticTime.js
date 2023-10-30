@@ -24,7 +24,7 @@ var init = () => {
     // Energy Generators
     {
         const getDesc = level => `q_1=${getQ1(level).toString(0)}`
-        q1 = theory.createUpgrade(100, currency, new FirstFreeCost(new ExponentialCost(100, Math.log2(2))))
+        q1 = theory.createUpgrade(100, currency, new FirstFreeCost(new ExponentialCost(10, Math.log2(2))))
         q1.getDescription = _ => Utils.getMath(getDesc(q1.level))
         q1.getInfo = amount => Utils.getMathTo(getDesc(q1.level), getDesc(q1.level + amount))
     }
@@ -32,7 +32,7 @@ var init = () => {
     {
         const getDesc = level => `q_2=2^{${level}}`
         const getInfo = level => `q_2=${getQ2(level)}`
-        q2 = theory.createUpgrade(200, currency, new ExponentialCost(150, Math.log2(10)))
+        q2 = theory.createUpgrade(200, currency, new ExponentialCost(15, Math.log2(10)))
         q2.getDescription = _ => Utils.getMath(getDesc(q2.level))
         q2.getInfo = amount => Utils.getMathTo(getInfo(q2.level), getInfo(q2.level + amount))
     }
