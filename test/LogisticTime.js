@@ -32,7 +32,7 @@ var init = () => {
     {
         const getDesc = level => `q_2=2^{${level}}`
         const getInfo = level => `q_2=${getQ2(level)}`
-        q2 = theory.createUpgrade(200, currency, new ExponentialCost(BigNumber.TEN, Math.log2(150)))
+        q2 = theory.createUpgrade(200, currency, new ExponentialCost(150, Math.log2(10)))
         q2.getDescription = _ => Utils.getMath(getDesc(q2.level))
         q2.getInfo = amount => Utils.getMathTo(getInfo(q2.level), getInfo(q2.level + amount))
     }
