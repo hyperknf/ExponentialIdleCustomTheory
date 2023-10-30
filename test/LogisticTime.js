@@ -13,6 +13,8 @@ var currency
 var q1, q2
 var reset_time
 
+var drho = BigNumber.ZERO
+
 var time = BigNumber.ZERO
 
 var init = () => {
@@ -78,7 +80,8 @@ var tick = (elapsedTime, multiplier) => {
     let bonus = theory.publicationMultiplier
 
     time += time >= 60 ? 60 - time : dt
-    currency.value += dt * bonus * getQ1(q1.level) * getQ2(q2.level) * getLogisticValue(time)
+    drho = (dt / 0.1) * bonus * getQ1(q1.level) * getQ2(q2.level) * getLogisticValue(time)
+    currency.value += drho * 0.1
 
     theory.invalidatePrimaryEquation()
     theory.invalidateSecondaryEquation()
@@ -98,7 +101,11 @@ var getSecondaryEquation = () => {
     return `\\begin{array}{c} ${result.join(`\\\\`)} \\end{array}`
 }
 var getTertiaryEquation = () => {
-    return `t=${time.toString(1)}`
+    const result = [
+        `\\dot{\\rho}=${drho}`,
+        `t=${time.toString(1)}`
+    ]
+    return result.join(",\\quad ")
 }
 
 var getPublicationMultiplier = (tau) => tau.pow(0.15)
