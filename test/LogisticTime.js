@@ -47,11 +47,10 @@ var init = () => {
     // Singular Upgrades
 
     {
-        const getDesc = () => `Reset ${Utils.getMath("t")}`
-        const getInfo = () => `Resets ${Utils.getMath("t")}`
+        const getDesc = () => `t\\leftarrow0`
         reset_time = theory.createSingularUpgrade(0, currency, new FreeCost())
-        reset_time.getDescription = getDesc
-        reset_time.getInfo = getInfo
+        reset_time.getDescription = () => Utils.getMath(getDesc())
+        reset_time.getInfo = () => Utils.getMath(getDesc())
         reset_time.bought = _ => {
             reset_time.level = 0
             time = BigNumber.ZERO
