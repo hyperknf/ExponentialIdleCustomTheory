@@ -93,7 +93,7 @@ var getSecondaryEquation = () => {
     theory.secondaryEquationHeight = 45
     const result = [
         `${theory.latexSymbol}=\\max{\\rho}`,
-        `\\dot{t}=\\begin{cases}1, & t<c\\\\t-c, & t\\ge c\\end{cases}`
+        `\\dot{t}=\\begin{cases}1, & t<c\\\\c-t, & t\\ge c\\end{cases}`
     ]
     return `\\begin{array}{c} ${result.join(`\\\\`)} \\end{array}`
 }
