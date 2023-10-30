@@ -87,19 +87,19 @@ var tick = (elapsedTime, multiplier) => {
 }
 
 var getPrimaryEquation = () => {
-    theory.primaryEquationHeight = 35
-    return `\\dot{\\rho}=tq_1q_2(\\frac{60-t}{60})`
+    theory.primaryEquationHeight = 43
+    return `\\dot{\\rho}=tq_1q_2(\\frac{c-t}{c})`
 }
 var getSecondaryEquation = () => {
     theory.secondaryEquationHeight = 45
     const result = [
         `${theory.latexSymbol}=\\max{\\rho}`,
-        `\\dot{t}=\\begin{cases}1, & t<c\\\\t-60, & t\\ge c\\end{cases}`
+        `\\dot{t}=\\begin{cases}1, & t<c\\\\t-c, & t\\ge c\\end{cases}`
     ]
     return `\\begin{array}{c} ${result.join(`\\\\`)} \\end{array}`
 }
 var getTertiaryEquation = () => {
-    return ``
+    return `t=${time.toString(1)}`
 }
 
 var getPublicationMultiplier = (tau) => tau.pow(0.15)
@@ -111,5 +111,17 @@ var getQ1 = level => Utils.getStepwisePowerSum(level, 2, 10, 0)
 var getQ2 = level => BigNumber.TWO.pow(level)
 
 var getLogisticValue = time => (BigNumber.SIX * BigNumber.TEN - time).max(BigNumber.ZERO) / (BigNumber.SIX * BigNumber.TEN)
+
+var getInternalState = () => {
+    return JSON.stringify({
+        time: time.toBase64String()
+    })
+}
+var setInternalState = string => {
+    const state = JSON.parse(string)
+    
+    const time_state = state.time ?? BigNumber.ZERO.toBase64String()
+    time = BigNumber.fromBase64String(time_state)
+}
 
 init()
