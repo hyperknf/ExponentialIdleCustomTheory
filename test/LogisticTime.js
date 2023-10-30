@@ -87,17 +87,23 @@ var tick = (elapsedTime, multiplier) => {
 }
 
 var getPrimaryEquation = () => {
+    theory.primaryEquationHeight = 35
     return `\\dot{\\rho}=tq_1q_2(\\frac{60-t}{60})`
 }
 var getSecondaryEquation = () => {
-    return `${theory.symbol}=\\max{\\rho}`
+    theory.secondaryEquationHeight = 45
+    const result = [
+        `${theory.latexSymbol}=\\max{\\rho}`,
+        `\\dot{t}=\\begin{cases}1, & t<c\\\\t-60, & t\\ge c\\end{cases}`
+    ]
+    return `\\begin{array}{c} ${result.join(`\\\\`)} \\end{array}`
 }
 var getTertiaryEquation = () => {
     return ``
 }
 
-var getPublicationMultiplier = (tau) => tau.pow(0.164) / BigNumber.THREE
-var getPublicationMultiplierFormula = (symbol) => `2^{\\lfloor\\max(\\log_{10}{},5)-5\\rfloor}`
+var getPublicationMultiplier = (tau) => tau.pow(0.15)
+var getPublicationMultiplierFormula = (symbol) => `${symbol}^{}-.15`
 var getTau = () => currency.value
 var get2DGraphValue = () => currency.value.sign * (1 + currency.value.abs()).log10().toNumber()
 
