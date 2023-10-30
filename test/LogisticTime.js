@@ -80,8 +80,8 @@ var tick = (elapsedTime, multiplier) => {
     let bonus = theory.publicationMultiplier
 
     time += time >= 60 ? 60 - time : dt
-    drho = (dt / 0.1) * bonus * getQ1(q1.level) * getQ2(q2.level) * getLogisticValue(time)
-    currency.value += drho * 0.1
+    drho = bonus * getQ1(q1.level) * getQ2(q2.level) * getLogisticValue(time)
+    currency.value += dt * drho
 
     theory.invalidatePrimaryEquation()
     theory.invalidateSecondaryEquation()
