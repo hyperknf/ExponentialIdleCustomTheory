@@ -118,6 +118,7 @@ var getInternalState = () => {
     })
 }
 var setInternalState = string => {
+    if (!string) return
     const state = JSON.parse(string)
     
     const time_state = state.time ?? BigNumber.ZERO.toBase64String()
