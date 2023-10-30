@@ -24,7 +24,7 @@ var init = () => {
     // Energy Generators
     {
         const getDesc = level => `q_1=${getQ1(level)}`
-        q1 = theory.createUpgrade(100, currency, new FirstFreeCost(new ExponentialCost(BigNumber.FIVE, Math.log2(2))))
+        q1 = theory.createUpgrade(100, currency, new FirstFreeCost(new ExponentialCost(100, Math.log2(2))))
         q1.getDescription = _ => Utils.getMath(getDesc(q1.level))
         q1.getInfo = amount => Utils.getMathTo(getDesc(q1.level), getDesc(q1.level + amount))
     }
@@ -32,7 +32,7 @@ var init = () => {
     {
         const getDesc = level => `q_2=2^{${level}}`
         const getInfo = level => `q_2=${getQ2(level)}`
-        q2 = theory.createUpgrade(200, currency, new FirstFreeCost(new ExponentialCost(BigNumber.TEN, Math.log2(10))))
+        q2 = theory.createUpgrade(200, currency, new ExponentialCost(BigNumber.TEN, Math.log2(150)))
         q2.getDescription = _ => Utils.getMath(getDesc(q2.level))
         q2.getInfo = amount => Utils.getMathTo(getInfo(q2.level), getInfo(q2.level + amount))
     }
@@ -79,7 +79,7 @@ var tick = (elapsedTime, multiplier) => {
     let bonus = theory.publicationMultiplier
 
     time += dt
-    currency.value += dt * bonus * time * getQ1(q1.level) * getQ2(q2.level) * getLogisticValue(time)
+    currency.value += dt * bonus * getQ1(q1.level) * getQ2(q2.level) * getLogisticValue(time)
 
     theory.invalidatePrimaryEquation()
     theory.invalidateSecondaryEquation()
@@ -110,7 +110,7 @@ var get2DGraphValue = () => currency.value.sign * (1 + currency.value.abs()).log
 var getQ1 = level => Utils.getStepwisePowerSum(level, 2, 10, 0)
 var getQ2 = level => BigNumber.TWO.pow(level)
 
-var getLogisticValue = time => (BigNumber.SIX * BigNumber.TEN - time).max(BigNumber.ZERO) / (BigNumber.SIX * BigNumber.TEN)
+var getLogisticValue = time => (BigNumber.SIX * BigNumber.TEN - time).max(BigNumber.ZERO) / (BigNumber.SIX * BigNumber.TEN) * time
 
 var getInternalState = () => {
     return JSON.stringify({
