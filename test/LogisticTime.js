@@ -123,7 +123,7 @@ var getQ1 = level => Utils.getStepwisePowerSum(level, 2, 10, 0)
 var getQ2 = level => BigNumber.TWO.pow(level)
 var getC = level => 100 + 100 * Utils.getStepwisePowerSum(level, 10, 9, 0)
 
-var getLogisticValue = time => (BigNumber.SIX * BigNumber.TEN - time) / (BigNumber.SIX * BigNumber.TEN) * time.sqrt()
+var getLogisticValue = time => (getC(c.level) - time) / getC(c.level) * time.sqrt()
 
 var getInternalState = () => {
     return JSON.stringify({
