@@ -103,7 +103,7 @@ var getTertiaryEquation = () => {
 }
 
 var getPublicationMultiplier = (tau) => tau.pow(0.15)
-var getPublicationMultiplierFormula = (symbol) => `${symbol}^{}-.15`
+var getPublicationMultiplierFormula = (symbol) => `${symbol}^{0.15}`
 var getTau = () => currency.value
 var get2DGraphValue = () => currency.value.sign * (1 + currency.value.abs()).log10().toNumber()
 
