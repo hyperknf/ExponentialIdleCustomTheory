@@ -77,7 +77,7 @@ var tick = (elapsedTime, multiplier) => {
     let dt = BigNumber.from(elapsedTime * multiplier)
     let bonus = theory.publicationMultiplier
 
-    time += dt
+    time += time >= 60 ? time - 60 : dt
     currency.value += dt * bonus * getQ1(q1.level) * getQ2(q2.level) * getLogisticValue(time)
 
     theory.invalidatePrimaryEquation()
