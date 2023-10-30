@@ -88,7 +88,7 @@ var tick = (elapsedTime, multiplier) => {
 
 var getPrimaryEquation = () => {
     theory.primaryEquationHeight = 43
-    return `\\dot{\\rho}=tq_1q_2(\\frac{c-t}{c})`
+    return `\\dot{\\rho}=q_1q_2(\\frac{c-t}{c})\\sqrt{t}`
 }
 var getSecondaryEquation = () => {
     theory.secondaryEquationHeight = 45
@@ -110,7 +110,7 @@ var get2DGraphValue = () => currency.value.sign * (1 + currency.value.abs()).log
 var getQ1 = level => Utils.getStepwisePowerSum(level, 2, 10, 0)
 var getQ2 = level => BigNumber.TWO.pow(level)
 
-var getLogisticValue = time => (BigNumber.SIX * BigNumber.TEN - time).max(BigNumber.ZERO) / (BigNumber.SIX * BigNumber.TEN) * time
+var getLogisticValue = time => (BigNumber.SIX * BigNumber.TEN - time).max(BigNumber.ZERO) / (BigNumber.SIX * BigNumber.TEN) * time.sqrt()
 
 var getInternalState = () => {
     return JSON.stringify({
