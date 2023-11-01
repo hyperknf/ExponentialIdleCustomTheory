@@ -49,16 +49,24 @@ const TextResource = {
                     "zh-Hans": "达到e50ρ"
                 }
             },
-            "e100": {
+            "e200": {
                 "Name": {
-                    "en": "Amateur",
-                    "zh-Hant": "業餘",
-                    "zh-Hans": "业余"
+                    "en": "Idler"
                 },
                 "Description": {
-                    "en": "Reach e100ρ",
-                    "zh-Hant": "達到e100ρ",
-                    "zh-Hans": "达到e100ρ"
+                    "en": "Reach e200ρ",
+                    "zh-Hant": "達到e200ρ",
+                    "zh-Hans": "达到e200ρ"
+                }
+            },
+            "e500": {
+                "Name": {
+                    "en": "Professional"
+                },
+                "Description": {
+                    "en": "Reach e500ρ",
+                    "zh-Hant": "達到e500ρ",
+                    "zh-Hans": "达到e500ρ"
                 }
             }
         },
@@ -306,6 +314,8 @@ var dt = BigNumber.ONE / 10
 
 var achievements = {
     regular: [
+        false,
+        false,
         false,
         false,
         false,
@@ -721,6 +731,20 @@ var initialize = () => {
         getTextResource(TextResource.Achievements.Progress.e100.Description),
         () => achievements.regular[3]
     )
+    achievement4 = theory.createAchievement(
+        4,
+        progress_achievements,
+        getTextResource(TextResource.Achievements.Progress.e200.Name),
+        getTextResource(TextResource.Achievements.Progress.e200.Description),
+        () => achievements.regular[4]
+    )
+    achievement4 = theory.createAchievement(
+        5,
+        progress_achievements,
+        getTextResource(TextResource.Achievements.Progress.e500.Name),
+        getTextResource(TextResource.Achievements.Progress.e500.Description),
+        () => achievements.regular[5]
+    )
 
     secret_achievement1 = theory.createSecretAchievement(
         5000,
@@ -815,6 +839,8 @@ var tick = (elapsedTime, multiplier) => {
     if (currency.value >= BigNumber.TEN.pow(25)) achievements.regular[1] = true
     if (currency.value >= BigNumber.TEN.pow(50)) achievements.regular[2] = true
     if (currency.value >= BigNumber.TEN.pow(100)) achievements.regular[3] = true
+    if (currency.value >= BigNumber.TEN.pow(200)) achievements.regular[4] = true
+    if (currency.value >= BigNumber.TEN.pow(500)) achievements.regular[5] = true
 
     if (unlock_bought && unlock_refund) {
         unlock_bought = unlock_refund = false

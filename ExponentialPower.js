@@ -49,16 +49,24 @@ const TextResource = {
                     "zh-Hans": "达到e50ρ"
                 }
             },
-            "e100": {
+            "e200": {
                 "Name": {
-                    "en": "Amateur",
-                    "zh-Hant": "業餘",
-                    "zh-Hans": "业余"
+                    "en": "Idler"
                 },
                 "Description": {
-                    "en": "Reach e100ρ",
-                    "zh-Hant": "達到e100ρ",
-                    "zh-Hans": "达到e100ρ"
+                    "en": "Reach e200ρ",
+                    "zh-Hant": "達到e200ρ",
+                    "zh-Hans": "达到e200ρ"
+                }
+            },
+            "e500": {
+                "Name": {
+                    "en": "Professional"
+                },
+                "Description": {
+                    "en": "Reach e500ρ",
+                    "zh-Hant": "達到e500ρ",
+                    "zh-Hans": "达到e500ρ"
                 }
             }
         },
@@ -111,10 +119,10 @@ const TextResource = {
         "fi": "Julkaisukerroin"
     },
     "TestUpgrade": {
-        "en": "Free 1000 ticks",
-        "zh-Hant": "免費1000刻",
-        "zh-Hans": "免费1000刻",
-        "fi": "Ihmainen 1000 tikki"
+        "en": "Free e3",
+        "zh-Hant": "免費e3",
+        "zh-Hans": "免费e3",
+        "fi": "Ihmainen e3"
     },
     "Hour": {
         "en": "hour",
@@ -252,13 +260,13 @@ const TextResource = {
     }
 }
 
-var id = "ExponentialPower"
+var id = "ExponentialPowerTest"
 var getName = language => {
     const names = {
-        "en": "Exponential Power",
-        "zh-Hant": "指數力量",
-        "zh-Hans": "指数力量",
-        "fi": "Eksponentiaalinen Teho"
+        "en": "Exponential Power t",
+        "zh-Hant": "指數力量t",
+        "zh-Hans": "指数力量t",
+        "fi": "Eksponentiaalinen Teho t"
     }
     return names[language] ?? names.en
 }
@@ -306,6 +314,8 @@ var dt = BigNumber.ONE / 10
 
 var achievements = {
     regular: [
+        false,
+        false,
         false,
         false,
         false,
@@ -630,14 +640,13 @@ var initialize = () => {
     {
         test_upgrade = theory.createSingularUpgrade(1000, currency, new FreeCost())
         test_upgrade.getDescription = test_upgrade.getInfo = _ => Utils.getMath(`\\text{${getTextResource(TextResource.TestUpgrade)}}`)
-        test_upgrade.bought = _ => {
-            for (let i = 1; i <= 1000; i++) tick(0.1, ad_bonus ? 1.5 : 1)
-        }
+        test_upgrade.bought = _ => currency.value *= 1000
     }
     */
 
     ///////////////////////
     //// Milestone Upgrades
+
     theory.setMilestoneCost(new CustomCost(level => {
         switch (level) {
             case 0:
@@ -686,6 +695,7 @@ var initialize = () => {
     
     /////////////////
     //// Achievements
+
     progress_achievements = theory.createAchievementCategory(
         0,
         getTextResource(TextResource.Achievements.Progress.Name)
@@ -722,6 +732,20 @@ var initialize = () => {
         getTextResource(TextResource.Achievements.Progress.e100.Name),
         getTextResource(TextResource.Achievements.Progress.e100.Description),
         () => achievements.regular[3]
+    )
+    achievement4 = theory.createAchievement(
+        4,
+        progress_achievements,
+        getTextResource(TextResource.Achievements.Progress.e200.Name),
+        getTextResource(TextResource.Achievements.Progress.e200.Description),
+        () => achievements.regular[4]
+    )
+    achievement4 = theory.createAchievement(
+        5,
+        progress_achievements,
+        getTextResource(TextResource.Achievements.Progress.e500.Name),
+        getTextResource(TextResource.Achievements.Progress.e500.Description),
+        () => achievements.regular[5]
     )
 
     secret_achievement1 = theory.createSecretAchievement(
@@ -817,6 +841,8 @@ var tick = (elapsedTime, multiplier) => {
     if (currency.value >= BigNumber.TEN.pow(25)) achievements.regular[1] = true
     if (currency.value >= BigNumber.TEN.pow(50)) achievements.regular[2] = true
     if (currency.value >= BigNumber.TEN.pow(100)) achievements.regular[3] = true
+    if (currency.value >= BigNumber.TEN.pow(200)) achievements.regular[4] = true
+    if (currency.value >= BigNumber.TEN.pow(500)) achievements.regular[5] = true
 
     if (unlock_bought && unlock_refund) {
         unlock_bought = unlock_refund = false
