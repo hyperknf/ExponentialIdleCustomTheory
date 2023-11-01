@@ -157,7 +157,7 @@ var getFtValue = time => (getC(c.level) - time) / getC(c.level) * time.sqrt()
 
 var getFtDisplay = time => {
     const modifier = getC(c.level)
-    return (1 - time / modifier) * (time / modifier).sqrt()
+    return ((1 - time / modifier) * (time / modifier).sqrt()).toNumber()
 }
 
 var getInternalState = () => {
