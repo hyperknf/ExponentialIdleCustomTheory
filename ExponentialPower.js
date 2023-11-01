@@ -773,7 +773,7 @@ var updateAvailability = () => {
 
     // Singular upgrades
 
-    domain_switch.isAvailable = unlockCurrency2.level >= 1
+    // domain_switch.isAvailable = unlockCurrency2.level >= 1
 }
 
 var tick = (elapsedTime, multiplier) => {

@@ -634,6 +634,7 @@ var initialize = () => {
 
     ///////////////////////
     //// Milestone Upgrades
+
     theory.setMilestoneCost(new CustomCost(level => {
         switch (level) {
             case 0:
@@ -682,6 +683,7 @@ var initialize = () => {
     
     /////////////////
     //// Achievements
+
     progress_achievements = theory.createAchievementCategory(
         0,
         getTextResource(TextResource.Achievements.Progress.Name)
@@ -769,7 +771,7 @@ var updateAvailability = () => {
 
     // Singular upgrades
 
-    domain_switch.isAvailable = unlockCurrency2.level >= 1
+    // domain_switch.isAvailable = unlockCurrency2.level >= 1
 }
 
 var tick = (elapsedTime, multiplier) => {
