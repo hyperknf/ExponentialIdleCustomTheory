@@ -111,10 +111,10 @@ const TextResource = {
         "fi": "Julkaisukerroin"
     },
     "TestUpgrade": {
-        "en": "Free 1000 ticks",
-        "zh-Hant": "免費1000刻",
-        "zh-Hans": "免费1000刻",
-        "fi": "Ihmainen 1000 tikki"
+        "en": "Free e3",
+        "zh-Hant": "免費e3",
+        "zh-Hans": "免费e3",
+        "fi": "Ihmainen e3"
     },
     "Hour": {
         "en": "hour",
@@ -629,9 +629,7 @@ var initialize = () => {
     {
         test_upgrade = theory.createSingularUpgrade(1000, currency, new FreeCost())
         test_upgrade.getDescription = test_upgrade.getInfo = _ => Utils.getMath(`\\text{${getTextResource(TextResource.TestUpgrade)}}`)
-        test_upgrade.bought = _ => {
-            for (let i = 1; i <= 1000; i++) tick(0.1, ad_bonus ? 1.5 : 1)
-        }
+        test_upgrade.bought = _ => currency.value *= 1000
     }
 
     ///////////////////////
