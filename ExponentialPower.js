@@ -49,6 +49,18 @@ const TextResource = {
                     "zh-Hans": "达到e50ρ"
                 }
             },
+            "e100": {
+                "Name": {
+                    "en": "Amateur",
+                    "zh-Hant": "業餘",
+                    "zh-Hans": "业余"
+                },
+                "Description": {
+                    "en": "Reach e100ρ",
+                    "zh-Hant": "達到e100ρ",
+                    "zh-Hans": "达到e100ρ"
+                }
+            },
             "e200": {
                 "Name": {
                     "en": "Idler"
