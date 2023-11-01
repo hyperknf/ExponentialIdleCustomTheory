@@ -111,10 +111,10 @@ const TextResource = {
         "fi": "Julkaisukerroin"
     },
     "TestUpgrade": {
-        "en": "Free e3",
-        "zh-Hant": "免費e3",
-        "zh-Hans": "免费e3",
-        "fi": "Ihmainen e3"
+        "en": "Free 1000 ticks",
+        "zh-Hant": "免費1000刻",
+        "zh-Hans": "免费1000刻",
+        "fi": "Ihmainen 1000 tikki"
     },
     "Hour": {
         "en": "hour",
@@ -252,13 +252,13 @@ const TextResource = {
     }
 }
 
-var id = "ExponentialPower"
+var id = "ExponentialPowerTest"
 var getName = language => {
     const names = {
-        "en": "Exponential Power",
-        "zh-Hant": "指數力量",
-        "zh-Hans": "指数力量",
-        "fi": "Eksponentiaalinen Teho"
+        "en": "Exponential Power t",
+        "zh-Hant": "指數力量t",
+        "zh-Hans": "指数力量t",
+        "fi": "Eksponentiaalinen Teho t"
     }
     return names[language] ?? names.en
 }
@@ -288,7 +288,7 @@ var getDescription = language => {
     return (descriptions[language] ?? descriptions.en).join("\n")
 }
 var authors = "HyperKNF"
-var version = "v1.3.3b"
+var version = "v1.3.3c"
 
 const currency2text = ["δ", "\\delta"]
 
@@ -630,7 +630,9 @@ var initialize = () => {
     {
         test_upgrade = theory.createSingularUpgrade(1000, currency, new FreeCost())
         test_upgrade.getDescription = test_upgrade.getInfo = _ => Utils.getMath(`\\text{${getTextResource(TextResource.TestUpgrade)}}`)
-        test_upgrade.bought = _ => currency.value *= 1000
+        test_upgrade.bought = _ => {
+            for (let i = 1; i <= 1000; i++) tick(0.1, ad_bonus ? 1.5 : 1)
+        }
     }
     */
 
@@ -649,9 +651,9 @@ var initialize = () => {
             case 4:
                 return BigNumber.from(290)
             case 5:
-                return BigNumber.from(350)
+                return BigNumber.from(400)
             case 6:
-                return BigNumber.from(500)
+                return BigNumber.from(450)
             default:
                 return BigNumber.from(1000)
         }
@@ -771,7 +773,7 @@ var updateAvailability = () => {
 
     // Singular upgrades
 
-    // domain_switch.isAvailable = unlockCurrency2.level >= 1
+    domain_switch.isAvailable = unlockCurrency2.level >= 1
 }
 
 var tick = (elapsedTime, multiplier) => {
@@ -919,7 +921,7 @@ var getSecondaryEquation = () => {
 var getTertiaryEquation = () => {
     let result
     if (page == 1) {
-        result = `c_1^{B(c_2${unlock.level >= 2 ? "x_1" : ""})}=${tertiary_display[0]},\\quad b_0=${tertiary_display[1]}`
+        result = `c_1^{B(c_2${unlock.level >= 2 ? "X" : ""})}=${tertiary_display[0]},\\quad b_0=${tertiary_display[1]}`
     } else result = ""
     return "\\begin{array}{c}" + result + "\\end{array}"
 }

@@ -651,7 +651,7 @@ var initialize = () => {
             case 5:
                 return BigNumber.from(400)
             case 6:
-                return BigNumber.from(500)
+                return BigNumber.from(450)
             default:
                 return BigNumber.from(1000)
         }
@@ -919,7 +919,7 @@ var getSecondaryEquation = () => {
 var getTertiaryEquation = () => {
     let result
     if (page == 1) {
-        result = `c_1^{B(c_2${unlock.level >= 2 ? "x_1" : ""})}=${tertiary_display[0]},\\quad b_0=${tertiary_display[1]}`
+        result = `c_1^{B(c_2${unlock.level >= 2 ? "X" : ""})}=${tertiary_display[0]},\\quad b_0=${tertiary_display[1]}`
     } else result = ""
     return "\\begin{array}{c}" + result + "\\end{array}"
 }
