@@ -156,8 +156,8 @@ var getT1 = level => BigNumber.from(1.25).pow(level)
 var getFtValue = time => (getC(c.level) - time) / getC(c.level) * time.sqrt()
 
 var getFtDisplay = time => {
-    const modifier = getC(c.level) / 100
-    return ((100 - time / modifier) / 100 * (time / modifier).sqrt()).toNumber()
+    const modifier = getC(c.level) / 5
+    return ((5 - time / modifier) / 5 * (time / modifier).sqrt()).toNumber()
 }
 
 var getInternalState = () => {
