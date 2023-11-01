@@ -122,7 +122,7 @@ var getPrimaryEquation = () => {
     return `\\dot{\\rho}=q_1q_2f(t)`
 }
 var getSecondaryEquation = () => {
-    theory.secondaryEquationHeight = 70
+    theory.secondaryEquationHeight = 85
     const result = [
         `${theory.latexSymbol}=\\max{\\rho}`,
         `\\dot{t}=\\begin{cases}t_1, & t<c\\\\c-t, & t\\ge c\\end{cases}`,
