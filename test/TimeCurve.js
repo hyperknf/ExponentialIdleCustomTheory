@@ -70,6 +70,7 @@ var init = () => {
         display_ft.bought = _ => {
             display_ft.level = 0
             displaying_ft = !displaying_ft
+            theory.clearGraph()
         }
     }
 
@@ -142,7 +143,10 @@ var getTertiaryEquation = () => {
 var getPublicationMultiplier = (tau) => tau.pow(0.15)
 var getPublicationMultiplierFormula = (symbol) => `${symbol}^{0.15}`
 var getTau = () => currency.value
-var get2DGraphValue = () => currency.value.sign * (1 + currency.value.abs()).log10().toNumber()
+var get2DGraphValue = () => {
+    if (!displaying_ft) return currency.value.sign * (1 + currency.value.abs()).log10().toNumber()
+    return getFtDisplay(time)
+}
 
 var getQ1 = level => Utils.getStepwisePowerSum(level, 2, 10, 0)
 var getQ2 = level => BigNumber.TWO.pow(level)
