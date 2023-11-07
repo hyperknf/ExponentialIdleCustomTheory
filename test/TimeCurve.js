@@ -1,4 +1,4 @@
-import { ExponentialCost, FirstFreeCost, FreeCost, LinearCost } from "./api/Costs"
+import { ConstantCost, ExponentialCost, FirstFreeCost, FreeCost, LinearCost } from "./api/Costs"
 import { BigNumber } from "./api/BigNumber"
 import { theory } from "./api/Theory"
 import { Utils } from "./api/Utils"
@@ -17,7 +17,7 @@ var drho = BigNumber.ZERO, ft = BigNumber.ZERO
 
 var time = BigNumber.ZERO
 
-var display_ft, refund_t1
+var auto_reset, display_ft, refund_t1
 var displaying_ft = false
 
 var init = () => {
@@ -62,6 +62,13 @@ var init = () => {
     theory.createPublicationUpgrade(0, currency, 1e9)
     theory.createBuyAllUpgrade(1, currency, 1e10)
     theory.createAutoBuyerUpgrade(2, currency, 1e15)
+
+    {
+        auto_reset = theory.createPermanentUpgrade(100, currency, new ConstantCost(BigNumber.TEN.pow(100)))
+        auto_reset.description = Utils.getMath(`\\text{Automatic }t\\text{ resetter}`)
+        auto_reset.info = Utils.getMathTo(`\\dot{t}=c-t,\\quad t \\ge c`,`\\dot{t}=-t,\\quad t \\ge c`)
+        auto_reset.maxLevel = 1
+    }
 
     {
         display_ft = theory.createPermanentUpgrade(1000, currency, new FreeCost())
@@ -120,7 +127,7 @@ var tick = (elapsedTime, multiplier) => {
     let dt = BigNumber.from(elapsedTime * multiplier)
     let bonus = theory.publicationMultiplier
 
-    time += time >= getC(c.level) ? getC(c.level) - time : dt * getT1(t1.level)
+    time += time >= getC(c.level) ? (auto_reset.level >= 1 ? -time : getC(c.level) - time) : dt * getT1(t1.level)
     ft = getFtValue(time)
     drho = bonus * getQ1(q1.level) * getQ2(q2.level) * ft
     currency.value += dt * drho
@@ -138,7 +145,7 @@ var getSecondaryEquation = () => {
     theory.secondaryEquationHeight = 85
     const result = [
         `${theory.latexSymbol}=\\max{\\rho}`,
-        `\\dot{t}=\\begin{cases}t_1, & t<c\\\\c-t, & t\\ge c\\end{cases}`,
+        `\\dot{t}=\\begin{cases}t_1, & t<c\\\\${auto_reset.level >= 1 ? `-t` : `c-t`}, & t\\ge c\\end{cases}`,
         `f(t)=\\frac{(c-t)\\sqrt{t}}{c}`
     ]
     return `\\begin{array}{c} ${result.join(`\\\\`)} \\end{array}`
