@@ -75,7 +75,7 @@ var init = () => {
     }
 
     {
-        refund_t1 = theory.createPermanentUpgrade(1000, currency, new FreeCost())
+        refund_t1 = theory.createPermanentUpgrade(2000, currency, new FreeCost())
         refund_t1.description = Utils.getMath(`\\text{Refund }t_1`)
         refund_t1.info = Utils.getMath(`\\text{Refunds }t_1`)
         refund_t1.bought = _ => {
