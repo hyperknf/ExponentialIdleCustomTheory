@@ -17,7 +17,7 @@ var drho = BigNumber.ZERO, ft = BigNumber.ZERO
 
 var time = BigNumber.ZERO
 
-var display_ft
+var display_ft, refund_t1
 var displaying_ft = false
 
 var init = () => {
@@ -71,6 +71,18 @@ var init = () => {
             display_ft.level = 0
             displaying_ft = !displaying_ft
             theory.clearGraph()
+        }
+    }
+
+    {
+        refund_t1 = theory.createPermanentUpgrade(1000, currency, new FreeCost())
+        refund_t1.description = Utils.getMath(`\\text{Refund }t_1`)
+        refund_t1.info = Utils.getMath(`\\text{Refunds }t_1`)
+        refund_t1.bought = _ => {
+            refund_t1.level = 0
+            if (t1.level <= 0) return
+            t1.level--
+            currency.value += t1.cost.getCost(t1.level)
         }
     }
 
