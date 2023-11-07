@@ -2,6 +2,7 @@ import { ConstantCost, ExponentialCost, FirstFreeCost, FreeCost, LinearCost } fr
 import { BigNumber } from "./api/BigNumber"
 import { theory } from "./api/Theory"
 import { Utils } from "./api/Utils"
+import { Localization } from "./api/Localization"
 
 var id = "TimeCurve"
 var name = "Time Curve"
@@ -12,6 +13,8 @@ var version = 1
 var currency
 var q1, q2, c, t1
 var reset_time
+
+var unlock_q
 
 var drho = BigNumber.ZERO, ft = BigNumber.ZERO
 
@@ -110,6 +113,12 @@ var init = () => {
     ///////////////////////
     //// Milestone Upgrades
     theory.setMilestoneCost(new LinearCost(20, 20))
+
+    {
+        unlock_q = theory.createMilestoneUpgrade(100, 1)
+        unlock_q.getDescription = _ => Localization.getUpgradeAddTermDesc(`q`)
+        unlock_q.getInfo = _ => Localization.getUpgradeAddTermInfo(`q`)
+    }
     
     /////////////////
     //// Achievements
@@ -190,6 +199,10 @@ var setInternalState = string => {
     
     const time_state = state.time ?? BigNumber.ZERO.toBase64String()
     time = BigNumber.fromBase64String(time_state)
+}
+
+var postPublish = () => {
+    time = BigNumber.ZERO
 }
 
 init()
