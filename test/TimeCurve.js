@@ -165,7 +165,7 @@ var getPrimaryEquation = () => {
 var getSecondaryEquation = () => {
     theory.secondaryEquationHeight = 85
     const result = [
-        `${theory.latexSymbol}=\\max{\\rho}`,
+        `${theory.latexSymbol}=\\max{\\rho${settings.tau_rate != 1 ? `^{${settings.tau_rate}}` : ``}}`,
         `\\dot{t}=\\begin{cases}t_1, & t<c\\\\${auto_reset.level >= 1 ? `-t` : `c-t`}, & t\\ge c\\end{cases}`,
         `f(t)=\\frac{(c-t)\\sqrt{t}}{c}`
     ]
@@ -183,7 +183,7 @@ var getTertiaryEquation = () => {
 var getPublicationMultiplier = (tau) => tau.pow(settings.tau_rate)
 var getPublicationMultiplierFormula = (symbol) => `${symbol}^{${0.15 / settings.tau_rate}}`
 
-var getCurrencyFromTau = tau => [tau.max(BigNumber.ONE / settings.tau_rate), currency.symbol]
+var getCurrencyFromTau = tau => [tau.max(BigNumber.ONE).pow(BigNumber.ONE / settings.tau_rate), currency.symbol]
 var getTau = () => currency.value.pow(settings.tau_rate)
 var get2DGraphValue = () => {
     if (!displaying_ft) return currency.value.sign * (1 + currency.value.abs()).log10().toNumber()
