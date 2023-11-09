@@ -11,7 +11,7 @@ var authors = "HyperKNF"
 var version = 1
 
 var currency
-var q1, q2, c, t1
+var q1, q2, r1, c, t1
 var reset_time
 
 var unlock_q
@@ -45,8 +45,15 @@ var init = () => {
     }
 
     {
+        const getDesc = level => `r_1=${getR1(level).toString(1)}`
+        r1 = theory.createUpgrade(1000, currency, new ExponentialCost(1e20, Math.log2(1.7)))
+        r1.getDescription = _ => Utils.getMath(getDesc(r1.level))
+        r1.getInfo = amount => Utils.getMathTo(getDesc(r1.level, r1.level + amount))
+    }
+
+    {
         const getDesc = level => `c=${getC(level).toString(0)}`
-        c = theory.createUpgrade(1000, currency, new ExponentialCost(BigNumber.TEN.pow(5), Math.log2(BigNumber.TEN.pow(2.5))))
+        c = theory.createUpgrade(10000, currency, new ExponentialCost(BigNumber.TEN.pow(5), Math.log2(BigNumber.TEN.pow(2.5))))
         c.getDescription = _ => Utils.getMath(getDesc(c.level))
         c.getInfo = amount => Utils.getMathTo(getDesc(c.level), getDesc(c.level + amount))
     }
@@ -54,7 +61,7 @@ var init = () => {
     {
         const getDesc = level => `t_1=1.25^{${level}}`
         const getInfo = level => `t_1=${getT1(level)}`
-        t1 = theory.createUpgrade(2000, currency, new ExponentialCost(BigNumber.TEN.pow(5), Math.log2(BigNumber.TEN.pow(2.5))))
+        t1 = theory.createUpgrade(20000, currency, new ExponentialCost(BigNumber.TEN.pow(5), Math.log2(BigNumber.TEN.pow(2.5))))
         t1.getDescription = _ => Utils.getMath(getDesc(t1.level))
         t1.getInfo = amount => Utils.getMathTo(getInfo(t1.level), getInfo(t1.level + amount))
     }
@@ -69,7 +76,7 @@ var init = () => {
     {
         auto_reset = theory.createPermanentUpgrade(100, currency, new ConstantCost(BigNumber.TEN.pow(100)))
         auto_reset.description = Utils.getMath(`\\text{Automatic }t\\text{ resetter}`)
-        auto_reset.info = Utils.getMathTo(`\\dot{t}=c-t,\\quad t \\ge c`,`\\dot{t}=-t,\\quad t \\ge c`)
+        auto_reset.info = Utils.getMathTo(`\\dot{t}=c-t,\\quad t \\ge c\\quad`,`\\quad\\dot{t}=-t,\\quad t \\ge c`)
         auto_reset.maxLevel = 1
     }
 
@@ -130,6 +137,7 @@ var init = () => {
 }
 
 var updateAvailability = () => {
+    r1.isAvailable = unlock_q.level >= 1
 }
 
 var tick = (elapsedTime, multiplier) => {
@@ -138,7 +146,7 @@ var tick = (elapsedTime, multiplier) => {
 
     time += time >= getC(c.level) ? (auto_reset.level >= 1 ? -time : getC(c.level) - time) : dt * getT1(t1.level)
     ft = getFtValue(time)
-    drho = bonus * getQ1(q1.level) * getQ2(q2.level) * ft
+    drho = bonus * getBaseDotRho() * getBaseDotQ()
     currency.value += dt * drho
 
     theory.invalidatePrimaryEquation()
@@ -147,8 +155,8 @@ var tick = (elapsedTime, multiplier) => {
 }
 
 var getPrimaryEquation = () => {
-    theory.primaryEquationHeight = 22
-    return `\\dot{\\rho}=q_1q_2f(t)`
+    theory.primaryEquationHeight = unlock_q.level >= 1 ? 45 : 22
+    return `\\dot{\\rho}=q_1q_2${unlock_q.level >= 1 ? `q` : ``}f(t)`
 }
 var getSecondaryEquation = () => {
     theory.secondaryEquationHeight = 85
@@ -178,8 +186,17 @@ var get2DGraphValue = () => {
 
 var getQ1 = level => Utils.getStepwisePowerSum(level, 2, 10, 0)
 var getQ2 = level => BigNumber.TWO.pow(level)
+var getR1 = level => 1 + Utils.getStepwisePowerSum(level, 2, 10, 0) / 10
 var getC = level => 100 + 100 * Utils.getStepwisePowerSum(level, 10, 9, 0)
 var getT1 = level => BigNumber.from(1.25).pow(level)
+
+var getBaseDotRho = () => {
+    return getQ1(q1.level) * getQ2(q2.level) * getFtValue(time)
+}
+var getBaseDotQ = () => {
+    if (unlock_q.level < 1) return 1
+    return getR1(r1.level)
+}
 
 var getFtValue = time => (getC(c.level) - time) / getC(c.level) * time.sqrt()
 
