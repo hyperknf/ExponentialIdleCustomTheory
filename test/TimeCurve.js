@@ -164,11 +164,11 @@ var tick = (elapsedTime, multiplier) => {
 }
 
 var getPrimaryEquation = () => {
-    theory.primaryEquationHeight = unlock_q.level >= 1 ? 45 : 22
+    theory.primaryEquationHeight = unlock_q.level >= 1 ? 65 : 22
     const result = [
         `\\dot{\\rho}=q_1q_2${unlock_q.level >= 1 ? `q^{0.5}` : ``}f(t)`
     ]
-    if (unlock_q.level >= 1) result.push(`\\dot{q}=r_1`)
+    if (unlock_q.level >= 1) result.push(`\\dot{q}=\\frac{r_1}{1+q}`)
     return `\\begin{array}{c} ${result.join(`\\\\`)} \\end{array}`
 }
 var getSecondaryEquation = () => {
@@ -207,7 +207,7 @@ var get2DGraphValue = () => {
 
 var getQ1 = level => Utils.getStepwisePowerSum(level, 2, 10, 0)
 var getQ2 = level => BigNumber.TWO.pow(level)
-var getR1 = level => Utils.getStepwisePowerSum(level, 2, 10, 0) / 10000
+var getR1 = level => Utils.getStepwisePowerSum(level, 2, 10, 0)
 var getC = level => 100 + 100 * Utils.getStepwisePowerSum(level, 10, 9, 0)
 var getT1 = level => BigNumber.from(1.25).pow(level)
 
@@ -216,7 +216,7 @@ var getBaseDotRho = () => {
 }
 var getBaseDotQ = () => {
     if (unlock_q.level < 1) return 1
-    return getR1(r1.level)
+    return getR1(r1.level) / (1 + q)
 }
 
 var getFtValue = time => (getC(c.level) - time) / getC(c.level) * time.sqrt()
