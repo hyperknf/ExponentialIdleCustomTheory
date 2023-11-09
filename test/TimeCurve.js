@@ -190,7 +190,7 @@ var getTertiaryEquation = () => {
         `q=${q}`,
         `\\dot{q}=${dq}`
     ]
-    const result_string = result.join(",\\quad ")
+    let result_string = result.join(",\\quad ")
     if (unlock_q.level >= 1) result_string += `\\\\${q_row.join(`,\\quad `)}`
     return result_string
 }
