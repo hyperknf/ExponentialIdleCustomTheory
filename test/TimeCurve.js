@@ -123,7 +123,7 @@ var init = () => {
 
     ///////////////////////
     //// Milestone Upgrades
-    theory.setMilestoneCost(new LinearCost(20, 20))
+    theory.setMilestoneCost(new LinearCost(10, 10))
 
     {
         unlock_q = theory.createMilestoneUpgrade(100, 1)
