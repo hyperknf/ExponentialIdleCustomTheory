@@ -16,9 +16,9 @@ var reset_time
 
 var unlock_q
 
-var drho = BigNumber.ZERO, ft = BigNumber.ZERO
+var drho = BigNumber.ZERO, dq = BigNumber.ZERO, ft = BigNumber.ZERO
 
-var time = BigNumber.ZERO
+var time = BigNumber.ZERO, q = BigNumber.ONE
 
 var auto_reset, display_ft, refund_t1
 var displaying_ft = false
@@ -151,16 +151,25 @@ var tick = (elapsedTime, multiplier) => {
     time += time >= getC(c.level) ? (auto_reset.level >= 1 ? -time : getC(c.level) - time) : dt * getT1(t1.level)
     ft = getFtValue(time)
     drho = bonus * getBaseDotRho() * getBaseDotQ()
+    dq = getBaseDotQ()
+
     currency.value += dt * drho
+    q += dt * dq
 
     theory.invalidatePrimaryEquation()
     theory.invalidateSecondaryEquation()
     theory.invalidateTertiaryEquation()
+
+    updateAvailability()
 }
 
 var getPrimaryEquation = () => {
     theory.primaryEquationHeight = unlock_q.level >= 1 ? 45 : 22
-    return `\\dot{\\rho}=q_1q_2${unlock_q.level >= 1 ? `q` : ``}f(t)`
+    const result = [
+        `\\dot{\\rho}=q_1q_2${unlock_q.level >= 1 ? `q^{0.5}` : ``}f(t)`
+    ]
+    if (unlock_q.level >= 1) result.push(`\\dot{q}=r_1`)
+    return result.join(`\\\\`)
 }
 var getSecondaryEquation = () => {
     theory.secondaryEquationHeight = 85
@@ -177,7 +186,13 @@ var getTertiaryEquation = () => {
         `t=${time.toString(1)}`,
         `f(t)=${ft}`
     ]
-    return result.join(",\\quad ")
+    const q_row = [
+        `q=${q}`,
+        `\\dot{q}=${dq}`
+    ]
+    const result_string = result.join(",\\quad ")
+    if (unlock_q.level >= 1) result_string += `\\\\${q_row.join(`,\\quad `)}`
+    return result_string
 }
 
 var getPublicationMultiplier = (tau) => tau.pow(settings.tau_rate)
@@ -192,12 +207,12 @@ var get2DGraphValue = () => {
 
 var getQ1 = level => Utils.getStepwisePowerSum(level, 2, 10, 0)
 var getQ2 = level => BigNumber.TWO.pow(level)
-var getR1 = level => 1 + Utils.getStepwisePowerSum(level, 2, 10, 0) / 10
+var getR1 = level => Utils.getStepwisePowerSum(level, 2, 10, 0) / 10000
 var getC = level => 100 + 100 * Utils.getStepwisePowerSum(level, 10, 9, 0)
 var getT1 = level => BigNumber.from(1.25).pow(level)
 
 var getBaseDotRho = () => {
-    return getQ1(q1.level) * getQ2(q2.level) * getFtValue(time)
+    return getQ1(q1.level) * getQ2(q2.level) * q.sqrt() * getFtValue(time)
 }
 var getBaseDotQ = () => {
     if (unlock_q.level < 1) return 1
@@ -226,6 +241,7 @@ var setInternalState = string => {
 
 var postPublish = () => {
     time = BigNumber.ZERO
+    q = BigNumber.ONE
 }
 
 init()
