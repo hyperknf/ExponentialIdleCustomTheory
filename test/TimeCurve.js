@@ -23,6 +23,10 @@ var time = BigNumber.ZERO
 var auto_reset, display_ft, refund_t1
 var displaying_ft = false
 
+var settings = {
+    tau_rate: 0.5
+}
+
 var init = () => {
     currency = theory.createCurrency()
 
@@ -76,7 +80,7 @@ var init = () => {
     {
         auto_reset = theory.createPermanentUpgrade(100, currency, new ConstantCost(BigNumber.TEN.pow(100)))
         auto_reset.description = Utils.getMath(`\\text{Automatic }t\\text{ resetter}`)
-        auto_reset.info = Utils.getMathTo(`\\dot{t}=c-t,\\quad t \\ge c\\quad`,`\\quad\\dot{t}=-t,\\quad t \\ge c`)
+        auto_reset.info = Utils.getMathTo(`\\dot{t}=c-t,\\quad t \\ge c\\qquad`,`\\qquad\\dot{t}=-t,\\quad t \\ge c`)
         auto_reset.maxLevel = 1
     }
 
@@ -176,9 +180,11 @@ var getTertiaryEquation = () => {
     return result.join(",\\quad ")
 }
 
-var getPublicationMultiplier = (tau) => tau.pow(0.15)
-var getPublicationMultiplierFormula = (symbol) => `${symbol}^{0.15}`
-var getTau = () => currency.value
+var getPublicationMultiplier = (tau) => tau.pow(settings.tau_rate)
+var getPublicationMultiplierFormula = (symbol) => `${symbol}^{${0.15 / settings.tau_rate}}`
+
+var getCurrencyFromTau = tau => [tau.max(BigNumber.ONE / settings.tau_rate), currency.symbol]
+var getTau = () => currency.value.pow(settings.tau_rate)
 var get2DGraphValue = () => {
     if (!displaying_ft) return currency.value.sign * (1 + currency.value.abs()).log10().toNumber()
     return getFtDisplay(time)
