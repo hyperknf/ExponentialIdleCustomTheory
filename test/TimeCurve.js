@@ -49,8 +49,8 @@ var init = () => {
     }
 
     {
-        const getDesc = level => `r_1=${getR1(level).toString(1)}`
-        r1 = theory.createUpgrade(1000, currency, new ExponentialCost(1e20, Math.log2(1.7)))
+        const getDesc = level => `r_1=${getR1(level).toString(0)}`
+        r1 = theory.createUpgrade(1000, currency, new ExponentialCost(1e20, Math.log2(2)))
         r1.getDescription = _ => Utils.getMath(getDesc(r1.level))
         r1.getInfo = amount => Utils.getMathTo(getDesc(r1.level, r1.level + amount))
     }
@@ -192,7 +192,7 @@ var getTertiaryEquation = () => {
     ]
     let result_string = result.join(",\\quad ")
     if (unlock_q.level >= 1) result_string += `\\\\${q_row.join(`,\\quad `)}`
-    return result_string
+    return `\\begin{array}{c} ${result_string} \\end{array}`
 }
 
 var getPublicationMultiplier = (tau) => tau.pow(settings.tau_rate)
