@@ -18,7 +18,7 @@ var unlock_q
 
 var drho = BigNumber.ZERO, dq = BigNumber.ZERO, ft = BigNumber.ZERO
 
-var time = BigNumber.ZERO, q = BigNumber.ONE
+var time = BigNumber.ZERO, q = BigNumber.ZERO
 
 var auto_reset, display_ft, refund_t1
 var displaying_ft = false
@@ -50,7 +50,7 @@ var init = () => {
 
     {
         const getDesc = level => `r_1=${getR1(level).toString(0)}`
-        r1 = theory.createUpgrade(1000, currency, new ExponentialCost(1e20, Math.log2(2)))
+        r1 = theory.createUpgrade(1000, currency, new FirstFreeCost(new ExponentialCost(1e20, Math.log2(2))))
         r1.getDescription = _ => Utils.getMath(getDesc(r1.level))
         r1.getInfo = amount => Utils.getMathTo(getDesc(r1.level, r1.level + amount))
     }
@@ -228,7 +228,8 @@ var getFtDisplay = time => {
 
 var getInternalState = () => {
     return JSON.stringify({
-        time: time.toBase64String()
+        time: time.toBase64String(),
+        q: q.toBase64String()
     })
 }
 var setInternalState = string => {
@@ -237,11 +238,13 @@ var setInternalState = string => {
     
     const time_state = state.time ?? BigNumber.ZERO.toBase64String()
     time = BigNumber.fromBase64String(time_state)
+    const q_state = state.q ?? BigNumber.ZERO.toBase64String()
+    q = BigNumber.fromBase64String(q_state)
 }
 
 var postPublish = () => {
     time = BigNumber.ZERO
-    q = BigNumber.ONE
+    q = BigNumber.ZERO
 }
 
 init()
