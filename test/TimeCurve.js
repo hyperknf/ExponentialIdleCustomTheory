@@ -52,7 +52,7 @@ var init = () => {
         const getDesc = level => `r_1=${getR1(level).toString(0)}`
         r1 = theory.createUpgrade(1000, currency, new FirstFreeCost(new ExponentialCost(1e20, Math.log2(2))))
         r1.getDescription = _ => Utils.getMath(getDesc(r1.level))
-        r1.getInfo = amount => Utils.getMathTo(getDesc(r1.level, r1.level + amount))
+        r1.getInfo = amount => Utils.getMathTo(getDesc(r1.level), getDesc(r1.level + amount))
     }
 
     {
