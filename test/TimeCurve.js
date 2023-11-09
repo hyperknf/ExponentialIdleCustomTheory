@@ -169,7 +169,7 @@ var getPrimaryEquation = () => {
         `\\dot{\\rho}=q_1q_2${unlock_q.level >= 1 ? `q^{0.5}` : ``}f(t)`
     ]
     if (unlock_q.level >= 1) result.push(`\\dot{q}=r_1`)
-    return result.join(`\\\\`)
+    return `\\begin{array}{c} ${result.join(`\\\\`)} \\end{array}`
 }
 var getSecondaryEquation = () => {
     theory.secondaryEquationHeight = 85
