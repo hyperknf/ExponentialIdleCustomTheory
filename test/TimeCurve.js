@@ -1,4 +1,4 @@
-import { ConstantCost, CustomCost, ExponentialCost, FirstFreeCost, FreeCost, LinearCost } from "./api/Costs"
+import { ConstantCost, CustomCost, ExponentialCost, FirstFreeCost, FreeCost } from "./api/Costs"
 import { BigNumber } from "./api/BigNumber"
 import { theory } from "./api/Theory"
 import { Utils } from "./api/Utils"
