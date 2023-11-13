@@ -5,10 +5,10 @@ import { Utils } from "./api/Utils"
 import { Localization } from "./api/Localization"
 
 var id = "TimeCurve"
-var name = "Time Curve"
-var description = "Time Curve by HyperKNF"
+var name = "Curve of Time"
+var description = "Curve of Time by HyperKNF"
 var authors = "HyperKNF"
-var version = 1
+var version = "1.2"
 
 var currency
 var q1, q2, r1, r2, c, t1
