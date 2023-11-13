@@ -266,7 +266,7 @@ var getBaseDotRho = () => {
 var getBaseDotQ = () => {
     if (unlock_q.level < 1) return BigNumber.ZERO
 
-    const r_1 = isR1Available() ? getR1(r1.level) : 1
+    const r_1 = isR1Available() ? getR1(r1.level) : 0
     const r_2 = isR2Available() ? getR2(r2.level) : 1
     const gt = isGtAvailable() ? getGtValue(time) : 1
     return r_1 * r_2 * gt / q
