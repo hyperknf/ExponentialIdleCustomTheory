@@ -292,7 +292,7 @@ var setInternalState = string => {
     
     const time_state = state.time ?? BigNumber.ZERO.toBase64String()
     time = BigNumber.fromBase64String(time_state)
-    const q_state = state.q ?? BigNumber.ZERO.toBase64String()
+    const q_state = state.q ?? BigNumber.ONE.toBase64String()
     q = BigNumber.fromBase64String(q_state)
 }
 
