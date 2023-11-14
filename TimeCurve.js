@@ -190,6 +190,7 @@ var tick = (elapsedTime, multiplier) => {
 
     currency.value += dt * drho
     q += dt * dq
+    q = q.max(BigNumber.ONE)
 
     theory.invalidatePrimaryEquation()
     theory.invalidateSecondaryEquation()
