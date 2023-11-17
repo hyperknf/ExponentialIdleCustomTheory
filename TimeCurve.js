@@ -278,7 +278,7 @@ var getGtValue = t => 2 * t.sqrt() / 3 - 2 * t.pow(1.5) / (5 * getC(c.level)) //
 
 var getFtDisplay = time => {
     const modifier = getC(c.level) / 5
-    return ((5 - time / modifier) / 5 * (time / modifier).sqrt()).toNumber()
+    return ((5000 - time / modifier) / 5 * (time / modifier).sqrt()).toNumber()
 }
 
 var getInternalState = () => {
