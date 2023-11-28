@@ -182,7 +182,7 @@ class CurveOfTime {
                 reset_time.getInfo = () => Utils.getMath(getDesc())
                 reset_time.bought = _ => {
                     reset_time.level = 0
-                    this.time = BigNumber.ZERO
+                    this.t = BigNumber.ZERO
                 }
                 return reset_time
             })()
@@ -258,8 +258,8 @@ class CurveOfTime {
     }
 
     get graphValue() {
-        if (this.GraphDisplay.ft) return this.getFtDisplay(time)
-        if (this.GraphDisplay.gt) return this.getGtDisplay(time)
+        if (this.GraphDisplay.ft) return this.getFtDisplay(this.t)
+        if (this.GraphDisplay.gt) return this.getGtDisplay(this.t)
         return this.currency.value.sign * (1 + this.currency.value.abs()).log10().toNumber()
     }
 
@@ -312,12 +312,12 @@ class CurveOfTime {
     }
 
     getFtDisplay(time) {
-        const modifier = this.getC(c.level) / 5
+        const modifier = this.getC(this.Upgrades.c.level) / 5
         return ((5 - time / modifier) / 5 * (time / modifier).sqrt()).toNumber()
     }
 
     getGtDisplay(t) {
-        const modifier = this.getC(c.level) / 5
+        const modifier = this.getC(this.Upgrades.c.level) / 5
         return (getGtValue(t) / modifier).toNumber()
     }
 
