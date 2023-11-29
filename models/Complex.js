@@ -16,8 +16,8 @@ class Complex {
     }
     static fromJSON(obj) {
         if (typeof obj != "object") throw new Error("Inputted value is not an object")
-        const real = obj.real ?? BigNumber.ZERO.toBase64String()
-        const imaginary = obj.imaginary ?? BigNumber.ZERO.toBase64String()
+        const real = BigNumber.fromBase64String(obj.real) ?? BigNumber.ZERO.toBase64String()
+        const imaginary = BigNumber.fromBase64String(obj.imaginary) ?? BigNumber.ZERO.toBase64String()
         return new Complex(real, imaginary)
     }
 
