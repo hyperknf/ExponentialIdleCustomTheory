@@ -59,6 +59,9 @@ class CurveOfTime {
                 BigNumber.TEN.pow(15),
                 BigNumber.TEN.pow(20)
             ],
+            increase_q_exp_costs: [
+                BigNumber.TEN.pow(35)
+            ],
             milestone_dq_multi: 2
         }
 
@@ -101,7 +104,7 @@ class CurveOfTime {
                 return c
             })(),
             t1: (()=>{
-                const getDesc = level => `t_1=\\frac{${this.getCMultiplier(level).toString(0)}}{${this.Settings.t1_decay_rate}^{${level}}}`
+                const getDesc = level => `t_1=\\frac{${this.getCMultiplier(level)}}{${this.Settings.t1_decay_rate}^{${level}}}`
                 const getInfo = level => `t_1=${this.getT1(level)}`
                 const t1 = this.theory.createUpgrade(20000, this.currency, new ExponentialCost(BigNumber.TEN.pow(5), Math.log2(BigNumber.TEN.pow(2.5))))
                 t1.getDescription = _ => Utils.getMath(getDesc(t1.level))
@@ -130,6 +133,18 @@ class CurveOfTime {
                 unlock_q_terms.getInfo = _ => unlock_q_terms.level >= 1 ? Localization.getUpgradeAddTermInfo(`g(t)`) : Localization.getUpgradeAddTermInfo(`r_2`)
                 unlock_q_terms.maxLevel = 2
                 return unlock_q_terms
+            })(),
+            increase_q_exp: (()=>{
+                const requirement_text = `Requirement: ${Utils.getMath(`t_1\\text{ level }\\ge\\text{ 10}`)}`
+                const increase_q_exp = this.theory.createPermanentUpgrade(2000, this.currency, new CustomCost(
+                    level => {
+                        return this.Settings.increase_q_exp_costs[level]
+                    }
+                ))
+                increase_q_exp.getDescription = _ => this.qExponentEffectAvailable ? Localization.getUpgradeIncCustomExpDesc(`q`, 0.01) : requirement_text
+                increase_q_exp.getInfo = _ => this.qExponentEffectAvailable ? Localization.getUpgradeIncCustomExpInfo(`q`, 0.01) : requirement_text
+                increase_q_exp.maxLevel = Math.min(50, this.Settings.increase_q_exp_costs.length)
+                return increase_q_exp
             })(),
             display_ft: (()=>{
                 const display_ft = this.theory.createPermanentUpgrade(10000, this.currency, new FreeCost())
@@ -163,13 +178,13 @@ class CurveOfTime {
                 refund_t1.getDescription = _ => Localization.getUpgradeDecCustomDesc(`t_1\\text{ level}`, 1)
                 refund_t1.getInfo = _ => Localization.getUpgradeDecCustomInfo(`t_1\\text{ level}`, 1)
                 refund_t1.bought = _ => {
-                    if (t1.level <= 0) {
+                    if (this.Upgrades.t1.level <= 0) {
                         refund_t1.level--
                         this.currency.value += refund_t1.cost.getCost(refund_t1.level)
                         return
                     }
                     this.Upgrades.t1.level--
-                    this.currency.value += this.Upgrades.t1.cost.getCost(t1.level)
+                    this.currency.value += this.Upgrades.t1.cost.getCost(this.Upgrades.t1.level)
                 }
                 return refund_t1
             })()
@@ -220,7 +235,7 @@ class CurveOfTime {
     get primaryEquation() {
         this.theory.primaryEquationHeight = this.r1Available ? 45 : 25
         const result = [
-            `\\dot{\\rho}=${this.dotRhoMultiplied ? String(this.Settings.milestone_drho_multi) : ``}q_1q_2${this.qUnlocked ? `q^{0.5}` : ``}f(t)`
+            `\\dot{\\rho}=${this.dotRhoMultiplied ? String(this.Settings.milestone_drho_multi) : ``}q_1q_2${this.qUnlocked ? `q^{${this.getQExponent(this.PermanentUpgrades.increase_q_exp.level).toString(this.qExponentDecimals)}}` : ``}f(t)`
         ]
         if (this.r1Available) result.push(`\\dot{q}=\\frac{${this.dotQMultiplied ? String(this.Settings.milestone_dq_multi) : ``}r_1${this.r2Available ? `r_2` : ``}${this.gtAvailable ? `g(t)` : ``}}{q}`)
         return `\\begin{array}{c} ${result.join(`,\\quad `)} \\end{array}`
@@ -275,6 +290,10 @@ class CurveOfTime {
         return this.PermanentUpgrades.unlock_q_terms.level >= 2 && this.PermanentUpgrades.unlock_q_terms.isAvailable
     }
 
+    get qExponentEffectAvailable() {
+        return this.Upgrades.t1.level >= 10
+    }
+
     get dotRhoMultiplied() {
         return this.MilestoneUpgrades.increase_drho_multi.level >= 1
     }
@@ -303,6 +322,13 @@ class CurveOfTime {
         return r_1 * r_2 * gt / this.q
     }
 
+    get qExponentDecimals() {
+        const exponent = this.getQExponent(this.PermanentUpgrades.increase_q_exp.level)
+        if ((exponent * 10) % 10 == 0) return 0
+        if ((exponent * 10) % 1 != 0) return 2
+        return 1
+    }
+
     getFtValue(time) {
         return (this.getC(this.Upgrades.c.level) - time) / this.getC(this.Upgrades.c.level) * time.sqrt()
     }
@@ -318,7 +344,12 @@ class CurveOfTime {
 
     getGtDisplay(t) {
         const modifier = this.getC(this.Upgrades.c.level) / 5
-        return (getGtValue(t) / modifier).toNumber()
+        return (this.getGtValue(t) / modifier).toNumber()
+    }
+
+    getQExponent(level) {
+        if (this.qExponentEffectAvailable) return BigNumber.ONE / 2 + 0.01 * level
+        return BigNumber.ONE / 2
     }
 
     getQ1(level) {
@@ -357,11 +388,11 @@ class CurveOfTime {
         let dt = BigNumber.from(elapsedTime * multiplier)
         let bonus = BigNumber.from(theory.publicationMultiplier)
 
-        this.t += this.t >= this.getC(this.Upgrades.c.level) ? (this.PermanentUpgrades.auto_reset.level >= 1 ? -this.t : (this.getC(c.level) - this.t)) : (dt * this.getT1(this.Upgrades.t1.level))
+        this.t += this.t >= this.getC(this.Upgrades.c.level) ? (this.PermanentUpgrades.auto_reset.level >= 1 ? -this.t : (this.getC(this.Upgrades.c.level) - this.t)) : (dt * this.getT1(this.Upgrades.t1.level))
         this.t = this.t.min(this.getC(this.Upgrades.c.level))
         this.ft = this.getFtValue(this.t)
         this.gt = this.getGtValue(this.t)
-        this.dot_rho = bonus * this.baseDotRho * (this.dotRhoMultiplied ? this.Settings.milestone_drho_multi : 1) * (this.qUnlocked ? this.q.sqrt() : 1)
+        this.dot_rho = bonus * this.baseDotRho * (this.dotRhoMultiplied ? this.Settings.milestone_drho_multi : 1) * (this.qUnlocked ? this.q.pow(this.getQExponent(this.PermanentUpgrades.increase_q_exp.level)) : 1)
         this.dot_q = this.baseDotQ * (this.dotQMultiplied ? this.Settings.milestone_dq_multi : 1)
 
         try {
@@ -384,6 +415,7 @@ class CurveOfTime {
         this.Upgrades.r2.isAvailable = this.r2Available
 
         this.PermanentUpgrades.unlock_q_terms.isAvailable = this.qUnlocked
+        this.PermanentUpgrades.increase_q_exp.isAvailable = this.qUnlocked
         this.MilestoneUpgrades.increase_drho_multi.isAvailable = this.MilestoneUpgrades.increase_dq_multi.isAvailable = this.qUnlocked
 
         this.PermanentUpgrades.display_ft.isAvailable = !this.GraphDisplay.gt
