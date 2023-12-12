@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>
+            e^x Custom Theories
+        </title>
+    </head>
+    <body>
+        <div class="center">
+            <h1>
+                $$ e^x \text{ Custom Theories} $$
+            </h1>
+            <h4>
+                $$ \text{By HyperKNF} $$
+            </h4>
+            <hr>
+            <table class="center">
+                <thead>
+                    <th><h2>$$ \text{Custom Theory List} $$</h2></th>
+                </thead>
+            </table>
+            <table class="center">
+                <tbody>
+                    <tr>
+                        <td>
+                            <h3>
+                                $$ \text{Exponential Power} $$
+                            </h3>
+                        </td>
+                        <td>
+                            <button onclick="copy(Links.EP)">
+                                Copy link
+                            </button>
+                        </td>
+                        <td>
+                            <button onclick="overview('EP')">
+                                Overview
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h3>
+                                $$ \text{Curve of Time} $$
+                            </h3>
+                        </td>
+                        <td>
+                            <button onclick="copy(Links.CT)">
+                                Copy link
+                            </button>
+                        </td>
+                        <td>
+                            <button onclick="overview('CT')">
+                                Overview
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+            // Empty
+        </script>
+        <script>
+            class Links {
+                static get EP() { return "https://theory.hyperknf.com/ExponentialPower.js" }
+                static get CT() { return "https://theory.hyperknf.com/TimeCurve.js" }
+            }
+            async function copy(text) {
+                await navigator.clipboard.writeText(text)
+                alert("Copied to clipboard!")
+            }
+            function overview(theory) {
+                window.location.href = `https://theory.hyperknf.com/overview/${theory}`
+            }
+        </script>
+
+        <style>
+            body {
+                background-color: rgb(200, 255, 255);
+            }
+
+            .center {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            button {
+                display: inline-block;
+                padding: 12px 24px;
+                font-size: 16px;
+                font-weight: bold;
+                color: #fff;
+                background-color: #4CAF50;
+                border: none;
+                border-radius: 4px;
+                transition: background-color 0.3s ease;
+            }
+            button:hover {
+                background-color: #45a049;
+            }
+
+            table {
+                border-collapse: collapse;
+                width: 55%;
+            }
+            table th, table td {
+                padding: 12px;
+                border-bottom: 1px solid #ddd;
+            }
+            table th {
+                background-color: #4CAF50;
+                color: #fff;
+            }
+            table tbody tr:nth-child(even) {
+                background-color: rgb(125, 255, 255);
+            }
+        </style>
+    </body>
+</html>
