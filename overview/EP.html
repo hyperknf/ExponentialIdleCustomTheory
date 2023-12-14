@@ -173,10 +173,23 @@
                     </tr>
                 </tbody>
             </table>
+            <button class="footer" onclick="copy()">Copy link</button>
+            <button class="footer" onclick="back()">Return to main page</button>
         </div>
 
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
             // Empty
+        </script>
+        <script>
+            const link = "https://theory.hyperknf.com/ExponentialPower.js"
+            const main = "https://theory.hyperknf.com/"
+            async function copy() {
+                await navigator.clipboard.writeText(link)
+                alert("Copied to clipboard!")
+            }
+            function back() {
+                window.location.href = main
+            }
         </script>
 
         <style>
@@ -187,6 +200,7 @@
             .center {
                 margin-left: auto;
                 margin-right: auto;
+                text-align: center;
             }
 
             button {
@@ -202,6 +216,9 @@
             }
             button:hover {
                 background-color: #45a049;
+            }
+            button.footer {
+                width: 27.5%
             }
 
             table {
