@@ -1,9 +1,42 @@
-import { ConstantCost, ExponentialCost, FreeCost, LinearCost } from "./api/Costs"
+import { ConstantCost, ExponentialCost, FreeCost, CustomCost } from "./api/Costs"
 import { BigNumber } from "./api/BigNumber"
 import { theory, QuaternaryEntry } from "./api/Theory"
 import { Utils } from "./api/Utils"
 import { Localization } from "./api/Localization"
 import { ui } from "./api/ui/UI"
+
+/*
+
+    ===== READ BEFORE GOING ANY FURTHER =====
+
+    --- EXPONENTIAL POWER ---
+
+    < credits >
+    theory, idea, translations: HyperKNF
+    testing: e^x community
+    e_1, e_2, e_3, e_4, e_6 approximations: WolframAlpha.com (series expansion)
+    e_5 approximation: Sequential Limits (official custom theory), Xelaroc
+
+    < version >
+    v1.3.3d TEST
+
+    < downloads >
+    https://theory.hyperknf.com/ExponentialPower.js
+    https://raw.githubusercontent.com/hyperknf/ExponentialIdleCustomTheory/main/ExponentialPower.js
+
+    < official leaderboards >
+    https://docs.google.com/spreadsheets/d/1VlHgt1y4GWCDph3zPfsm2foX40NK5aM0IUfZlEgy_ac/
+
+    < license >
+    Permission to use, modify, merge, and distribute this piece of JavaScript code for non-profit-making
+    purposes is hereby granted, provided that the correct credits (refer to the "credits" section of
+    this code comment) are given.
+    This JavaScript code is provided as is, without warranty of any kind, expressed or implied,
+    including but not limited to the warranties of merchantability, fitness for a particular purpose,
+    and non-infringement.
+    Last updated: 29/11/2023 (EP v1.3.3d.test7)
+
+*/
 
 const TextResource = {
     "Achievements": {
@@ -79,6 +112,16 @@ const TextResource = {
                     "en": "Reach e500ρ",
                     "zh-Hant": "達到e500ρ",
                     "zh-Hans": "达到e500ρ"
+                }
+            },
+            "e1000": {
+                "Name": {
+                    "en": "Exemplary"
+                },
+                "Description": {
+                    "en": "Reach e1000ρ",
+                    "zh-Hant": "達到e1000ρ",
+                    "zh-Hans": "达到e1000ρ"
                 }
             }
         },
@@ -234,6 +277,9 @@ const TextResource = {
             "fi": "Lukitse asetukset"
         }
     },
+    "UnlockELatex": {
+        "en": "e_i\\text{ max level}"
+    },
     "Statistics": {
         "Title": {
             "en": "Statistics",
@@ -277,7 +323,7 @@ var getName = language => {
     const names = {
         "en": "Exponential Power",
         "zh-Hant": "指數力量",
-        "zh-Hans": "指数力量t",
+        "zh-Hans": "指数力量",
         "fi": "Eksponentiaalinen Teho"
     }
     return names[language] ?? names.en
@@ -308,24 +354,24 @@ var getDescription = language => {
     return (descriptions[language] ?? descriptions.en).join("\n")
 }
 var authors = "HyperKNF"
-var version = "v1.3.3c"
+var version = "v1.3.3d.test8"
 
 const currency2text = ["δ", "\\delta"]
 
 var drho = BigNumber.ZERO
 
 var currency, currency2
-var k, c1, c2, n, a, b, x, y, x1, y1, y2, dtime
+var k, c1, c2, n, a, b, x, y, l1, l2, p, x1, x2, y1, y2, dtime
 var test_upgrade, domain_switch
-var unlock, time_exp
+var unlock, unlock2, increase_unlockE, time_exp, c1_exp
 var publication, unlockE, unlockCurrency2
-
 var ad_bonus = false
 
 var dt = BigNumber.ONE / 10
 
 var achievements = {
     regular: [
+        false,
         false,
         false,
         false,
@@ -340,13 +386,13 @@ var achievements = {
 }
 
 var progress_achievements, secret_achievements
-var achievement1, achievement2, achievement3, achievement4
+var achievement1, achievement2, achievement3, achievement4, achievement5, achievement6, achievement7
 var secret_achievement1, secret_achievement2
 
 var page = 1
 var E = BigNumber.E
-var E1 = BigNumber.ZERO, E2 = BigNumber.ZERO, E3 = BigNumber.ZERO, E4 = BigNumber.ZERO
-var EDisplay = [BigNumber.ZERO, BigNumber.ZERO, BigNumber.ZERO, BigNumber.ZERO]
+var E1 = BigNumber.ZERO, E2 = BigNumber.ZERO, E3 = BigNumber.ZERO, E4 = BigNumber.ZERO, E5 = BigNumber.ZERO, E6 = BigNumber.ZERO
+var EDisplay = [BigNumber.ZERO, BigNumber.ZERO, BigNumber.ZERO, BigNumber.ZERO, BigNumber.ZERO, BigNumber.ZERO]
 var time = BigNumber.ZERO
 
 var domain_switched = false
@@ -356,14 +402,15 @@ var publication_max_drho = BigNumber.ZERO
 var max_drho = BigNumber.ZERO
 var total_rho = BigNumber.ZERO
 
-var balance_values = [BigNumber.ZERO, BigNumber.ZERO, BigNumber.ZERO]
+var balance_values = [BigNumber.ZERO, BigNumber.ZERO, BigNumber.ZERO, BigNumber.ZERO]
 
 var total_time = [BigNumber.ZERO, BigNumber.ZERO]
 var ticks = BigNumber.ZERO
 var recovering = false
 var recovery_time = BigNumber.ZERO
 
-var unlock_bought = false, unlock_refund = false, unlock_times = 0
+var unlock_bought = false, unlock_refund = false, unlock_times = 0, tap_count = 0
+var milestones = [20, 50, 100, 170, 290, 400, 450, 650, 720, 900, 925, 960, 1000]
 var secret_achievement_chance = 1e6
 var page2_equation_scale = 0.925
 
@@ -389,7 +436,7 @@ var tertiary_display = Array.from({
 }, () => BigNumber.ZERO)
 
 var log = (base, value) => BigNumber.from(value).log() / BigNumber.from(base).log()
-var getTextResource = resource => resource[Localization.language] ?? resource.en ?? "???"
+var getTextResource = resource => resource[Localization.language] ?? resource.en ?? "?????"
 
 var getStepwisePowerProduct = (level, base, step_length, offset) => {
     if (offset != 0) throw new Error("I don't know how to implement non-zero offset :)")
@@ -441,12 +488,26 @@ var initialize = () => {
     // c1
     {
         let getDesc = (level) => "c_1=" + getC1(level).toString(1)
+        const getCost = level => 15 * getStepwisePowerProduct(level, 2, 50, 0)
         c1 = theory.createUpgrade(1, currency, new CustomCost(
-            level => 15 * getStepwisePowerProduct(level, 2, 50, 0)
+            getCost,
+            function cumulative_cost(level, amount) {
+                let result = BigNumber.ZERO
+                for (let i = 0; i < amount; i++) result += getCost(level + i)
+                return result
+            },
+            function max(level, currency) {
+                let cumulative = BigNumber.ZERO
+                let current_level = level
+                while (cumulative < currency) {
+                    cumulative += getCost(current_level)
+                    current_level++
+                }
+                return Math.round(current_level - level - 1)
+            }
         ))
         c1.getDescription = (_) => Utils.getMath(getDesc(c1.level))
         c1.getInfo = (amount) => Utils.getMathTo(getDesc(c1.level), getDesc(c1.level + amount))
-        c1.maxLevel = 9999
     }
 
     // c2
@@ -460,10 +521,18 @@ var initialize = () => {
 
     // x1
     {
-        let getDesc = level => "x_1=" + getX1(level).toString(2)
+        let getDesc = level => "x_1=" + getX1(level).toString(3)
         x1 = theory.createUpgrade(3, currency, new ExponentialCost(1e45, Math.log2(77.5)))
         x1.getDescription = _ => Utils.getMath(getDesc(x1.level))
         x1.getInfo = amount => Utils.getMathTo(getDesc(x1.level), getDesc(x1.level + amount))
+    }
+
+    // x2
+    {
+        let getDesc = level => "x_2=" + getX2(level).toString(3)
+        x2 = theory.createUpgrade(4, currency, new SuperExponentialCost(BigNumber.TEN.pow(450), 60, 1.025).cost_model)
+        x2.getDescription = _ => Utils.getMath(getDesc(x2.level))
+        x2.getInfo = amount => Utils.getMathTo(getDesc(x2.level), getDesc(x2.level + amount))
     }
     
     // y1
@@ -520,10 +589,36 @@ var initialize = () => {
     // y
     {
         let getDesc = (level) => "y=" + getY(level).toString(2)
-        let getInfo = (level) => "y=" + getY(level).toString(2) + ""
+        let getInfo = (level) => "y=" + getY(level).toString(2)
         y = theory.createUpgrade(104, currency, new ExponentialCost(5e83, Math.log2(2.046375)))
         y.getDescription = (_) => Utils.getMath(getDesc(y.level))
         y.getInfo = (amount) => Utils.getMathTo(getInfo(y.level), getInfo(y.level + amount))
+    }
+
+    // l1
+    {
+        let getDesc = (level) => "l_1=" + getL1(level).toString(0)
+        let getInfo = (level) => "l_1=" + getL1(level).toString(0)
+        l1 = theory.createUpgrade(105, currency, new ExponentialCost(BigNumber.TEN.pow(650), Math.log2(6.2)))
+        l1.getDescription = (_) => Utils.getMath(getDesc(l1.level))
+        l1.getInfo = (amount) => Utils.getMathTo(getInfo(l1.level), getInfo(l1.level + amount))
+    }
+
+    // l2
+    {
+        let getDesc = (level) => "l_2=1.2^{" + getL2Exponent(level).toString(0) + "}"
+        let getInfo = (level) => "l_2=" + getL2(level).toString(2)
+        l2 = theory.createUpgrade(106, currency, new SuperExponentialCost(BigNumber.TEN.pow(650), 24.5, 1.001).cost_model)
+        l2.getDescription = (_) => Utils.getMath(getDesc(l2.level))
+        l2.getInfo = (amount) => Utils.getMathTo(getInfo(l2.level), getInfo(l2.level + amount))
+    }
+
+    // p
+    {
+        let getDesc = level => `p=${getP(level)}`
+        p = theory.createUpgrade(107, currency, new SuperExponentialCost(BigNumber.TEN.pow(720), 3, 1.00125).cost_model)
+        p.getDescription = _ => Utils.getMath(getDesc(p.level))
+        p.getInfo = amount => Utils.getMathTo(getDesc(p.level), getDesc(p.level + amount))
     }
 
     // dt
@@ -561,6 +656,10 @@ var initialize = () => {
                         return BigNumber.TEN.pow(48)
                     case 3:
                         return BigNumber.TEN.pow(85)
+                    case 4:
+                        return BigNumber.TEN.pow(650)
+                    case 5:
+                        return BigNumber.TEN.pow(720)
                 }
             }
         ))
@@ -572,7 +671,7 @@ var initialize = () => {
     {
         let getDesc = _ => Localization.getUpgradeUnlockDesc(currency2text[1])
         let getInfo = _ => Localization.getUpgradeUnlockInfo(currency2text[1])
-        unlockCurrency2 = theory.createPermanentUpgrade(1000, currency, new ConstantCost(BigNumber.TEN.pow(1000)))
+        unlockCurrency2 = theory.createPermanentUpgrade(1000, currency, new ConstantCost(BigNumber.TEN.pow(9999)))
         unlockCurrency2.description = "?????"
         unlockCurrency2.info = "?????"
         unlockCurrency2.maxLevel = 1
@@ -659,26 +758,7 @@ var initialize = () => {
     ///////////////////////
     //// Milestone Upgrades
 
-    theory.setMilestoneCost(new CustomCost(level => {
-        switch (level) {
-            case 0:
-                return BigNumber.from(20)
-            case 1:
-                return BigNumber.from(50)
-            case 2:
-                return BigNumber.from(100)
-            case 3:
-                return BigNumber.from(170)
-            case 4:
-                return BigNumber.from(290)
-            case 5:
-                return BigNumber.from(400)
-            case 6:
-                return BigNumber.from(450)
-            default:
-                return BigNumber.from(1000)
-        }
-    }))
+    theory.setMilestoneCost(new CustomCost(level => BigNumber.from(milestones[level] ?? 9999)))
 
     { 
         unlock = theory.createMilestoneUpgrade(0, 4)
@@ -694,15 +774,37 @@ var initialize = () => {
             unlock.level == 2 ? "y_1" :
             "y_2"
         )
-        unlock.canBeRefunded = _ => time_exp.level == 0 || unlock.level >= 2
+        unlock.canBeRefunded = _ => (time_exp.level == 0 || unlock.level >= 2) && unlock2.level == 0
         unlock.bought = _ => unlock_bought = true
         unlock.refunded = _ => unlock_refund = true
+    }
+
+    { 
+        unlock2 = theory.createMilestoneUpgrade(10, 1)
+        unlock2.getDescription = _ => Localization.getUpgradeAddTermDesc("x_2")
+        unlock2.getInfo = _ => Localization.getUpgradeAddTermInfo("x_2")
+        unlock2.canBeRefunded = _ => increase_unlockE.level == 0
+    }
+
+    { 
+        increase_unlockE = theory.createMilestoneUpgrade(50, 2)
+        increase_unlockE.getDescription = _ => Localization.getUpgradeIncCustomDesc(getTextResource(TextResource.UnlockELatex), 1)
+        increase_unlockE.getInfo = _ => Localization.getUpgradeIncCustomInfo(getTextResource(TextResource.UnlockELatex), 1)
+        increase_unlockE.canBeRefunded = _ => c1_exp.level == 0
     }
 
     { 
         time_exp = theory.createMilestoneUpgrade(100, 2)
         time_exp.getDescription = _ => Localization.getUpgradeIncCustomExpDesc("t", 0.25)
         time_exp.getInfo = _ => Localization.getUpgradeIncCustomExpInfo("t", 0.25)
+        time_exp.canBeRefunded = _ => unlock2.level == 0
+    }
+
+    { 
+        c1_exp = theory.createMilestoneUpgrade(200, 4)
+        c1_exp.getDescription = _ => Localization.getUpgradeIncCustomExpDesc("c_1", c1_exp.level >= 2 ? 0.02 : 0.03)
+        c1_exp.getInfo = _ => Localization.getUpgradeIncCustomExpInfo("c_1", c1_exp.level >= 2 ? 0.02 : 0.03)
+        c1_exp.canBeRefunded = _ => true
     }
     
     /////////////////
@@ -738,25 +840,32 @@ var initialize = () => {
         getTextResource(TextResource.Achievements.Progress.e50.Description),
         () => achievements.regular[2]
     )
-    achievement3 = theory.createAchievement(
+    achievement4 = theory.createAchievement(
         3,
         progress_achievements,
         getTextResource(TextResource.Achievements.Progress.e100.Name),
         getTextResource(TextResource.Achievements.Progress.e100.Description),
         () => achievements.regular[3]
     )
-    achievement4 = theory.createAchievement(
+    achievement5 = theory.createAchievement(
         4,
         progress_achievements,
         getTextResource(TextResource.Achievements.Progress.e200.Name),
         getTextResource(TextResource.Achievements.Progress.e200.Description),
         () => achievements.regular[4]
     )
-    achievement4 = theory.createAchievement(
+    achievement6 = theory.createAchievement(
         5,
         progress_achievements,
         getTextResource(TextResource.Achievements.Progress.e500.Name),
         getTextResource(TextResource.Achievements.Progress.e500.Description),
+        () => achievements.regular[5]
+    )
+    achievement7 = theory.createAchievement(
+        6,
+        progress_achievements,
+        getTextResource(TextResource.Achievements.Progress.e1000.Name),
+        getTextResource(TextResource.Achievements.Progress.e1000.Description),
         () => achievements.regular[5]
     )
 
@@ -783,8 +892,38 @@ var initialize = () => {
     //chapter2 = theory.createStoryChapter(1, "My Second Chapter", "This is line 1 again,\nand this is line 2... again.\n\nNice again.", () => c2.level > 0)
 }
 
+var skip_time = seconds => {
+    const ticks = Math.min(seconds / 0.1, 200)
+    const time_per_tick = seconds / ticks
+    const multi = ad_bonus ? 1.5 : 1
+    const autobuy = theory.isAutoBuyerActive
+    for (let ctick = 1; ctick <= ticks; ctick++) {
+        if (autobuy) buy_all_upgrades()
+        tick(time_per_tick, multi)
+    }
+}
+
+var buy_all_upgrades = () => {
+    const upgrades = [k, c1, c2, n, a, b, x, y, l1, l2, p, x1, x2, y1, y2, dtime]
+    for (const upgrade of upgrades) if (upgrade && upgrade.isAutoBuyable) upgrade.buy(-1)
+}
+
 var updatePage = () => {
     if (unlock.level < 1 && page == 2) page = 1
+}
+
+var updateMaxLevel = () => {
+    // Unlock e_i
+    {
+        const max_level = 4 + increase_unlockE.level
+        if (unlockE.level > max_level) {
+            for (let i = unlockE.level; i > max_level; i--) {
+                unlockE.level--
+                currency.value += unlockE.cost.getCost(unlockE.level)
+            }
+        }
+        unlockE.maxLevel = max_level
+    }
 }
 
 var updateAvailability = () => {
@@ -794,13 +933,21 @@ var updateAvailability = () => {
     a.isAvailable = b.isAvailable = unlock.level >= 1 && unlockE.level >= 2
     x.isAvailable = unlock.level >= 1 && unlockE.level >= 3
     y.isAvailable = unlock.level >= 1 && unlockE.level >= 4
+    l1.isAvailable = l2.isAvailable = unlockE.level >= 5
+    p.isAvailable = unlockE.level >= 6
+
     x1.isAvailable = unlock.level >= 2
+    x2.isAvailable = unlock2.level >= 1
     y1.isAvailable = unlock.level >= 3
     y2.isAvailable = unlock.level >= 4
 
     unlockE.isAvailable = unlock.level >= 1
 
+    unlock2.isAvailable = unlock.level >= 4 && time_exp.level >= 2
+    increase_unlockE.isAvailable = unlock2.level >= 1
+
     time_exp.isAvailable = unlock.level >= 1
+    c1_exp.isAvailable = increase_unlockE.level == increase_unlockE.maxLevel
 
     // Permanent upgrades
 
@@ -825,14 +972,20 @@ var tick = (elapsedTime, multiplier) => {
     if (unlockE.level >= 2) E2 = EDisplay[1] = getE2(getA(a.level), getB(b.level))
     if (unlockE.level >= 3) E3 = EDisplay[2] = getE3(getX(x.level))
     if (unlockE.level >= 4) E4 = EDisplay[3] = getE4(getY(y.level))
+    if (unlockE.level >= 5) E5 = EDisplay[4] = getE5(getL1(l1.level), getL2(l2.level))
+    if (unlockE.level >= 6) E6 = EDisplay[5] = getE6(getP(p.level))
     E = E1
     if (unlockE.level >= 2) E *= E2
     if (unlockE.level >= 3) E *= E3
     if (unlockE.level >= 4) E *= E4
+    if (unlockE.level >= 5) E *= E5
+    if (unlockE.level >= 6) E *= E6
 
     time += dt * getDT(dtime.level)
-    const main_exponent = getC1(c1.level).pow(getC2Balance(getC2(c2.level)) * (
+    const main_exponent = getC1(c1.level).pow(getC1ExtraExponent(c1_exp.level) * getC2Balance(getC2(c2.level)) * (
         unlock.level >= 2 ? getX1(x1.level) : 1
+    ) * (
+        unlock2.level >= 1 ? getX2(x2.level) : 1
     ))
     tertiary_display[0] = main_exponent.toString(3)
     drho = getK(k.level) * bonus * time.pow(getTExp(time_exp.level)) * (
@@ -855,6 +1008,7 @@ var tick = (elapsedTime, multiplier) => {
     if (currency.value >= BigNumber.TEN.pow(100)) achievements.regular[3] = true
     if (currency.value >= BigNumber.TEN.pow(200)) achievements.regular[4] = true
     if (currency.value >= BigNumber.TEN.pow(500)) achievements.regular[5] = true
+    if (currency.value >= BigNumber.TEN.pow(1000)) achievements.regular[6] = true
 
     if (unlock_bought && unlock_refund) {
         unlock_bought = unlock_refund = false
@@ -875,6 +1029,7 @@ var tick = (elapsedTime, multiplier) => {
     theory.invalidateQuaternaryValues()
 
     updatePage()
+    updateMaxLevel()
     updateAvailability()
 }
 
@@ -905,11 +1060,11 @@ var getPrimaryEquation = () => {
     if (page == 0) {
         theory.primaryEquationHeight = 100
         theory.primaryEquationScale = 1
-        result = "B(x)=\\frac{x}{b_0}\\\\b_0=\\prod_{i=1}^{3}{\\sqrt[i+1]{\\max(1,b_i)}}"
+        result = "B(x)=\\frac{x}{b_0}\\\\b_0=\\prod_{i=1}^{4}{\\sqrt[i+1]{\\max(1,b_i)}}"
     } else if (page == 1) {
         theory.primaryEquationHeight = 55
         theory.primaryEquationScale = 1
-        result = `\\dot{\\rho}=k${publication.level >= 1 ? "m" : ""}t^{${getTExp(time_exp.level) == 1 ? "" : getTExp(time_exp.level).toString(getTExp(time_exp.level) == 1 ? 0 : getTExp(time_exp.level) == 0.5 ? 1 : 2)}}${unlock.level >= 1 ? "E^{-0.9}" : ""}c_1^{B(c_2${unlock.level >= 2 ? "X" : ""})}${unlock.level >= 3 ? "Y" : ""}\
+        result = `\\dot{\\rho}=k${publication.level >= 1 ? "m" : ""}t^{${getTExp(time_exp.level) == 1 ? "" : getTExp(time_exp.level).toString(getTExp(time_exp.level) == 1 ? 0 : getTExp(time_exp.level) == 0.5 ? 1 : 2)}}${unlock.level >= 1 ? "E^{-0.9}" : ""}c_1^{${getC1ExtraExponentDisplay(c1_exp.level)}B(c_2${unlock.level >= 2 ? "X" : ""})}${unlock.level >= 3 ? "Y" : ""}\
         \\\\`
         + theory.latexSymbol + "=\\max\\rho"
     } else if (page == 2) {
@@ -922,18 +1077,19 @@ var getPrimaryEquation = () => {
 var getSecondaryEquation = () => {
     let result
     if (page == 0) {
-        theory.secondaryEquationHeight = 60
+        theory.secondaryEquationHeight = 80
         theory.secondaryEquationScale = 1
         result = [
             "b_1=\\log_{10^{20}}{\\rho}",
             "b_2=\\log_{10^{100}}{\\rho}",
-            "b_3=\\log_{10^{500}}{\\rho}"
+            "b_3=\\log_{10^{500}}{\\rho}",
+            "b_4=\\log_{10^{1000}}{\\rho}"
         ].join("\\\\")
     } else if (page == 1) {
         theory.secondaryEquationHeight = publication.level >= 1 ? unlock.level >= 2 ? unlock.level >= 3 ? 60 : 40 : 20 : 0
         theory.secondaryEquationScale = 1
         result = publication.level >= 1 ? `\\\\m=\\text{${getTextResource(TextResource.PublicationMultiplier)}}` : ""
-        if (unlock.level >= 2) result += `\\\\X=x_1`
+        if (unlock.level >= 2) result += `\\\\X=x_1${unlock2.level >= 1 ? `x_2` : ``}`
         if (unlock.level >= 3) result += `\\\\Y=y_1${unlock.level >= 4 ? "y_2" : ""}`
     } else if (page == 2) {
         theory.secondaryEquationHeight = page2_equation_scale * (
@@ -941,25 +1097,33 @@ var getSecondaryEquation = () => {
                 switch (level) {
                     case 0: return 0
                     case 1: return 35
-                    case 2: return 70
-                    case 3: return 110
-                    case 4: return 150
-                    default: return 150
+                    case 2: return 35
+                    case 3: return 75
+                    case 4: return 75
+                    case 5: return 115
+                    case 6: return 115
+                    default: return 110
                 }
             }
         )(unlockE.level)
         theory.secondaryEquationScale = page2_equation_scale
         result = "e_1=e-(1+\\frac{1}{n})^n"
-        if (unlockE.level >= 2) result += "\\\\e_2=e-(1+\\frac{a}{b})^{\\frac{b}{a}}"
+        if (unlockE.level >= 2) result += ",\\quad e_2=e-(1+\\frac{a}{b})^{\\frac{b}{a}}"
         if (unlockE.level >= 3) result += "\\\\e_3=|1-\\int^e_1\\frac{\\sqrt[x]{e}}{t}dt|"
-        if (unlockE.level >= 4) result += "\\\\e_4=1-\\int^{(1+\\frac{1}{y})^y}_{1}\\frac{1}{t}dt"
+        if (unlockE.level >= 4) result += ",\\quad e_4=1-\\int^{(1+\\frac{1}{y})^y}_{1}\\frac{1}{t}dt"
+        if (unlockE.level >= 5) result += "\\\\e_5=e-\\frac{l_0}{\\sqrt[l_0]{l_0!}}"
+        if (unlockE.level >= 6) result += ",\\quad e_6=1-\\frac{\\sqrt{2\\pi p}(\\frac{p}{e})^p}{p!}"
     } else result = "\\text{Invalid Page}"
     return "\\begin{array}{c}" + result + "\\end{array}"
 }
 var getTertiaryEquation = () => {
     let result
     if (page == 1) {
-        result = `c_1^{B(c_2${unlock.level >= 2 ? "X" : ""})}=${tertiary_display[0]},\\quad b_0=${tertiary_display[1]}`
+        result = `c_1^{${getC1ExtraExponentDisplay(c1_exp.level)}B(c_2${unlock.level >= 2 ? "X" : ""})}=${tertiary_display[0]},\\quad b_0=${tertiary_display[1]}`
+    } else if (page == 2) {
+        const list = []
+        if (unlockE.level >= 5) list.push(`l_0=l_1l_2`)
+        result = list.join(",\\quad")
     } else result = ""
     return "\\begin{array}{c}" + result + "\\end{array}"
 }
@@ -985,6 +1149,10 @@ var getQuaternaryEntries = () => {
         result.push(formatQuaternaryEntry(
             "b_3",
             balance_values[2].toString(3)
+        ))
+        result.push(formatQuaternaryEntry(
+            "b_4",
+            balance_values[3].toString(3)
         ))
     }
     if (page == 1) {
@@ -1020,6 +1188,14 @@ var getQuaternaryEntries = () => {
             "e_4",
             unlockE.level >= 4 ? getInverseEDisplay(EDisplay[3]) : null
         ))
+        result.push(formatQuaternaryEntry(
+            "e_5",
+            unlockE.level >= 5 ? getInverseEDisplay(EDisplay[4]) : null
+        ))
+        result.push(formatQuaternaryEntry(
+            "e_6",
+            unlockE.level >= 6 ? getInverseEDisplay(EDisplay[5]) : null
+        ))
     }
     return result
 }
@@ -1030,11 +1206,26 @@ var getPublicationMultiplierFormula = symbol => `m=\\frac{15{${symbol}}^{0.126}}
 var getTau = () => currency.value.max(BigNumber.ZERO)
 var get2DGraphValue = () => currency.value.sign * (BigNumber.ONE + currency.value.abs()).log10().toNumber()
 
-var getK = level => BigNumber.ZERO + Utils.getStepwisePowerSum(level, 2, 5, 0)
+var getK = level => {
+    const first_layer = BigNumber.ZERO + Utils.getStepwisePowerSum(Math.min(level, 3750), 2, 5, 0)
+
+    const second_layer_base = Utils.getStepwisePowerSum(3751, 2, 5, 0) - Utils.getStepwisePowerSum(3750, 2, 5, 0)
+    const second_layer = second_layer_base * Utils.getStepwisePowerSum(Math.max(level - 3750, 0), 2, 7, 0)
+
+    return first_layer + second_layer
+}
 var getC1 = level => BigNumber.ONE + 0.5 * level
+var getC1ExtraExponent = level => BigNumber.ONE + 0.03 * Math.min(2, level) + 0.02 * Math.max(0, level - 2)
+var getC1ExtraExponentDisplay = level => {
+    const value = getC1ExtraExponent(level)
+    if (value == 1) return ""
+    if ((value * 10) % 1 == 0) return value.toString(1)
+    if ((value * 100) % 1 == 0) return value.toString(2)
+    return value.toString(3)
+}
 var getC2BalanceDenominator = value => {
     const rho = value.max(1.01)
-    const milestones = [BigNumber.TEN.pow(20), BigNumber.TEN.pow(100), BigNumber.TEN.pow(500)]
+    const milestones = [BigNumber.TEN.pow(20), BigNumber.TEN.pow(100), BigNumber.TEN.pow(500), BigNumber.TEN.pow(1000)]
     let result = 1
     for (let i = 0; i <= milestones.length - 1; i++) {
         const balance_value = log(milestones[i], rho)
@@ -1062,7 +1253,12 @@ var getA = level => getInverseA(level).pow(-1)
 var getB = level => BigNumber.ONE + Utils.getStepwisePowerSum(level, 2, 10, 0)
 var getX = level => BigNumber.TWO + Utils.getStepwisePowerSum(level, 2, 10, 0)
 var getY = level => (BigNumber.TWO + Utils.getStepwisePowerSum(level, 2, 10, 0)) / 4
-var getX1 = level => BigNumber.ONE + 0.01 * level
+var getL1 = level => BigNumber.TWO + Utils.getStepwisePowerSum(level, 2, 7, 0)
+var getL2Exponent = level => level / BigNumber.ONE
+var getL2 = level => BigNumber.from(1.2).pow(getL2Exponent(level))
+var getP = level => Utils.getStepwisePowerSum(level, 2, 25, 0) / 100
+var getX1 = level => BigNumber.ONE + 0.01 * Math.min(300, level) + 0.005 * Math.max(0, level - 300)
+var getX2 = level => BigNumber.ONE + 0.002 * Math.min(60, level) + 0.001 * Math.max(0, level - 60)
 var getY1Exponent = level => level / BigNumber.SIX
 var getY1 = level => BigNumber.E.pow(getY1Exponent(level))
 var getY2Exponent = level => level / BigNumber.TEN
@@ -1086,6 +1282,34 @@ var getE4 = y => {
     if (y <= 10) return 1 / (1 - (BigNumber.ONE + 1 / y).pow(y).log())
     // Laurent Series
     return 2 * y + 4 / 3 - 1 / (9 * y) + 8 / (135 * y.pow(2)) - 31 / (810 * y.pow(3))
+}
+var getE5 = (l1, l2) => {
+    const input = l1 * l2
+    // From Sequential Limits
+    const stirling = 2 * BigNumber.PI * input
+    if (input < 1000) return BigNumber.ONE / (BigNumber.E - (BigNumber.E / (stirling.pow(BigNumber.PI / stirling))))
+    else {
+        // From Sequential Limits
+        // Xelaroc's approximation
+        const constant = BigNumber.PI.log() + stirling.log().log() - stirling.log()
+        return ((constant.exp() - constant).exp() - 0.5) / BigNumber.E
+    }
+}
+var getE6 = m => {
+    const g = 7;
+    const C = [0.99999999999980993, 676.5203681218851, -1259.1392167224028, 771.32342877765313, -176.61502916214059, 12.507343278686905, -0.13857109526572012, 9.9843695780195716e-6, 1.5056327351493116e-7];
+    function gamma(z) {
+        z -= 1;
+        var x = C[0];
+        for (var i = 1; i < g + 2; i++)
+            x += C[i] / (z + i);
+        var t = z + g + 0.5;
+        return Math.sqrt(2 * Math.PI) * Math.pow(t, (z + 0.5)) * Math.exp(-t) * x
+    }
+    if (m <= 0) return BigNumber.ONE
+    if (m < 5) return BigNumber.ONE / (BigNumber.ONE - ((2 * m * BigNumber.PI).sqrt() * (m / BigNumber.E).pow(m)) / gamma(m + 1))
+    // Laurent Series
+    else return 12 * m + 0.5 + 293 / (720 * m) - 4406147 / (43545600 * m.pow(3)) + 14787105577 / (188116992000 * m.pow(5))
 }
 
 var factorial = number => {
@@ -1162,8 +1386,12 @@ var getEquationOverlay = _ => {
     ]
     const grid = ui.createGrid({
         inputTransparent: true,
-        cascadeInputTransparent: false,
-        children
+        cascadeInputTransparent: true,
+        children,
+        onTouched: event => {
+            if (event.type != TouchType.PRESSED) return
+            tap_count++
+        }
     })
     return grid
 }
@@ -1219,6 +1447,46 @@ var canGoToPreviousStage = () => page == 2 || page == 1
 var goToPreviousStage = () => page--
 var canGoToNextStage = () => (page == 1 && unlock.level >= 1) || page == 0
 var goToNextStage = () => page++
+
+class SuperExponentialCost {
+    constructor(original, base, increment) {
+        this.a = BigNumber.from(original)
+        this.c = BigNumber.from(base)
+        this.d = BigNumber.from(increment)
+    }
+
+    cost(level) {
+        return this.a * this.c.pow(level) * this.d.pow(0.5 * level * (level + 1))
+    }
+
+    cumulative_cost(level, amount) {
+        let result = BigNumber.ZERO
+        for (let i = 0; i < amount; i++) result += this.cost(level + i)
+        return result
+    }
+
+    max(level, currency) {
+        let cumulative = BigNumber.ZERO
+        let current_level = level
+        while (cumulative < currency) {
+            cumulative += this.cost(current_level)
+            current_level++
+        }
+        return Math.round(current_level - level - 1)
+    }
+
+    get functions() {
+        return [
+            level => this.cost(level),
+            (level, amount) => this.cumulative_cost(level, amount),
+            (level, currency) => this.max(level, currency)
+        ]
+    }
+
+    get cost_model() {
+        return new CustomCost(...this.functions)
+    }
+}
 
 class Popups {
     static get statistics() {
