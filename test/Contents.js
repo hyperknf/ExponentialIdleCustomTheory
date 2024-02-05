@@ -40,9 +40,35 @@ export class Item {
     }
 }
 
+export class Theory extends Item {
+    /**
+     * Name of the theory
+     * @type {string}
+     */
+    name
+
+    /**
+     * Creates a new Theory
+     * @param {string} name 
+     * @param {any} authors
+     * @param {any} version
+     * @param {number} version_code
+     * @param {number} start 
+     * @param {number} end 
+     * @param {Record<string, Item> | undefined} children 
+     */
+    constructor(name, authors, version, version_code, start, end, children) {
+        super(start, end, children)
+        this.name = name
+        this.authors = authors
+        this.version = version
+        this.version_code = version_code
+    }
+}
+
 export var Version = ""
 
-export var ExponentialPower = new Item(1, 1650, {
+export var ExponentialPower = new Theory("Exponential Power", "HyperKNF", "1.3.3d", 1, 1, 1650, {
     imports: new Item(1, 6),
     info: new Item(8, 36),
     text_resource: new Item(42, 320),
