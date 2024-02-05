@@ -66,16 +66,13 @@
             </h4>
         </div>
 
-        <script defer src="../Vercount.js">
-            // Empty
-        </script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
             // Empty
         </script>
         <script>
             class Links {
-                static get EP() { return "https://theory.hyperknf.com/ExponentialPower.js" }
-                static get CT() { return "https://theory.hyperknf.com/TimeCurve.js" }
+                static get EP() { return "https://theory.hyperknf.com/releases/EP" }
+                static get CT() { return "https://theory.hyperknf.com/releases/CT" }
             }
             async function copy(text) {
                 await navigator.clipboard.writeText(text)
@@ -94,6 +91,7 @@
             .center {
                 margin-left: auto;
                 margin-right: auto;
+                text-align: center;
             }
 
             button {
@@ -113,7 +111,7 @@
 
             table {
                 border-collapse: collapse;
-                width: 55%;
+                width: 60%;
             }
             table th, table td {
                 padding: 12px;
