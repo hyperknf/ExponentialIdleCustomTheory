@@ -17,9 +17,6 @@ import { ui } from "./api/ui/UI"
     e_1, e_2, e_3, e_4, e_6 approximations: WolframAlpha.com (series expansion)
     e_5 approximation: Sequential Limits (official custom theory), Xelaroc
 
-    < version >
-    v1.3.3d TEST
-
     < downloads >
     https://theory.hyperknf.com/ExponentialPower.js
     https://raw.githubusercontent.com/hyperknf/ExponentialIdleCustomTheory/main/ExponentialPower.js
@@ -36,6 +33,10 @@ import { ui } from "./api/ui/UI"
     and non-infringement.
     Last updated: 29/11/2023 (EP v1.3.3d.test7)
 
+*/
+
+/*
+    TEXT RESOURCE
 */
 
 const TextResource = {
@@ -318,6 +319,10 @@ const TextResource = {
     }
 }
 
+/*
+    THEORY INFORMATIONS
+*/
+
 var id = "ExponentialPowerTest"
 var getName = language => {
     const names = {
@@ -354,20 +359,35 @@ var getDescription = language => {
     return (descriptions[language] ?? descriptions.en).join("\n")
 }
 var authors = "HyperKNF"
-var version = "v1.3.3d.test8"
+
+var version = "v1.4.test3"
+var version_code = 1
 
 const currency2text = ["δ", "\\delta"]
 
+/*
+    DATA
+*/
+
+// DRHO DATA
+
 var drho = BigNumber.ZERO
+
+// THEORY PLACEHOLDERS
 
 var currency, currency2
 var k, c1, c2, n, a, b, x, y, l1, l2, p, x1, x2, y1, y2, dtime
 var test_upgrade, domain_switch
 var unlock, unlock2, increase_unlockE, time_exp, c1_exp
 var publication, unlockE, unlockCurrency2
+
+// DT DATA
+
 var ad_bonus = false
 
 var dt = BigNumber.ONE / 10
+
+// ACHIEVEMENTS PLACEHOLDERS
 
 var achievements = {
     regular: [
@@ -389,30 +409,49 @@ var progress_achievements, secret_achievements
 var achievement1, achievement2, achievement3, achievement4, achievement5, achievement6, achievement7
 var secret_achievement1, secret_achievement2
 
+// PAGE DATA
+
 var page = 1
+
+// E DATA
+
 var E = BigNumber.E
 var E1 = BigNumber.ZERO, E2 = BigNumber.ZERO, E3 = BigNumber.ZERO, E4 = BigNumber.ZERO, E5 = BigNumber.ZERO, E6 = BigNumber.ZERO
 var EDisplay = [BigNumber.ZERO, BigNumber.ZERO, BigNumber.ZERO, BigNumber.ZERO, BigNumber.ZERO, BigNumber.ZERO]
+
+// T DATA
+
 var time = BigNumber.ZERO
 
-var domain_switched = false
+// DOMAIN DATA
+
 var domain = 1
+
+// RHO DATA
 
 var publication_max_drho = BigNumber.ZERO
 var max_drho = BigNumber.ZERO
 var total_rho = BigNumber.ZERO
 
+// B DATA
+
 var balance_values = [BigNumber.ZERO, BigNumber.ZERO, BigNumber.ZERO, BigNumber.ZERO]
+
+// TIME DATA
 
 var total_time = [BigNumber.ZERO, BigNumber.ZERO]
 var ticks = BigNumber.ZERO
 var recovering = false
 var recovery_time = BigNumber.ZERO
 
+// DEVELOPER SETTINGS
+
 var unlock_bought = false, unlock_refund = false, unlock_times = 0, tap_count = 0
 var milestones = [20, 50, 100, 170, 290, 400, 450, 650, 720, 900, 925, 960, 1000]
 var secret_achievement_chance = 1e6
 var page2_equation_scale = 0.925
+
+// SETTINGS DATA
 
 var settings = {
     display_overlay: {
@@ -429,11 +468,17 @@ var settings_upgrades = {
     lock_settings: null
 }
 
+// DISPLAY DATA
+
 var show_stats
 
 var tertiary_display = Array.from({
     length: 2
 }, () => BigNumber.ZERO)
+
+/*
+    UTILITIES
+*/
 
 var log = (base, value) => BigNumber.from(value).log() / BigNumber.from(base).log()
 var getTextResource = resource => resource[Localization.language] ?? resource.en ?? "?????"
@@ -455,6 +500,24 @@ var getStepwisePowerProduct = (level, base, step_length, offset) => {
     return product
 }
 
+var generateCustomCost = getCost => new CustomCost(
+    getCost,
+    function cumulative_cost(level, amount) {
+        let result = BigNumber.ZERO
+        for (let i = 0; i < amount; i++) result += getCost(level + i)
+        return result
+    },
+    function max(level, currency) {
+        let cumulative = BigNumber.ZERO
+        let current_level = level
+        while (cumulative < currency) {
+            cumulative += getCost(current_level)
+            current_level++
+        }
+        return Math.round(current_level - level - 1)
+    }
+)
+
 var formatNumber = (number, digits, idklol) => (!idklol ? (number < 10 ? "0" : "") : "") + BigNumber.from(number).toString(digits)
 
 var formatTime = time => {
@@ -470,12 +533,17 @@ var formatTime = time => {
     return result
 }
 
+/*
+    INITIALIZE
+*/
+
 var initialize = () => {
+    // CURRENCY CREATION
+
     currency = theory.createCurrency()
     currency2 = theory.createCurrency(...currency2text)
 
-    ///////////////////
-    // Regular Upgrades
+    // REGULAR UPGRADES
 
     // k
     {
@@ -488,23 +556,8 @@ var initialize = () => {
     // c1
     {
         let getDesc = (level) => "c_1=" + getC1(level).toString(1)
-        const getCost = level => 15 * getStepwisePowerProduct(level, 2, 50, 0)
-        c1 = theory.createUpgrade(1, currency, new CustomCost(
-            getCost,
-            function cumulative_cost(level, amount) {
-                let result = BigNumber.ZERO
-                for (let i = 0; i < amount; i++) result += getCost(level + i)
-                return result
-            },
-            function max(level, currency) {
-                let cumulative = BigNumber.ZERO
-                let current_level = level
-                while (cumulative < currency) {
-                    cumulative += getCost(current_level)
-                    current_level++
-                }
-                return Math.round(current_level - level - 1)
-            }
+        c1 = theory.createUpgrade(1, currency, generateCustomCost(
+            level => 15 * getStepwisePowerProduct(level, 2, 50, 0)
         ))
         c1.getDescription = (_) => Utils.getMath(getDesc(c1.level))
         c1.getInfo = (amount) => Utils.getMathTo(getDesc(c1.level), getDesc(c1.level + amount))
@@ -636,12 +689,14 @@ var initialize = () => {
         dtime.maxLevel = 10
     }
 
-    /////////////////////
-    // Permanent Upgrades
+    // PERMANENT UPGRADES
+
+    // default upgrades
     publication = theory.createPublicationUpgrade(0, currency, 1e13)
     theory.createBuyAllUpgrade(1, currency, 1e16)
     theory.createAutoBuyerUpgrade(2, currency, 1e31)
 
+    // unlock e
     {
         let getDesc = level => Localization.getUpgradeUnlockDesc(`e_{${level + 1}}`)
         let getInfo = level => Localization.getUpgradeUnlockInfo(`e_{${level + 1}}`)
@@ -668,6 +723,7 @@ var initialize = () => {
         unlockE.maxLevel = 4
     }
 
+    // unlock second currency
     {
         let getDesc = _ => Localization.getUpgradeUnlockDesc(currency2text[1])
         let getInfo = _ => Localization.getUpgradeUnlockInfo(currency2text[1])
@@ -677,6 +733,7 @@ var initialize = () => {
         unlockCurrency2.maxLevel = 1
     }
 
+    // max drho display
     {
         let getDesc = level => `${
             getTextResource(settings.display_overlay.max_drho ? TextResource.Disable : TextResource.Enable)
@@ -692,6 +749,7 @@ var initialize = () => {
         }
     }
 
+    // time display
     {
         let getDesc = level => `${
             getTextResource(settings.display_overlay.time ? TextResource.Disable : TextResource.Enable)
@@ -707,6 +765,7 @@ var initialize = () => {
         }
     }
 
+    // lock settings
     {
         let getDesc = level => `${
             getTextResource(settings.lock_settings ? TextResource.Disable : TextResource.Enable)
@@ -722,6 +781,7 @@ var initialize = () => {
         }
     }
 
+    // show statistics
     {
         let getDesc = level => getTextResource(TextResource.Statistics.Show)
         let getInfo = getDesc
@@ -734,20 +794,21 @@ var initialize = () => {
         }
     }
 
-    //////////////////////
-    //// Singular Upgrades
+    // SINGULAR UPGRADES
 
+    // domain switch
     {
         domain_switch = theory.createSingularUpgrade(100, currency, new FreeCost())
         domain_switch.getDescription = _ => unlockCurrency2.level >= 1 ? getTextResource(TextResource.DomainSwitch.Unlocked.Description) : getTextResource(TextResource.DomainSwitch.Locked)
         domain_switch.getInfo = _ => unlockCurrency2 >= 1 ? getTextResource(TextResource.DomainSwitch.Unlocked.Info) : getTextResource(TextResource.DomainSwitch.Locked)
         domain_switch.bought = _ => {
             domain_switch.level = 0
-            domain_switched = true
+            if (unlockCurrency2.level >= 1) domain = 2
         }
     }
 
     /*
+    // test upgrade
     {
         test_upgrade = theory.createSingularUpgrade(1000, currency, new FreeCost())
         test_upgrade.getDescription = test_upgrade.getInfo = _ => Utils.getMath(`\\text{${getTextResource(TextResource.TestUpgrade)}}`)
@@ -755,11 +816,12 @@ var initialize = () => {
     }
     */
 
-    ///////////////////////
-    //// Milestone Upgrades
+    // MILESTONE UPGRADES
 
+    // settings
     theory.setMilestoneCost(new CustomCost(level => BigNumber.from(milestones[level] ?? 9999)))
 
+    // unlock
     { 
         unlock = theory.createMilestoneUpgrade(0, 4)
         unlock.getDescription = _ => Localization.getUpgradeAddTermDesc(
@@ -779,6 +841,7 @@ var initialize = () => {
         unlock.refunded = _ => unlock_refund = true
     }
 
+    // unlock 2
     { 
         unlock2 = theory.createMilestoneUpgrade(10, 1)
         unlock2.getDescription = _ => Localization.getUpgradeAddTermDesc("x_2")
@@ -786,6 +849,7 @@ var initialize = () => {
         unlock2.canBeRefunded = _ => increase_unlockE.level == 0
     }
 
+    // unlock e max level
     { 
         increase_unlockE = theory.createMilestoneUpgrade(50, 2)
         increase_unlockE.getDescription = _ => Localization.getUpgradeIncCustomDesc(getTextResource(TextResource.UnlockELatex), 1)
@@ -793,6 +857,7 @@ var initialize = () => {
         increase_unlockE.canBeRefunded = _ => c1_exp.level == 0
     }
 
+    // time exponent
     { 
         time_exp = theory.createMilestoneUpgrade(100, 2)
         time_exp.getDescription = _ => Localization.getUpgradeIncCustomExpDesc("t", 0.25)
@@ -800,6 +865,7 @@ var initialize = () => {
         time_exp.canBeRefunded = _ => unlock2.level == 0
     }
 
+    // c1 exponent
     { 
         c1_exp = theory.createMilestoneUpgrade(200, 4)
         c1_exp.getDescription = _ => Localization.getUpgradeIncCustomExpDesc("c_1", c1_exp.level >= 2 ? 0.02 : 0.03)
@@ -807,8 +873,7 @@ var initialize = () => {
         c1_exp.canBeRefunded = _ => true
     }
     
-    /////////////////
-    //// Achievements
+    // ACHIEVEMENTS
 
     progress_achievements = theory.createAchievementCategory(
         0,
@@ -892,6 +957,10 @@ var initialize = () => {
     //chapter2 = theory.createStoryChapter(1, "My Second Chapter", "This is line 1 again,\nand this is line 2... again.\n\nNice again.", () => c2.level > 0)
 }
 
+/*
+    SDK FUNCTIONS
+*/
+
 var skip_time = seconds => {
     const ticks = Math.min(seconds / 0.1, 200)
     const time_per_tick = seconds / ticks
@@ -908,26 +977,35 @@ var buy_all_upgrades = () => {
     for (const upgrade of upgrades) if (upgrade && upgrade.isAutoBuyable) upgrade.buy(-1)
 }
 
+/*
+    TICK UPDATES
+*/
+
+// UPDATE PAGE
+
 var updatePage = () => {
+    // debug
     if (unlock.level < 1 && page == 2) page = 1
 }
 
+// UPDATE MAX LEVEL
+
 var updateMaxLevel = () => {
-    // Unlock e_i
-    {
-        const max_level = 4 + increase_unlockE.level
-        if (unlockE.level > max_level) {
-            for (let i = unlockE.level; i > max_level; i--) {
-                unlockE.level--
-                currency.value += unlockE.cost.getCost(unlockE.level)
-            }
+    // unlock e_i
+    const max_level = 4 + increase_unlockE.level
+    if (unlockE.level > max_level) {
+        for (let i = unlockE.level; i > max_level; i--) {
+            unlockE.level--
+            currency.value += unlockE.cost.getCost(unlockE.level)
         }
-        unlockE.maxLevel = max_level
     }
+    unlockE.maxLevel = max_level
 }
 
+// UPDATE AVAILABILITY
+
 var updateAvailability = () => {
-    // Upgrades
+    // regular upgrades
 
     n.isAvailable = unlock.level >= 1 && unlockE.level >= 1
     a.isAvailable = b.isAvailable = unlock.level >= 1 && unlockE.level >= 2
@@ -949,24 +1027,32 @@ var updateAvailability = () => {
     time_exp.isAvailable = unlock.level >= 1
     c1_exp.isAvailable = increase_unlockE.level == increase_unlockE.maxLevel
 
-    // Permanent upgrades
+    // permanent upgrades
 
     settings_upgrades.display_overlay.max_drho.isAvailable = !settings.lock_settings
     settings_upgrades.display_overlay.time.isAvailable = !settings.lock_settings
 
-    // Singular upgrades
+    // singular upgrades
 
     // domain_switch.isAvailable = unlockCurrency2.level >= 1
 }
 
+// MAIN FUNCTION
+
 var tick = (elapsedTime, multiplier) => {
+    // time
+
     total_time[0] = total_time[0] + elapsedTime
     total_time[1] = total_time[1] + elapsedTime
     ticks += BigNumber.ONE
     
+    // dt
+
     dt = BigNumber.from(elapsedTime * multiplier)
     if (multiplier == 1.5) ad_bonus = true
     const bonus = theory.publicationMultiplier
+
+    // e_i
 
     E1 = EDisplay[0] = getE1(getN(n.level))
     if (unlockE.level >= 2) E2 = EDisplay[1] = getE2(getA(a.level), getB(b.level))
@@ -980,6 +1066,8 @@ var tick = (elapsedTime, multiplier) => {
     if (unlockE.level >= 4) E *= E4
     if (unlockE.level >= 5) E *= E5
     if (unlockE.level >= 6) E *= E6
+
+    // t and currencies
 
     time += dt * getDT(dtime.level)
     const main_exponent = getC1(c1.level).pow(getC1ExtraExponent(c1_exp.level) * getC2Balance(getC2(c2.level)) * (
@@ -999,8 +1087,12 @@ var tick = (elapsedTime, multiplier) => {
     total_rho += drho * dt
     total_rho = total_rho.max(getCurrencyFromTau(theory.tau)[0])
 
+    // max rho update
+
     if (max_drho <= drho * (dt / 0.1)) max_drho = drho * (dt / 0.1)
     if (publication_max_drho <= drho * (dt / 0.1)) publication_max_drho = drho * (dt / 0.1)
+
+    // achievements
 
     if (currency.value >= BigNumber.TEN.pow(10)) achievements.regular[0] = true
     if (currency.value >= BigNumber.TEN.pow(25)) achievements.regular[1] = true
@@ -1017,32 +1109,31 @@ var tick = (elapsedTime, multiplier) => {
     }
     if (Math.round(Math.random() * (secret_achievement_chance - 1) + 1) == 1) achievements.secret[1] = true
 
+    // statistics debug
+
     const publication_rho = getCurrencyFromTau(theory.tau)[0]
     if (publication_rho <= currency.value && recovering) {
         recovering = false
         recovery_time = total_time[1]
     }
 
+    // equation invalidation
+
     theory.invalidatePrimaryEquation()
     theory.invalidateSecondaryEquation()
     theory.invalidateTertiaryEquation()
     theory.invalidateQuaternaryValues()
+
+    // calling update functions
 
     updatePage()
     updateMaxLevel()
     updateAvailability()
 }
 
-var postPublish = () => {
-    publication_max_drho = BigNumber.ZERO
-    time = BigNumber.ZERO
-    total_time[1] = BigNumber.ZERO
-    recovering = true
-    domain = 1
-    page = 1
-}
-
-var formatQuaternaryEntry = (...args) => new QuaternaryEntry(...args)
+/*
+    CURRENCY VISIBLE
+*/
 
 var isCurrencyVisible = index => {
     switch (index) {
@@ -1054,6 +1145,10 @@ var isCurrencyVisible = index => {
             return false // Invalid index
     }
 }
+
+/*
+    EQUATION DISPLAYS
+*/
 
 var getPrimaryEquation = () => {
     let result
@@ -1102,7 +1197,7 @@ var getSecondaryEquation = () => {
                     case 4: return 75
                     case 5: return 115
                     case 6: return 115
-                    default: return 110
+                    default: return 115
                 }
             }
         )(unlockE.level)
@@ -1127,6 +1222,8 @@ var getTertiaryEquation = () => {
     } else result = ""
     return "\\begin{array}{c}" + result + "\\end{array}"
 }
+
+var formatQuaternaryEntry = (...args) => new QuaternaryEntry(...args)
 var getQuaternaryEntries = () => {
     const result = []
     result.push(formatQuaternaryEntry(
@@ -1200,11 +1297,28 @@ var getQuaternaryEntries = () => {
     return result
 }
 
+/*
+    TAU
+*/
+
+var postPublish = () => {
+    publication_max_drho = BigNumber.ZERO
+    time = BigNumber.ZERO
+    total_time[1] = BigNumber.ZERO
+    recovering = true
+    domain = 1
+    page = 1
+}
+
 var getCurrencyFromTau = tau => [tau.max(BigNumber.ONE), currency.symbol]
 var getPublicationMultiplier = tau => 15 * tau.pow(0.126) / (10 + tau).log10().pow(0.9)
 var getPublicationMultiplierFormula = symbol => `m=\\frac{15{${symbol}}^{0.126}}{\\log^{0.9}_{10}(10+${symbol})}`
 var getTau = () => currency.value.max(BigNumber.ZERO)
 var get2DGraphValue = () => currency.value.sign * (BigNumber.ONE + currency.value.abs()).log10().toNumber()
+
+/*
+    VARIABLES
+*/
 
 var getK = level => {
     const first_layer = BigNumber.ZERO + Utils.getStepwisePowerSum(Math.min(level, 3750), 2, 5, 0)
@@ -1267,6 +1381,10 @@ var getDT = level => Utils.getStepwisePowerSum(level, 2, 10, 0) / 10
 
 var getTExp = level => BigNumber.ONE / 4 * (2 + (time_exp.isAvailable ? level : 0))
 
+/*
+    E_I FUNCTIONS
+*/
+
 var getE1 = n => {
     if (n <= 100) return 1 / (BigNumber.E - (BigNumber.ONE + 1 / n).pow(n))
     // Laurent Series
@@ -1296,6 +1414,7 @@ var getE5 = (l1, l2) => {
     }
 }
 var getE6 = m => {
+    // thanks to someone online I found for this gamma function code
     const g = 7;
     const C = [0.99999999999980993, 676.5203681218851, -1259.1392167224028, 771.32342877765313, -176.61502916214059, 12.507343278686905, -0.13857109526572012, 9.9843695780195716e-6, 1.5056327351493116e-7];
     function gamma(z) {
@@ -1353,6 +1472,10 @@ var getInverseEDisplay = E => {
     return `${(10 / base).toString(2)}e${(-(exponent + 1)).toString(0)}`
 }
 
+/*
+    EQUATION OVERLAYS
+*/
+
 var getEquationOverlay = _ => {
     const children = [
         ui.createLatexLabel({
@@ -1396,9 +1519,19 @@ var getEquationOverlay = _ => {
     return grid
 }
 
+/*
+    INTERNAL STATES
+*/
+
 var getInternalState = () => JSON.stringify({
+    // Version informations
     version,
+    version_code,
+
+    // User settings
     settings,
+
+    // Game data
     lifetime_total_time: total_time[0].toBase64String(),
     publication_total_time: total_time[1].toBase64String(),
     time: time.toBase64String(),
@@ -1406,6 +1539,7 @@ var getInternalState = () => JSON.stringify({
     total_rho: total_rho.toBase64String(),
     ticks: ticks.toBase64String(),
 
+    // Publication recovery data
     recovering,
     recovery_time: recovery_time.toBase64String()
 })
@@ -1429,6 +1563,10 @@ var setInternalState = string => {
     recovery_time = BigNumber.fromBase64String(state.recovery_time ?? BigNumber.ZERO.toBase64String())
 }
 
+/*
+    PAGES AND STAGES
+*/
+
 var canResetStage = () => true
 var getResetStageMessage = () => getTextResource(TextResource.ResetStage)
 var resetStage = () => {
@@ -1448,6 +1586,10 @@ var goToPreviousStage = () => page--
 var canGoToNextStage = () => (page == 1 && unlock.level >= 1) || page == 0
 var goToNextStage = () => page++
 
+/*
+    CLASS DEFINITIONS
+*/
+
 class SuperExponentialCost {
     constructor(original, base, increment) {
         this.a = BigNumber.from(original)
@@ -1459,32 +1601,8 @@ class SuperExponentialCost {
         return this.a * this.c.pow(level) * this.d.pow(0.5 * level * (level + 1))
     }
 
-    cumulative_cost(level, amount) {
-        let result = BigNumber.ZERO
-        for (let i = 0; i < amount; i++) result += this.cost(level + i)
-        return result
-    }
-
-    max(level, currency) {
-        let cumulative = BigNumber.ZERO
-        let current_level = level
-        while (cumulative < currency) {
-            cumulative += this.cost(current_level)
-            current_level++
-        }
-        return Math.round(current_level - level - 1)
-    }
-
-    get functions() {
-        return [
-            level => this.cost(level),
-            (level, amount) => this.cumulative_cost(level, amount),
-            (level, currency) => this.max(level, currency)
-        ]
-    }
-
     get cost_model() {
-        return new CustomCost(...this.functions)
+        return generateCustomCost(n => this.cost(n))
     }
 }
 
@@ -1526,5 +1644,7 @@ class Popups {
         throw new Error("Work in progress")
     }
 }
+
+// calling initialize
 
 initialize()
