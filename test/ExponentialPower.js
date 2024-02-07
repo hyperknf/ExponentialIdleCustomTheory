@@ -1034,7 +1034,7 @@ var updateAvailability = () => {
 
     // singular upgrades
 
-    // domain_switch.isAvailable = unlockCurrency2.level >= 1
+    domain_switch.isAvailable = unlockCurrency2.level >= 1
 }
 
 // MAIN FUNCTION
