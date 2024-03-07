@@ -10,7 +10,7 @@ var authors = "HyperKNF"
 var version = "0"
 
 var data = {
-    currency,
+    currency: undefined,
     symbol: {
         ascii: "σ",
         latex: "\\sigma"
