@@ -17,10 +17,13 @@ var data = {
     },
     tau_rate: 1,
     upgrades: {
-        c1, c2
+        c1: undefined,
+        c2: undefined
     },
     perm_upgrades: {
-        pub, all, auto
+        pub: undefined,
+        all: undefined,
+        auto: undefined
     }
 }
 
