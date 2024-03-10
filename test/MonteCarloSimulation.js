@@ -31,32 +31,6 @@ var mcs = {
     t: BigNumber.ZERO
 }
 
-var utils = {
-    toInternalState: __tis,
-    fromInternalState: __fis
-}
-function __tis(obj) {
-    const re = {}
-    for (const key of obj) {
-        if (obj[key] instanceof BigNumber) re[key] = obj[key].toBase64String()
-        else if (typeof obj[key] == "object") re[key] = __tis(obj[key])
-        else re[key] = obj[key]
-    }
-    return re
-}
-function __fis(obj) {
-    const re = {}
-    for (const key of obj) {
-        try {
-            re[key] = BigNumber.fromBase64String(obj[key])
-        } catch (e) {
-            if (typeof obj[key] == "object") re[key] = __fis(obj[key])
-            else re[key] = obj[key]
-        }
-    }
-    return re
-}
-
 var init = () => {
 
     data.currency = theory.createCurrency(data.symbol.ascii, data.symbol.latex)
@@ -91,9 +65,14 @@ var getPublicationMultiplierFormula = symbol => `(${symbol}+1)^0`
 var getCurrencyFromTau = tau => [tau.max(BigNumber.ONE).pow(BigNumber.ONE / data.tau_rate), this.currency.symbol]
 var getTau = () => data.currency.value.pow(1 / data.tau_rate)
 
-var getInternalState = () => JSON.stringify(utils.toInternalState(mcs))
+var getInternalState = () => JSON.stringify({
+    t: mcs.t.toBase64String()
+})
 var setInternalState = string => {
-    for (const [key, value] of Objects.entries(utils.fromInternalState(JSON.parse(string)))) mcs[key] = value
+    const state = JSON.parse(string)
+    const to = key => BigNumber.fromBase64String(state[key] ?? BigNumber.ZERO.toBase64String())
+
+    mcs.t = to("t")
 }
 
 var get2DGraphValue = () => data.currency.value.sign * (1 + data.currency.value.abs()).log10().toNumber()
