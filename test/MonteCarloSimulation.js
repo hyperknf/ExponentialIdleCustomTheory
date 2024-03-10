@@ -59,7 +59,7 @@ function __fis(obj) {
 
 var init = () => {
 
-    data.currency = theory.createCurrency(symbol.ascii, symbol.latex)
+    data.currency = theory.createCurrency(data.symbol.ascii, data.symbol.latex)
 
     // upgrades
 
