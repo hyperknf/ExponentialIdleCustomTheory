@@ -103,7 +103,7 @@ init()
 class Equations {
 
     static get primary() {
-        return `\\dot${data.symbol.latex}=c_1c_2(1-e^{-t})`
+        return `\\dot${data.symbol.latex} = c_1c_2(1-e^{-t})`
     }
 
 }
